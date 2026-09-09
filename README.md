@@ -4,7 +4,7 @@
 
 **Course:** LAB211 — OOP with Java  
 **Project:** Stadium Ticket Booking Simulation  
-**Member:** Doan Ngoc Nhan.  
+**Member:** Doan Ngoc Nhan - QE210282 
 **Architecture:** MVC (Model - View - Controller)  
 **Persistence:** CSV files  
 **Core Research Problem:** Preventing **Double Booking** when many Fan Threads attempt to book the same seat concurrently.
