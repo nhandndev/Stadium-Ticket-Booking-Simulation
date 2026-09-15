@@ -298,3 +298,56 @@ Impact on project:
 
 - README root san sang hon cho nguoi doc dau tien.
 - Submission package co dau vet AI Audit ro rang.
+
+## Entry 08 - Sync README With Draw.io Use Case HTML And Remove HTML
+
+Date: 2026-09-16
+
+Project phase: README synchronization and repository cleanup
+
+Original prompt summary:
+
+```text
+Trong file LABSE20D.drawio.html co lam lai use case. Hay update them may phan con thieu trong README. Cai nao trong HTML khong co thi la HTML thieu chu khong phai du an sai. Lam xong update README va xoa file HTML.
+```
+
+AI output summary:
+
+- Doc file `LABSE20D.drawio.html`.
+- Trich cac label actor/use case tu draw.io HTML.
+- Cap nhat `README.md` voi cac use case thieu/nen noi ro hon:
+  - Review booking.
+  - Create pending booking.
+  - View ticket detail.
+  - Assist ticket issues.
+  - Manage CSV data.
+  - Configure simulation scenario.
+  - View / compare simulation results.
+  - Payment Service, Notification Service, Gate Staff extension.
+- Them section `Use Case Diagram Coverage` vao README.
+- Ghi ro `README + Document/` la official project scope; neu HTML thieu thi la diagram incomplete, khong phai project sai.
+- Xoa file `LABSE20D.drawio.html` theo yeu cau.
+
+Accepted parts:
+
+- Dung HTML nhu source de dong bo README voi use case diagram hien tai.
+- Giu README/Document la baseline chinh thuc vi diagram co the thieu.
+- Xoa HTML sau khi da trich noi dung can thiet.
+
+Rejected/modified parts:
+
+- Khong thu hep scope du an theo nhung gi HTML co.
+- Khong bo cac requirement da co trong README/Document chi vi HTML khong ve.
+
+Verification method:
+
+- Trich `value` labels tu HTML bang command-line.
+- Kiem tra README co section `Use Case Diagram Coverage`.
+- Kiem tra `LABSE20D.drawio.html` da bi xoa.
+- Kiem tra git status sau thay doi.
+
+Impact on project:
+
+- README dong bo hon voi use case diagram moi.
+- Repository gon hon vi khong giu file HTML draw.io tam.
+- AI audit tiep tuc ghi lai ly do va tac dong cua thay doi.

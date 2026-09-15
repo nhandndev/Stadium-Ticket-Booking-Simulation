@@ -88,9 +88,12 @@ Confirm Booking
 - Register / login / logout.
 - Manage fan profile.
 - Select 1-4 seats per transaction.
+- Review booking before confirmation.
 - Create booking.
+- Create pending booking with expiry.
 - Make online payment simulation.
 - View owned tickets.
+- View ticket detail.
 - View booking history.
 - Request cancellation/refund as an extension.
 
@@ -116,6 +119,7 @@ Confirm Booking
 - Check booking/payment/seat status.
 - Assist failed booking.
 - Assist missing ticket.
+- Assist ticket issues.
 - Assist payment issue.
 - Escalate data inconsistency.
 
@@ -130,8 +134,8 @@ Confirm Booking
 - Manage ticket pricing.
 - Open ticket sales.
 - Close ticket sales.
-- Generate CSV data.
-- Validate CSV data.
+- Manage CSV data.
+- Generate/validate CSV data.
 - View system summary.
 - View audit log.
 
@@ -152,12 +156,14 @@ These are useful for a realistic booking system but should not delay LAB core re
 
 - Configure number of fan threads.
 - Configure target match and target seats.
+- Configure simulation scenario.
 - Select contention scenario.
 - Select synchronization mechanism.
 - Run concurrent booking simulation.
 - Detect double booking.
 - Measure throughput.
 - Measure success/failure/conflict counts.
+- View and compare simulation results.
 - Export or display simulation results.
 
 Supported synchronization strategies:
@@ -169,7 +175,100 @@ Supported synchronization strategies:
 
 ---
 
-## 4. Core Business Rules
+## 4. Use Case Diagram Coverage
+
+The former `LABSE20D.drawio.html` diagram was used to synchronize the README with the current use case baseline. After synchronization, the HTML file is no longer required in the repository.
+
+Important note:
+
+```text
+README + Document/ are the official project scope.
+If a valid project requirement is not shown in the old draw.io HTML,
+the diagram is incomplete; the project scope is not wrong.
+```
+
+### Public Browsing
+
+- Browse matches.
+- Search matches.
+- View match list.
+- View match detail.
+- View stadium.
+- View section.
+- View seat map.
+- View seat availability.
+- Register.
+- Login.
+- Logout.
+
+### Fan Booking
+
+- Manage profile.
+- Select seats.
+- Review booking.
+- Create booking.
+- Validate booking.
+- Calculate booking total.
+- Check seat availability.
+- Create pending booking.
+- Hold seats.
+- Make online payment.
+- Confirm booking.
+- Create ticket.
+- Record transaction.
+
+### Ticket And Booking Management
+
+- View my tickets.
+- View ticket detail.
+- View booking history.
+- Request cancellation.
+- Request refund.
+
+### Seller Operations
+
+- Search/create fan.
+- Create booking for fan.
+- Accept offline payment.
+- Issue ticket.
+- Search ticket.
+
+### Support Operations
+
+- Search fan / ticket / booking / payment.
+- Check status.
+- Assist booking issues.
+- Assist payment issues.
+- Assist ticket issues.
+- Escalate data inconsistency.
+
+### Administrator Operations
+
+- Manage stadium / section / seat / match.
+- Manage fan / staff / roles.
+- Manage ticket pricing.
+- Open / close ticket sales.
+- Manage CSV data.
+- View system summary.
+- View audit log.
+
+### Simulator Operations
+
+- Configure simulation.
+- Select synchronization mechanism.
+- Run simulation.
+- View / compare results.
+- Export result.
+
+### External And Extension Actors
+
+- Payment Service: process online payment.
+- Notification Service: send booking confirmation, payment result and ticket notification.
+- Gate Staff: validate ticket and check-in ticket.
+
+---
+
+## 5. Core Business Rules
 
 1. A fan may book a maximum of **4 seats per transaction**.
 2. A seat already booked for a match cannot be sold again for the same match.
@@ -202,7 +301,7 @@ LOCKED -> AVAILABLE
 
 ---
 
-## 5. Architecture
+## 6. Architecture
 
 The application follows MVC with additional Service and Repository layers.
 
@@ -242,7 +341,7 @@ src/
 
 ---
 
-## 6. Data And CSV Files
+## 7. Data And CSV Files
 
 Minimum CSV files:
 
@@ -283,7 +382,7 @@ The generated dataset should contain at least **10,000 rows**, with seats as the
 
 ---
 
-## 7. Data Generation
+## 8. Data Generation
 
 Run the data generator before running the main program.
 
@@ -308,7 +407,7 @@ wc -l data/*.csv
 
 ---
 
-## 8. Compile And Run
+## 9. Compile And Run
 
 Compile:
 
@@ -330,7 +429,7 @@ java -cp out app.Main
 
 ---
 
-## 9. Suggested Main Menu
+## 10. Suggested Main Menu
 
 ```text
 ===== STADIUM TICKET BOOKING =====
@@ -355,7 +454,7 @@ Optional staff menu:
 
 ---
 
-## 10. Booking Flow
+## 11. Booking Flow
 
 Fan checkout flow:
 
@@ -384,7 +483,7 @@ Viewing a seat as `AVAILABLE` does not guarantee that the seat is still availabl
 
 ---
 
-## 11. Concurrency Simulator
+## 12. Concurrency Simulator
 
 Required Java concurrency utilities:
 
@@ -448,7 +547,7 @@ Expected research conclusion:
 
 ---
 
-## 12. Documentation
+## 13. Documentation
 
 Detailed project documents are stored in:
 
@@ -486,7 +585,7 @@ Required diagrams:
 
 ---
 
-## 13. Testing Checklist
+## 14. Testing Checklist
 
 ### Single-thread Booking
 
@@ -536,7 +635,7 @@ Required diagrams:
 
 ---
 
-## 14. AI Audit
+## 15. AI Audit
 
 This project keeps an AI audit trail because AI was used to support requirements analysis, use case correction, architecture design, documentation and prompt review.
 
@@ -593,7 +692,7 @@ Prompt audit: ai_logs/prompt_audit_summary.md
 
 ---
 
-## 15. Submission Package
+## 16. Submission Package
 
 Final ZIP naming format:
 
@@ -634,7 +733,6 @@ Before submission:
 
 ---
 
-## 16. Notes
+## 17. Notes
 
 The LAB requirements remain the top priority. Enterprise-like features should improve the design and report quality, but they should not break MVC, CSV persistence or the concurrency simulator deliverables.
-

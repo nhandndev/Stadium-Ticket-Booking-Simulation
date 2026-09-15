@@ -164,3 +164,28 @@ Human/AI correction:
 Final decision:
 
 - Accepted. README tong da phan anh baseline moi va co AI Audit.
+
+## Audit 07 - Sync README With Draw.io HTML
+
+Date: 2026-09-16
+
+Prompt quality:
+
+- Clear task: yes, update README from `LABSE20D.drawio.html`.
+- Clear scope guard: yes, if HTML misses something, HTML is incomplete, not the project.
+- Clear cleanup requirement: yes, delete HTML after update.
+
+AI output risk:
+
+- Could incorrectly remove valid requirements because they are missing from the diagram.
+- Could keep stale draw.io HTML after extracting useful content.
+
+Human/AI correction:
+
+- README was updated by adding diagram coverage without reducing official project scope.
+- HTML was treated as a synchronization source, not as the authority over requirements.
+- `LABSE20D.drawio.html` was deleted after README update.
+
+Final decision:
+
+- Accepted. README now includes use case coverage from the diagram and the temporary HTML file is removed.
