@@ -1,803 +1,500 @@
 # Stadium Ticket Booking Simulation
 
-## 1. Project Overview
+## 1. Project Information
 
-**Course:** LAB211 - OOP with Java  
-**Project:** Stadium Ticket Booking Simulation  
-**Member:** Doan Ngoc Nhan - QE210282  
-**Architecture:** MVC with Service and Repository layers  
-**Persistence:** CSV files  
-**Core research problem:** Preventing **Double Booking** when many fan threads attempt to book the same seat concurrently.
+| Item | Description |
+| --- | --- |
+| Course | LAB211 - OOP with Java |
+| Project | Stadium Ticket Booking Simulation |
+| Member | Doan Ngoc Nhan - QE210282 |
+| Application type | Java Console Application |
+| Architecture | MVC + Service + Repository |
+| Data storage | CSV files |
+| Main topic | Preventing double booking in concurrent seat reservation |
 
-This project simulates a stadium ticket-booking system and compares synchronization strategies to evaluate the trade-off between data consistency, concurrency and throughput.
+This project is a pure Java console application for managing stadium tickets and
+simulating multiple users booking seats at the same time. The system applies OOP,
+layered design, CSV persistence, DTOs, exception handling and Java concurrency.
 
-The project has two scopes:
-
-1. **LAB211 core scope:** Java OOP, MVC, CSV persistence, CRUD, booking flow, custom exceptions, data generation and concurrency simulator.
-2. **Enterprise-like extension scope:** seller-assisted booking, support lookup, admin sales control, seat hold expiry, idempotency, ticket validation, notification simulation, audit log and AI audit/reflection.
-
----
-
-## 2. Core Design Decision
-
-The most important design rule is:
-
-```text
-Fan/Seller checkout flow != Simulator booking attempt
-```
-
-The system separates:
-
-- `Create Booking`: customer checkout flow for Fan/Seller, including payment.
-- `Execute Booking Core`: shared booking core for checking availability, applying synchronization and reserving/committing seat state.
-- `Execute Concurrent Booking`: simulator flow that calls `Execute Booking Core`, not the full checkout/payment flow.
-
-This prevents the simulator from incorrectly creating 1000 online payment flows when the real goal is to test double-booking behavior.
-
-```text
-Fan Create Booking
-  -> Validate Booking
-  -> Calculate Booking Total
-  -> Execute Booking Core
-  -> Hold Seats
-  -> Make Online Payment
-  -> Confirm Booking
-
-Seller Create Booking for Fan
-  -> Select Fan
-  -> Select Seats for Customer
-  -> Validate Booking
-  -> Calculate Booking Total
-  -> Execute Booking Core
-  -> Hold Seats
-  -> Accept Offline Payment
-  -> Confirm Booking
-  -> Issue Ticket
-
-Simulator
-  -> Create Fan Threads
-  -> Synchronize Thread Start
-  -> Execute Concurrent Booking
-  -> Execute Booking Core
-  -> Detect Double Booking
-  -> Calculate Metrics
-```
-
-`Confirm Booking` includes system actions:
-
-```text
-Confirm Booking
-  -> Create Ticket
-  -> Record Transaction
-```
-
-`Issue Ticket` is a Seller operation after the system has already created the ticket.
+The project does not use Spring, a web server, REST API, HTTP status codes or a
+database management system.
 
 ---
 
-## 3. Actor Hierarchy And Shared User Features
+## 2. Project Objectives
 
-The current Use Case baseline uses `User` as the common parent actor for authenticated users:
+The system has two main objectives:
 
-```text
-User
-  +-- Fan
-  +-- Staff
-        +-- Seller
-        +-- Support Staff
-        +-- Administrator
-        +-- Gate Staff
-```
+1. Provide the basic operations of a stadium ticket booking system for guests,
+   fans, staff and administrators.
+2. Compare synchronization mechanisms and show how each mechanism affects
+   double booking, execution time and throughput.
 
-External or operational actors:
-
-```text
-Guest
-Payment Service
-Notification Service
-Simulator Operator
-```
-
-The shared `User` actor owns:
-
-- `Login`
-- `Logout`
-- `Update Profile Information`
-
-Fan and Staff inherit these common use cases. This avoids duplicating Login, Logout and profile-update relationships for every role. Guest can browse public information, register and login before becoming an authenticated Fan/User.
-
-Role boundaries:
-
-- `Guest`: public browsing and registration.
-- `Fan`: customer booking, payment and ticket/history access.
-- `Staff`: authenticated operational users.
-- `Seller`: counter booking and offline payment.
-- `Support Staff`: issue lookup, status checking and escalation.
-- `Administrator`: data, role, pricing, sales and audit management.
-- `Gate Staff`: ticket validation and check-in.
-- `Simulator Operator`: runs concurrency experiments.
-
-The Use Case diagram is a presentation view. Internal use cases such as `Execute Booking Core`, `Apply Synchronization Strategy`, `Expire Pending Booking` and reconciliation remain documented in `Document/`.
+The scope is kept suitable for a LAB211 console application. Features from the
+previous larger scope, such as Support Staff and Notification Service, are not
+part of the current baseline.
 
 ---
 
-## 4. Main Features
+## 3. Current Scope
 
-### Guest / Fan
+### 3.1 Actors
 
-- View match list.
-- Search match.
-- Filter matches.
-- View match details.
-- View stadium and sections.
-- View seat map.
-- View seat availability.
-- Register as a Fan.
-- Inherit `Login`, `Logout` and `Update Profile Information` from `User`.
-- Select 1-4 seats per transaction.
-- Review booking before confirmation.
-- Create booking.
-- Create pending booking with expiry.
-- Make online payment simulation.
-- View owned tickets.
-- View ticket detail.
-- View booking history.
-- Request cancellation/refund as an extension.
+| Actor | Responsibility |
+| --- | --- |
+| Guest | Browse matches and seat availability, register and log in |
+| User | Use common authenticated functions such as logout and profile update |
+| Fan | Book seats, pay, view bookings and tickets, and request a refund |
+| Seller | Create a fan account, create a booking for a fan, receive offline payment and issue a ticket |
+| Gate Staff | Validate a ticket and check it in |
+| Administrator | Manage stadium data, matches, prices, accounts, sales and system monitoring |
+| Simulator Operator | Configure, run, compare and export concurrency simulations |
+| Payment Service | Simulate online payment processing |
 
-### Seller
+In the domain model, `Fan` and `Staff` inherit from `User`. Staff behavior is
+identified by `UserRole`, including `SELLER`, `GATE_STAFF`, `ADMIN` and
+`SIMULATOR_OPERATOR`.
 
-- Inherit `Login`, `Logout` and `Update Profile Information` from `User`.
-- Search fan.
-- Create fan if not found.
-- Select fan.
-- Select seats for customer.
-- Create booking for fan through the shared booking core.
+### 3.2 Guest Features
+
+- Search and filter matches.
+- View match details and seat availability.
+- Register a Fan account.
+- Log in.
+
+### 3.3 Common User Features
+
+- Log out.
+- Update profile information.
+
+### 3.4 Fan Features
+
+- Select seats and create a booking.
+- Make an online payment.
+- View booking history and booking details.
+- View tickets, ticket details and ticket history.
+- Request a refund.
+
+### 3.5 Seller Features
+
+- Search for or create a Fan.
+- Create a booking for a Fan.
 - Accept offline payment.
-- Confirm offline payment.
-- Issue ticket after ticket creation.
-- View seller transactions.
+- Issue a ticket.
 
-### Support Staff
+### 3.6 Gate Staff Features
 
-- Inherit `Login`, `Logout` and `Update Profile Information` from `User`.
-- Search customer booking and ticket information.
-- Check booking and payment status.
-- Review cancellation/refund request.
-- Assist ticket issues.
-- Escalate data inconsistency.
+- Validate a ticket.
+- Check in a valid ticket.
+- Reject an invalid, cancelled or previously used ticket.
 
-### Administrator
+### 3.7 Administrator Features
 
-- Inherit `Login`, `Logout` and `Update Profile Information` from `User`.
-- Manage stadium.
-- Manage section.
-- Manage seat.
-- Manage match.
-- Manage fan.
-- Manage staff and roles.
-- Manage ticket pricing.
-- Open ticket sales.
-- Close ticket sales.
-- Manage CSV data.
-- Generate/validate CSV data.
-- View system summary.
-- View audit log.
+#### Stadium Management
 
-### Enterprise-like Extensions
+- Create, list, view, update and delete stadiums.
 
-These are useful for a realistic booking system but should not delay LAB core requirements:
+#### Section Management
 
-- Seat hold expiry.
-- Idempotency key for duplicate booking requests.
-- Payment/ticket reconciliation.
-- Cancellation/refund simulation.
-- Ticket validation/check-in by Gate Staff.
-- Notification simulation.
-- Audit log.
-- Soft delete/status instead of unsafe hard delete.
+- Create sections.
+- View sections by stadium.
+- View, update and delete a section.
 
-### Concurrency Simulator
+#### Seat Management
 
-- Configure number of fan threads.
-- Configure target match and target seats.
-- Configure simulation scenario.
-- Select contention scenario.
-- Select synchronization mechanism.
-- Run concurrent booking simulation.
-- Detect double booking.
-- Measure throughput.
-- Measure success/failure/conflict counts.
-- View and compare simulation results.
-- Export or display simulation results.
+- Create seats.
+- View seats by section.
+- View, update and delete a seat.
+- Activate or deactivate a seat.
 
-Supported synchronization strategies:
+#### Match Management
 
-- `NO_LOCK`
-- `SYNCHRONIZED`
-- `FILE_LOCK`
-- `OPTIMISTIC`
+- Create, list, view, update and delete matches.
 
----
+#### Ticket Pricing Management
 
-## 5. Use Case Diagram Coverage
+- Create a ticket price for a match and section.
+- View ticket prices by match.
+- View, update and delete a ticket price.
 
-The current Use Case diagram was used to synchronize this README with the latest actor and feature layout.
+#### Ticket Sales Management
 
-Important note:
+- Open or close ticket sales.
+- View ticket sales status.
 
-```text
-README + Document/ are the official project scope.
-The diagram focuses on user-visible and actor-facing use cases.
-Internal booking/concurrency rules remain in Document/.
-```
+#### Fan Management
 
-### Actor Inheritance
+- Create, list, view, search and filter Fan accounts.
+- Update, activate or deactivate a Fan account.
+- Delete a Fan account when business rules allow it.
 
-```text
-Fan - - -|> User
-Staff - - -|> User
-Seller - - -|> Staff
-Support Staff - - -|> Staff
-Administrator - - -|> Staff
-Gate Staff - - -|> Staff
-```
+#### Staff And Role Management
 
-Inherited from `User`:
+- Create, list, view, search and filter Staff accounts.
+- Update, activate or deactivate a Staff account.
+- Assign, change or revoke a Staff role.
 
-- Login.
-- Logout.
-- Update Profile Information.
+#### System Monitoring
 
-### Guest / Public Browsing
+- View the system summary and audit log.
+- Review refund requests.
 
-- Search matches.
-- Filter matches.
-- View match detail.
-- View seat availability.
-- Register.
-- Login.
+### 3.8 Simulator Operator Features
 
-### Fan Use Cases
-
-- Select seats.
-- Review booking.
-- Create booking.
-- Validate booking.
-- Calculate booking total.
-- Check seat availability.
-- Create pending booking.
-- Hold seats.
-- Make online payment.
-- Confirm booking.
-- Create ticket.
-- Record transaction.
-
-### Ticket And Booking Management
-
-- View my tickets.
-- View ticket detail.
-- View booking history.
-- Request cancellation.
-- Request refund.
-
-### Seller Use Cases
-
-- Search/create fan.
-- Create booking for fan.
-- Accept offline payment.
-- Issue ticket.
-- Search ticket.
-
-### Support Staff Use Cases
-
-- Search customer booking and ticket information.
-- Check booking and payment status.
-- Assist ticket issues.
-- Review cancellation/refund request.
-- Escalate data inconsistency.
-
-### Administrator Use Cases
-
-- Manage stadium / section / seat / match.
-- Manage fan / staff / roles.
-- Manage ticket pricing.
-- Open / close ticket sales.
-- Manage CSV data.
-- View system summary.
-- View audit log.
-
-### Gate Staff Use Cases
-
-- Validate ticket.
-- Check-in ticket.
-
-### Simulator Operations
-
-- Configure simulation.
-- Select synchronization mechanism.
-- Run simulation.
-- View / compare results.
-- Export result.
-
-### External And Extension Actors
-
-- Payment Service: process online payment.
-- Notification Service: send booking confirmation, payment result and ticket notification.
-- Gate Staff: validate ticket and check-in ticket. Enterprise extension P2.
+- Configure a simulation.
+- Select a synchronization mechanism.
+- Run a simulation.
+- View and compare results.
+- Export a result.
 
 ---
 
-## 6. Core Business Rules
+## 4. Architecture
 
-1. A fan may book a maximum of **4 seats per transaction**.
-2. A seat already booked for a match cannot be sold again for the same match.
-3. A successful booking must satisfy:
+The class diagrams follow this dependency direction:
 
 ```text
-matchId + seatId -> maximum 1 VALID ticket
+View -> Controller -> Service -> Repository -> Model / CSV
+                         |
+                         +-> DTO
 ```
 
-4. Seat lifecycle:
+### Layer Responsibilities
 
-```text
-AVAILABLE -> LOCKED -> BOOKED
-LOCKED -> AVAILABLE
-```
+| Layer | Responsibility |
+| --- | --- |
+| View | Display console menus, read input and print results |
+| Controller | Receive View actions and delegate work to Services |
+| Service | Validate input and implement business use cases |
+| Repository | Read, write, search and update CSV data |
+| Model | Store entity state and simple domain behavior |
+| DTO | Carry request and response data between application layers |
 
-5. `LOCKED -> AVAILABLE` happens when:
+Important dependency rules:
 
-- Payment fails.
-- Payment is cancelled.
-- Payment expires.
-- Booking expires.
-- A partial booking fails and held seats must be released.
+- View does not access Repository or CSV directly.
+- Controller calls Service instead of implementing business rules.
+- Service coordinates Repository and Model objects.
+- Repository persists Model entities, not DTO objects.
+- DTOs contain data only and do not read CSV files.
+- Simulator uses the same seat state and synchronization rules as booking.
 
-6. Pending bookings must have an expiry time.
-7. Repeated booking requests should be protected by `idempotencyKey`.
-8. Fan booking, Seller booking and Simulator must use the same booking core.
-9. Simulator must not call the full Fan checkout/payment flow.
-10. Admin should not hard delete records that already have transaction history.
-
----
-
-## 7. Architecture
-
-The application follows MVC with additional Service and Repository layers.
-
-```text
-View
-  -> Controller
-    -> Service / Use Case
-      -> Domain Model
-      -> Repository
-        -> CSV File
-```
-
-### Layer Rules
-
-- View displays menus, reads input and displays results.
-- Controller coordinates user actions and calls services.
-- Service contains business workflows and booking logic.
-- Repository reads/writes CSV and performs CRUD/search.
-- Controller must not access CSV files directly.
-- View must not contain business logic.
-- Simulator must call booking core through service methods, not edit CSV/tickets directly.
-
-Suggested packages:
+### Suggested Package Structure
 
 ```text
 src/
-  model/
-  repository/
-  service/
-  service/sync/
-  controller/
-  view/
-  exception/
-  util/
-  Main.java
+  app/
+  common/
+    entity/
+    exception/
+  auth/
+  user/
+  stadium/
+  match/
+  booking/
+  payment/
+  ticket/
+  refund/
+  admin/
+  simulation/
+```
+
+Each domain should contain only the folders it currently needs, such as `model`,
+`dto`, `repository`, `service`, `controller`, `view` and `enums`.
+
+---
+
+## 5. Main Domain Model
+
+### Account Domain
+
+- `User`: common account information and profile behavior.
+- `Fan`: customer account with a maximum ticket limit per transaction.
+- `Staff`: employee account whose permissions are determined by `UserRole`.
+
+### Stadium And Match Domain
+
+- `Stadium`: stadium information.
+- `Section`: a seating section belonging to a stadium.
+- `Seat`: a physical seat belonging to a section.
+- `Match`: match information and ticket-sale status.
+- `MatchSeat`: the availability of one physical seat for one match.
+- `TicketPrice`: price for a match and section.
+
+`Seat` represents the physical seat, while `MatchSeat` represents its booking
+state for a particular match. Booking a seat for one match therefore does not
+make that physical seat unavailable for every other match.
+
+### Booking Domain
+
+- `Booking`: a Fan's booking and total amount.
+- `Payment`: online or offline payment information.
+- `Ticket`: ticket issued after a successful booking/payment flow.
+- `BookingTransaction`: records a booking attempt for auditing and simulation.
+- `RefundRequest`: refund request submitted by a Fan and reviewed by an Admin.
+
+### Simulation Domain
+
+- `Simulation`: simulation configuration and running status.
+- `SimulationResult`: measured result of a simulation run.
+- `BookingTask`: one concurrent seat-booking attempt.
+- `BookingStrategy`: common contract for synchronization strategies.
+
+---
+
+## 6. Main Application Flows
+
+### 6.1 Authentication And Role Navigation
+
+```text
+Start application
+-> Show Guest menu
+-> Register or Login
+-> Verify account and password
+-> Read UserRole
+-> Open the menu belonging to that role
+-> Logout
+-> Return to Guest menu
+```
+
+The application does not ask the user to choose a protected role manually.
+After login, the saved `UserRole` determines whether the program opens the Fan,
+Seller, Gate Staff, Administrator or Simulator Operator menu.
+
+### 6.2 Fan Booking And Online Payment
+
+```text
+Search / Filter Match
+-> View Match Details
+-> View Seat Availability
+-> Select Seats
+-> Validate Booking Request
+-> Re-check MatchSeat Availability
+-> Create Booking
+-> Process Mock Online Payment
+-> Mark Successful Seats as BOOKED
+-> Create Ticket
+-> Record Booking Transaction
+```
+
+Seat availability must be checked again when the booking is committed. A seat
+shown as available may have been booked by another thread before confirmation.
+
+### 6.3 Seller Booking And Offline Payment
+
+```text
+Search Fan
+-> Create Fan if not found
+-> Select Match and Seats
+-> Create Booking for Fan
+-> Accept Offline Payment
+-> Confirm Booking
+-> Issue Ticket
+```
+
+### 6.4 Ticket Validation And Check-in
+
+```text
+Enter Ticket Code
+-> Find Ticket
+-> Validate Ticket Status
+-> Mark Ticket as USED
+-> Save Check-in Result
+```
+
+A `USED`, `CANCELLED` or `REFUNDED` ticket cannot be checked in again.
+
+### 6.5 Refund Review
+
+```text
+Fan submits Refund Request
+-> Administrator views pending requests
+-> Administrator approves or rejects request
+-> Update related status when approved
 ```
 
 ---
 
-## 8. Data And CSV Files
+## 7. Core Business Rules
 
-Minimum CSV files:
+1. A Fan may select at most four seats in one booking transaction.
+2. Ticket sales must be open before a seat can be booked.
+3. A deactivated physical seat cannot be sold.
+4. A `MatchSeat` must be `AVAILABLE` before a booking can commit it.
+5. One seat can produce at most one valid ticket for the same match.
+6. A successful payment is required for the Fan online booking flow.
+7. Seller booking uses offline payment and does not call the online Payment Service.
+8. Ticket check-in succeeds only once.
+9. Data with related transaction history may be deleted only when business rules permit it.
+10. Concurrent booking attempts must be recorded for simulation metrics.
+
+The main consistency rule is:
+
+```text
+matchId + seatId -> at most one successful booking / valid ticket
+```
+
+---
+
+## 8. Concurrency Simulation
+
+The simulator creates multiple `BookingTask` objects that attempt to reserve the
+same or overlapping seats. `ExecutorService` runs the tasks and
+`CountDownLatch` can synchronize their starting time.
+
+Supported synchronization mechanisms:
+
+- `NO_LOCK`: unsafe baseline used to demonstrate race conditions.
+- `SYNCHRONIZED`: JVM-level synchronized booking operation.
+- `FILE_LOCK`: file-level locking for CSV updates.
+- `OPTIMISTIC`: version-based update that detects write conflicts.
+
+Suggested scenarios:
+
+```text
+High contention:   many threads -> one seat
+Medium contention: many threads -> a small seat group
+Low contention:    many threads -> many different seats
+```
+
+Simulation results include mechanism, thread count, attempts, successes,
+failures, conflicts, double bookings, execution time and throughput.
+
+The simulator tests the booking core only. It does not create hundreds of online
+payment screens or require interactive console input from worker threads.
+
+---
+
+## 9. CSV Persistence
+
+Repositories convert Model objects to and from CSV rows. The expected data set
+includes files for these domains:
 
 ```text
 data/
   stadiums.csv
   sections.csv
   seats.csv
-  fans.csv
   matches.csv
-  tickets.csv
-  transactions.csv
-```
-
-Recommended extended CSV files:
-
-```text
-data/
-  staff.csv
   match_seats.csv
+  ticket_prices.csv
+  fans.csv
+  staff.csv
   bookings.csv
-  booking_items.csv
-  payment_transactions.csv
+  payments.csv
+  tickets.csv
+  booking_transactions.csv
+  refund_requests.csv
+  simulations.csv
   simulation_results.csv
   audit_logs.csv
-  ticket_pricing.csv
-  notifications.csv
 ```
 
-Important fields:
-
-- `Seat.status`: physical state only: `ACTIVE`, `MAINTENANCE`, `INACTIVE`.
-- `MatchSeat.status`: per-match sale state: `AVAILABLE`, `LOCKED`, `BOOKED`.
-- `MatchSeat.version`: required for optimistic locking.
-- `Booking.expiresAt`: required for pending booking expiry.
-- `Booking.idempotencyKey`: used to prevent duplicate submit.
-- `Ticket.status`: `VALID`, `USED`, `CANCELLED`, `REFUNDED`.
-- `Match.saleStatus`: `NOT_OPEN`, `ON_SALE`, `CLOSED`, `SOLD_OUT`.
-
-The generated dataset should contain at least **10,000 rows**, with seats as the largest dataset.
+The final generated data set should satisfy the LAB requirement for at least
+10,000 rows, with seats or match-seat inventory forming the largest portion.
 
 ---
 
-## 9. Data Generation
+## 10. Use Case And Class Diagrams
 
-Run the data generator before running the main program.
+### Use Case Diagram
 
-If using an IDE, run:
+The latest Use Case source is:
 
 ```text
-DataGenerator.java
+Biểu đồ không có tiêu đề (11).drawio
 ```
 
-If using command line:
+The `System Overview - UseCase` page is the current baseline for actors and
+user-visible features.
 
-```bash
-javac -d out $(find src -name "*.java")
-java -cp out util.DataGenerator
-```
+### Class Diagrams
 
-Verify row count:
+The class design is divided into six Mermaid files:
 
-```bash
-wc -l data/*.csv
-```
+| File | Content |
+| --- | --- |
+| `01_Main_View_Auth.mmd` | Navigation, authentication, profile, Guest browsing and DTOs |
+| `02_Stadium_Match_Admin.mmd` | Stadium, section, seat, match, pricing, accounts and Admin operations |
+| `03_User_Booking_Payment_Ticket.mmd` | Fan/Seller booking, payment, ticket, refund and Gate Staff flows |
+| `04_Simulation.mmd` | Simulation configuration, booking tasks, strategies and reporting |
+| `05_CSV_Repository_BaseEntity.mmd` | CSV repositories, base entity, data generator and exceptions |
+| `06_Model_Relationships.mmd` | Entity relationships, inheritance and multiplicities |
+
+See the [Class Diagram Index](docs/Class_Diagrams/README.md) for conventions and
+detailed design notes.
 
 ---
 
-## 10. Compile And Run
+## 11. Project Structure
 
-Compile:
+```text
+Stadium-Ticket-Booking-Simulation/
+  src/                    Java source code
+  data/                   CSV data files (created when persistence is implemented)
+  docs/                   Requirements and technical documents
+    Class_Diagrams/       Six Mermaid class diagrams
+  ai_logs/                AI usage evidence and reflection material
+  README.md               Project overview
+```
+
+The repository is being implemented incrementally. The current source contains
+the common foundation and the first Stadium domain classes. The remaining
+features in this README describe the approved target scope and will be added in
+later implementation stages.
+
+---
+
+## 12. Compile And Run
+
+Requirements:
+
+- JDK 17 or a compatible Java version.
+- A terminal or Java IDE.
+
+Compile all Java files:
 
 ```bash
 javac -d out $(find src -name "*.java")
 ```
 
-Run:
-
-```bash
-java -cp out Main
-```
-
-If `Main.java` belongs to a package, update the command, for example:
+Run the current entry point:
 
 ```bash
 java -cp out app.Main
 ```
 
----
-
-## 11. Suggested Main Menu
-
-```text
-===== STADIUM TICKET BOOKING =====
-
-1. Guest / Fan Booking
-2. Staff Operations
-3. Data Management
-4. Concurrency Simulator
-5. Exit
-```
-
-Optional staff menu:
-
-```text
-===== STAFF OPERATIONS =====
-
-1. Seller Operations
-2. Support Operations
-3. Administrator Operations
-4. Back
-```
+The available menu functions depend on the current implementation stage.
 
 ---
 
-## 12. Booking Flow
+## 13. Documentation
 
-Fan checkout flow:
+Detailed documents are stored in [`docs/`](docs/README.md), including project
+scope, SRS, Use Cases, architecture, data model, simulation design, edge cases,
+test plan, implementation roadmap, delivery checklist and AI reflection.
 
-```text
-Login
--> Select Match
--> Select Section
--> View Seat Map
--> Select 1-4 Seats
--> Review Booking
--> Validate Booking
--> Calculate Booking Total
--> Execute Booking Core
--> Hold Seats
--> Create Pending Booking
--> Make Online Payment
--> Confirm Booking
--> Mark Seats BOOKED
--> Create Ticket
--> Record Transaction
-```
+When documents conflict, use this priority order:
 
-The application must re-check seat availability during the booking transaction.
-
-Viewing a seat as `AVAILABLE` does not guarantee that the seat is still available later.
+1. Current LAB211 assignment requirements.
+2. Latest Use Case diagram.
+3. Latest six Class Diagrams.
+4. This README.
+5. Older detailed documents in `docs/`.
 
 ---
 
-## 13. Concurrency Simulator
+## 14. Definition Of Done
 
-Required Java concurrency utilities:
+The project is complete when:
 
-```text
-ExecutorService
-CountDownLatch
-```
-
-Typical scenarios:
-
-```text
-High contention:   1000 fan threads -> 1 seat
-Medium contention: 1000 fan threads -> 100 seats
-Low contention:    1000 fan threads -> many different seats
-```
-
-Run simulator:
-
-```text
-Main Menu
--> Concurrency Simulator
--> Select Mechanism
--> Enter Thread Count
--> Select Match / Target Seats
--> Run
-```
-
-Recommended experiment:
-
-```text
-1000 threads x 4 mechanisms
-```
-
-Simulator metrics:
-
-- Mechanism.
-- Thread count.
-- Total attempts.
-- Successful bookings.
-- Failed bookings.
-- Conflict count.
-- Double booking count.
-- Execution time.
-- Throughput.
-- Double booking rate.
-
-Critical validation:
-
-```text
-same matchId + same seatId + multiple VALID tickets
-=> Double Booking
-```
-
-Expected research conclusion:
-
-- `NO_LOCK` is the unsafe baseline and may produce race conditions.
-- Safe strategies are expected to prevent double booking.
-- `SYNCHRONIZED` is simple but JVM-local.
-- `FILE_LOCK` is closer to CSV/file persistence but slower.
-- `OPTIMISTIC` supports concurrency but may produce conflicts under high contention.
-
----
-
-## 14. Documentation
-
-Detailed project documents are stored in:
-
-```text
-Document/
-```
-
-Current documentation set:
-
-- `Document/README.md`
-- `Document/00_REPO_SCAN_SUMMARY.md`
-- `Document/01_PROJECT_SCOPE.md`
-- `Document/02_SRS.md`
-- `Document/03_USE_CASE_SPECIFICATION.md`
-- `Document/04_FEATURE_BACKLOG.md`
-- `Document/05_LAYERED_ARCHITECTURE.md`
-- `Document/06_DOMAIN_DATA_MODEL.md`
-- `Document/07_BOOKING_AND_SIMULATION_DESIGN.md`
-- `Document/08_EDGE_CASES_AND_BUSINESS_RULES.md`
-- `Document/09_TEST_PLAN.md`
-- `Document/10_DELIVERY_CHECKLIST.md`
-- `Document/11_SERVICE_CONTRACTS.md`
-- `Document/12_IMPLEMENTATION_ROADMAP.md`
-- `Document/13_AI_USAGE_AUDIT_AND_REFLECTION.md`
-- `Document/Class_Diagrams/README.md`
-
-Use these files as the official baseline for implementation, report writing and diagram drawing.
-
-The code-ready class-diagram baseline is stored in `Document/Class_Diagrams/`. It contains six focused diagrams for Main/Auth, Stadium/Admin, Booking/Payment/Ticket, Simulation, CSV/Repository and complete Model relationships, plus a dependency guide. The diagrams preserve the Java Console structure `VIEW -> CONTROLLER -> SERVICE -> REPOSITORY -> MODEL / CSV`.
-
-Required diagrams:
-
-- UML Class Diagram.
-- Use Case Diagram, preferably split into Guest/Fan, Staff, Admin and Simulator.
-- Booking Flowchart.
-- Synchronization / Double Booking Prevention Flowchart.
-- Simulator Flowchart.
-
----
-
-## 15. Testing Checklist
-
-### Single-thread Booking
-
-- [ ] Fan can register.
-- [ ] Fan can login/logout.
-- [ ] Match list loads correctly.
-- [ ] Seat map displays correctly.
-- [ ] Fan can select 1-4 seats.
-- [ ] Booking total is calculated.
-- [ ] Seat is held before payment confirmation.
-- [ ] Ticket is created after successful booking.
-- [ ] Booked seat cannot be booked again.
-- [ ] Pending booking expiry releases held seats.
-- [ ] Duplicate submit is prevented if idempotency is implemented.
-
-### CRUD / Admin
-
-- [ ] Stadium CRUD/search works.
-- [ ] Section CRUD/search works.
-- [ ] Seat CRUD/search works.
-- [ ] Fan CRUD/search works.
-- [ ] Match CRUD/search works.
-- [ ] Sales open/close works if implemented.
-- [ ] Pricing snapshot works if implemented.
-
-### CSV
-
-- [ ] CSV parse works.
-- [ ] CSV serialization works.
-- [ ] >= 10,000 rows generated.
-- [ ] Invalid CSV data is handled safely.
-- [ ] Duplicate IDs are detected.
-- [ ] Broken references are detected.
-
-### Concurrency
-
-- [ ] `NO_LOCK` demonstrates possible race condition.
-- [ ] `SYNCHRONIZED` prevents double booking.
-- [ ] `FILE_LOCK` prevents double booking.
-- [ ] `OPTIMISTIC` detects version conflict.
-- [ ] `CountDownLatch` is used.
-- [ ] `ExecutorService` is used.
-- [ ] Simulator calls booking core only.
-- [ ] Simulator does not run online payment flow.
-- [ ] 100-500 thread demo works.
-- [ ] 1000-thread experiment works if the machine can handle it.
-
----
-
-## 16. AI Audit
-
-This project keeps an AI audit trail because AI was used to support requirements analysis, use case correction, architecture design, documentation and prompt review.
-
-Current AI log files:
-
-```text
-ai_logs/
-  doan_ngoc_nhan_QE210282_ai_log.md
-  prompt_audit_summary.md
-```
-
-AI audit records include:
-
-- Original prompt summary.
-- AI output summary.
-- Accepted parts.
-- Rejected or modified parts.
-- Verification method.
-- Impact on project.
-
-Important AI-audited decisions:
-
-1. Create documentation from repository scan.
-2. Split `Create Booking` checkout flow from `Execute Booking Core`.
-3. Prevent Simulator from including Fan online payment flow.
-4. Add seat hold expiry and idempotency.
-5. Add enterprise-like extensions with priority control.
-6. Clean duplicate include relationships in use case specs.
-
-AI Reflection in the report should explain:
-
-- What AI helped with.
-- Which AI outputs were incorrect or incomplete.
-- How the team verified/corrected AI output.
-- How prompts improved over time.
-- Risks of depending too much on AI.
-- Lessons learned.
-
-Requirement for T10:
-
-```text
-AI Reflection >= 500 words per member
-AI Log file per member
-Prompt audit for important AI interactions
-```
-
-For this member:
-
-```text
-Member: Doan Ngoc Nhan - QE210282
-AI log: ai_logs/doan_ngoc_nhan_QE210282_ai_log.md
-Prompt audit: ai_logs/prompt_audit_summary.md
-```
-
----
-
-## 17. Submission Package
-
-Final ZIP naming format:
-
-```text
-NHOM_XX_LAB211_TicketBooking.zip
-```
-
-Expected contents:
-
-```text
-src/
-data/
-docs/
-ai_logs/
-README.md
-```
-
-Before submission:
-
-- [ ] Source code compiles successfully.
-- [ ] Main program runs.
-- [ ] MVC architecture is respected.
-- [ ] Controller does not access CSV directly.
-- [ ] Business logic is not placed in View.
-- [ ] CSV data has >= 10,000 rows.
-- [ ] DataGenerator works.
-- [ ] At least 5 custom exceptions exist.
-- [ ] At least 3 synchronization mechanisms are implemented.
-- [ ] Simulator uses `ExecutorService`.
-- [ ] Simulator uses `CountDownLatch`.
-- [ ] Throughput chart/table is completed.
-- [ ] Double booking rate chart/table is completed.
-- [ ] UML and flowcharts are completed.
-- [ ] Report and slides are completed.
-- [ ] AI logs are included.
-- [ ] AI Reflection is included.
-- [ ] ZIP follows the required structure.
-
----
-
-## 18. Notes
-
-The LAB requirements remain the top priority. Enterprise-like features should improve the design and report quality, but they should not break MVC, CSV persistence or the concurrency simulator deliverables.
+- Required use cases can be executed from the console according to role.
+- Controllers, Services and Repositories follow the dependency rules.
+- CSV data can be loaded, updated and saved reliably.
+- Fan and Seller booking flows prevent invalid seat sales.
+- Ticket validation prevents duplicate check-in.
+- Administrator functions cover the approved management scope.
+- All four synchronization mechanisms can be demonstrated and compared.
+- The simulator reports double-booking and performance metrics.
+- The project compiles and includes test/demo evidence.
+- Documentation, diagrams, report and submission package are synchronized.
