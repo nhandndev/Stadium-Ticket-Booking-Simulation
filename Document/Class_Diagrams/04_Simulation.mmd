@@ -1,0 +1,347 @@
+classDiagram
+    direction TB
+
+    namespace VIEW {
+        class SimulatorView {
+            -simulationController: SimulationController
+            +SimulatorView(simulationController: SimulationController)
+            +showConfigurationMenu(): void
+            +startSimulation(request: SimulationRequestDto): void
+        }
+        class ReportView {
+            -simulationController: SimulationController
+            +ReportView(simulationController: SimulationController)
+            +displayResults(): void
+            +displayComparison(results: List~SimulationResultDto~): void
+            +exportResult(simulationId: Long, filePath: Path): void
+        }
+    }
+
+    namespace CONTROLLER {
+        class SimulationController {
+            -simulationService: SimulationService
+            +SimulationController(simulationService: SimulationService)
+            +configureSimulation(request: SimulationRequestDto): SimulationResponseDto
+            +runSimulation(simulationId: Long): SimulationResultDto
+            +compareSyncMechanisms(simulationId: Long): List~SimulationResultDto~
+            +getResults(): List~SimulationResultDto~
+            +exportResult(simulationId: Long, filePath: Path): boolean
+            +shutdown(): void
+        }
+    }
+
+    namespace SERVICE {
+        class SimulationService {
+            -executor: ExecutorService
+            -strategyFactory: StrategyFactory
+            -simulationRepository: SimulationRepository
+            -resultRepository: SimulationResultRepository
+            -transactionRepository: TransactionRepository
+            +SimulationService(strategyFactory: StrategyFactory, simulationRepository: SimulationRepository, resultRepository: SimulationResultRepository, transactionRepository: TransactionRepository)
+            +configureSimulation(request: SimulationRequestDto): SimulationResponseDto
+            +runSimulation(simulationId: Long): SimulationResultDto
+            +compareSyncMechanisms(simulationId: Long): List~SimulationResultDto~
+            +getResults(): List~SimulationResultDto~
+            +exportResult(simulationId: Long, filePath: Path): boolean
+            +shutdown(): void
+        }
+    }
+
+    namespace DTO {
+        class SimulationRequestDto {
+            -matchId: Long
+            -targetSeatIds: List~Long~
+            -threadCount: int
+            -mechanism: SyncMechanism
+            +SimulationRequestDto(matchId: Long, targetSeatIds: List~Long~, threadCount: int, mechanism: SyncMechanism)
+            +getMatchId(): Long
+            +getThreadCount(): int
+            +getMechanism(): SyncMechanism
+            +getTargetSeatIds(): List~Long~
+        }
+        class SimulationResponseDto {
+            -simulationId: Long
+            -matchId: Long
+            -threadCount: int
+            -mechanism: SyncMechanism
+            -status: SimulationStatus
+            +SimulationResponseDto(simulationId: Long, matchId: Long, threadCount: int, mechanism: SyncMechanism, status: SimulationStatus)
+            +getSimulationId(): Long
+            +getMatchId(): Long
+            +getThreadCount(): int
+            +getMechanism(): SyncMechanism
+            +getStatus(): SimulationStatus
+        }
+        class SimulationResultDto {
+            -simulationId: Long
+            -mechanism: SyncMechanism
+            -threadCount: int
+            -attemptCount: int
+            -successCount: int
+            -failedCount: int
+            -conflictCount: int
+            -doubleBookingCount: int
+            -durationMillis: long
+            -throughput: double
+            -doubleBookingRate: double
+            +SimulationResultDto(simulationId: Long, mechanism: SyncMechanism, threadCount: int, attemptCount: int, successCount: int, failedCount: int, conflictCount: int, doubleBookingCount: int, durationMillis: long, throughput: double, doubleBookingRate: double)
+            +getSimulationId(): Long
+            +getMechanism(): SyncMechanism
+            +getThreadCount(): int
+            +getAttemptCount(): int
+            +getSuccessCount(): int
+            +getFailedCount(): int
+            +getConflictCount(): int
+            +getDoubleBookingCount(): int
+            +getDurationMillis(): long
+            +getThroughput(): double
+            +getDoubleBookingRate(): double
+        }
+    }
+
+    namespace REPOSITORY {
+        class SimulationRepository {
+            +SimulationRepository(filePath: Path)
+            +findByMatchId(matchId: Long): List~Simulation~
+            #parseLine(line: String): Simulation
+
+            #formatLine(entity: Simulation): String
+        }
+        class SimulationResultRepository {
+            +SimulationResultRepository(filePath: Path)
+            +findBySimulationId(simulationId: Long): List~SimulationResult~
+            +exportResult(simulationId: Long, filePath: Path): boolean
+            #parseLine(line: String): SimulationResult
+
+            #formatLine(entity: SimulationResult): String
+        }
+        class MatchSeatRepository {
+            -filePath: Path
+            +MatchSeatRepository(filePath: Path)
+            +findByMatchId(matchId: Long): List~MatchSeat~
+            +find(matchId: Long, seatId: Long): MatchSeat
+            +save(seat: MatchSeat): MatchSeat
+            +updateWithoutLock(seat: MatchSeat): boolean
+            +updateSynchronized(seat: MatchSeat): boolean
+            +updateWithFileLock(seat: MatchSeat): boolean
+            +updateIfVersionMatches(seat: MatchSeat, expectedVersion: int): boolean
+            #parseLine(line: String): MatchSeat
+            #formatLine(entity: MatchSeat): String
+        }
+        class TransactionRepository {
+            +TransactionRepository(filePath: Path)
+            +findBySimulationId(simulationId: Long): List~BookingTransaction~
+            #parseLine(line: String): BookingTransaction
+
+            #formatLine(entity: BookingTransaction): String
+        }
+    }
+
+    namespace STRATEGY {
+        class BookingStrategy {
+            <<interface>>
+            +execute(fanId: Long, matchId: Long, seatIds: List~Long~): BookingTransaction
+        }
+        class NoLockStrategy {
+            -matchSeatRepository: MatchSeatRepository
+            -transactionRepository: TransactionRepository
+            +NoLockStrategy(matchSeatRepository: MatchSeatRepository, transactionRepository: TransactionRepository)
+            +execute(fanId: Long, matchId: Long, seatIds: List~Long~): BookingTransaction
+        }
+        class SynchronizedStrategy {
+            -matchSeatRepository: MatchSeatRepository
+            -transactionRepository: TransactionRepository
+            +SynchronizedStrategy(matchSeatRepository: MatchSeatRepository, transactionRepository: TransactionRepository)
+            +execute(fanId: Long, matchId: Long, seatIds: List~Long~): BookingTransaction
+        }
+        class FileLockStrategy {
+            -matchSeatRepository: MatchSeatRepository
+            -transactionRepository: TransactionRepository
+            +FileLockStrategy(matchSeatRepository: MatchSeatRepository, transactionRepository: TransactionRepository)
+            +execute(fanId: Long, matchId: Long, seatIds: List~Long~): BookingTransaction
+        }
+        class OptimisticLockStrategy {
+            -matchSeatRepository: MatchSeatRepository
+            -transactionRepository: TransactionRepository
+            -maxRetries: int
+            +OptimisticLockStrategy(matchSeatRepository: MatchSeatRepository, transactionRepository: TransactionRepository, maxRetries: int)
+            +execute(fanId: Long, matchId: Long, seatIds: List~Long~): BookingTransaction
+        }
+        class StrategyFactory {
+            -matchSeatRepository: MatchSeatRepository
+            -transactionRepository: TransactionRepository
+            +StrategyFactory(matchSeatRepository: MatchSeatRepository, transactionRepository: TransactionRepository)
+            +create(mechanism: SyncMechanism): BookingStrategy
+        }
+        class BookingTask {
+            -startLatch: CountDownLatch
+            -strategy: BookingStrategy
+            -fanId: Long
+            -matchId: Long
+            -seatIds: List~Long~
+            +BookingTask(startLatch: CountDownLatch, strategy: BookingStrategy, fanId: Long, matchId: Long, seatIds: List~Long~)
+            +call(): BookingTransaction
+        }
+    }
+
+    namespace MODEL {
+        class Simulation {
+            -matchId: Long
+            -targetSeatIds: List~Long~
+            -threadCount: int
+            -mechanism: SyncMechanism
+            -status: SimulationStatus
+            +Simulation(id: Long, matchId: Long, targetSeatIds: List~Long~, threadCount: int, mechanism: SyncMechanism)
+            +start(): void
+            +complete(): void
+            +getMatchId(): Long
+            +getTargetSeatIds(): List~Long~
+            +getThreadCount(): int
+            +getMechanism(): SyncMechanism
+            +getStatus(): SimulationStatus
+        }
+        class SimulationResult {
+            -simulationId: Long
+            -mechanism: SyncMechanism
+            -threadCount: int
+            -attemptCount: int
+            -successCount: int
+            -failedCount: int
+            -conflictCount: int
+            -doubleBookingCount: int
+            -durationMillis: long
+            +SimulationResult(id: Long, simulationId: Long, mechanism: SyncMechanism, threadCount: int)
+            +recordAttempt(success: boolean, conflict: boolean, doubleBooking: boolean): void
+            +calculateThroughput(): double
+            +calculateDoubleBookingRate(): double
+            +getSimulationId(): Long
+            +getMechanism(): SyncMechanism
+            +getThreadCount(): int
+            +getAttemptCount(): int
+            +getSuccessCount(): int
+            +getFailedCount(): int
+            +getConflictCount(): int
+            +getDoubleBookingCount(): int
+            +getDurationMillis(): long
+        }
+        class BookingTransaction {
+            -simulationId: Long
+            -bookingId: Long
+            -fanId: Long
+            -matchId: Long
+            -seatIds: List~Long~
+            -mechanism: SyncMechanism
+            -status: TransactionStatus
+            -createdAt: LocalDateTime
+            -completedAt: LocalDateTime
+            -durationMillis: long
+            -failureReason: String
+            +BookingTransaction(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, mechanism: SyncMechanism)
+            +attachBooking(bookingId: Long): void
+            +attachSimulation(simulationId: Long): void
+            +markSuccessful(completedAt: LocalDateTime): void
+            +markFailed(reason: String, completedAt: LocalDateTime): void
+            +calculateDuration(): long
+            +getSimulationId(): Long
+            +getBookingId(): Long
+            +getFanId(): Long
+            +getMatchId(): Long
+            +getSeatIds(): List~Long~
+            +getMechanism(): SyncMechanism
+            +getStatus(): TransactionStatus
+            +getCreatedAt(): LocalDateTime
+            +getCompletedAt(): LocalDateTime
+            +getDurationMillis(): long
+            +getFailureReason(): String
+        }
+        class MatchSeat {
+            -matchId: Long
+            -seatId: Long
+            -status: SeatStatus
+            -version: int
+            +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int)
+            +isAvailable(): boolean
+            +lock(): void
+            +markBooked(): void
+            +release(): void
+            +getMatchId(): Long
+            +getSeatId(): Long
+            +getStatus(): SeatStatus
+            +getVersion(): int
+        }
+        class SyncMechanism {
+            <<enumeration>>
+            NO_LOCK
+            SYNCHRONIZED
+            FILE_LOCK
+            OPTIMISTIC
+        }
+        class SimulationStatus {
+            <<enumeration>>
+            CONFIGURED
+            RUNNING
+            COMPLETED
+        }
+        class TransactionStatus {
+            <<enumeration>>
+            SUCCESS
+            FAILED
+            CONFLICT
+        }
+        class SeatStatus {
+            <<enumeration>>
+            AVAILABLE
+            LOCKED
+            BOOKED
+        }
+    }
+
+    SimulatorView --> SimulationController
+    ReportView --> SimulationController
+    SimulationController --> SimulationService
+    SimulationService --> SimulationRepository
+    SimulationService --> SimulationResultRepository
+    SimulationService --> TransactionRepository
+    SimulationService --> StrategyFactory
+    BookingTask --> BookingStrategy
+    BookingStrategy <|.. NoLockStrategy
+    BookingStrategy <|.. SynchronizedStrategy
+    BookingStrategy <|.. FileLockStrategy
+    BookingStrategy <|.. OptimisticLockStrategy
+    Simulation "1" --> "0..*" SimulationResult
+    Simulation "1" --> "0..*" BookingTransaction
+
+    classDef view fill:#eef6ff,stroke:#3b82f6,color:#102a43,stroke-width:1px
+    classDef controller fill:#edfcf3,stroke:#22a06b,color:#102a43,stroke-width:1px
+    classDef service fill:#fff0f6,stroke:#c2255c,color:#102a43,stroke-width:1px
+    classDef dto fill:#ecfeff,stroke:#0891b2,color:#102a43,stroke-width:1px
+    classDef repository fill:#fff7e8,stroke:#d97706,color:#102a43,stroke-width:1px
+    classDef model fill:#f7f0ff,stroke:#845ec2,color:#102a43,stroke-width:1px
+    classDef helper fill:#f1f5f9,stroke:#64748b,color:#102a43,stroke-width:1px
+
+    class SimulatorView view
+    class ReportView view
+    class SimulationController controller
+    class SimulationService service
+    class SimulationRequestDto dto
+    class SimulationResponseDto dto
+    class SimulationResultDto dto
+    class SimulationRepository repository
+    class SimulationResultRepository repository
+    class MatchSeatRepository repository
+    class TransactionRepository repository
+    class BookingStrategy helper
+    class NoLockStrategy helper
+    class SynchronizedStrategy helper
+    class FileLockStrategy helper
+    class OptimisticLockStrategy helper
+    class StrategyFactory helper
+    class BookingTask helper
+    class Simulation model
+    class SimulationResult model
+    class BookingTransaction model
+    class MatchSeat model
+    class SyncMechanism model
+    class SimulationStatus model
+    class TransactionStatus model
+    class SeatStatus model

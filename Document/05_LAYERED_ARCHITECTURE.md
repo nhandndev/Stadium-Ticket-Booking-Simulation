@@ -7,10 +7,11 @@ He thong dung MVC nhung nen chia ro hon theo cac layer:
 ```text
 View
   -> Controller
+    -> Request / Result Object
     -> Service / Use Case
       -> Domain Model
-      -> Repository Interface
-        -> CSV Repository Implementation
+      -> Repository
+        -> CSV File
       -> Infrastructure Utilities
 ```
 
@@ -22,41 +23,66 @@ Simulator khong nam rieng mot booking logic moi. Simulator tao concurrent tasks 
 src/
   Main.java
   model/
-    BaseEntity.java
+    User.java
     Stadium.java
     Section.java
     Seat.java
+    MatchSeat.java
     Match.java
     Fan.java
     Staff.java
     Booking.java
-    BookingItem.java
     Ticket.java
-    BookingTransaction.java
-    PaymentTransaction.java
+    Payment.java
+    Simulation.java
+    SimulationConfig.java
     SimulationResult.java
-    AuditLog.java
+    TicketPrice.java
+    BookingItem.java
+    SeatHold.java
+    Transaction.java
+    RefundRequest.java
+    CancellationRequest.java
     Notification.java
+    AuditLog.java
+    InconsistencyReport.java
+  dto/
+    BookingRequest.java
+    BookingResult.java
+    PaymentRequest.java
+    PaymentResult.java
+    SimulationConfig.java
   repository/
-    CsvRepository.java
     StadiumRepository.java
     SectionRepository.java
     SeatRepository.java
+    MatchSeatRepository.java
     MatchRepository.java
     FanRepository.java
     StaffRepository.java
+    BookingRepository.java
+    PaymentRepository.java
     TicketRepository.java
-    TransactionRepository.java
     SimulationResultRepository.java
+    TicketPriceRepository.java
+    TransactionRepository.java
+    RefundRequestRepository.java
+    CancellationRequestRepository.java
+    NotificationRepository.java
+    AuditLogRepository.java
+    InconsistencyReportRepository.java
   service/
     AuthService.java
     BookingService.java
     PaymentService.java
     TicketService.java
+    MatchService.java
+    UserService.java
+    RefundService.java
     NotificationService.java
-    CheckInService.java
-    AdminService.java
+    SellerService.java
     SupportService.java
+    AdminService.java
     DataGenerationService.java
     CsvValidationService.java
     SimulationService.java
@@ -66,36 +92,42 @@ src/
     SynchronizedBookingStrategy.java
     FileLockBookingStrategy.java
     OptimisticBookingStrategy.java
+    FileLockManager.java
   controller/
     GuestController.java
+    UserController.java
     FanController.java
-    StaffController.java
-    AdminController.java
     SellerController.java
     SupportController.java
+    AdminController.java
+    GateController.java
     SimulationController.java
   view/
     MainMenuView.java
-    GuestView.java
+    LoginView.java
+    RegisterView.java
     FanView.java
-    StaffView.java
+    SellerView.java
+    SupportView.java
+    GateView.java
     AdminView.java
-    SeatMapView.java
     SimulationView.java
   exception/
-    SeatNotFoundException.java
+    AppException.java
+    ValidationException.java
+    NotFoundException.java
     SeatNotAvailableException.java
-    BookingLimitExceededException.java
-    MatchNotFoundException.java
-    FanNotFoundException.java
-    OptimisticLockException.java
-    CsvDataException.java
-    FileAccessException.java
+    BookingLimitException.java
+    BookingConflictException.java
+    AccessDeniedException.java
+    PaymentException.java
+    InvalidTicketException.java
+    SimulationException.java
+    CsvException.java
   util/
     CsvUtil.java
     IdGenerator.java
     DateTimeUtil.java
-    MoneyUtil.java
     DataGenerator.java
 ```
 
@@ -125,6 +157,12 @@ Lam:
 - Chuyen DTO/input sang command object neu can.
 - Bat exception va tra message ve View.
 
+### Request / Result Object
+
+- Mang du lieu giua Console View, Controller va Service.
+- Chi tao khi object giup dien ta nghiep vu nhu `BookingRequest`, `PaymentResult`, `SimulationConfig`.
+- Khong tao `ApiResponse`, HTTP DTO hoac global HTTP exception handler.
+
 Khong lam:
 
 - Khong doc/ghi CSV truc tiep.
@@ -145,8 +183,7 @@ Service quan trong:
 - `BookingService`: customer checkout va booking core, nhung phai tach method ro.
 - `SimulationService`: tao thread, chay scenario, collect metric.
 - `PaymentService`: payment simulation.
-- `SupportService`: tra cuu va reconciliation.
-- `AdminService`: CRUD va data validation.
+- `AdminService`: mot service don cho toan bo feature Administrator; khong tach service con theo tung menu trong project nho.
 
 ### Domain Model
 
@@ -169,11 +206,7 @@ Lam:
 - Search/filter.
 - Cap nhat seat/ticket/transaction.
 
-Nen co:
-
-- Generic `CsvRepository<T>`.
-- Atomic write strategy: ghi temp file roi replace neu co the.
-- Cache in-memory cho read performance neu can.
+Moi entity/nhom du lieu dung mot repository concrete don gian, vi du `BookingRepository`, `TicketRepository`. Repository tu doc/ghi file CSV cua no; khong bat buoc generic interface, mapper, cache hoac repository implementation thu hai.
 
 ### Infrastructure / Util
 
@@ -190,7 +223,7 @@ Lam:
 Huong phu thuoc nen la:
 
 ```text
-View -> Controller -> Service -> Repository -> CSV
+View -> Controller -> Request/Result -> Service -> Repository -> CSV
 Service -> Domain
 Repository -> Domain
 ```

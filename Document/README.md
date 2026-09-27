@@ -13,13 +13,14 @@ Muc tieu: giu dung trong tam cua du an LAB211 la Java OOP, MVC, CSV persistence 
 5. [04_FEATURE_BACKLOG.md](04_FEATURE_BACKLOG.md) - Feature theo module, uu tien MVP/Core/Enterprise-like.
 6. [05_LAYERED_ARCHITECTURE.md](05_LAYERED_ARCHITECTURE.md) - Phan tang MVC ro rang va package goi y.
 7. [06_DOMAIN_DATA_MODEL.md](06_DOMAIN_DATA_MODEL.md) - Entity, CSV schema, quan he du lieu.
-8. [07_BOOKING_AND_SIMULATION_DESIGN.md](07_BOOKING_AND_SIMULATION_DESIGN.md) - Booking engine, dong bo, simulator, metric.
-9. [08_EDGE_CASES_AND_BUSINESS_RULES.md](08_EDGE_CASES_AND_BUSINESS_RULES.md) - Business rules va edge cases can xu ly.
-10. [09_TEST_PLAN.md](09_TEST_PLAN.md) - Test plan cho unit/integration/concurrency/performance.
-11. [10_DELIVERY_CHECKLIST.md](10_DELIVERY_CHECKLIST.md) - Checklist code, data, report, slide, demo.
-12. [11_SERVICE_CONTRACTS.md](11_SERVICE_CONTRACTS.md) - Contract goi y cho Controller-Service-Repository.
+8. [Class_Diagrams/README.md](Class_Diagrams/README.md) - Baseline Class Diagram code-ready gom 6 trang, Service, DTO va dependency guide.
+9. [11_SERVICE_CONTRACTS.md](11_SERVICE_CONTRACTS.md) - Contract goi y cho Controller-Service-Repository.
+10. [07_BOOKING_AND_SIMULATION_DESIGN.md](07_BOOKING_AND_SIMULATION_DESIGN.md) - Booking engine, dong bo, simulator, metric.
+11. [08_EDGE_CASES_AND_BUSINESS_RULES.md](08_EDGE_CASES_AND_BUSINESS_RULES.md) - Business rules va edge cases can xu ly.
+12. [09_TEST_PLAN.md](09_TEST_PLAN.md) - Test plan cho unit/integration/concurrency/performance.
 13. [12_IMPLEMENTATION_ROADMAP.md](12_IMPLEMENTATION_ROADMAP.md) - Lo trinh code theo phase/sprint.
-14. [13_AI_USAGE_AUDIT_AND_REFLECTION.md](13_AI_USAGE_AUDIT_AND_REFLECTION.md) - AI Log, audit prompt va AI Reflection.
+14. [10_DELIVERY_CHECKLIST.md](10_DELIVERY_CHECKLIST.md) - Checklist code, data, report, slide, demo.
+15. [13_AI_USAGE_AUDIT_AND_REFLECTION.md](13_AI_USAGE_AUDIT_AND_REFLECTION.md) - AI Log, audit prompt va AI Reflection.
 
 ## Nguyen tac ra quyet dinh
 

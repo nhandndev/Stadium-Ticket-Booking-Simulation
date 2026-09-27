@@ -34,14 +34,24 @@
 | rowLabel | String | A, B, C |
 | seatNumber | int | Required |
 | seatType | SeatType | STANDARD, VIP, ACCESSIBLE |
-| status | SeatStatus | AVAILABLE, LOCKED, BOOKED, MAINTENANCE |
-| lockedBy | String | bookingId/sessionId optional |
+| status | PhysicalSeatStatus | ACTIVE, MAINTENANCE, INACTIVE |
+
+`Seat` chi mo ta ghe vat ly. Trang thai ban ve khong duoc dat truc tiep tren `Seat`, vi cung mot ghe co the ban cho nhieu tran khac nhau.
+
+### MatchSeat
+
+| Field | Type | Notes |
+|---|---|---|
+| matchSeatId | String | Unique |
+| matchId | String | FK Match |
+| seatId | String | FK Seat |
+| status | MatchSeatStatus | AVAILABLE, LOCKED, BOOKED |
+| lockedByBookingId | String | optional |
 | lockedAt | LocalDateTime | optional |
+| lockExpiresAt | LocalDateTime | optional |
 | version | int | Required for optimistic lock |
 
-Important: trong he thong thuc te, status cua ghe nen theo match. Neu CSV don gian chi co `seats.csv`, can dam bao ticket uniqueness bang `matchId + seatId`.
-
-Nen them file `match_seats.csv` neu muon chuan hon.
+Unique business constraint: `matchId + seatId` phai unique. Moi lifecycle `AVAILABLE -> LOCKED -> BOOKED` dien ra tren `MatchSeat`.
 
 ### Match
 
@@ -58,28 +68,40 @@ Nen them file `match_seats.csv` neu muon chuan hon.
 | saleStatus | SaleStatus | NOT_OPEN, ON_SALE, CLOSED, SOLD_OUT |
 | basePriceMultiplier | double | Optional, default 1.0 |
 
-### Fan
+### User
+
+`User` la abstract parent cua `Fan` va `Staff`. Khi luu CSV, cac inherited fields co the duoc flatten vao `fans.csv` va `staff.csv` de mapper don gian.
 
 | Field | Type | Notes |
 |---|---|---|
-| fanId | String | Unique |
+| userId | String | Unique |
 | fullName | String | Required |
 | email | String | Unique if provided |
 | phone | String | Unique if provided |
-| password | String | Demo only |
-| status | FanStatus | ACTIVE, INACTIVE, BLOCKED |
+| passwordHash | String | Demo only, khong luu raw password |
+| status | UserStatus | ACTIVE, INACTIVE, BLOCKED |
 | createdAt | LocalDateTime | Required |
+| updatedAt | LocalDateTime | Required |
 
-### Staff
+### Fan
+
+`Fan extends User`.
 
 | Field | Type | Notes |
 |---|---|---|
-| staffId | String | Unique |
-| fullName | String | Required |
+| fanCode | String | Unique customer code |
+
+### Staff
+
+`Staff extends User`.
+
+Trong UML, `Staff` la abstract parent cua `Seller`, `SupportStaff`, `Administrator` va `GateStaff`. Khi luu CSV, tat ca van dung chung `staff.csv`; cot `role` cho biet loai Staff de khoi phuc dung subclass khi doc file.
+
+| Field | Type | Notes |
+|---|---|---|
+| staffCode | String | Unique employee code |
 | username | String | Unique |
-| password | String | Demo only |
-| role | StaffRole | SELLER, SUPPORT, ADMIN |
-| status | StaffStatus | ACTIVE, INACTIVE |
+| role | StaffRole | SELLER, SUPPORT, ADMINISTRATOR, GATE_STAFF |
 
 ### Booking
 
@@ -104,7 +126,7 @@ Nen them file `match_seats.csv` neu muon chuan hon.
 | bookingItemId | String | Unique |
 | bookingId | String | FK Booking |
 | matchId | String | FK Match |
-| seatId | String | FK Seat |
+| matchSeatId | String | FK MatchSeat |
 | price | double | Snapshot price |
 | status | BookingItemStatus | LOCKED, CONFIRMED, RELEASED |
 
@@ -116,7 +138,7 @@ Nen them file `match_seats.csv` neu muon chuan hon.
 | bookingId | String | FK Booking |
 | fanId | String | FK Fan |
 | matchId | String | FK Match |
-| seatId | String | FK Seat |
+| matchSeatId | String | FK MatchSeat |
 | qrCode | String | simulated |
 | status | TicketStatus | VALID, USED, CANCELLED, REFUNDED |
 | issuedAt | LocalDateTime | Required |
@@ -225,6 +247,7 @@ Bat buoc/nen co:
 - `stadiums.csv`
 - `sections.csv`
 - `seats.csv`
+- `match_seats.csv`
 - `fans.csv`
 - `staff.csv`
 - `matches.csv`
@@ -256,21 +279,26 @@ Can validate:
 - Seat.sectionId ton tai trong Section.
 - Seat.stadiumId khop voi Section.stadiumId.
 - Match.stadiumId ton tai trong Stadium.
+- MatchSeat.matchId ton tai trong Match.
+- MatchSeat.seatId ton tai trong Seat va phai thuoc stadium cua Match.
+- MatchSeat.matchId + seatId phai unique.
 - Booking.fanId ton tai trong Fan.
 - Booking.matchId ton tai trong Match.
 - Ticket.bookingId ton tai trong Booking.
-- Ticket.matchId + seatId khong duplicate voi ticket valid khac.
+- Ticket.matchId + matchSeatId khong duplicate voi ticket valid khac.
 
 ## Enum Goi Y
 
 ```text
-SeatStatus = AVAILABLE, LOCKED, BOOKED, MAINTENANCE
+PhysicalSeatStatus = ACTIVE, MAINTENANCE, INACTIVE
+MatchSeatStatus = AVAILABLE, LOCKED, BOOKED
 MatchStatus = SCHEDULED, OPEN_FOR_SALE, SOLD_OUT, CANCELLED, COMPLETED
 SaleStatus = NOT_OPEN, ON_SALE, CLOSED, SOLD_OUT
 BookingStatus = PENDING, CONFIRMED, FAILED, CANCELLED, EXPIRED
 PaymentStatus = PENDING, SUCCESS, FAILED, CANCELLED, EXPIRED, REFUNDED
 TicketStatus = VALID, USED, CANCELLED, REFUNDED
-StaffRole = SELLER, SUPPORT, ADMIN
+StaffRole = SELLER, SUPPORT, ADMINISTRATOR, GATE_STAFF
+UserStatus = ACTIVE, INACTIVE, BLOCKED
 SyncMechanism = NO_LOCK, SYNCHRONIZED, FILE_LOCK, OPTIMISTIC
 ContentionScenario = HIGH, MEDIUM, LOW
 PricingStatus = ACTIVE, INACTIVE

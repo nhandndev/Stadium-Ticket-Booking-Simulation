@@ -94,19 +94,19 @@
 
 | ID | Feature | Priority | Notes |
 |---|---|---|---|
-| F-701 | Manage stadium | P1 | CRUD + search |
-| F-702 | Manage section | P1 | CRUD + search |
-| F-703 | Manage seat | P1 | CRUD + search |
-| F-704 | Manage match | P1 | CRUD + search |
-| F-705 | Manage fan | P1 | CRUD + search |
+| F-701 | Stadium management | P1 | Create, list, details, update, conditional delete |
+| F-702 | Section management | P1 | Create, list by stadium, details, update, conditional delete |
+| F-703 | Seat management | P1 | CRUD by section + activate/deactivate |
+| F-704 | Match management | P1 | Create, list, details, update, conditional delete |
+| F-705 | Fan management | P1 | CRUD/search + activate/deactivate + lock/unlock |
 | F-706 | Generate CSV data | P0 | >= 10,000 rows |
 | F-707 | Validate CSV data | P1 | Duplicate/reference/status |
 | F-708 | View system summary | P2 | Counts/status |
-| F-709 | Manage staff | P1 | Create/disable seller/support/admin |
-| F-710 | Manage roles | P1 | Assign SELLER/SUPPORT/ADMIN |
-| F-711 | Open ticket sales | P1 | Cho match bat dau ban ve |
-| F-712 | Close ticket sales | P1 | Ngung ban ve theo match |
-| F-713 | Manage ticket pricing | P1 | Section/match price |
+| F-709 | Staff account management | P1 | CRUD/search + activate/deactivate + lock/unlock |
+| F-710 | Staff role management | P1 | View, assign, change, revoke available roles |
+| F-711 | Open ticket sales | P1 | Validate match, seat and pricing before opening |
+| F-712 | Close ticket sales | P1 | Stop new holds and expose sales status |
+| F-713 | Ticket pricing management | P1 | CRUD price by Match + Section |
 | F-714 | View audit log | P2 | Theo actor/action/entity |
 
 ## Module 9 - Concurrency Simulator

@@ -10,7 +10,7 @@ Tasks:
 - Tao `Main.java` va menu chinh.
 - Tao enum co ban.
 - Tao custom exceptions.
-- Tao `CsvRepository<T>` va utility parse/write CSV.
+- Tao cac repository concrete va utility parse/write CSV.
 
 Done when:
 

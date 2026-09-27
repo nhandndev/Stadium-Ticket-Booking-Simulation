@@ -94,10 +94,9 @@ Must show:
 - Visibility.
 - Inheritance.
 - Associations.
-- Multiplicity.
-- `BaseEntity`.
-- `CsvRepository<T>`.
-- Booking/BookingItem/Ticket relation.
+- Khong bat buoc multiplicity neu de bai khong yeu cau.
+- Repository concrete don gian cho tung entity/nhom du lieu.
+- Booking/Ticket relation.
 - Synchronization strategy interface and implementations.
 
 ### Flowcharts

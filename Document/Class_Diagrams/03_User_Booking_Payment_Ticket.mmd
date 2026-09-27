@@ -1,0 +1,660 @@
+classDiagram
+    direction TB
+
+    namespace VIEW {
+        class SeatMapView {
+            -browseController: BrowseController
+            +SeatMapView(browseController: BrowseController)
+            +displaySeatMap(matchId: Long): void
+        }
+        class BookingView {
+            -bookingController: BookingController
+            -refundController: RefundController
+            -seatMapView: SeatMapView
+            -fanController: FanController
+            -ticketController: TicketController
+            +BookingView(bookingController: BookingController, refundController: RefundController, seatMapView: SeatMapView, fanController: FanController, ticketController: TicketController)
+            +showBookingMenu(): void
+            +submitBooking(request: BookingRequestDto): void
+            +displayBookingResponse(response: BookingResponseDto): void
+            +showMyBookings(fanId: Long): void
+            +showMyTickets(fanId: Long): void
+            +showTicketDetails(ticketId: Long): void
+            +showRefundMenu(fanId: Long): void
+        }
+        class SellerView {
+            -fanController: FanController
+            -bookingController: BookingController
+            +SellerView(fanController: FanController, bookingController: BookingController)
+            +showSellerMenu(): void
+            +searchFan(keyword: String): void
+            +createFan(): void
+            +createBookingForFan(request: BookingRequestDto): void
+            +acceptOfflinePayment(request: PaymentRequestDto): void
+            +issueTicket(bookingId: Long): void
+        }
+        class GateView {
+            -ticketController: TicketController
+            +GateView(ticketController: TicketController)
+            +showGateMenu(): void
+            +validateTicket(ticketCode: String, matchId: Long): void
+            +checkInTicket(ticketCode: String, matchId: Long): void
+        }
+    }
+
+    namespace CONTROLLER {
+        class BrowseController {
+            -browseService: BrowseService
+            +BrowseController(browseService: BrowseService)
+            +searchMatches(keyword: String): List~MatchResponseDto~
+            +filterMatches(stadiumId: Long, startDate: LocalDate): List~MatchResponseDto~
+            +viewMatchDetails(matchId: Long): MatchResponseDto
+            +getSeatMap(matchId: Long): List~MatchSeatResponseDto~
+        }
+        class FanController {
+            -fanService: FanService
+            +FanController(fanService: FanService)
+            +register(request: RegisterFanRequestDto): UserResponseDto
+            +searchFans(keyword: String): List~UserResponseDto~
+            +getMyTickets(fanId: Long): List~TicketResponseDto~
+        }
+        class BookingController {
+            -bookingService: BookingService
+            +BookingController(bookingService: BookingService)
+            +createBooking(request: BookingRequestDto): BookingResponseDto
+            +createBookingForFan(sellerId: Long, request: BookingRequestDto): BookingResponseDto
+            +makeOnlinePayment(request: PaymentRequestDto): PaymentResponseDto
+            +acceptOfflinePayment(sellerId: Long, request: PaymentRequestDto): PaymentResponseDto
+            +issueTickets(bookingId: Long): List~TicketResponseDto~
+            +getMyBookings(fanId: Long): List~BookingResponseDto~
+            +getBookingDetails(bookingId: Long): BookingResponseDto
+        }
+        class TicketController {
+            -ticketService: TicketService
+            +TicketController(ticketService: TicketService)
+            +validateTicket(ticketCode: String, matchId: Long): TicketResponseDto
+            +getTicketDetails(ticketId: Long): TicketResponseDto
+            +checkInTicket(ticketCode: String, matchId: Long): TicketResponseDto
+        }
+        class RefundController {
+            -refundService: RefundService
+            +RefundController(refundService: RefundService)
+            +requestRefund(request: RefundRequestDto): RefundResponseDto
+            +reviewRefund(request: RefundReviewRequestDto): RefundResponseDto
+        }
+    }
+
+    namespace SERVICE {
+        class BrowseService {
+            -matchRepository: MatchRepository
+            -matchSeatRepository: MatchSeatRepository
+            +BrowseService(matchRepository: MatchRepository, matchSeatRepository: MatchSeatRepository)
+            +searchMatches(keyword: String): List~MatchResponseDto~
+            +filterMatches(stadiumId: Long, startDate: LocalDate): List~MatchResponseDto~
+            +viewMatchDetails(matchId: Long): MatchResponseDto
+            +getSeatMap(matchId: Long): List~MatchSeatResponseDto~
+        }
+        class FanService {
+            -fanRepository: FanRepository
+            -bookingRepository: BookingRepository
+            -ticketRepository: TicketRepository
+            +FanService(fanRepository: FanRepository, bookingRepository: BookingRepository, ticketRepository: TicketRepository)
+            +register(request: RegisterFanRequestDto): UserResponseDto
+            +searchFans(keyword: String): List~UserResponseDto~
+            +getMyTickets(fanId: Long): List~TicketResponseDto~
+        }
+        class BookingService {
+            -bookingRepository: BookingRepository
+            -ticketRepository: TicketRepository
+            -paymentRepository: PaymentRepository
+            -transactionRepository: TransactionRepository
+            -seatRepository: SeatRepository
+            -ticketPriceRepository: TicketPriceRepository
+            -strategyFactory: StrategyFactory
+            -mockPaymentService: MockPaymentService
+            +BookingService(bookingRepository: BookingRepository, ticketRepository: TicketRepository, paymentRepository: PaymentRepository, transactionRepository: TransactionRepository, seatRepository: SeatRepository, ticketPriceRepository: TicketPriceRepository, strategyFactory: StrategyFactory, mockPaymentService: MockPaymentService)
+            +validateTicketLimit(seatIds: List~Long~): void
+            +calculateTotal(matchId: Long, seatIds: List~Long~): BigDecimal
+            +createBooking(request: BookingRequestDto): BookingResponseDto
+            +createBookingForFan(sellerId: Long, request: BookingRequestDto): BookingResponseDto
+            +makeOnlinePayment(request: PaymentRequestDto): PaymentResponseDto
+            +acceptOfflinePayment(sellerId: Long, request: PaymentRequestDto): PaymentResponseDto
+            +issueTickets(bookingId: Long): List~TicketResponseDto~
+            +getMyBookings(fanId: Long): List~BookingResponseDto~
+            +getBookingDetails(bookingId: Long): BookingResponseDto
+        }
+        class TicketService {
+            -ticketRepository: TicketRepository
+            +TicketService(ticketRepository: TicketRepository)
+            +validateTicket(ticketCode: String, matchId: Long): TicketResponseDto
+            +getTicketDetails(ticketId: Long): TicketResponseDto
+            +checkInTicket(ticketCode: String, matchId: Long): TicketResponseDto
+        }
+        class RefundService {
+            -refundRepository: RefundRepository
+            -bookingRepository: BookingRepository
+            +RefundService(refundRepository: RefundRepository, bookingRepository: BookingRepository)
+            +requestRefund(request: RefundRequestDto): RefundResponseDto
+            +reviewRefund(request: RefundReviewRequestDto): RefundResponseDto
+        }
+    }
+
+    namespace DTO {
+        class RegisterFanRequestDto {
+            -fullName: String
+            -email: String
+            -password: String
+            -phone: String
+            +RegisterFanRequestDto(fullName: String, email: String, password: String, phone: String)
+            +getFullName(): String
+            +getEmail(): String
+            +getPassword(): String
+            +getPhone(): String
+        }
+        class UserResponseDto {
+            -id: Long
+            -fullName: String
+            -email: String
+            -phone: String
+            -role: UserRole
+            -status: UserStatus
+            +UserResponseDto(id: Long, fullName: String, email: String, phone: String, role: UserRole, status: UserStatus)
+            +getId(): Long
+            +getRole(): UserRole
+            +getFullName(): String
+            +getEmail(): String
+            +getPhone(): String
+            +getStatus(): UserStatus
+        }
+        class MatchResponseDto {
+            -id: Long
+            -stadiumId: Long
+            -homeTeam: String
+            -awayTeam: String
+            -startTime: LocalDateTime
+            -saleStatus: SaleStatus
+            +MatchResponseDto(id: Long, stadiumId: Long, homeTeam: String, awayTeam: String, startTime: LocalDateTime, saleStatus: SaleStatus)
+            +getId(): Long
+            +getStadiumId(): Long
+            +getHomeTeam(): String
+            +getAwayTeam(): String
+            +getStartTime(): LocalDateTime
+            +getSaleStatus(): SaleStatus
+        }
+
+        class MatchSeatResponseDto {
+            -id: Long
+            -matchId: Long
+            -seatId: Long
+            -status: SeatStatus
+            -version: int
+            +MatchSeatResponseDto(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int)
+            +isAvailable(): boolean
+            +getId(): Long
+            +getMatchId(): Long
+            +getSeatId(): Long
+            +getStatus(): SeatStatus
+            +getVersion(): int
+        }
+        class BookingRequestDto {
+            -fanId: Long
+            -matchId: Long
+            -seatIds: List~Long~
+            +BookingRequestDto(fanId: Long, matchId: Long, seatIds: List~Long~)
+            +getFanId(): Long
+            +getMatchId(): Long
+            +getSeatIds(): List~Long~
+        }
+        class BookingResponseDto {
+            -bookingId: Long
+            -fanId: Long
+            -matchId: Long
+            -seatIds: List~Long~
+            -totalAmount: BigDecimal
+            -status: BookingStatus
+            +BookingResponseDto(bookingId: Long, fanId: Long, matchId: Long, seatIds: List~Long~, totalAmount: BigDecimal, status: BookingStatus)
+            +getBookingId(): Long
+            +getStatus(): BookingStatus
+            +getFanId(): Long
+            +getMatchId(): Long
+            +getSeatIds(): List~Long~
+            +getTotalAmount(): BigDecimal
+        }
+        class PaymentRequestDto {
+            -bookingId: Long
+            -amount: BigDecimal
+            +PaymentRequestDto(bookingId: Long, amount: BigDecimal)
+            +getBookingId(): Long
+            +getAmount(): BigDecimal
+        }
+        class PaymentResponseDto {
+            -paymentId: Long
+            -bookingId: Long
+            -amount: BigDecimal
+            -method: PaymentMethod
+            -status: PaymentStatus
+            +PaymentResponseDto(paymentId: Long, bookingId: Long, amount: BigDecimal, method: PaymentMethod, status: PaymentStatus)
+            +getStatus(): PaymentStatus
+            +getPaymentId(): Long
+            +getBookingId(): Long
+            +getAmount(): BigDecimal
+            +getMethod(): PaymentMethod
+        }
+        class TicketResponseDto {
+            -ticketId: Long
+            -bookingId: Long
+            -matchId: Long
+            -seatId: Long
+            -ticketCode: String
+            -status: TicketStatus
+            -checkedInAt: LocalDateTime
+            +TicketResponseDto(ticketId: Long, bookingId: Long, matchId: Long, seatId: Long, ticketCode: String, status: TicketStatus, checkedInAt: LocalDateTime)
+            +getTicketId(): Long
+            +getTicketCode(): String
+            +getBookingId(): Long
+            +getMatchId(): Long
+            +getSeatId(): Long
+            +getStatus(): TicketStatus
+            +getCheckedInAt(): LocalDateTime
+        }
+        class RefundRequestDto {
+            -fanId: Long
+            -bookingId: Long
+            -reason: String
+            +RefundRequestDto(fanId: Long, bookingId: Long, reason: String)
+            +getBookingId(): Long
+            +getFanId(): Long
+            +getReason(): String
+        }
+        class RefundReviewRequestDto {
+            -adminId: Long
+            -requestId: Long
+            -approve: boolean
+            -note: String
+            +RefundReviewRequestDto(adminId: Long, requestId: Long, approve: boolean, note: String)
+            +isApprove(): boolean
+            +getAdminId(): Long
+            +getRequestId(): Long
+            +getNote(): String
+        }
+        class RefundResponseDto {
+            -requestId: Long
+            -bookingId: Long
+            -fanId: Long
+            -status: RefundStatus
+            +RefundResponseDto(requestId: Long, bookingId: Long, fanId: Long, status: RefundStatus)
+            +getStatus(): RefundStatus
+            +getRequestId(): Long
+            +getBookingId(): Long
+            +getFanId(): Long
+        }
+    }
+
+    namespace REPOSITORY {
+        class MatchRepository {
+            +MatchRepository(filePath: Path)
+            +findUpcoming(): List~Match~
+            #parseLine(line: String): Match
+
+            #formatLine(entity: Match): String
+        }
+        class SeatRepository {
+            +SeatRepository(filePath: Path)
+            +findBySectionId(sectionId: Long): List~Seat~
+            #parseLine(line: String): Seat
+
+            #formatLine(entity: Seat): String
+        }
+        class TicketPriceRepository {
+            -filePath: Path
+            +TicketPriceRepository(filePath: Path)
+            +findPrice(matchId: Long, sectionId: Long): TicketPrice
+            +findByMatchId(matchId: Long): List~TicketPrice~
+            +save(price: TicketPrice): TicketPrice
+            +update(price: TicketPrice): TicketPrice
+            +delete(matchId: Long, sectionId: Long): boolean
+            #parseLine(line: String): TicketPrice
+            #formatLine(entity: TicketPrice): String
+        }
+        class FanRepository {
+            +FanRepository(filePath: Path)
+            +findByEmail(email: String): Fan
+            +search(keyword: String): List~Fan~
+            #parseLine(line: String): Fan
+
+            #formatLine(entity: Fan): String
+        }
+        class BookingRepository {
+            +BookingRepository(filePath: Path)
+            +findByFanId(fanId: Long): List~Booking~
+            #parseLine(line: String): Booking
+
+            #formatLine(entity: Booking): String
+        }
+        class PaymentRepository {
+            +PaymentRepository(filePath: Path)
+            +findByBookingId(bookingId: Long): Payment
+            #parseLine(line: String): Payment
+
+            #formatLine(entity: Payment): String
+        }
+        class TicketRepository {
+            +TicketRepository(filePath: Path)
+            +findByBookingId(bookingId: Long): List~Ticket~
+            +findByCode(ticketCode: String): Ticket
+            +findByFanId(fanId: Long): List~Ticket~
+            #parseLine(line: String): Ticket
+
+            #formatLine(entity: Ticket): String
+        }
+        class TransactionRepository {
+            +TransactionRepository(filePath: Path)
+            +findBySimulationId(simulationId: Long): List~BookingTransaction~
+            #parseLine(line: String): BookingTransaction
+
+            #formatLine(entity: BookingTransaction): String
+        }
+        class MatchSeatRepository {
+            -filePath: Path
+            +MatchSeatRepository(filePath: Path)
+            +findByMatchId(matchId: Long): List~MatchSeat~
+            +find(matchId: Long, seatId: Long): MatchSeat
+            +save(seat: MatchSeat): MatchSeat
+            +updateWithoutLock(seat: MatchSeat): boolean
+            +updateSynchronized(seat: MatchSeat): boolean
+            +updateWithFileLock(seat: MatchSeat): boolean
+            +updateIfVersionMatches(seat: MatchSeat, expectedVersion: int): boolean
+            #parseLine(line: String): MatchSeat
+            #formatLine(entity: MatchSeat): String
+        }
+        class RefundRepository {
+            +RefundRepository(filePath: Path)
+            +findByFanId(fanId: Long): List~RefundRequest~
+            +findPending(): List~RefundRequest~
+            #parseLine(line: String): RefundRequest
+
+            #formatLine(entity: RefundRequest): String
+        }
+    }
+
+    namespace HELPER {
+        class BookingStrategy {
+            <<interface>>
+            +execute(fanId: Long, matchId: Long, seatIds: List~Long~): BookingTransaction
+        }
+        class StrategyFactory {
+            -matchSeatRepository: MatchSeatRepository
+            -transactionRepository: TransactionRepository
+            +StrategyFactory(matchSeatRepository: MatchSeatRepository, transactionRepository: TransactionRepository)
+            +create(mechanism: SyncMechanism): BookingStrategy
+        }
+        class MockPaymentService {
+            -successMode: boolean
+            +MockPaymentService(successMode: boolean)
+            +processPayment(bookingId: Long, amount: BigDecimal): boolean
+        }
+    }
+
+    namespace MODEL {
+        class Fan {
+            -MAX_TICKETS_PER_TRANSACTION: int = 4
+            +Fan(id: Long, fullName: String, email: String, passwordHash: String, phone: String, status: UserStatus)
+            +canBook(ticketCount: int): boolean
+        }
+        class Booking {
+            -fanId: Long
+            -matchId: Long
+            -seatIds: List~Long~
+            -totalAmount: BigDecimal
+            -status: BookingStatus
+            +Booking(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, totalAmount: BigDecimal, status: BookingStatus)
+            +validateTicketLimit(): void
+            +confirm(): void
+            +cancel(): void
+            +getFanId(): Long
+            +getMatchId(): Long
+            +getSeatIds(): List~Long~
+            +getTotalAmount(): BigDecimal
+            +getStatus(): BookingStatus
+        }
+        class MatchSeat {
+            -matchId: Long
+            -seatId: Long
+            -status: SeatStatus
+            -version: int
+            +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int)
+            +isAvailable(): boolean
+            +lock(): void
+            +markBooked(): void
+            +release(): void
+            +getMatchId(): Long
+            +getSeatId(): Long
+            +getStatus(): SeatStatus
+            +getVersion(): int
+        }
+        class Payment {
+            -bookingId: Long
+            -amount: BigDecimal
+            -method: PaymentMethod
+            -status: PaymentStatus
+            +Payment(id: Long, bookingId: Long, amount: BigDecimal, method: PaymentMethod, status: PaymentStatus)
+            +markSuccess(): void
+            +markFailed(): void
+            +getBookingId(): Long
+            +getAmount(): BigDecimal
+            +getMethod(): PaymentMethod
+            +getStatus(): PaymentStatus
+        }
+        class Ticket {
+            -bookingId: Long
+            -matchId: Long
+            -seatId: Long
+            -ticketCode: String
+            -status: TicketStatus
+            -checkedInAt: LocalDateTime
+            +Ticket(id: Long, bookingId: Long, matchId: Long, seatId: Long, ticketCode: String, status: TicketStatus)
+            +issue(): void
+            +isValidForMatch(matchId: Long): boolean
+            +checkIn(time: LocalDateTime): void
+            +cancel(): void
+            +getBookingId(): Long
+            +getMatchId(): Long
+            +getSeatId(): Long
+            +getTicketCode(): String
+            +getStatus(): TicketStatus
+            +getCheckedInAt(): LocalDateTime
+        }
+        class BookingTransaction {
+            -simulationId: Long
+            -bookingId: Long
+            -fanId: Long
+            -matchId: Long
+            -seatIds: List~Long~
+            -mechanism: SyncMechanism
+            -status: TransactionStatus
+            -createdAt: LocalDateTime
+            -completedAt: LocalDateTime
+            -durationMillis: long
+            -failureReason: String
+            +BookingTransaction(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, mechanism: SyncMechanism)
+            +attachBooking(bookingId: Long): void
+            +attachSimulation(simulationId: Long): void
+            +markSuccessful(completedAt: LocalDateTime): void
+            +markFailed(reason: String, completedAt: LocalDateTime): void
+            +calculateDuration(): long
+            +getSimulationId(): Long
+            +getBookingId(): Long
+            +getFanId(): Long
+            +getMatchId(): Long
+            +getSeatIds(): List~Long~
+            +getMechanism(): SyncMechanism
+            +getStatus(): TransactionStatus
+            +getCreatedAt(): LocalDateTime
+            +getCompletedAt(): LocalDateTime
+            +getDurationMillis(): long
+            +getFailureReason(): String
+        }
+        class RefundRequest {
+            -bookingId: Long
+            -fanId: Long
+            -reason: String
+            -status: RefundStatus
+            -requestedAt: LocalDateTime
+            -reviewedBy: Long
+            -reviewedAt: LocalDateTime
+            -reviewNote: String
+            +RefundRequest(id: Long, bookingId: Long, fanId: Long, reason: String, requestedAt: LocalDateTime)
+            +approve(adminId: Long, note: String, time: LocalDateTime): void
+            +reject(adminId: Long, note: String, time: LocalDateTime): void
+            +getBookingId(): Long
+            +getFanId(): Long
+            +getReason(): String
+            +getStatus(): RefundStatus
+            +getRequestedAt(): LocalDateTime
+            +getReviewedBy(): Long
+            +getReviewedAt(): LocalDateTime
+            +getReviewNote(): String
+        }
+        class BookingStatus {
+            <<enumeration>>
+            PENDING
+            CONFIRMED
+            CANCELLED
+        }
+        class PaymentMethod {
+            <<enumeration>>
+            ONLINE
+            OFFLINE_CASH
+        }
+        class PaymentStatus {
+            <<enumeration>>
+            PENDING
+            SUCCESS
+            FAILED
+        }
+        class TicketStatus {
+            <<enumeration>>
+            PENDING
+            ISSUED
+            CHECKED_IN
+            CANCELLED
+        }
+        class RefundStatus {
+            <<enumeration>>
+            REQUESTED
+            APPROVED
+            REJECTED
+        }
+        class UserRole {
+            <<enumeration>>
+            FAN
+            SELLER
+            GATE_STAFF
+            ADMIN
+            SIMULATOR_OPERATOR
+        }
+        class UserStatus {
+            <<enumeration>>
+            ACTIVE
+            INACTIVE
+        }
+        class SeatStatus {
+            <<enumeration>>
+            AVAILABLE
+            LOCKED
+            BOOKED
+        }
+    }
+
+    BookingView --> BookingController
+    BookingView --> RefundController
+    SeatMapView --> BrowseController
+    SellerView --> BookingController
+    SellerView --> FanController
+    GateView --> TicketController
+    BrowseController --> BrowseService
+    FanController --> FanService
+    BookingController --> BookingService
+    TicketController --> TicketService
+    RefundController --> RefundService
+    BrowseService --> MatchRepository
+    BrowseService --> MatchSeatRepository
+    FanService --> FanRepository
+    FanService --> TicketRepository
+    BookingService --> BookingRepository
+    BookingService --> SeatRepository
+    BookingService --> TicketPriceRepository
+    BookingService --> PaymentRepository
+    BookingService --> TicketRepository
+    BookingService --> StrategyFactory
+    BookingService --> MockPaymentService
+    TicketService --> TicketRepository
+    RefundService --> RefundRepository
+    Booking "0..*" --> "1" Fan
+    Booking "0..*" --> "1..4" MatchSeat
+    Booking "1" --> "0..1" Payment
+    Booking "1" *-- "0..4" Ticket
+    RefundRequest "0..*" --> "1" Booking
+
+    classDef view fill:#eef6ff,stroke:#3b82f6,color:#102a43,stroke-width:1px
+    classDef controller fill:#edfcf3,stroke:#22a06b,color:#102a43,stroke-width:1px
+    classDef service fill:#fff0f6,stroke:#c2255c,color:#102a43,stroke-width:1px
+    classDef dto fill:#ecfeff,stroke:#0891b2,color:#102a43,stroke-width:1px
+    classDef repository fill:#fff7e8,stroke:#d97706,color:#102a43,stroke-width:1px
+    classDef model fill:#f7f0ff,stroke:#845ec2,color:#102a43,stroke-width:1px
+    classDef helper fill:#f1f5f9,stroke:#64748b,color:#102a43,stroke-width:1px
+
+    class SeatMapView view
+    class BookingView view
+    class SellerView view
+    class GateView view
+    class BrowseController controller
+    class FanController controller
+    class BookingController controller
+    class TicketController controller
+    class RefundController controller
+    class BrowseService service
+    class FanService service
+    class BookingService service
+    class TicketService service
+    class RefundService service
+    class RegisterFanRequestDto dto
+    class UserResponseDto dto
+    class MatchResponseDto dto
+    class MatchSeatResponseDto dto
+    class BookingRequestDto dto
+    class BookingResponseDto dto
+    class PaymentRequestDto dto
+    class PaymentResponseDto dto
+    class TicketResponseDto dto
+    class RefundRequestDto dto
+    class RefundReviewRequestDto dto
+    class RefundResponseDto dto
+    class MatchRepository repository
+    class SeatRepository repository
+    class TicketPriceRepository repository
+    class FanRepository repository
+    class BookingRepository repository
+    class PaymentRepository repository
+    class TicketRepository repository
+    class TransactionRepository repository
+    class MatchSeatRepository repository
+    class RefundRepository repository
+    class BookingStrategy helper
+    class StrategyFactory helper
+    class MockPaymentService helper
+    class Fan model
+    class Booking model
+    class MatchSeat model
+    class Payment model
+    class Ticket model
+    class BookingTransaction model
+    class RefundRequest model
+    class BookingStatus model
+    class PaymentMethod model
+    class PaymentStatus model
+    class TicketStatus model
+    class RefundStatus model
+    class UserRole model
+    class UserStatus model
+    class SeatStatus model

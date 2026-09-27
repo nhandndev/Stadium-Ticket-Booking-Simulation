@@ -52,6 +52,11 @@ viewSeatMap(matchId, sectionId)
 createBooking(fanId, matchId, seatIds, paymentMethod)
 viewMyTickets(fanId)
 viewBookingHistory(fanId)
+viewBookingStatus(bookingId)
+reviewBooking(request)
+calculateBookingTotal(matchId, seatIds)
+cancelBooking(fanId, bookingId, reason)
+requestRefund(command)
 ```
 
 Rules:
@@ -68,7 +73,10 @@ searchFan(keyword)
 createFan(fanInput)
 createBookingForFan(staffId, fanId, matchId, seatIds)
 confirmOfflinePayment(bookingId)
-lookupTicket(keyword)
+viewCustomerInformation(fanId)
+selectSeatsForFan(fanId, matchId, seatIds)
+calculateBookingTotal(matchId, seatIds)
+issueTicket(bookingId)
 ```
 
 Rules:
@@ -81,44 +89,44 @@ Rules:
 
 ```text
 showSupportMenu(staffSession)
-searchFan(keyword)
-searchTicket(keyword)
-searchBooking(keyword)
-searchPayment(keyword)
-assistFailedBooking(bookingId)
-assistMissingTicket(bookingId)
-assistPaymentIssue(paymentId)
+searchCustomerBookingTicket(criteria)
+checkBookingPaymentStatus(bookingId)
+reviewCancellationRefund(command)
+approveRefund(requestId, supportStaffId)
+rejectRefund(requestId, supportStaffId, reason)
+escalateDataInconsistency(command)
+viewInconsistencyReports(status)
 ```
 
 Rules:
 
-- Must check staff role `SUPPORT` or `ADMIN`.
+- Must check staff role `SUPPORT` or `ADMINISTRATOR`.
 - Mutating actions should write audit log.
 
 ### AdminController
 
 ```text
 showAdminMenu(staffSession)
-manageStadium()
-manageSection()
-manageSeat()
-manageMatch()
-manageFan()
-manageStaff()
-manageRoles()
-manageTicketPricing()
-openTicketSales(matchId)
-closeTicketSales(matchId)
-generateCsvData(config)
-validateCsvData()
-viewAuditLog()
-viewSystemSummary()
+handleStadiumManagement()
+handleSectionManagement()
+handleSeatManagement()
+handleMatchManagement()
+handleTicketPricingManagement()
+handleTicketSalesManagement()
+handleFanManagement()
+handleStaffRoleManagement()
+handleSystemMonitoring()
 ```
 
 Rules:
 
-- Must check staff role `ADMIN`.
-- Prefer soft delete/status update for records with transaction history.
+- Must check staff role `ADMINISTRATOR`.
+- Mot `AdminController` goi mot `AdminService`; khong tao Controller/Service rieng cho tung feature.
+- `AdminService` co method CRUD ro rang cho Stadium, Section, Seat, Match va TicketPrice.
+- `AdminService` co method activate/deactivate, lock/unlock va conditional delete cho Fan/Staff.
+- `AdminService` co method view/assign/change/revoke StaffRole.
+- Prefer deactivate/lock/status update cho record da co transaction history.
+- Moi mutation phai ghi AuditLog.
 
 ### SimulationController
 
@@ -136,6 +144,20 @@ Rules:
 - Must call `SimulationService`.
 - Must not directly create tickets or edit seats.
 - Must not call Fan checkout/payment flow.
+
+### GateController
+
+```text
+searchTicket(ticketCode)
+validateTicket(request)
+checkInTicket(request)
+```
+
+Rules:
+
+- Search/validate khong thay doi ticket.
+- Check-in phai kiem tra dung match va atomically doi `VALID` thanh `USED`.
+- Ticket invalid, cancelled, refunded hoac da used phai bi tu choi.
 
 ## Service Contracts
 
@@ -242,34 +264,32 @@ Responsibilities:
 
 ## Repository Contracts
 
-Generic:
+Repository cua LAB la concrete class doc/ghi CSV truc tiep. Khong bat buoc tao generic interface va lop CSV implementation rieng.
 
-```text
-interface CsvRepository<T> {
-  List<T> findAll();
-  Optional<T> findById(String id);
-  void save(T entity);
-  void update(T entity);
-  boolean deleteById(String id);
-  void saveAll(List<T> entities);
-}
-```
-
-Specialized examples:
+Examples:
 
 ```text
 SeatRepository
   List<Seat> findBySectionId(String sectionId)
-  Optional<Seat> findByMatchAndSeat(String matchId, String seatId)
-  boolean updateSeatStatusWithVersion(String seatId, SeatStatus status, int expectedVersion)
+  Seat findById(String seatId)
+  void save(Seat seat)
+  void update(Seat seat)
+
+MatchSeatRepository
+  MatchSeat findByMatchAndSeat(String matchId, String seatId)
+  List<MatchSeat> findByMatchAndSection(String matchId, String sectionId)
+  void update(MatchSeat matchSeat)
+
+BookingRepository
+  Booking findById(String bookingId)
+  List<Booking> findByFanId(String fanId)
+  void save(Booking booking)
+  void update(Booking booking)
 
 TicketRepository
   List<Ticket> findByFanId(String fanId)
-  List<Ticket> findValidByMatchAndSeat(String matchId, String seatId)
-
-TransactionRepository
-  List<BookingTransaction> findByFanId(String fanId)
-  List<BookingTransaction> findByBookingId(String bookingId)
+  List<Ticket> findValidByMatchAndSeat(String matchId, String matchSeatId)
+  void save(Ticket ticket)
 ```
 
 ## Exception Contract

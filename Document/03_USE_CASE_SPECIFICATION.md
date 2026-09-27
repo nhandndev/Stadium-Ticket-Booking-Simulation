@@ -306,12 +306,25 @@ Primary actor: Administrator
 
 Main flow:
 
-1. Admin chon entity can quan ly.
-2. He thong hien menu create/view/update/delete/search.
-3. Admin nhap thao tac.
-4. He thong validate rule va reference.
-5. He thong ghi CSV.
-6. He thong record audit log.
+1. Admin chon mot trong chin nhom: Stadium, Section, Seat, Match, Ticket Pricing, Ticket Sales, Fan, Staff & Role, System Monitoring.
+2. He thong hien dung menu feature cua nhom duoc chon.
+3. Admin nhap thao tac va du lieu can thiet.
+4. Controller kiem tra quyen Administrator va validate input.
+5. Service kiem tra business rule, dependency va lich su giao dich.
+6. Repository cap nhat CSV neu thao tac hop le.
+7. He thong ghi AuditLog cho moi thao tac thay doi du lieu, trang thai hoac quyen.
+
+Detailed feature groups:
+
+- Stadium: Create, List, Details, Update, Delete.
+- Section: Create, List by Stadium, Details, Update, Delete.
+- Seat: Create, List by Section, Details, Update, Delete, Activate, Deactivate.
+- Match: Create, List, Details, Update, Delete.
+- Ticket Pricing: Create for Match + Section, List by Match, Details, Update, Delete.
+- Ticket Sales: Open, Close, View Sales Status.
+- Fan: Create, List/Details, Search, Update, Activate/Deactivate, Lock/Unlock, conditional Delete.
+- Staff & Role: Create, List/Details, Search, Update, Activate/Deactivate, Lock/Unlock, conditional Delete, View/Assign/Change/Revoke Role.
+- System Monitoring: View System Summary, View Audit Log.
 
 Business notes:
 
@@ -321,6 +334,10 @@ Business notes:
 - Neu he thong co Seller/Support/Admin thi nen co `Manage Staff` va `Manage Roles`.
 - Nen co `Open Ticket Sales` va `Close Ticket Sales` de dieu khien khi nao fan duoc booking.
 - Nen co `Manage Ticket Pricing` de set section/match price, phuc vu `Calculate Booking Total`.
+- Khong xoa Stadium/Section/Seat/Match/TicketPrice khi con reference nghiep vu khong the huy.
+- Khong xoa Fan da co booking history; uu tien deactivate hoac lock.
+- Khong duoc lock/delete tai khoan dang dang nhap hoac revoke Administrator cuoi cung.
+- AuditLog la append-only trong Admin UI.
 
 ## UC-08 Run Concurrency Simulation
 

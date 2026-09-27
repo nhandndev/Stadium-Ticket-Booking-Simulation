@@ -1,0 +1,337 @@
+---
+title: Booking, Payment and Ticket Domain
+config:
+  theme: base
+  themeVariables:
+    fontFamily: "Inter, Arial, sans-serif"
+    primaryTextColor: "#172033"
+    lineColor: "#64748B"
+---
+classDiagram
+direction TB
+
+namespace Model {
+  class BaseEntity {
+    <<abstract>>
+    #id: Long
+    +BaseEntity(id: Long)
+    +getId(): Long
+    +toCsvLine(): String*
+    +fromCsvLine(line: String): BaseEntity*
+  }
+  class User {
+    <<abstract>>
+    -fullName: String
+    -email: String
+    -passwordHash: String
+    -phone: String
+    -role: UserRole
+    -active: boolean
+    +User(id: Long, fullName: String, email: String, passwordHash: String, phone: String, role: UserRole)
+    +updateProfile(fullName: String, phone: String): void
+    +deactivate(): void
+    +isAdmin(): boolean
+  }
+  class Fan {
+    +MAX_TICKETS_PER_TRANSACTION: int = 4
+    +Fan(id: Long, fullName: String, email: String, passwordHash: String, phone: String)
+    +canBook(ticketCount: int): boolean
+  }
+  class Match {
+    -stadiumId: Long
+    -homeTeam: String
+    -awayTeam: String
+    -startTime: LocalDateTime
+    -saleStatus: SaleStatus
+    +Match(id: Long, stadiumId: Long, homeTeam: String, awayTeam: String, startTime: LocalDateTime)
+    +updateSchedule(startTime: LocalDateTime): void
+    +openSales(): void
+    +closeSales(): void
+    +isOnSale(): boolean
+  }
+  class MatchSeat {
+    -matchId: Long
+    -seatId: Long
+    -status: SeatStatus
+    -version: int
+    +MatchSeat(matchId: Long, seatId: Long)
+    +isAvailable(): boolean
+    +lock(expectedVersion: int): boolean
+    +markBooked(expectedVersion: int): boolean
+    +release(): void
+  }
+  class TicketPrice {
+    -matchId: Long
+    -sectionId: Long
+    -amount: BigDecimal
+    +TicketPrice(matchId: Long, sectionId: Long, amount: BigDecimal)
+    +changePrice(amount: BigDecimal): void
+  }
+  class Booking {
+    -fanId: Long
+    -matchId: Long
+    -seatIds: List~Long~
+    -totalAmount: BigDecimal
+    -status: BookingStatus
+    -createdAt: LocalDateTime
+    +Booking(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, totalAmount: BigDecimal, createdAt: LocalDateTime)
+    +validateTicketLimit(): void
+    +confirm(): void
+    +cancel(): void
+    +isPayable(): boolean
+  }
+  class Payment {
+    -bookingId: Long
+    -amount: BigDecimal
+    -status: PaymentStatus
+    -paidAt: LocalDateTime
+    +Payment(id: Long, bookingId: Long, amount: BigDecimal)
+    +markSuccessful(paidAt: LocalDateTime): void
+    +markFailed(): void
+  }
+  class Ticket {
+    -bookingId: Long
+    -matchId: Long
+    -seatId: Long
+    -ticketCode: String
+    -issuedAt: LocalDateTime
+    +Ticket(id: Long, bookingId: Long, matchId: Long, seatId: Long, ticketCode: String, issuedAt: LocalDateTime)
+    +getTicketDetails(): String
+  }
+  class BookingTransaction {
+    -bookingId: Long
+    -fanId: Long
+    -matchId: Long
+    -seatIds: List~Long~
+    -mechanism: SyncMechanism
+    -status: TransactionStatus
+    -createdAt: LocalDateTime
+    -completedAt: LocalDateTime
+    -durationMillis: long
+    -failureReason: String
+    +BookingTransaction(id: Long, bookingId: Long, fanId: Long, matchId: Long, seatIds: List~Long~, mechanism: SyncMechanism)
+    +markSuccessful(completedAt: LocalDateTime): void
+    +markFailed(reason: String, completedAt: LocalDateTime): void
+    +calculateDuration(): long
+  }
+  class UserRole { <<enumeration>> FAN ADMIN }
+  class SaleStatus { <<enumeration>> DRAFT OPEN CLOSED }
+  class SeatStatus { <<enumeration>> AVAILABLE LOCKED BOOKED }
+  class BookingStatus { <<enumeration>> PENDING_PAYMENT CONFIRMED CANCELLED }
+  class PaymentStatus { <<enumeration>> PENDING SUCCESS FAILED }
+  class SyncMechanism { <<enumeration>> NO_LOCK SYNCHRONIZED FILE_LOCK OPTIMISTIC }
+  class TransactionStatus { <<enumeration>> PENDING SUCCESS FAILED CONFLICT }
+}
+
+namespace Exception {
+  class EntityNotFoundException {
+    +EntityNotFoundException(message: String)
+  }
+  class InvalidBookingException {
+    +InvalidBookingException(message: String)
+  }
+  class SeatAlreadyBookedException {
+    +SeatAlreadyBookedException(message: String)
+  }
+  class PaymentFailedException {
+    +PaymentFailedException(message: String)
+  }
+  class CsvDataException {
+    +CsvDataException(message: String, cause: Throwable)
+  }
+}
+
+namespace Repository {
+  class CsvRepository~T~ {
+    <<abstract>>
+    #filePath: Path
+    +CsvRepository(filePath: Path)
+    +findAll(): List~T~
+    +findById(id: Long): T
+    +findByCondition(condition: Predicate~T~): List~T~
+    +save(entity: T): T
+    +update(entity: T): T
+    +delete(id: Long): boolean
+  }
+  class MatchRepository {
+    -matchFile: String
+    -matchSeatFile: String
+    -ticketPriceFile: String
+    +MatchRepository(dataDirectory: String)
+    +findAll(): List~Match~
+    +findById(matchId: Long): Match
+    +search(keyword: String): List~Match~
+    +save(match: Match): Match
+    +update(match: Match): Match
+    +delete(matchId: Long): void
+    +findSeatsByMatch(matchId: Long): List~MatchSeat~
+    +findMatchSeat(matchId: Long, seatId: Long): MatchSeat
+    +updateMatchSeat(matchSeat: MatchSeat): MatchSeat
+    +updateMatchSeatIfVersion(matchSeat: MatchSeat, expectedVersion: int): boolean
+    +findPrice(matchId: Long, sectionId: Long): TicketPrice
+    +saveOrUpdatePrice(ticketPrice: TicketPrice): TicketPrice
+  }
+  class BookingRepository {
+    -fileName: String
+    +BookingRepository(dataDirectory: String)
+    +findAll(): List~Booking~
+    +findById(bookingId: Long): Booking
+    +findByFanId(fanId: Long): List~Booking~
+    +save(booking: Booking): Booking
+    +update(booking: Booking): Booking
+  }
+  class PaymentRepository {
+    -fileName: String
+    +PaymentRepository(dataDirectory: String)
+    +findById(paymentId: Long): Payment
+    +findByBookingId(bookingId: Long): Payment
+    +save(payment: Payment): Payment
+    +update(payment: Payment): Payment
+  }
+  class TicketRepository {
+    -fileName: String
+    +TicketRepository(dataDirectory: String)
+    +findById(ticketId: Long): Ticket
+    +findByBookingId(bookingId: Long): List~Ticket~
+    +findByFanId(fanId: Long): List~Ticket~
+    +saveAll(tickets: List~Ticket~): List~Ticket~
+  }
+  class TransactionRepository {
+    -fileName: String
+    +TransactionRepository(dataDirectory: String)
+    +findAll(): List~BookingTransaction~
+    +findById(transactionId: Long): BookingTransaction
+    +findByBookingId(bookingId: Long): List~BookingTransaction~
+    +findByCondition(condition: Predicate~BookingTransaction~): List~BookingTransaction~
+    +save(transaction: BookingTransaction): BookingTransaction
+    +update(transaction: BookingTransaction): BookingTransaction
+  }
+}
+
+namespace Service {
+  class BookingService {
+    -matchRepository: MatchRepository
+    -bookingRepository: BookingRepository
+    -transactionRepository: TransactionRepository
+    +BookingService(matchRepository: MatchRepository, bookingRepository: BookingRepository, transactionRepository: TransactionRepository)
+    +selectSeats(matchId: Long, seatIds: List~Long~): List~MatchSeat~
+    +createBooking(fanId: Long, matchId: Long, seatIds: List~Long~): Booking
+    +executeBookingCore(fanId: Long, matchId: Long, seatIds: List~Long~, mechanism: SyncMechanism): Booking
+    +validateTicketLimit(seatIds: List~Long~): void
+    +recordTransaction(booking: Booking, mechanism: SyncMechanism): BookingTransaction
+    +getBookings(fanId: Long): List~Booking~
+    +getBookingDetail(bookingId: Long): Booking
+  }
+  class PaymentService {
+    -bookingRepository: BookingRepository
+    -paymentRepository: PaymentRepository
+    +PaymentService(bookingRepository: BookingRepository, paymentRepository: PaymentRepository)
+    +makeOnlinePayment(bookingId: Long): Payment
+    -simulatePayment(payment: Payment): boolean
+  }
+  class TicketService {
+    -bookingRepository: BookingRepository
+    -ticketRepository: TicketRepository
+    +TicketService(bookingRepository: BookingRepository, ticketRepository: TicketRepository)
+    +issueTickets(bookingId: Long): List~Ticket~
+    +getTickets(fanId: Long): List~Ticket~
+    +getTicketDetail(ticketId: Long): Ticket
+  }
+}
+
+namespace Controller {
+  class BookingController {
+    -bookingService: BookingService
+    -paymentService: PaymentService
+    -ticketService: TicketService
+    +BookingController(bookingService: BookingService, paymentService: PaymentService, ticketService: TicketService)
+    +selectSeats(matchId: Long, seatIds: List~Long~): List~MatchSeat~
+    +createBooking(fanId: Long, matchId: Long, seatIds: List~Long~): Booking
+    +makeOnlinePayment(bookingId: Long): Payment
+    +getBookings(fanId: Long): List~Booking~
+    +getBookingDetail(bookingId: Long): Booking
+    +getTickets(fanId: Long): List~Ticket~
+    +getTicketDetail(ticketId: Long): Ticket
+  }
+}
+
+BookingController --> BookingService
+BookingController --> PaymentService
+BookingController --> TicketService
+BookingService --> MatchRepository
+BookingService --> BookingRepository
+BookingService --> TransactionRepository
+PaymentService --> BookingRepository
+PaymentService --> PaymentRepository
+TicketService --> BookingRepository
+TicketService --> TicketRepository
+MatchRepository --|> CsvRepository
+BookingRepository --|> CsvRepository
+PaymentRepository --|> CsvRepository
+TicketRepository --|> CsvRepository
+TransactionRepository --|> CsvRepository
+BaseEntity <|-- User
+User <|-- Fan
+BaseEntity <|-- Match
+BaseEntity <|-- Booking
+BaseEntity <|-- Payment
+BaseEntity <|-- Ticket
+BaseEntity <|-- BookingTransaction
+MatchRepository --> MatchSeat
+MatchRepository --> TicketPrice
+BookingRepository --> Booking
+PaymentRepository --> Payment
+TicketRepository --> Ticket
+TransactionRepository --> BookingTransaction
+Fan "1" --> "0..*" Booking
+Match "1" --> "0..*" Booking
+Booking "0..1" --> "1..*" MatchSeat : reserves
+Booking "1" *-- "0..1" Payment
+Booking "1" *-- "0..*" Ticket
+Booking "1" --> "1..*" BookingTransaction
+Ticket "0..1" --> "1" MatchSeat
+User --> UserRole
+Match --> SaleStatus
+MatchSeat --> SeatStatus
+Booking --> BookingStatus
+Payment --> PaymentStatus
+BookingTransaction --> TransactionStatus
+BookingTransaction --> SyncMechanism
+
+note for BookingController "Receives console commands and delegates each workflow to its service."
+note for BookingService "Shared booking core contains seat validation, synchronization and transaction recording."
+note for PaymentService "Online payment is simulated locally; no HTTP API is required."
+note for TicketService "Tickets are issued only after the booking is confirmed."
+
+style BookingController fill:#E9E5F6,stroke:#6656A3,color:#172033
+style BookingService fill:#E5F4E8,stroke:#3F7D4D,color:#172033
+style PaymentService fill:#E5F4E8,stroke:#3F7D4D,color:#172033
+style TicketService fill:#E5F4E8,stroke:#3F7D4D,color:#172033
+style CsvRepository fill:#FFF7E8,stroke:#8B6B35,color:#172033
+style MatchRepository fill:#FFF0D8,stroke:#A96F22,color:#172033
+style BookingRepository fill:#FFF0D8,stroke:#A96F22,color:#172033
+style PaymentRepository fill:#FFF0D8,stroke:#A96F22,color:#172033
+style TicketRepository fill:#FFF0D8,stroke:#A96F22,color:#172033
+style TransactionRepository fill:#FFF0D8,stroke:#A96F22,color:#172033
+style BaseEntity fill:#E8F1F8,stroke:#35627A,color:#172033
+style User fill:#E8F1F8,stroke:#35627A,color:#172033
+style Fan fill:#E8F1F8,stroke:#35627A,color:#172033
+style Match fill:#E8F1F8,stroke:#35627A,color:#172033
+style MatchSeat fill:#E8F1F8,stroke:#35627A,color:#172033
+style TicketPrice fill:#E8F1F8,stroke:#35627A,color:#172033
+style Booking fill:#E8F1F8,stroke:#35627A,color:#172033
+style Payment fill:#E8F1F8,stroke:#35627A,color:#172033
+style Ticket fill:#E8F1F8,stroke:#35627A,color:#172033
+style BookingTransaction fill:#E8F1F8,stroke:#35627A,color:#172033
+style UserRole fill:#F1F3F5,stroke:#687078,color:#172033
+style SaleStatus fill:#F1F3F5,stroke:#687078,color:#172033
+style SeatStatus fill:#F1F3F5,stroke:#687078,color:#172033
+style BookingStatus fill:#F1F3F5,stroke:#687078,color:#172033
+style PaymentStatus fill:#F1F3F5,stroke:#687078,color:#172033
+style SyncMechanism fill:#F1F3F5,stroke:#687078,color:#172033
+style TransactionStatus fill:#F1F3F5,stroke:#687078,color:#172033
+style EntityNotFoundException fill:#FDECEC,stroke:#A33A3A,color:#172033
+style InvalidBookingException fill:#FDECEC,stroke:#A33A3A,color:#172033
+style SeatAlreadyBookedException fill:#FDECEC,stroke:#A33A3A,color:#172033
+style PaymentFailedException fill:#FDECEC,stroke:#A33A3A,color:#172033
+style CsvDataException fill:#FDECEC,stroke:#A33A3A,color:#172033

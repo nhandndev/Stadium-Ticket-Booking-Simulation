@@ -75,18 +75,65 @@ Confirm Booking
 
 ---
 
-## 3. Main Features
+## 3. Actor Hierarchy And Shared User Features
+
+The current Use Case baseline uses `User` as the common parent actor for authenticated users:
+
+```text
+User
+  +-- Fan
+  +-- Staff
+        +-- Seller
+        +-- Support Staff
+        +-- Administrator
+        +-- Gate Staff
+```
+
+External or operational actors:
+
+```text
+Guest
+Payment Service
+Notification Service
+Simulator Operator
+```
+
+The shared `User` actor owns:
+
+- `Login`
+- `Logout`
+- `Update Profile Information`
+
+Fan and Staff inherit these common use cases. This avoids duplicating Login, Logout and profile-update relationships for every role. Guest can browse public information, register and login before becoming an authenticated Fan/User.
+
+Role boundaries:
+
+- `Guest`: public browsing and registration.
+- `Fan`: customer booking, payment and ticket/history access.
+- `Staff`: authenticated operational users.
+- `Seller`: counter booking and offline payment.
+- `Support Staff`: issue lookup, status checking and escalation.
+- `Administrator`: data, role, pricing, sales and audit management.
+- `Gate Staff`: ticket validation and check-in.
+- `Simulator Operator`: runs concurrency experiments.
+
+The Use Case diagram is a presentation view. Internal use cases such as `Execute Booking Core`, `Apply Synchronization Strategy`, `Expire Pending Booking` and reconciliation remain documented in `Document/`.
+
+---
+
+## 4. Main Features
 
 ### Guest / Fan
 
 - View match list.
 - Search match.
+- Filter matches.
 - View match details.
 - View stadium and sections.
 - View seat map.
 - View seat availability.
-- Register / login / logout.
-- Manage fan profile.
+- Register as a Fan.
+- Inherit `Login`, `Logout` and `Update Profile Information` from `User`.
 - Select 1-4 seats per transaction.
 - Review booking before confirmation.
 - Create booking.
@@ -99,7 +146,7 @@ Confirm Booking
 
 ### Seller
 
-- Staff login/logout.
+- Inherit `Login`, `Logout` and `Update Profile Information` from `User`.
 - Search fan.
 - Create fan if not found.
 - Select fan.
@@ -112,19 +159,16 @@ Confirm Booking
 
 ### Support Staff
 
-- Search fan.
-- Search ticket.
-- Search booking transaction.
-- Search payment transaction.
-- Check booking/payment/seat status.
-- Assist failed booking.
-- Assist missing ticket.
+- Inherit `Login`, `Logout` and `Update Profile Information` from `User`.
+- Search customer booking and ticket information.
+- Check booking and payment status.
+- Review cancellation/refund request.
 - Assist ticket issues.
-- Assist payment issue.
 - Escalate data inconsistency.
 
 ### Administrator
 
+- Inherit `Login`, `Logout` and `Update Profile Information` from `User`.
 - Manage stadium.
 - Manage section.
 - Manage seat.
@@ -175,35 +219,46 @@ Supported synchronization strategies:
 
 ---
 
-## 4. Use Case Diagram Coverage
+## 5. Use Case Diagram Coverage
 
-The former `LABSE20D.drawio.html` diagram was used to synchronize the README with the current use case baseline. After synchronization, the HTML file is no longer required in the repository.
+The current Use Case diagram was used to synchronize this README with the latest actor and feature layout.
 
 Important note:
 
 ```text
 README + Document/ are the official project scope.
-If a valid project requirement is not shown in the old draw.io HTML,
-the diagram is incomplete; the project scope is not wrong.
+The diagram focuses on user-visible and actor-facing use cases.
+Internal booking/concurrency rules remain in Document/.
 ```
 
-### Public Browsing
+### Actor Inheritance
 
-- Browse matches.
+```text
+Fan - - -|> User
+Staff - - -|> User
+Seller - - -|> Staff
+Support Staff - - -|> Staff
+Administrator - - -|> Staff
+Gate Staff - - -|> Staff
+```
+
+Inherited from `User`:
+
+- Login.
+- Logout.
+- Update Profile Information.
+
+### Guest / Public Browsing
+
 - Search matches.
-- View match list.
+- Filter matches.
 - View match detail.
-- View stadium.
-- View section.
-- View seat map.
 - View seat availability.
 - Register.
 - Login.
-- Logout.
 
-### Fan Booking
+### Fan Use Cases
 
-- Manage profile.
 - Select seats.
 - Review booking.
 - Create booking.
@@ -225,7 +280,7 @@ the diagram is incomplete; the project scope is not wrong.
 - Request cancellation.
 - Request refund.
 
-### Seller Operations
+### Seller Use Cases
 
 - Search/create fan.
 - Create booking for fan.
@@ -233,16 +288,15 @@ the diagram is incomplete; the project scope is not wrong.
 - Issue ticket.
 - Search ticket.
 
-### Support Operations
+### Support Staff Use Cases
 
-- Search fan / ticket / booking / payment.
-- Check status.
-- Assist booking issues.
-- Assist payment issues.
+- Search customer booking and ticket information.
+- Check booking and payment status.
 - Assist ticket issues.
+- Review cancellation/refund request.
 - Escalate data inconsistency.
 
-### Administrator Operations
+### Administrator Use Cases
 
 - Manage stadium / section / seat / match.
 - Manage fan / staff / roles.
@@ -251,6 +305,11 @@ the diagram is incomplete; the project scope is not wrong.
 - Manage CSV data.
 - View system summary.
 - View audit log.
+
+### Gate Staff Use Cases
+
+- Validate ticket.
+- Check-in ticket.
 
 ### Simulator Operations
 
@@ -264,11 +323,11 @@ the diagram is incomplete; the project scope is not wrong.
 
 - Payment Service: process online payment.
 - Notification Service: send booking confirmation, payment result and ticket notification.
-- Gate Staff: validate ticket and check-in ticket.
+- Gate Staff: validate ticket and check-in ticket. Enterprise extension P2.
 
 ---
 
-## 5. Core Business Rules
+## 6. Core Business Rules
 
 1. A fan may book a maximum of **4 seats per transaction**.
 2. A seat already booked for a match cannot be sold again for the same match.
@@ -301,7 +360,7 @@ LOCKED -> AVAILABLE
 
 ---
 
-## 6. Architecture
+## 7. Architecture
 
 The application follows MVC with additional Service and Repository layers.
 
@@ -310,8 +369,8 @@ View
   -> Controller
     -> Service / Use Case
       -> Domain Model
-      -> Repository Interface
-        -> CSV Repository Implementation
+      -> Repository
+        -> CSV File
 ```
 
 ### Layer Rules
@@ -341,7 +400,7 @@ src/
 
 ---
 
-## 7. Data And CSV Files
+## 8. Data And CSV Files
 
 Minimum CSV files:
 
@@ -361,6 +420,7 @@ Recommended extended CSV files:
 ```text
 data/
   staff.csv
+  match_seats.csv
   bookings.csv
   booking_items.csv
   payment_transactions.csv
@@ -372,7 +432,9 @@ data/
 
 Important fields:
 
-- `Seat.version`: required for optimistic locking.
+- `Seat.status`: physical state only: `ACTIVE`, `MAINTENANCE`, `INACTIVE`.
+- `MatchSeat.status`: per-match sale state: `AVAILABLE`, `LOCKED`, `BOOKED`.
+- `MatchSeat.version`: required for optimistic locking.
 - `Booking.expiresAt`: required for pending booking expiry.
 - `Booking.idempotencyKey`: used to prevent duplicate submit.
 - `Ticket.status`: `VALID`, `USED`, `CANCELLED`, `REFUNDED`.
@@ -382,7 +444,7 @@ The generated dataset should contain at least **10,000 rows**, with seats as the
 
 ---
 
-## 8. Data Generation
+## 9. Data Generation
 
 Run the data generator before running the main program.
 
@@ -407,7 +469,7 @@ wc -l data/*.csv
 
 ---
 
-## 9. Compile And Run
+## 10. Compile And Run
 
 Compile:
 
@@ -429,7 +491,7 @@ java -cp out app.Main
 
 ---
 
-## 10. Suggested Main Menu
+## 11. Suggested Main Menu
 
 ```text
 ===== STADIUM TICKET BOOKING =====
@@ -454,7 +516,7 @@ Optional staff menu:
 
 ---
 
-## 11. Booking Flow
+## 12. Booking Flow
 
 Fan checkout flow:
 
@@ -483,7 +545,7 @@ Viewing a seat as `AVAILABLE` does not guarantee that the seat is still availabl
 
 ---
 
-## 12. Concurrency Simulator
+## 13. Concurrency Simulator
 
 Required Java concurrency utilities:
 
@@ -547,7 +609,7 @@ Expected research conclusion:
 
 ---
 
-## 13. Documentation
+## 14. Documentation
 
 Detailed project documents are stored in:
 
@@ -572,8 +634,11 @@ Current documentation set:
 - `Document/11_SERVICE_CONTRACTS.md`
 - `Document/12_IMPLEMENTATION_ROADMAP.md`
 - `Document/13_AI_USAGE_AUDIT_AND_REFLECTION.md`
+- `Document/Class_Diagrams/README.md`
 
 Use these files as the official baseline for implementation, report writing and diagram drawing.
+
+The code-ready class-diagram baseline is stored in `Document/Class_Diagrams/`. It contains six focused diagrams for Main/Auth, Stadium/Admin, Booking/Payment/Ticket, Simulation, CSV/Repository and complete Model relationships, plus a dependency guide. The diagrams preserve the Java Console structure `VIEW -> CONTROLLER -> SERVICE -> REPOSITORY -> MODEL / CSV`.
 
 Required diagrams:
 
@@ -585,7 +650,7 @@ Required diagrams:
 
 ---
 
-## 14. Testing Checklist
+## 15. Testing Checklist
 
 ### Single-thread Booking
 
@@ -635,7 +700,7 @@ Required diagrams:
 
 ---
 
-## 15. AI Audit
+## 16. AI Audit
 
 This project keeps an AI audit trail because AI was used to support requirements analysis, use case correction, architecture design, documentation and prompt review.
 
@@ -692,7 +757,7 @@ Prompt audit: ai_logs/prompt_audit_summary.md
 
 ---
 
-## 16. Submission Package
+## 17. Submission Package
 
 Final ZIP naming format:
 
@@ -733,6 +798,6 @@ Before submission:
 
 ---
 
-## 17. Notes
+## 18. Notes
 
 The LAB requirements remain the top priority. Enterprise-like features should improve the design and report quality, but they should not break MVC, CSV persistence or the concurrency simulator deliverables.
