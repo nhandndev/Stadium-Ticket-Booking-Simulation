@@ -1,7 +1,6 @@
 package stadium.model;
 
 import common.entity.BaseEntity;
-import stadium.enums.SeatStatus;
 
 public class Seat extends BaseEntity {
     private Long sectionId;
@@ -15,28 +14,33 @@ public class Seat extends BaseEntity {
         this.seatNumber = seatNumber;
         this.active = active;
     }
-    public Long getSectionId() {
-        return this.sectionId;
-    }
-    public void setSectionId(Long sectionId) {
-        this.sectionId = sectionId;
-    }
-    public String getRowLabel() {
-        return this.rowLabel;
-    }
-    public void setRowLabel(String rowLabel) {
+
+    public void updateLocation(String rowLabel, int seatNumber) {
         this.rowLabel = rowLabel;
-    }
-    public int getSeatNumber() {
-        return this.seatNumber;
-    }
-    public void setSeatNumber(int seatNumber) {
         this.seatNumber = seatNumber;
     }
-    public boolean isActive() {
-        return this.active;
+
+    public void activate() {
+        active = true;
     }
-    public void setActive(boolean active) {
-        this.active = active;
+
+    public void deactivate() {
+        active = false;
+    }
+
+    public Long getSectionId() {
+        return sectionId;
+    }
+
+    public String getRowLabel() {
+        return rowLabel;
+    }
+
+    public int getSeatNumber() {
+        return seatNumber;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

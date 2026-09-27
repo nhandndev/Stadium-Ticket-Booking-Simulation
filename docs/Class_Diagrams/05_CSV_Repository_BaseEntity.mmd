@@ -180,7 +180,7 @@ classDiagram
     namespace MODEL {
         class BaseEntity {
             <<abstract>>
-            #id: Long
+            -id: Long
             +BaseEntity(id: Long)
             +getId(): Long
         }
@@ -443,28 +443,22 @@ classDiagram
     }
 
     namespace EXCEPTIONS {
-        class EntityNotFoundException {
-            +EntityNotFoundException(message: String)
+        class AppException {
+            -errorCode: ErrorCode
+            +AppException(errorCode: ErrorCode)
+            +AppException(errorCode: ErrorCode, message: String)
+            +getErrorCode(): ErrorCode
         }
 
-        class InvalidBookingException {
-            +InvalidBookingException(message: String)
-        }
-
-        class SeatAlreadyBookedException {
-            +SeatAlreadyBookedException(message: String)
-        }
-
-        class PaymentFailedException {
-            +PaymentFailedException(message: String)
-        }
-
-        class CsvDataException {
-            +CsvDataException(message: String)
-        }
-
-        class OptimisticLockException {
-            +OptimisticLockException(message: String)
+        class ErrorCode {
+            <<enumeration>>
+            INVALID_INPUT
+            NOT_FOUND
+            UNKNOWN_ERROR
+            -code: String
+            -message: String
+            +getCode(): String
+            +getMessage(): String
         }
 
         class RuntimeException {
@@ -504,12 +498,8 @@ classDiagram
     RefundRequest --|> BaseEntity
     AuditLog --|> BaseEntity
     DataGenerator ..> CsvRepository~T~
-    RuntimeException <|-- EntityNotFoundException
-    RuntimeException <|-- InvalidBookingException
-    RuntimeException <|-- SeatAlreadyBookedException
-    RuntimeException <|-- PaymentFailedException
-    RuntimeException <|-- CsvDataException
-    RuntimeException <|-- OptimisticLockException
+    RuntimeException <|-- AppException
+    AppException --> ErrorCode
 
     classDef view fill:#eef6ff,stroke:#3b82f6,color:#102a43,stroke-width:1px
     classDef controller fill:#edfcf3,stroke:#22a06b,color:#102a43,stroke-width:1px
@@ -551,10 +541,6 @@ classDiagram
     class BookingTransaction model
     class RefundRequest model
     class AuditLog model
-    class EntityNotFoundException helper
-    class InvalidBookingException helper
-    class SeatAlreadyBookedException helper
-    class PaymentFailedException helper
-    class CsvDataException helper
-    class OptimisticLockException helper
+    class AppException helper
+    class ErrorCode helper
     class RuntimeException helper

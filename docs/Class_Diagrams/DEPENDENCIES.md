@@ -372,12 +372,11 @@ Moi generic parameter tao mot dependency compile-time tu Repository den Model tu
 
 | Child | Parent | Quan he |
 |---|---|---|
-| `EntityNotFoundException` | `RuntimeException` | `--|>` Generalization |
-| `InvalidBookingException` | `RuntimeException` | `--|>` Generalization |
-| `SeatAlreadyBookedException` | `RuntimeException` | `--|>` Generalization |
-| `PaymentFailedException` | `RuntimeException` | `--|>` Generalization |
-| `CsvDataException` | `RuntimeException` | `--|>` Generalization |
-| `OptimisticLockException` | `RuntimeException` | `--|>` Generalization |
+| `AppException` | `RuntimeException` | `--|>` Generalization |
+
+`AppException` co association mot chieu toi `ErrorCode`. Moi loi duoc phan loai
+bang ma noi bo nhu `INVALID_INPUT`, `NOT_FOUND` hoac `UNKNOWN_ERROR`; du an
+Console khong su dung HTTP status.
 
 ### 6.5 CSV parsing/formatting contract
 

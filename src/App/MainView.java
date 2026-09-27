@@ -2,10 +2,10 @@ package app;
 
 import java.util.Scanner;
 
-public class MainMenuView {
+public class MainView {
     private final Scanner scanner;
 
-    public MainMenuView(Scanner scanner) {
+    public MainView(Scanner scanner) {
         this.scanner = scanner;
     }
 
@@ -23,7 +23,7 @@ public class MainMenuView {
 
     private void showMenu() {
         System.out.println();
-        System.out.println("=== STADIUM TICKET BOOKING SIMULATION ===");
+        System.out.println("STADIUM TICKET BOOKING SIMULATION");
         System.out.println("1. Browse As Guest");
         System.out.println("2. Login As Fan");
         System.out.println("3. Login As Staff");

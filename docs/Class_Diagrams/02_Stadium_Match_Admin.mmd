@@ -201,18 +201,25 @@ classDiagram
         class StadiumRequestDto {
             -name: String
             -address: String
+            +StadiumRequestDto()
             +StadiumRequestDto(name: String, address: String)
             +getName(): String
             +getAddress(): String
+            +setName(name: String): void
+            +setAddress(address: String): void
         }
         class StadiumResponseDto {
             -id: Long
             -name: String
             -address: String
+            +StadiumResponseDto()
             +StadiumResponseDto(id: Long, name: String, address: String)
             +getId(): Long
             +getName(): String
             +getAddress(): String
+            +setId(id: Long): void
+            +setName(name: String): void
+            +setAddress(address: String): void
         }
         class MatchRequestDto {
             -stadiumId: Long

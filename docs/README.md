@@ -6,6 +6,7 @@ Muc tieu: giu dung trong tam cua du an LAB211 la Java OOP, MVC, CSV persistence 
 
 ## Thu tu doc de lam du an
 
+0. [Thuyet_Trinh/README.md](Thuyet_Trinh/README.md) - Kich ban thuyet trinh tieng Viet tu Use Case, 6 trang Class Diagram den source code hien co.
 1. [00_REPO_SCAN_SUMMARY.md](00_REPO_SCAN_SUMMARY.md) - Tong ket hien trang repo va nhung gi da rut ra.
 2. [01_PROJECT_SCOPE.md](01_PROJECT_SCOPE.md) - Pham vi du an, actor, muc tieu va uu tien.
 3. [02_SRS.md](02_SRS.md) - Software Requirements Specification.

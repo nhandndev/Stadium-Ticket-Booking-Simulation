@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ed48d2cf-23cb-4a8f-8886-19397743c96c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/stadium/dto/StadiumRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stadium/dto/StadiumResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stadium/enums/SeatStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stadium/model/Seat.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stadium/model/Section.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/stadium/model/Stadium.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/entity/BaseEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/entity/BaseEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stadium/dd.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/MainMenuView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/MainMenuView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -10,17 +10,16 @@ public class Section extends BaseEntity {
         this.stadiumId = stadiumId;
         this.name = name;
     }
-    public Long getStadiumId() {
-        return this.stadiumId;
-    }
-    public void setStadiumId(Long stadiumId) {
-        this.stadiumId = stadiumId;
-    }
-    public String getName() {
-        return this.name;
-    }
-    public void setName(String name) {
+
+    public void rename(String name) {
         this.name = name;
     }
 
+    public Long getStadiumId() {
+        return stadiumId;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
