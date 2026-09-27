@@ -11,7 +11,6 @@ public class MainMenuView {
 
     public void start() {
         int choice;
-
         do {
             showMenu();
             System.out.print("Choose: ");

@@ -1,9 +1,9 @@
 package common.entity;
 
 public abstract class BaseEntity {
-    protected Long id;
+   private Long id;
 
-    protected BaseEntity(Long id) {
+    public BaseEntity(Long id) {
         this.id = id;
     }
 

@@ -2,52 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ed48d2cf-23cb-4a8f-8886-19397743c96c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/App/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/App/MainMenuView.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/common/entity/BaseEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/common/exception/AppException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/common/exception/ErrorCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Stadium-Ticket-Booking-Simulation.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Stadium-Ticket-Booking-Simulation.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stadium/dto/StadiumRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stadium/dto/StadiumResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stadium/enums/SeatStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stadium/model/Seat.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stadium/model/Section.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/stadium/model/Stadium.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/00_REPO_SCAN_SUMMARY.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/00_REPO_SCAN_SUMMARY.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/01_PROJECT_SCOPE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/01_PROJECT_SCOPE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/02_SRS.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/02_SRS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/03_USE_CASE_SPECIFICATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/03_USE_CASE_SPECIFICATION.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/04_FEATURE_BACKLOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/04_FEATURE_BACKLOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/05_LAYERED_ARCHITECTURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/05_LAYERED_ARCHITECTURE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/06_DOMAIN_DATA_MODEL.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/06_DOMAIN_DATA_MODEL.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/07_BOOKING_AND_SIMULATION_DESIGN.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/07_BOOKING_AND_SIMULATION_DESIGN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/08_EDGE_CASES_AND_BUSINESS_RULES.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/08_EDGE_CASES_AND_BUSINESS_RULES.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/09_TEST_PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/09_TEST_PLAN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/10_DELIVERY_CHECKLIST.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/10_DELIVERY_CHECKLIST.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/11_SERVICE_CONTRACTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/11_SERVICE_CONTRACTS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/12_IMPLEMENTATION_ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/12_IMPLEMENTATION_ROADMAP.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/13_AI_USAGE_AUDIT_AND_REFLECTION.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/13_AI_USAGE_AUDIT_AND_REFLECTION.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/Class_Diagrams/01_Main_View_Auth.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/01_Main_View_Auth.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/Class_Diagrams/02_Stadium_Match_Admin.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/02_Stadium_Match_Admin.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/Class_Diagrams/03_User_Booking_Payment_Ticket.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/03_User_Booking_Payment_Ticket.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/Class_Diagrams/04_Simulation.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/04_Simulation.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/Class_Diagrams/05_CSV_Repository_BaseEntity.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/05_CSV_Repository_BaseEntity.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/Class_Diagrams/06_Model_Relationships.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/06_Model_Relationships.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/Class_Diagrams/DEPENDENCIES.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/DEPENDENCIES.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/Class_Diagrams/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/00_Full_Class_Diagram.mmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/01_User_Account_Domain.mmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/02_Stadium_Match_Domain.mmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/03_Booking_Payment_Ticket_Domain.mmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/04_Simulation_Domain.mmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/05_Console_Navigation_Domain.mmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/CHATGPT_WEB_REVISED2_MERMAID_REVIEW_AND_FIX_PROMPT.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/CHATGPT_WEB_REVISION_PROMPT.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/Stadium_Class_Diagrams.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/generated_markdown/01_Main_View_Auth.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/generated_markdown/02_Stadium_Match_Admin.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/generated_markdown/03_User_Booking_Payment_Ticket.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/generated_markdown/04_Simulation.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/generated_markdown/05_CSV_Repository_BaseEntity.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/archive/class_diagrams_legacy/generated_markdown/06_Model_Relationships.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/common/entity/BaseEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/entity/BaseEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stadium/dd.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +20,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
