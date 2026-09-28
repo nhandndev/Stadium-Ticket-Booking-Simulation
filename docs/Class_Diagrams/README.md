@@ -11,7 +11,7 @@ DTO objects are used at the View/Controller/Service boundary. Repositories still
 ## Class format
 
 - Attribute: `-fieldName: Type`
-- Protected attribute: `#fieldName: Type`
+- Public attribute: `+fieldName: Type`
 - Constructor: `+ClassName(parameter: Type)` with **no return type**
 - Method: `+method(parameter: Type): ReturnType`
 
@@ -55,7 +55,7 @@ The architecture remains `View -> Controller -> Service -> Repository -> Model`,
 ## Final code-ready fixes
 
 - `MainView` now owns a `BookingView` and receives it through the constructor so the Fan menu has an explicit navigation path to booking/payment/history.
-- CSV serialization is centralized in Repository classes: `CsvRepository<T>` defines both `#parseLine(line: String): T` and `#formatLine(entity: T): String`. Concrete repositories override both. `BaseEntity` no longer owns CSV formatting methods, preventing two competing serialization mechanisms.
+- CSV serialization is centralized in Repository classes: `CsvRepository<T>` defines both `+parseLine(line: String): T` and `+formatLine(entity: T): String`. Concrete repositories override both as public methods. `BaseEntity` no longer owns CSV formatting methods, preventing two competing serialization mechanisms.
 - `MatchSeatRepository` and `TicketPriceRepository` also define `parseLine/formatLine` because they persist CSV with specialized update rules.
 - `SimulationController.configureSimulation()` and `SimulationService.configureSimulation()` now return `SimulationResponseDto`, which represents a configured simulation before execution. `SimulationResultDto` is only returned after a run or comparison.
-- Class formatting remains: private fields with `-`, public constructors/methods with `+`, protected reusable members with `#`; constructors have no return type.
+- Class formatting uses only private (`-`) and public (`+`) members; constructors have no return type. The diagram does not define a CSV `header` field.

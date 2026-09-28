@@ -203,34 +203,34 @@ classDiagram
             +FanRepository(filePath: Path)
             +findByEmail(email: String): Fan
             +search(keyword: String): List~Fan~
-            #parseLine(line: String): Fan
+            +parseLine(line: String): Fan
 
-            #formatLine(entity: Fan): String
+            +formatLine(entity: Fan): String
         }
 
         class StaffRepository {
             +StaffRepository(filePath: Path)
             +findByEmail(email: String): Staff
             +search(keyword: String): List~Staff~
-            #parseLine(line: String): Staff
+            +parseLine(line: String): Staff
 
-            #formatLine(entity: Staff): String
+            +formatLine(entity: Staff): String
         }
 
         class BookingRepository {
             +BookingRepository(filePath: Path)
             +findByFanId(fanId: Long): List~Booking~
-            #parseLine(line: String): Booking
+            +parseLine(line: String): Booking
 
-            #formatLine(entity: Booking): String
+            +formatLine(entity: Booking): String
         }
 
         class MatchRepository {
             +MatchRepository(filePath: Path)
             +findUpcoming(): List~Match~
-            #parseLine(line: String): Match
+            +parseLine(line: String): Match
 
-            #formatLine(entity: Match): String
+            +formatLine(entity: Match): String
         }
 
         class MatchSeatRepository {
@@ -243,8 +243,8 @@ classDiagram
             +updateSynchronized(seat: MatchSeat): boolean
             +updateWithFileLock(seat: MatchSeat): boolean
             +updateIfVersionMatches(seat: MatchSeat, expectedVersion: int): boolean
-            #parseLine(line: String): MatchSeat
-            #formatLine(entity: MatchSeat): String
+            +parseLine(line: String): MatchSeat
+            +formatLine(entity: MatchSeat): String
         }
 
         class TicketRepository {
@@ -252,9 +252,9 @@ classDiagram
             +findByBookingId(bookingId: Long): List~Ticket~
             +findByCode(ticketCode: String): Ticket
             +findByFanId(fanId: Long): List~Ticket~
-            #parseLine(line: String): Ticket
+            +parseLine(line: String): Ticket
 
-            #formatLine(entity: Ticket): String
+            +formatLine(entity: Ticket): String
         }
     }
 

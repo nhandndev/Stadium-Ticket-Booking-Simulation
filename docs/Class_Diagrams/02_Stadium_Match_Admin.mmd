@@ -338,30 +338,30 @@ classDiagram
         class StadiumRepository {
             +StadiumRepository(filePath: Path)
             +findByName(name: String): List~Stadium~
-            #parseLine(line: String): Stadium
+            +parseLine(line: String): Stadium
 
-            #formatLine(entity: Stadium): String
+            +formatLine(entity: Stadium): String
         }
         class SectionRepository {
             +SectionRepository(filePath: Path)
             +findByStadiumId(stadiumId: Long): List~Section~
-            #parseLine(line: String): Section
+            +parseLine(line: String): Section
 
-            #formatLine(entity: Section): String
+            +formatLine(entity: Section): String
         }
         class SeatRepository {
             +SeatRepository(filePath: Path)
             +findBySectionId(sectionId: Long): List~Seat~
-            #parseLine(line: String): Seat
+            +parseLine(line: String): Seat
 
-            #formatLine(entity: Seat): String
+            +formatLine(entity: Seat): String
         }
         class MatchRepository {
             +MatchRepository(filePath: Path)
             +findUpcoming(): List~Match~
-            #parseLine(line: String): Match
+            +parseLine(line: String): Match
 
-            #formatLine(entity: Match): String
+            +formatLine(entity: Match): String
         }
         class TicketPriceRepository {
             -filePath: Path
@@ -371,8 +371,8 @@ classDiagram
             +save(price: TicketPrice): TicketPrice
             +update(price: TicketPrice): TicketPrice
             +delete(matchId: Long, sectionId: Long): boolean
-            #parseLine(line: String): TicketPrice
-            #formatLine(entity: TicketPrice): String
+            +parseLine(line: String): TicketPrice
+            +formatLine(entity: TicketPrice): String
         }
         class MatchSeatRepository {
             -filePath: Path
@@ -384,56 +384,56 @@ classDiagram
             +updateSynchronized(seat: MatchSeat): boolean
             +updateWithFileLock(seat: MatchSeat): boolean
             +updateIfVersionMatches(seat: MatchSeat, expectedVersion: int): boolean
-            #parseLine(line: String): MatchSeat
-            #formatLine(entity: MatchSeat): String
+            +parseLine(line: String): MatchSeat
+            +formatLine(entity: MatchSeat): String
         }
         class FanRepository {
             +FanRepository(filePath: Path)
             +findByEmail(email: String): Fan
             +search(keyword: String): List~Fan~
-            #parseLine(line: String): Fan
+            +parseLine(line: String): Fan
 
-            #formatLine(entity: Fan): String
+            +formatLine(entity: Fan): String
         }
         class StaffRepository {
             +StaffRepository(filePath: Path)
             +findByEmail(email: String): Staff
             +search(keyword: String): List~Staff~
-            #parseLine(line: String): Staff
+            +parseLine(line: String): Staff
 
-            #formatLine(entity: Staff): String
+            +formatLine(entity: Staff): String
         }
         class BookingRepository {
             +BookingRepository(filePath: Path)
             +findByFanId(fanId: Long): List~Booking~
-            #parseLine(line: String): Booking
+            +parseLine(line: String): Booking
 
-            #formatLine(entity: Booking): String
+            +formatLine(entity: Booking): String
         }
         class TicketRepository {
             +TicketRepository(filePath: Path)
             +findByBookingId(bookingId: Long): List~Ticket~
             +findByCode(ticketCode: String): Ticket
             +findByFanId(fanId: Long): List~Ticket~
-            #parseLine(line: String): Ticket
+            +parseLine(line: String): Ticket
 
-            #formatLine(entity: Ticket): String
+            +formatLine(entity: Ticket): String
         }
         class RefundRepository {
             +RefundRepository(filePath: Path)
             +findByFanId(fanId: Long): List~RefundRequest~
             +findPending(): List~RefundRequest~
-            #parseLine(line: String): RefundRequest
+            +parseLine(line: String): RefundRequest
 
-            #formatLine(entity: RefundRequest): String
+            +formatLine(entity: RefundRequest): String
         }
         class AuditLogRepository {
             +AuditLogRepository(filePath: Path)
             +append(log: AuditLog): void
             +findRecent(limit: int): List~AuditLog~
-            #parseLine(line: String): AuditLog
+            +parseLine(line: String): AuditLog
 
-            #formatLine(entity: AuditLog): String
+            +formatLine(entity: AuditLog): String
         }
         class DataGenerator {
             -outputDirectory: Path

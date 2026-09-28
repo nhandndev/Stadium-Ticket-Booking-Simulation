@@ -298,11 +298,12 @@ Search Fan
 Enter Ticket Code
 -> Find Ticket
 -> Validate Ticket Status
--> Mark Ticket as USED
+-> Mark Ticket as CHECKED_IN
 -> Save Check-in Result
 ```
 
-A `USED`, `CANCELLED` or `REFUNDED` ticket cannot be checked in again.
+A `CHECKED_IN` or `CANCELLED` ticket cannot be checked in again. An approved
+refund must also make the related ticket ineligible for check-in.
 
 ### 6.5 Refund Review
 
@@ -399,11 +400,7 @@ The final generated data set should satisfy the LAB requirement for at least
 
 ### Use Case Diagram
 
-The latest Use Case source is:
-
-```text
-Biểu đồ không có tiêu đề (11).drawio
-```
+The latest Use Case source is the [current draw.io diagram](<Biểu đồ không có tiêu đề (11).drawio>).
 
 The `System Overview - UseCase` page is the current baseline for actors and
 user-visible features.
@@ -445,7 +442,128 @@ later implementation stages.
 
 ---
 
-## 12. Compile And Run
+## 12. Implementation Progress by Stage
+
+The stages below show the **implementation order**, not the six class diagram
+pages. `[x]` means the work exists in `src` and has been checked; `[ ]` means it
+remains to be done. The class diagrams describe the complete design, while this
+checklist tracks the current code progress.
+
+| Stage | Main scope | Current status | Demo outcome |
+| --- | --- | --- | --- |
+| 01 | Console foundation and shared classes | Complete | Run `app.Main`, open the menu, and exit |
+| 02 | Stadium structure models and DTOs | In progress | Create and print a Stadium, Section, and Seat |
+| 03 | CSV and stadium repositories | Not started | Save a stadium and read it after restarting |
+| 04 | Match, MatchSeat, and ticket pricing | Not started | Create a match, seat inventory, and prices |
+| 05 | Guest match and seat browsing | Not started | Search/filter matches and view available seats |
+| 06 | User, Fan, Staff, and authentication | Not started | Register, log in, and navigate by role |
+| 07 | System administration | Not started | Manage data and open ticket sales |
+| 08 | Fan booking, payment, tickets, and refunds | Not started | Buy and view tickets, then request a refund |
+| 09 | Seller and Gate Staff | Not started | Sell at the counter and check in a ticket |
+| 10 | Concurrency simulation | Not started | Run competing threads and compare results |
+| 11 | Integration, testing, and delivery | Not started | Demonstrate the complete flow |
+
+### Stage 01 - Console and Common Foundation
+
+- [x] `app.Main` starts the Java console application.
+- [x] `app.MainView` shows Guest, Fan Login, Staff Login, Register, and Exit options.
+- [x] `BaseEntity` has a private `id` and a `getId()` method.
+- [x] `AppException` and `ErrorCode` represent internal errors without HTTP status codes.
+- [x] The current source compiles and the menu runs; business options still show
+  not-yet-implemented messages.
+
+### Stage 02 - Stadium, Section, Seat, and DTOs
+
+- [x] `Stadium`, `Section`, and `Seat` inherit from `BaseEntity`.
+- [x] Domain methods include `updateDetails`, `rename`, `updateLocation`,
+  `activate`, and `deactivate`.
+- [x] `Seat.active` represents the state of a physical seat.
+- [x] `StadiumRequestDto` and `StadiumResponseDto` exist.
+- [x] `MatchSeat` and `SeatStatus` have not been added prematurely.
+- [ ] Add a small demo that creates and prints a Stadium -> Section -> Seat;
+  `MainView` does not yet use these models.
+
+### Stage 03 - CSV Foundation and Stadium Repositories
+
+- [ ] Create `CsvRepository<T>` and repositories for Stadium, Section, and Seat.
+- [ ] Implement `findAll`, `findById`, `save`, `update`, `delete`, and CSV conversion.
+- [ ] Verify that saved data can be read after restarting the application.
+
+### Stage 04 - Match, MatchSeat, and TicketPrice
+
+- [ ] Create `Match`, `MatchSeat`, `TicketPrice`, `SaleStatus`, `SeatStatus`, and DTOs.
+- [ ] Create repositories for matches, per-match seat inventory, and section prices.
+- [ ] Verify that `Seat.active` differs from `MatchSeat.status`; retain `version`
+  for optimistic locking.
+
+### Stage 05 - Guest Browsing
+
+- [ ] Connect `BrowseController -> BrowseService -> Repository` to the console View.
+- [ ] Search/filter matches, view details, and inspect available `MatchSeat` records.
+- [ ] Handle an empty match list and an unknown match ID.
+
+### Stage 06 - User, Fan, Staff, and Authentication
+
+**Account entities are introduced at this stage:** `User`, `Fan`, and `Staff`.
+Staff types are identified by `UserRole`; Fan and Staff are not recreated during
+the Administrator stage.
+
+- [ ] Create `User`, `Fan`, `Staff`, `UserRole`, and `UserStatus`.
+- [ ] Create `FanRepository` and `StaffRepository` for CSV account storage.
+- [ ] Create login, registration, profile, and user-response DTOs.
+- [ ] Create Auth/Fan Services and Controllers; registration creates only Fans.
+- [ ] Verify credentials and open the correct role menu; logout returns to Guest.
+
+### Stage 07 - Administrator
+
+- [ ] Implement Stadium, Section, Seat, Match, and TicketPrice CRUD through
+  Services and Controllers.
+- [ ] Open/close ticket sales and view the sales status.
+- [ ] Manage existing Fan/Staff accounts, including status and staff roles.
+- [ ] Generate CSV data and view the system summary and audit log.
+- [ ] Prevent deletion of referenced data and removal of the last Administrator.
+
+### Stage 08 - Fan Booking, Payment, Tickets, and Refunds
+
+- [ ] Create `Booking`, `Payment`, `Ticket`, `BookingTransaction`, and `RefundRequest`.
+- [ ] Let a Fan book at most four `MatchSeat` records; recheck availability on confirmation.
+- [ ] Simulate online payment, confirm the booking, and create tickets after success.
+- [ ] Show Fan bookings/tickets, accept refund requests, and let an Administrator
+  review those requests.
+- [ ] Ensure failed payment does not leave seats incorrectly marked as booked.
+
+### Stage 09 - Seller and Gate Staff
+
+- [ ] Let a Seller find/create a Fan, book on their behalf, and record offline payment.
+- [ ] Let the Seller issue tickets after a valid booking.
+- [ ] Let Gate Staff validate a ticket and check it in only once.
+- [ ] Reuse the previous stage's Booking/Ticket Services rather than duplicating seat rules.
+
+### Stage 10 - Concurrency Simulation
+
+- [ ] Create `Simulation`, `SimulationResult`, `BookingTask`, and DTOs.
+- [ ] Implement `NO_LOCK`, `SYNCHRONIZED`, `FILE_LOCK`, and `OPTIMISTIC` through
+  `BookingStrategy`.
+- [ ] Use `ExecutorService` and `CountDownLatch` for concurrent booking attempts.
+- [ ] Measure successes, failures, conflicts, double bookings, time, and throughput.
+- [ ] View, compare, and export results; simulation does not perform online payment.
+
+### Stage 11 - Integration, Testing, and Delivery
+
+- [ ] Connect role-specific menus and enforce authorization in Services.
+- [ ] Test CSV persistence after restart, large data sets, and edge cases.
+- [ ] Demonstrate the Admin -> Guest -> Fan -> Seller -> Gate -> Simulator flow.
+- [ ] Compare source code with the Use Cases and Class Diagrams, complete the
+  report, and prepare the submission package.
+
+The dependency order is **Stadium/CSV -> MatchSeat -> Guest/Auth -> Admin ->
+Booking -> Seller/Gate -> Simulation -> Integration**. The `User`, `Fan`, and
+`Staff` entities are introduced in **Stage 06**. Each stage creates only the
+modules it needs.
+
+---
+
+## 13. Compile And Run
 
 Requirements:
 
@@ -468,7 +586,7 @@ The available menu functions depend on the current implementation stage.
 
 ---
 
-## 13. Documentation
+## 14. Documentation
 
 Detailed documents are stored in [`docs/`](docs/README.md), including project
 scope, SRS, Use Cases, architecture, data model, simulation design, edge cases,
@@ -484,7 +602,7 @@ When documents conflict, use this priority order:
 
 ---
 
-## 14. Definition Of Done
+## 15. Definition Of Done
 
 The project is complete when:
 

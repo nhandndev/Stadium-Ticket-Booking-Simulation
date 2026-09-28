@@ -103,17 +103,17 @@ classDiagram
         class SimulationRepository {
             +SimulationRepository(filePath: Path)
             +findByMatchId(matchId: Long): List~Simulation~
-            #parseLine(line: String): Simulation
+            +parseLine(line: String): Simulation
 
-            #formatLine(entity: Simulation): String
+            +formatLine(entity: Simulation): String
         }
         class SimulationResultRepository {
             +SimulationResultRepository(filePath: Path)
             +findBySimulationId(simulationId: Long): List~SimulationResult~
             +exportResult(simulationId: Long, filePath: Path): boolean
-            #parseLine(line: String): SimulationResult
+            +parseLine(line: String): SimulationResult
 
-            #formatLine(entity: SimulationResult): String
+            +formatLine(entity: SimulationResult): String
         }
         class MatchSeatRepository {
             -filePath: Path
@@ -125,15 +125,15 @@ classDiagram
             +updateSynchronized(seat: MatchSeat): boolean
             +updateWithFileLock(seat: MatchSeat): boolean
             +updateIfVersionMatches(seat: MatchSeat, expectedVersion: int): boolean
-            #parseLine(line: String): MatchSeat
-            #formatLine(entity: MatchSeat): String
+            +parseLine(line: String): MatchSeat
+            +formatLine(entity: MatchSeat): String
         }
         class TransactionRepository {
             +TransactionRepository(filePath: Path)
             +findBySimulationId(simulationId: Long): List~BookingTransaction~
-            #parseLine(line: String): BookingTransaction
+            +parseLine(line: String): BookingTransaction
 
-            #formatLine(entity: BookingTransaction): String
+            +formatLine(entity: BookingTransaction): String
         }
     }
 

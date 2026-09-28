@@ -294,16 +294,16 @@ classDiagram
         class MatchRepository {
             +MatchRepository(filePath: Path)
             +findUpcoming(): List~Match~
-            #parseLine(line: String): Match
+            +parseLine(line: String): Match
 
-            #formatLine(entity: Match): String
+            +formatLine(entity: Match): String
         }
         class SeatRepository {
             +SeatRepository(filePath: Path)
             +findBySectionId(sectionId: Long): List~Seat~
-            #parseLine(line: String): Seat
+            +parseLine(line: String): Seat
 
-            #formatLine(entity: Seat): String
+            +formatLine(entity: Seat): String
         }
         class TicketPriceRepository {
             -filePath: Path
@@ -313,46 +313,46 @@ classDiagram
             +save(price: TicketPrice): TicketPrice
             +update(price: TicketPrice): TicketPrice
             +delete(matchId: Long, sectionId: Long): boolean
-            #parseLine(line: String): TicketPrice
-            #formatLine(entity: TicketPrice): String
+            +parseLine(line: String): TicketPrice
+            +formatLine(entity: TicketPrice): String
         }
         class FanRepository {
             +FanRepository(filePath: Path)
             +findByEmail(email: String): Fan
             +search(keyword: String): List~Fan~
-            #parseLine(line: String): Fan
+            +parseLine(line: String): Fan
 
-            #formatLine(entity: Fan): String
+            +formatLine(entity: Fan): String
         }
         class BookingRepository {
             +BookingRepository(filePath: Path)
             +findByFanId(fanId: Long): List~Booking~
-            #parseLine(line: String): Booking
+            +parseLine(line: String): Booking
 
-            #formatLine(entity: Booking): String
+            +formatLine(entity: Booking): String
         }
         class PaymentRepository {
             +PaymentRepository(filePath: Path)
             +findByBookingId(bookingId: Long): Payment
-            #parseLine(line: String): Payment
+            +parseLine(line: String): Payment
 
-            #formatLine(entity: Payment): String
+            +formatLine(entity: Payment): String
         }
         class TicketRepository {
             +TicketRepository(filePath: Path)
             +findByBookingId(bookingId: Long): List~Ticket~
             +findByCode(ticketCode: String): Ticket
             +findByFanId(fanId: Long): List~Ticket~
-            #parseLine(line: String): Ticket
+            +parseLine(line: String): Ticket
 
-            #formatLine(entity: Ticket): String
+            +formatLine(entity: Ticket): String
         }
         class TransactionRepository {
             +TransactionRepository(filePath: Path)
             +findBySimulationId(simulationId: Long): List~BookingTransaction~
-            #parseLine(line: String): BookingTransaction
+            +parseLine(line: String): BookingTransaction
 
-            #formatLine(entity: BookingTransaction): String
+            +formatLine(entity: BookingTransaction): String
         }
         class MatchSeatRepository {
             -filePath: Path
@@ -364,16 +364,16 @@ classDiagram
             +updateSynchronized(seat: MatchSeat): boolean
             +updateWithFileLock(seat: MatchSeat): boolean
             +updateIfVersionMatches(seat: MatchSeat, expectedVersion: int): boolean
-            #parseLine(line: String): MatchSeat
-            #formatLine(entity: MatchSeat): String
+            +parseLine(line: String): MatchSeat
+            +formatLine(entity: MatchSeat): String
         }
         class RefundRepository {
             +RefundRepository(filePath: Path)
             +findByFanId(fanId: Long): List~RefundRequest~
             +findPending(): List~RefundRequest~
-            #parseLine(line: String): RefundRequest
+            +parseLine(line: String): RefundRequest
 
-            #formatLine(entity: RefundRequest): String
+            +formatLine(entity: RefundRequest): String
         }
     }
 
