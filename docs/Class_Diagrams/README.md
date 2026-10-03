@@ -52,6 +52,8 @@ This revision fixes the four pre-code audit groups:
 
 The architecture remains `View -> Controller -> Service -> Repository -> Model`, with DTOs used only as boundary objects.
 
+In page 04, `SimulationService.runSimulation()` creates and closes its executor locally. The executor is not a class field, so neither the service nor controller exposes `shutdown()`.
+
 ## Final code-ready fixes
 
 - `MainView` now owns a `BookingView` and receives it through the constructor so the Fan menu has an explicit navigation path to booking/payment/history.

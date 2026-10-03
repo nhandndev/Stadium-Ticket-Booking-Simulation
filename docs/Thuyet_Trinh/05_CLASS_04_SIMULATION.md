@@ -12,10 +12,13 @@ cùng một kịch bản.
 
 **Lời thuyết trình:**
 
-`SimulatorView` nhận match, danh sách ghế mục tiêu, thread count và mechanism,
-sau đó tạo `SimulationRequestDto`. `SimulationController` chuyển yêu cầu cho
-`SimulationService`. Kết quả cấu hình trả về bằng `SimulationResponseDto`, còn
-kết quả sau khi chạy dùng `SimulationResultDto`.
+`SimulatorView.showConfigurationMenu()` nhận match, danh sách ghế mục tiêu,
+thread count và mechanism, sau đó tạo `SimulationRequestDto` và gọi
+`SimulationController.configureSimulation()`. `SimulationService` lưu cấu hình
+và trả `SimulationResponseDto` có status `CONFIGURED`; bước này chưa chạy thread.
+Khi người dùng chọn Run sau đó, `SimulatorView.startSimulation(simulationId)`
+gọi `SimulationController.runSimulation(simulationId)` để chạy cấu hình đã lưu.
+Kết quả sau khi chạy dùng `SimulationResultDto`.
 
 Việc tách hai response này là có chủ ý: cấu hình mới chỉ có id, match, số thread,
 mechanism và trạng thái; các metric chỉ tồn tại sau khi simulation hoàn thành.
@@ -24,13 +27,15 @@ mechanism và trạng thái; các metric chỉ tồn tại sau khi simulation ho
 
 **Lời thuyết trình:**
 
-`SimulationService` sở hữu `ExecutorService` để quản lý thread. Service lấy
-strategy từ `StrategyFactory`, tạo nhiều `BookingTask` và dùng
+`SimulationService.runSimulation()` tạo `ExecutorService` cục bộ để quản lý
+thread trong một lần chạy. Service lấy strategy từ `StrategyFactory`, tạo nhiều `BookingTask` và dùng
 `CountDownLatch` để các task bắt đầu gần cùng thời điểm. Sau khi các task kết
 thúc, Service tổng hợp transaction, tính metric, lưu `SimulationResult` và trả
 kết quả cho `ReportView`.
 
-`shutdown` được cung cấp để đóng thread pool đúng cách khi thoát chương trình.
+Sau khi thu kết quả, `runSimulation()` đóng thread pool trước khi trả về.
+Vì executor không phải field của Service, sơ đồ không cần method `shutdown()`
+riêng ở `SimulationService` hoặc `SimulationController`.
 
 ## Strategy Pattern
 

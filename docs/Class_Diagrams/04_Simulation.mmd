@@ -6,7 +6,7 @@ classDiagram
             -simulationController: SimulationController
             +SimulatorView(simulationController: SimulationController)
             +showConfigurationMenu(): void
-            +startSimulation(request: SimulationRequestDto): void
+            +startSimulation(simulationId: Long): void
         }
         class ReportView {
             -simulationController: SimulationController
@@ -26,13 +26,11 @@ classDiagram
             +compareSyncMechanisms(simulationId: Long): List~SimulationResultDto~
             +getResults(): List~SimulationResultDto~
             +exportResult(simulationId: Long, filePath: Path): boolean
-            +shutdown(): void
         }
     }
 
     namespace SERVICE {
         class SimulationService {
-            -executor: ExecutorService
             -strategyFactory: StrategyFactory
             -simulationRepository: SimulationRepository
             -resultRepository: SimulationResultRepository
@@ -43,7 +41,6 @@ classDiagram
             +compareSyncMechanisms(simulationId: Long): List~SimulationResultDto~
             +getResults(): List~SimulationResultDto~
             +exportResult(simulationId: Long, filePath: Path): boolean
-            +shutdown(): void
         }
     }
 

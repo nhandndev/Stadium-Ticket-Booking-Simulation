@@ -339,9 +339,23 @@ matchId + seatId -> at most one successful booking / valid ticket
 
 ## 8. Concurrency Simulation
 
+After a Simulator Operator logs in, `MainView.showSimulatorMenu()` provides
+configuration, run, result, comparison, and export options. On diagram page 04,
+`SimulatorView.showConfigurationMenu()` reads the match, target seats, thread
+count, and mechanism into a `SimulationRequestDto`. It calls
+`SimulationController.configureSimulation(request)` and displays the saved
+`SimulationResponseDto` with status `CONFIGURED`; this step does not run any
+booking tasks. When the operator later selects Run,
+`SimulatorView.startSimulation(simulationId)` calls
+`SimulationController.runSimulation(simulationId)` for that saved configuration.
+`ReportView` displays results, comparisons, and export feedback.
+
 The simulator creates multiple `BookingTask` objects that attempt to reserve the
-same or overlapping seats. `ExecutorService` runs the tasks and
-`CountDownLatch` can synchronize their starting time.
+same or overlapping seats. `SimulationService.runSimulation()` creates a local
+`ExecutorService` to run the tasks, collects their results, and shuts it down
+before returning. `CountDownLatch` can synchronize the tasks' starting time.
+The executor is not a field of `SimulationService`, and neither
+`SimulationService` nor `SimulationController` has a separate `shutdown()` method.
 
 Supported synchronization mechanisms:
 
@@ -414,7 +428,7 @@ The class design is divided into six Mermaid files:
 | `01_Main_View_Auth.mmd` | Navigation, authentication, profile, Guest browsing and DTOs |
 | `02_Stadium_Match_Admin.mmd` | Stadium, section, seat, match, pricing, accounts and Admin operations |
 | `03_User_Booking_Payment_Ticket.mmd` | Fan/Seller booking, payment, ticket, refund and Gate Staff flows |
-| `04_Simulation.mmd` | Simulation configuration, booking tasks, strategies and reporting |
+| `04_Simulation.mmd` | Simulation configuration, booking tasks, local executor lifecycle, strategies and reporting |
 | `05_CSV_Repository_BaseEntity.mmd` | CSV repositories, base entity, data generator and exceptions |
 | `06_Model_Relationships.mmd` | Entity relationships, inheritance and multiplicities |
 

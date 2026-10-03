@@ -246,7 +246,7 @@ Nguon: `04_Simulation.mmd`.
 | `SimulationService` | `TransactionRepository` | `-->` Directed association | Thu thap cac booking attempt. |
 | `SimulationService` | `StrategyFactory` | `-->` Directed association | Tao strategy theo mechanism. |
 | `SimulationService` | `BookingTask` | `..>` Dependency | Tao va submit concurrent tasks vao `ExecutorService`. |
-| `SimulationService` | `ExecutorService` | `-->` Association | Quan ly thread pool va shutdown. Day la Java library class. |
+| `SimulationService.runSimulation()` | `ExecutorService` | Local implementation detail | Tao pool khi chay simulation va dong pool truoc khi ham ket thuc; khong giu thanh field hay noi association tren class diagram. |
 
 ### 5.2 Strategy dependencies
 
