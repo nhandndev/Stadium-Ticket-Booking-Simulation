@@ -3,7 +3,8 @@ package common.exception;
 public enum ErrorCode {
     INVALID_INPUT("E001", "Invalid Input"),
     NOT_FOUND("E002", "Not Found"),
-    UNKNOWN_ERROR("E003", "Unknown Error");
+    UNKNOWN_ERROR("E003", "Unknown Error"),
+    CSV_ERROR("E004","CSV Error");
 
     private final String code;
     private final String message;
