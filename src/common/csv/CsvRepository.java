@@ -35,12 +35,12 @@ public abstract class CsvRepository<T extends BaseEntity> {
                 if (line.trim().isEmpty()) continue;
                 try {
                     T entity = parseLine(line);
-                    if(entity.getId() ==null || entity.getId()<=0 ||!ids.contains(entity.getId())) {
+                    if(entity.getId() == null || entity.getId() <= 0 || !ids.add(entity.getId())) {
                         throw new AppException(ErrorCode.CSV_ERROR, "Invalid or duplicate ID");
                     }
                     entities.add(entity);
                 } catch (AppException | IllegalArgumentException e){
-                    throw new AppException(ErrorCode.CSV_ERROR, filePath.getFileName()+"line "+(i+1)+": "+e.getMessage());
+                    throw new AppException(ErrorCode.CSV_ERROR, filePath.getFileName()+" line "+(i+1)+": "+e.getMessage());
                 }
             }
 return entities;
@@ -73,18 +73,33 @@ return entities;
         if (entity == null) throw new AppException(ErrorCode.INVALID_INPUT, "Entity is required");
 
         List<T> entities = findAll();
-        Long orginalId = entity.getId();
-        if(orginalId == null || orginalId <= 0) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Invalid ID");
-        }
-        for(T entity2 : entities) {
-            if(entity2.getId().equals(orginalId)) {
-                throw new AppException(ErrorCode.CSV_ERROR, "Duplicate ID");
+        Long originalId = entity.getId();
+        if (originalId == null) {
+            long maxId = 0;
+            for (T current : entities) {
+                maxId = Math.max(maxId, current.getId());
+            }
+            if (maxId == Long.MAX_VALUE) {
+                throw new AppException(ErrorCode.INVALID_INPUT, "ID limit reached");
+            }
+            entity.setId(maxId + 1);
+        } else {
+            if (originalId <= 0) {
+                throw new AppException(ErrorCode.INVALID_INPUT, "ID must be positive");
+            }
+            for (T current : entities) {
+                if (current.getId().equals(originalId)) {
+                    throw new AppException(ErrorCode.INVALID_INPUT, "Duplicate ID");
+                }
             }
         }
         entities.add(entity);
-        writeAll(entities);
-        entity.setId(orginalId);
+        try {
+            writeAll(entities);
+        } catch (AppException e) {
+            entity.setId(originalId);
+            throw e;
+        }
         return entity;
     }
     public T update(T entity) {
@@ -103,7 +118,7 @@ return entities;
         throw new AppException(ErrorCode.NOT_FOUND,"Entity hong tim thay");
     }
     public boolean delete(Long id) {
-        if(id == null){
+        if(id == null || id <= 0){
             throw new AppException(ErrorCode.INVALID_INPUT,"Invalid ID");
         }
         List<T> entities = findAll();
@@ -126,7 +141,7 @@ return entities;
             throw new AppException(ErrorCode.CSV_ERROR,"Cannot create file");
         }
     }
-    public void writeAll(List<T> entities) {
+    private void writeAll(List<T> entities) {
         List<String> lines = new ArrayList<>();
         for (T entity : entities) {
             lines.add(formatLine(entity));

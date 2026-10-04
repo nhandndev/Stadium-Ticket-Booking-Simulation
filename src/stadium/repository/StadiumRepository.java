@@ -6,7 +6,6 @@ import common.exception.ErrorCode;
 import stadium.model.Stadium;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,11 +33,12 @@ public class StadiumRepository extends CsvRepository<Stadium> {
         return new Stadium(id, parts[1], parts[2]);
     }
     @Override
-    public String formatLine(Stadium stadium) {
-        if(stadium == null || stadium.getId() <= 0 ||stadium.getName() == null || stadium.getName().trim().isEmpty() || stadium.getAddress() == null || stadium.getAddress().trim().isEmpty() ) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Invalid stadium data");
+    public String formatLine(Stadium entity) {
+        if (entity == null || entity.getId() == null || entity.getId() <= 0
+                || !isValidText(entity.getName()) || !isValidText(entity.getAddress())) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Invalid stadium CSV data");
         }
-        return stadium.getId() + "," + stadium.getName() + "," + stadium.getAddress() ;
+        return entity.getId() + "," + entity.getName() + "," + entity.getAddress();
 
     }
     private boolean isValidText(String value) {
