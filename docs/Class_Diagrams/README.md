@@ -1,5 +1,7 @@
 # Stadium Ticket Booking Simulation — 6 Class Diagrams with Service + DTO
 
+> These `.mmd` files are secondary working copies. The visible Use Case and Class Diagram pages in `usecase+classdiagram/hihi.drawio` are the final baseline. Hidden Mermaid metadata inside the draw.io file is stale and must not override the visible canvas. When this directory disagrees with the visible canvas, update this copy before using it for implementation or presentation.
+
 ## Architecture
 
 The revised diagrams use this flow:
@@ -11,7 +13,7 @@ DTO objects are used at the View/Controller/Service boundary. Repositories still
 ## Class format
 
 - Attribute: `-fieldName: Type`
-- Public attribute: `+fieldName: Type`
+- Attributes on the final visible diagrams are private (`-`); `+` is reserved for constructors and public methods.
 - Constructor: `+ClassName(parameter: Type)` with **no return type**
 - Method: `+method(parameter: Type): ReturnType`
 
@@ -23,7 +25,7 @@ DTO objects are used at the View/Controller/Service boundary. Repositories still
 - Model contains entities, enums and core state rules.
 - DTO has only data needed to receive input or return output; no CSV I/O and no business logic.
 - No mapper layer is introduced; Service can create DTO objects directly with simple Java constructors.
-- The six-file split is preserved so each diagram stays readable.
+- The six-file split is preserved here as a working copy; the final draw.io has one Use Case page and six Class Diagram pages. DTOs stay on their relevant domain pages, with no separate catalog.
 
 ## Files
 

@@ -4,7 +4,7 @@ classDiagram
     namespace REPOSITORY {
         class CsvRepository~T~ {
             <<abstract>>
-            +filePath: Path
+            -filePath: Path
             +CsvRepository(filePath: Path)
             +findAll(): List~T~
             +findById(id: Long): T
@@ -183,6 +183,7 @@ classDiagram
             -id: Long
             +BaseEntity(id: Long)
             +getId(): Long
+            +setId(id: Long): void
         }
 
         class MatchSeat {

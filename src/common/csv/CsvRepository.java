@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public abstract class CsvRepository<T extends BaseEntity> {
-    public final Path filePath;
+    private final Path filePath;
     public CsvRepository(Path filePath) {
         if(filePath == null) {
             throw new AppException(ErrorCode.INVALID_INPUT,"File Path is required");

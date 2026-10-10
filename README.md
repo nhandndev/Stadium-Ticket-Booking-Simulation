@@ -414,14 +414,14 @@ The final generated data set should satisfy the LAB requirement for at least
 
 ### Use Case Diagram
 
-The latest Use Case source is the [current draw.io diagram](<Biểu đồ không có tiêu đề (11).drawio>).
+The official Use Case source is [hihi.drawio](usecase+classdiagram/hihi.drawio), page `00_System_Overview_UseCase`.
 
 The `System Overview - UseCase` page is the current baseline for actors and
 user-visible features.
 
 ### Class Diagrams
 
-The class design is divided into six Mermaid files:
+The official class design is the **visible content** of pages 01-06 in [hihi.drawio](usecase+classdiagram/hihi.drawio). DTOs appear on the relevant domain pages; there is no separate DTO catalog. The six Mermaid files below are secondary working copies, not a replacement for the visible draw.io pages:
 
 | File | Content |
 | --- | --- |
@@ -467,7 +467,7 @@ checklist tracks the current code progress.
 | --- | --- | --- | --- |
 | 01 | Console foundation and shared classes | Complete | Run `app.Main`, open the menu, and exit |
 | 02 | Stadium structure models and DTOs | In progress | Create and print a Stadium, Section, and Seat |
-| 03 | CSV and stadium repositories | Not started | Save a stadium and read it after restarting |
+| 03 | CSV and stadium repositories | Code complete; not tested | Save a stadium and read it after restarting |
 | 04 | Match, MatchSeat, and ticket pricing | Not started | Create a match, seat inventory, and prices |
 | 05 | Guest match and seat browsing | Not started | Search/filter matches and view available seats |
 | 06 | User, Fan, Staff, and authentication | Not started | Register, log in, and navigate by role |
@@ -481,7 +481,7 @@ checklist tracks the current code progress.
 
 - [x] `app.Main` starts the Java console application.
 - [x] `app.MainView` shows Guest, Fan Login, Staff Login, Register, and Exit options.
-- [x] `BaseEntity` has a private `id` and a `getId()` method.
+- [x] `BaseEntity` has a private `id` and public `getId()`/`setId()` methods.
 - [x] `AppException` and `ErrorCode` represent internal errors without HTTP status codes.
 - [x] The current source compiles and the menu runs; business options still show
   not-yet-implemented messages.
@@ -499,8 +499,8 @@ checklist tracks the current code progress.
 
 ### Stage 03 - CSV Foundation and Stadium Repositories
 
-- [ ] Create `CsvRepository<T>` and repositories for Stadium, Section, and Seat.
-- [ ] Implement `findAll`, `findById`, `save`, `update`, `delete`, and CSV conversion.
+- [x] Create `CsvRepository<T>` and repositories for Stadium, Section, and Seat.
+- [x] Implement `findAll`, `findById`, `save`, `update`, `delete`, and CSV conversion.
 - [ ] Verify that saved data can be read after restarting the application.
 
 ### Stage 04 - Match, MatchSeat, and TicketPrice
@@ -534,13 +534,13 @@ the Administrator stage.
   Services and Controllers.
 - [ ] Open/close ticket sales and view the sales status.
 - [ ] Manage existing Fan/Staff accounts, including status and staff roles.
-- [ ] Generate CSV data and view the system summary and audit log.
+- [ ] View the system summary and audit log. Generate sample CSV data as a LAB utility, not a separate Administrator Use Case.
 - [ ] Prevent deletion of referenced data and removal of the last Administrator.
 
 ### Stage 08 - Fan Booking, Payment, Tickets, and Refunds
 
 - [ ] Create `Booking`, `Payment`, `Ticket`, `BookingTransaction`, and `RefundRequest`.
-- [ ] Let a Fan book at most four `MatchSeat` records; recheck availability on confirmation.
+- [ ] Let a Fan select at most four seats and create a PENDING booking with a price snapshot; recheck and commit availability during payment.
 - [ ] Simulate online payment, confirm the booking, and create tickets after success.
 - [ ] Show Fan bookings/tickets, accept refund requests, and let an Administrator
   review those requests.
@@ -558,7 +558,7 @@ the Administrator stage.
 - [ ] Create `Simulation`, `SimulationResult`, `BookingTask`, and DTOs.
 - [ ] Implement `NO_LOCK`, `SYNCHRONIZED`, `FILE_LOCK`, and `OPTIMISTIC` through
   `BookingStrategy`.
-- [ ] Use `ExecutorService` and `CountDownLatch` for concurrent booking attempts.
+- [ ] Use a local `ExecutorService` and `CountDownLatch` for concurrent booking attempts on isolated simulation seat data.
 - [ ] Measure successes, failures, conflicts, double bookings, time, and throughput.
 - [ ] View, compare, and export results; simulation does not perform online payment.
 
@@ -609,8 +609,8 @@ test plan, implementation roadmap, delivery checklist and AI reflection.
 When documents conflict, use this priority order:
 
 1. Current LAB211 assignment requirements.
-2. Latest Use Case diagram.
-3. Latest six Class Diagrams.
+2. Visible Use Case page 00 in `usecase+classdiagram/hihi.drawio`.
+3. Visible Class Diagram pages 01-06 in the same file, together with approved code/UML trade-off notes when implementation requires a documented adjustment.
 4. This README.
 5. Older detailed documents in `docs/`.
 

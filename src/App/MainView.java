@@ -16,7 +16,7 @@ public class MainView {
             System.out.print("Choose: ");
             choice = scanner.nextInt();
             handleChoice(choice);
-        } while (choice > 0 && choice <= 4);
+        } while (choice != 0);
 
         System.out.println("Goodbye!");
     }
