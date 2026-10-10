@@ -459,16 +459,16 @@ later implementation stages.
 ## 12. Implementation Progress by Stage
 
 The stages below show the **implementation order**, not the six class diagram
-pages. `[x]` means the work exists in `src` and has been checked; `[ ]` means it
-remains to be done. The class diagrams describe the complete design, while this
+pages. `[x]` means the code exists in `src`; `[ ]` means it remains to be done
+or has deliberately not been verified. The class diagrams describe the complete design, while this
 checklist tracks the current code progress.
 
-| Stage | Main scope | Current status | Demo outcome |
+| Stage | Main scope | Current status | Expected outcome |
 | --- | --- | --- | --- |
 | 01 | Console foundation and shared classes | Complete | Run `app.Main`, open the menu, and exit |
-| 02 | Stadium structure models and DTOs | In progress | Create and print a Stadium, Section, and Seat |
+| 02 | Stadium structure models and DTOs | Code complete; not demonstrated | Create and print a Stadium, Section, and Seat |
 | 03 | CSV and stadium repositories | Code complete; not tested | Save a stadium and read it after restarting |
-| 04 | Match, MatchSeat, and ticket pricing | Not started | Create a match, seat inventory, and prices |
+| 04 | Match, MatchSeat, and ticket pricing | Code complete; not tested | Create a match, seat inventory, and prices |
 | 05 | Guest match and seat browsing | Not started | Search/filter matches and view available seats |
 | 06 | User, Fan, Staff, and authentication | Not started | Register, log in, and navigate by role |
 | 07 | System administration | Not started | Manage data and open ticket sales |
@@ -493,7 +493,7 @@ checklist tracks the current code progress.
   `activate`, and `deactivate`.
 - [x] `Seat.active` represents the state of a physical seat.
 - [x] `StadiumRequestDto` and `StadiumResponseDto` exist.
-- [x] `MatchSeat` and `SeatStatus` have not been added prematurely.
+- [x] `MatchSeat` and `SeatStatus` were introduced in Stage 04, not Stage 02.
 - [ ] Add a small demo that creates and prints a Stadium -> Section -> Seat;
   `MainView` does not yet use these models.
 
@@ -505,10 +505,11 @@ checklist tracks the current code progress.
 
 ### Stage 04 - Match, MatchSeat, and TicketPrice
 
-- [ ] Create `Match`, `MatchSeat`, `TicketPrice`, `SaleStatus`, `SeatStatus`, and DTOs.
-- [ ] Create repositories for matches, per-match seat inventory, and section prices.
-- [ ] Verify that `Seat.active` differs from `MatchSeat.status`; retain `version`
-  for optimistic locking.
+- [x] Create `Match`, `MatchSeat`, `TicketPrice`, `SaleStatus`, `SeatStatus`, and DTOs.
+- [x] Create repositories for matches, per-match seat inventory, and section prices.
+- [x] Keep physical `Seat.active` separate from per-match `MatchSeat.status`, with
+  `version` retained for later optimistic locking.
+- [ ] Verify CSV persistence and behavior with a demo or smoke test (deferred by request).
 
 ### Stage 05 - Guest Browsing
 
