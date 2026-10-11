@@ -524,7 +524,8 @@ checklist tracks the current code progress.
 Staff types are identified by `UserRole`; Fan and Staff are not recreated during
 the Administrator stage.
 
-- [x] Create `User`, `Fan`, `Staff`, `UserRole`, and `UserStatus`.
+- [x] Create `User`, `Fan`, `Staff` in `src/user/model/` and
+  `UserRole`, `UserStatus` in `src/user/enums/`.
 - [x] Create `FanRepository` and `StaffRepository` for CSV account storage.
 - [ ] Create login, registration, profile, and user-response DTOs.
 - [ ] Create Auth/Fan Services and Controllers; registration creates only Fans.

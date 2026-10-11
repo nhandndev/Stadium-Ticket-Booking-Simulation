@@ -1,4 +1,4 @@
-package user.model;
+package user.enums;
 
 public enum UserRole {
     FAN,

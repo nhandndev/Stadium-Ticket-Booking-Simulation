@@ -3,6 +3,8 @@ package user.model;
 import common.entity.BaseEntity;
 import common.exception.AppException;
 import common.exception.ErrorCode;
+import user.enums.UserRole;
+import user.enums.UserStatus;
 
 public class User extends BaseEntity {
     private String fullName;

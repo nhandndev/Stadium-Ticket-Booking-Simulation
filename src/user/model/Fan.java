@@ -1,5 +1,8 @@
 package user.model;
 
+import user.enums.UserRole;
+import user.enums.UserStatus;
+
 public class Fan extends User {
     private static final int MAX_TICKETS_PER_TRANSACTION = 4;
 

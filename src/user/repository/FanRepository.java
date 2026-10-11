@@ -6,8 +6,8 @@ import common.exception.ErrorCode;
 import java.nio.file.Path;
 import java.util.List;
 import user.model.Fan;
-import user.model.UserRole;
-import user.model.UserStatus;
+import user.enums.UserRole;
+import user.enums.UserStatus;
 
 public class FanRepository extends CsvRepository<Fan> {
     public FanRepository(Path filePath) {

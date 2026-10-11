@@ -6,8 +6,8 @@ import common.exception.ErrorCode;
 import java.nio.file.Path;
 import java.util.List;
 import user.model.Staff;
-import user.model.UserRole;
-import user.model.UserStatus;
+import user.enums.UserRole;
+import user.enums.UserStatus;
 
 public class StaffRepository extends CsvRepository<Staff> {
     public StaffRepository(Path filePath) {
