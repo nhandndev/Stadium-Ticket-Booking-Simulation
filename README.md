@@ -469,8 +469,8 @@ checklist tracks the current code progress.
 | 02 | Stadium structure models and DTOs | Code complete; not demonstrated | Create and print a Stadium, Section, and Seat |
 | 03 | CSV and stadium repositories | Code complete; not tested | Save a stadium and read it after restarting |
 | 04 | Match, MatchSeat, and ticket pricing | Code complete; not tested | Create a match, seat inventory, and prices |
-| 05 | Guest match and seat browsing | Not started | Search/filter matches and view available seats |
-| 06 | User, Fan, Staff, and authentication | Not started | Register, log in, and navigate by role |
+| 05 | Guest match and seat browsing | Code complete; sample CSV not seeded | Search/filter matches and view available seats |
+| 06 | User, Fan, Staff, and authentication | In progress: Model and Repository complete | Register, log in, and navigate by role |
 | 07 | System administration | Not started | Manage data and open ticket sales |
 | 08 | Fan booking, payment, tickets, and refunds | Not started | Buy and view tickets, then request a refund |
 | 09 | Seller and Gate Staff | Not started | Sell at the counter and check in a ticket |
@@ -513,9 +513,10 @@ checklist tracks the current code progress.
 
 ### Stage 05 - Guest Browsing
 
-- [ ] Connect `BrowseController -> BrowseService -> Repository` to the console View.
-- [ ] Search/filter matches, view details, and inspect available `MatchSeat` records.
-- [ ] Handle an empty match list and an unknown match ID.
+- [x] Connect `BrowseController -> BrowseService -> Repository` to the console View.
+- [x] Search/filter matches, view details, and inspect available `MatchSeat` records.
+- [x] Handle an empty match list and an unknown match ID.
+- [ ] Add match and match-seat CSV data to the configured demo folder for a full Guest demonstration.
 
 ### Stage 06 - User, Fan, Staff, and Authentication
 
@@ -523,8 +524,8 @@ checklist tracks the current code progress.
 Staff types are identified by `UserRole`; Fan and Staff are not recreated during
 the Administrator stage.
 
-- [ ] Create `User`, `Fan`, `Staff`, `UserRole`, and `UserStatus`.
-- [ ] Create `FanRepository` and `StaffRepository` for CSV account storage.
+- [x] Create `User`, `Fan`, `Staff`, `UserRole`, and `UserStatus`.
+- [x] Create `FanRepository` and `StaffRepository` for CSV account storage.
 - [ ] Create login, registration, profile, and user-response DTOs.
 - [ ] Create Auth/Fan Services and Controllers; registration creates only Fans.
 - [ ] Verify credentials and open the correct role menu; logout returns to Guest.
