@@ -12,7 +12,6 @@ import match.repository.MatchSeatRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class BrowseService {
     private final MatchRepository matchRepository;
