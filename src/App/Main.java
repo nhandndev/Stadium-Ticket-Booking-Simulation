@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Path demoFolder = Path.of("test");
+        Path demoFolder = Path.of("data", "generated", "chang04-demo");
         MatchRepository matchRepository = new MatchRepository(demoFolder.resolve("matches.csv"));
         MatchSeatRepository matchSeatRepository = new MatchSeatRepository(
                 demoFolder.resolve("match_seats.csv"));

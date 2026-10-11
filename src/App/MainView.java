@@ -19,13 +19,22 @@ public class MainView {
     }
 
     public void start() {
-        int choice;
-        do {
+        boolean running = true;
+        while (running) {
             showMenu();
             System.out.print("Choose: ");
-            choice = scanner.nextInt();
-            handleChoice(choice);
-        } while (choice != 0);
+            String input = scanner.nextLine().trim();
+            try {
+                int choice = Integer.parseInt(input);
+                if (choice == 0) {
+                    running = false;
+                } else {
+                    handleChoice(choice);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid choice.");
+            }
+        }
 
         System.out.println("Goodbye!");
     }
@@ -135,8 +144,6 @@ public class MainView {
                 System.out.println("Invalid input.");
             }catch (DateTimeParseException e) {
                 System.out.println("Invalid date format.");
-            }catch (Exception e) {
-                System.out.println("Error issue IDK Right Now");
             }
         }
 
