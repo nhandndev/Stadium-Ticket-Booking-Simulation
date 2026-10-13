@@ -176,7 +176,6 @@ public class TicketPriceRepository {
                 try {
                     Files.deleteIfExists(temporaryFile);
                 } catch (IOException e) {
-                    // Do not hide the original write error.
                 }
             }
         }

@@ -19,6 +19,48 @@ layered design, CSV persistence, DTOs, exception handling and Java concurrency.
 The project does not use Spring, a web server, REST API, HTTP status codes or a
 database management system.
 
+### Original Problem Statement
+
+The LAB's core question is how to prevent double booking when thousands of
+concurrent fans attempt to buy the same stadium seats from CSV data. A simple
+read-then-check-then-write sequence is not atomic: two threads can both see a
+seat as `AVAILABLE` and each create a successful booking. The same physical
+seat can be sold for different matches, but for one match it must not produce
+two valid tickets. The project therefore tracks availability per match rather
+than changing the status of the physical seat itself.
+
+**Normal ticketing system.** This project goes beyond a standalone thread
+experiment by modeling the operations needed to sell and use tickets. An
+Administrator manages stadiums, sections, physical seats, matches, ticket
+prices by match and section, sale status, accounts and audit information.
+Guests can search matches and inspect availability. Fans can register, sign in,
+select up to four seats per transaction, create a pending booking, make a
+simulated online payment, and then view confirmed bookings and issued tickets
+or request a refund. A Seller can book for a Fan and record offline payment;
+Gate Staff validate tickets and prevent a second check-in. The booking flow
+must recheck seat availability when committing the purchase, retain the price
+used for that booking, and avoid issuing a ticket when payment fails. These
+workflows make the concurrency problem matter in a recognizable ticketing
+system, rather than only in a synthetic counter example.
+
+**Concurrency simulation.** A Simulator Operator chooses a match, target
+seats, thread count and synchronization mechanism, then starts many booking
+attempts together against isolated simulation data. The simulator compares
+`NO_LOCK` as an intentionally unsafe baseline with `SYNCHRONIZED`, `FILE_LOCK`
+and `OPTIMISTIC` approaches. It measures successful and failed attempts,
+conflicts, double bookings, execution time and throughput, and supports
+viewing, comparing and exporting the results. Simulation attempts exercise
+seat contention without running the Fan/Seller checkout or online payment.
+The CSV data set must contain at least 10,000 rows, so the comparison is not
+limited to a tiny hand-written example.
+
+**Project question:** Which mechanism keeps bookings correct under concurrent
+load, and what execution-time or throughput cost does that correctness bring?
+The normal booking flow and simulator share the same seat-integrity problem,
+but their data and payment workflows remain separate. This section describes
+the target system; the implementation checklist below shows what is already
+present in `src`.
+
 ---
 
 ## 2. Project Objectives
