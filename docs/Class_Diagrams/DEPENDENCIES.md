@@ -1,5 +1,9 @@
 # Full Class Diagram Dependencies - Pages 1 to 6
 
+> Historical relationship notes for the older View-first Mermaid copies.
+> For the current Controller-first design, use the visible pages in
+> [Controller_First_Full.drawio](Controller_First_Full.drawio).
+
 Tai lieu nay tong hop cac duong noi can dung cho 6 trang Class Diagram cua Stadium Ticket Booking Simulation.
 
 ## 1. Quy uoc quan he

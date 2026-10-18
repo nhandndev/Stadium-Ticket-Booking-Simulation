@@ -1,6 +1,6 @@
 # Danh sách cần chỉnh trong Use Case và Class Diagram
 
-Đối chiếu **các bảng đang hiển thị** trên 7 trang của `hihi.drawio` với code hiện tại và kịch bản các chặng đã chốt. File này chỉ liệt kê thao tác sửa sơ đồ; **chưa sửa `hihi.drawio`**. Ký hiệu `-` là thuộc tính private, `+` là phương thức public.
+Lưu ý lịch sử: checklist này được viết cho sơ đồ cũ đã gỡ bỏ. Sơ đồ chuẩn hiện tại là `docs/Class_Diagrams/Controller_First_Full.drawio`; đừng áp dụng các mục dưới đây nếu bảng mới đã có nội dung tương ứng. Ký hiệu `-` là thuộc tính private, `+` là phương thức public.
 
 **Thời điểm:** `Sửa ngay` = code đã có. `Khi làm chặng N` = mới có trong kịch bản, chỉ cập nhật sơ đồ nộp khi code tương ứng đã chốt. Một class xuất hiện ở nhiều trang thì sửa **tất cả bản sao được nêu**.
 

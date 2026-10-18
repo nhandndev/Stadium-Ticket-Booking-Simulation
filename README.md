@@ -193,12 +193,12 @@ identified by `UserRole`, including `SELLER`, `GATE_STAFF`, `ADMIN` and
 
 ## 4. Architecture
 
-The class diagrams follow this dependency direction:
+The controller-first class diagrams follow these dependency directions:
 
 ```text
-View -> Controller -> Service -> Repository -> Model / CSV
-                         |
-                         +-> DTO
+Main -> MainController -> View (console input/output)
+                       -> domain Controller -> Service -> Repository -> Model / CSV
+Request/response DTOs cross the Controller and Service boundaries.
 ```
 
 ### Layer Responsibilities
@@ -206,7 +206,7 @@ View -> Controller -> Service -> Repository -> Model / CSV
 | Layer | Responsibility |
 | --- | --- |
 | View | Display console menus, read input and print results |
-| Controller | Receive View actions and delegate work to Services |
+| Controller | Run the console workflow, request View input/output, and delegate business work to Services |
 | Service | Validate input and implement business use cases |
 | Repository | Read, write, search and update CSV data |
 | Model | Store entity state and simple domain behavior |
@@ -456,14 +456,14 @@ The final generated data set should satisfy the LAB requirement for at least
 
 ### Use Case Diagram
 
-The official Use Case source is [hihi.drawio](usecase+classdiagram/hihi.drawio), page `00_System_Overview_UseCase`.
+The official Use Case source is [Controller_First_Full.drawio](docs/Class_Diagrams/Controller_First_Full.drawio), page `00_System_Overview_UseCase`.
 
 The `System Overview - UseCase` page is the current baseline for actors and
 user-visible features.
 
 ### Class Diagrams
 
-The official class design is the **visible content** of pages 01-06 in [hihi.drawio](usecase+classdiagram/hihi.drawio). DTOs appear on the relevant domain pages; there is no separate DTO catalog. The six Mermaid files below are secondary working copies, not a replacement for the visible draw.io pages:
+The official class design is the **visible content** of pages 01-06 in [Controller_First_Full.drawio](docs/Class_Diagrams/Controller_First_Full.drawio). DTOs appear on the relevant domain pages; there is no separate DTO catalog. The six Mermaid files below are older secondary copies, not a replacement for the controller-first draw.io pages:
 
 | File | Content |
 | --- | --- |
@@ -511,7 +511,7 @@ checklist tracks the current code progress.
 | 02 | Stadium structure models and DTOs | Code complete; not demonstrated | Create and print a Stadium, Section, and Seat |
 | 03 | CSV and stadium repositories | Code complete; not tested | Save a stadium and read it after restarting |
 | 04 | Match, MatchSeat, and ticket pricing | Code complete; not tested | Create a match, seat inventory, and prices |
-| 05 | Guest match and seat browsing | Code complete; sample CSV not seeded | Search/filter matches and view available seats |
+| 05 | Guest browse and controller-first menu | Code refactored; sample CSV not seeded | Search/filter matches and view available seats |
 | 06 | User, Fan, Staff, and authentication | In progress: Model and Repository complete | Register, log in, and navigate by role |
 | 07 | System administration | Not started | Manage data and open ticket sales |
 | 08 | Fan booking, payment, tickets, and refunds | Not started | Buy and view tickets, then request a refund |
@@ -522,7 +522,7 @@ checklist tracks the current code progress.
 ### Stage 01 - Console and Common Foundation
 
 - [x] `app.Main` starts the Java console application.
-- [x] `app.MainView` shows Guest, Fan Login, Staff Login, Register, and Exit options.
+- [x] `app.MainController` runs the menu; `app.MainView` displays Guest, Fan Login, Staff Login, Register, and Exit options.
 - [x] `BaseEntity` has a private `id` and public `getId()`/`setId()` methods.
 - [x] `AppException` and `ErrorCode` represent internal errors without HTTP status codes.
 - [x] The current source compiles and the menu runs; business options still show
@@ -555,7 +555,7 @@ checklist tracks the current code progress.
 
 ### Stage 05 - Guest Browsing
 
-- [x] Connect `BrowseController -> BrowseService -> Repository` to the console View.
+- [x] Connect `MainController -> BrowseController -> BrowseService -> Repository` and use Views only for console input/output.
 - [x] Search/filter matches, view details, and inspect available `MatchSeat` records.
 - [x] Handle an empty match list and an unknown match ID.
 - [ ] Add match and match-seat CSV data to the configured demo folder for a full Guest demonstration.
@@ -654,7 +654,7 @@ test plan, implementation roadmap, delivery checklist and AI reflection.
 When documents conflict, use this priority order:
 
 1. Current LAB211 assignment requirements.
-2. Visible Use Case page 00 in `usecase+classdiagram/hihi.drawio`.
+2. Visible Use Case page 00 in `docs/Class_Diagrams/Controller_First_Full.drawio`.
 3. Visible Class Diagram pages 01-06 in the same file, together with approved code/UML trade-off notes when implementation requires a documented adjustment.
 4. This README.
 5. Older detailed documents in `docs/`.

@@ -43,7 +43,7 @@ public abstract class CsvRepository<T extends BaseEntity> {
                     throw new AppException(ErrorCode.CSV_ERROR, filePath.getFileName()+" line "+(i+1)+": "+e.getMessage());
                 }
             }
-return entities;
+            return entities;
         }catch(IOException e) {
             throw  new AppException(ErrorCode.CSV_ERROR,"Cannot read CSV file");
         }
@@ -115,7 +115,7 @@ return entities;
                 return entity;
             }
         }
-        throw new AppException(ErrorCode.NOT_FOUND,"Entity hong tim thay");
+        throw new AppException(ErrorCode.NOT_FOUND, "Entity not found");
     }
     public boolean delete(Long id) {
         if(id == null || id <= 0){

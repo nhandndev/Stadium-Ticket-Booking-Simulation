@@ -4,21 +4,25 @@ import match.controller.BrowseController;
 import match.repository.MatchRepository;
 import match.repository.MatchSeatRepository;
 import match.service.BrowseService;
+import match.view.SeatMapView;
 
 import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Path demoFolder = Path.of("data", "generated", "chang04-demo");
-        MatchRepository matchRepository = new MatchRepository(demoFolder.resolve("matches.csv"));
+        Path dataFolder = args.length > 0 ? Path.of(args[0]) : Path.of("data");
+        MatchRepository matchRepository = new MatchRepository(dataFolder.resolve("matches.csv"));
         MatchSeatRepository matchSeatRepository = new MatchSeatRepository(
-                demoFolder.resolve("match_seats.csv"));
+                dataFolder.resolve("match_seats.csv"));
         BrowseService browseService = new BrowseService(matchRepository, matchSeatRepository);
         BrowseController browseController = new BrowseController(browseService);
         try (Scanner scanner = new Scanner(System.in)) {
-            MainView view = new MainView(scanner, browseController);
-            view.start();
+            MainView mainView = new MainView(scanner);
+            SeatMapView seatMapView = new SeatMapView();
+            MainController mainController = new MainController(mainView, seatMapView,
+                    browseController);
+            mainController.start();
         }
     }
 }

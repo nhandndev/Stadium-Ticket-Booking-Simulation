@@ -84,6 +84,16 @@ public class MatchSeatRepository {
         return seat;
     }
 
+    public boolean deleteByMatchId(Long matchId) {
+        requirePositive(matchId);
+        List<MatchSeat> seats = readAll();
+        boolean removed = seats.removeIf(seat -> seat.getMatchId().equals(matchId));
+        if (removed) {
+            writeAll(seats);
+        }
+        return removed;
+    }
+
     public MatchSeat parseLine(String line) {
         String[] parts = line.split(",", -1);
         if (parts.length != 5) {

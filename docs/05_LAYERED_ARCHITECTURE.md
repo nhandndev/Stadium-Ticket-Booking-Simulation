@@ -223,7 +223,9 @@ Lam:
 Huong phu thuoc nen la:
 
 ```text
-View -> Controller -> Request/Result -> Service -> Repository -> CSV
+Main -> MainController -> View (console input/output)
+                       -> domain Controller -> Service -> Repository -> CSV
+Request/Result DTOs cross Controller and Service boundaries.
 Service -> Domain
 Repository -> Domain
 ```

@@ -1,6 +1,6 @@
 # Class diagram changes to apply after Stage 03
 
-Historical note: the visible `BaseEntity.setId()` and private `CsvRepository.filePath` are already present in `usecase+classdiagram/hihi.drawio`. Do not apply the same edit twice. Use the visible canvas and `secret/Code/QUYET_DINH_TRADEOFF_UML.md` for the current decision.
+Historical note: the visible `BaseEntity.setId()` and private `CsvRepository.filePath` are already present in `docs/Class_Diagrams/Controller_First_Full.drawio`. Do not apply the same edit twice. Use the visible canvas and `secret/Code/QUYET_DINH_TRADEOFF_UML.md` for the current decision.
 
 Status: pending. This file records differences between the current Java code and the class diagrams. The `.mmd` diagrams have not been edited yet.
 

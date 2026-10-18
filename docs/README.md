@@ -14,7 +14,7 @@ Muc tieu: giu dung trong tam cua du an LAB211 la Java OOP, MVC, CSV persistence 
 5. [04_FEATURE_BACKLOG.md](04_FEATURE_BACKLOG.md) - Feature theo module, uu tien MVP/Core/Enterprise-like.
 6. [05_LAYERED_ARCHITECTURE.md](05_LAYERED_ARCHITECTURE.md) - Phan tang MVC ro rang va package goi y.
 7. [06_DOMAIN_DATA_MODEL.md](06_DOMAIN_DATA_MODEL.md) - Entity, CSV schema, quan he du lieu.
-8. [Class_Diagrams/README.md](Class_Diagrams/README.md) - Baseline Class Diagram code-ready gom 6 trang, Service, DTO va dependency guide.
+8. [Class_Diagrams/Controller_First_Full.drawio](Class_Diagrams/Controller_First_Full.drawio) - Canonical Use Case and six controller-first Class Diagram pages.
 9. [11_SERVICE_CONTRACTS.md](11_SERVICE_CONTRACTS.md) - Contract goi y cho Controller-Service-Repository.
 10. [07_BOOKING_AND_SIMULATION_DESIGN.md](07_BOOKING_AND_SIMULATION_DESIGN.md) - Booking engine, dong bo, simulator, metric.
 11. [08_EDGE_CASES_AND_BUSINESS_RULES.md](08_EDGE_CASES_AND_BUSINESS_RULES.md) - Business rules va edge cases can xu ly.

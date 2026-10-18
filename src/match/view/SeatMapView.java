@@ -1,17 +1,14 @@
 package match.view;
 
-import match.controller.BrowseController;
 import match.dto.MatchSeatResponseDto;
 
 import java.util.List;
 
 public class SeatMapView {
-    private final BrowseController browseController;
-    public SeatMapView(BrowseController browseController) {
-        this.browseController = browseController;
+    public SeatMapView() {
     }
-    public void displaySeatMap(Long matchId){
-        List<MatchSeatResponseDto> seats = browseController.getSeatMap(matchId);
+
+    public void displaySeatMap(List<MatchSeatResponseDto> seats) {
         if (seats.isEmpty()) {
             System.out.println("No seats have been prepared for this match.");
             return;

@@ -18,6 +18,5 @@ target/
 data/generated/
 exports/
 logs/
-usecase+classdiagram/hihi.drawio
 test/matches.csv
 usecase+classdiagram/OTIO_REVIEW.md

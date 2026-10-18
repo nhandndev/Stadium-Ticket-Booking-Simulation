@@ -1,5 +1,10 @@
 # Kịch bản thuyết trình dự án
 
+> Các kịch bản bên dưới viết theo sơ đồ View-first cũ. Sơ đồ chuẩn hiện tại là
+> [Controller_First_Full.drawio](../Class_Diagrams/Controller_First_Full.drawio).
+> Trước khi thuyết trình, cần đổi phần giải thích hướng gọi thành Controller
+> điều phối View và gọi Service.
+
 Bộ tài liệu này là lời nói gợi ý để thuyết trình dựa trên Use Case mới nhất,
 sáu trang Class Diagram và source code hiện có của dự án Stadium Ticket Booking
 Simulation.
