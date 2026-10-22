@@ -2,23 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ed48d2cf-23cb-4a8f-8886-19397743c96c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Biểu đồ không có tiêu đề (11).drawio" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/05_LAYERED_ARCHITECTURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/05_LAYERED_ARCHITECTURE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/12_IMPLEMENTATION_ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/12_IMPLEMENTATION_ROADMAP.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/CHANGES_PENDING_STAGE_03.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/CHANGES_PENDING_STAGE_03.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/DEPENDENCIES.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/DEPENDENCIES.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/MainView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/csv/CsvRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/csv/CsvRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/match/repository/MatchSeatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/match/repository/MatchSeatRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/match/view/SeatMapView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/match/view/SeatMapView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usecase+classdiagram/CHECKLIST_CHINH_SUA_CLASS_USECASE.md" beforeDir="false" afterPath="$PROJECT_DIR$/usecase+classdiagram/CHECKLIST_CHINH_SUA_CLASS_USECASE.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
