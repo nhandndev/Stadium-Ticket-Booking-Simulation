@@ -4,7 +4,7 @@ import user.enums.UserRole;
 import user.enums.UserStatus;
 
 public class Fan extends User {
-    private static final int MAX_TICKETS_PER_TRANSACTION = 4;
+    private final int MAX_TICKETS_PER_TRANSACTION = 4;
 
     public Fan(Long id, String fullName, String email, String passwordHash,
             String phone, UserStatus status) {
@@ -12,6 +12,6 @@ public class Fan extends User {
     }
 
     public boolean canBook(int ticketCount) {
-        return ticketCount >= 1 && ticketCount <= MAX_TICKETS_PER_TRANSACTION;
+        return ticketCount >= 1 && ticketCount <= this.MAX_TICKETS_PER_TRANSACTION;
     }
 }

@@ -18,6 +18,6 @@ public class Staff extends User {
         if (role == null || role == UserRole.FAN) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid staff role");
         }
-        changeRole(role);
+        this.changeRole(role);
     }
 }

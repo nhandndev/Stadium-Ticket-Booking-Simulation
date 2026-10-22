@@ -19,7 +19,7 @@ public class StaffRepository extends CsvRepository<Staff> {
             throw new AppException(ErrorCode.INVALID_INPUT, "Email is required");
         }
         String wanted = email.trim().toLowerCase();
-        List<Staff> found = findByCondition(
+        List<Staff> found = this.findByCondition(
                 staff -> staff.getEmail().toLowerCase().equals(wanted));
         if (found.size() > 1) {
             throw new AppException(ErrorCode.CSV_ERROR, "Duplicate staff email in CSV");
@@ -29,15 +29,15 @@ public class StaffRepository extends CsvRepository<Staff> {
 
     public List<Staff> search(String keyword) {
         String wanted = keyword == null ? "" : keyword.trim().toLowerCase();
-        return findByCondition(staff -> staff.getFullName().toLowerCase().contains(wanted)
+        return this.findByCondition(staff -> staff.getFullName().toLowerCase().contains(wanted)
                 || staff.getEmail().toLowerCase().contains(wanted));
     }
 
     @Override
     public Staff parseLine(String line) {
         String[] parts = line.split(",", -1);
-        if (parts.length != 7 || !valid(parts[1]) || !valid(parts[2])
-                || !valid(parts[3]) || !valid(parts[4])) {
+        if (parts.length != 7 || !this.valid(parts[1]) || !this.valid(parts[2])
+                || !this.valid(parts[3]) || !this.valid(parts[4])) {
             throw new AppException(ErrorCode.CSV_ERROR, "Invalid staff row");
         }
         long id = Long.parseLong(parts[0]);
@@ -52,8 +52,8 @@ public class StaffRepository extends CsvRepository<Staff> {
     @Override
     public String formatLine(Staff entity) {
         if (entity == null || entity.getId() == null || entity.getId() <= 0
-                || !valid(entity.getFullName()) || !valid(entity.getEmail())
-                || !valid(entity.getPasswordHash()) || !valid(entity.getPhone())
+                || !this.valid(entity.getFullName()) || !this.valid(entity.getEmail())
+                || !this.valid(entity.getPasswordHash()) || !this.valid(entity.getPhone())
                 || entity.getRole() == null || entity.getRole() == UserRole.FAN
                 || entity.getStatus() == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid staff CSV data");

@@ -19,7 +19,7 @@ public class FanRepository extends CsvRepository<Fan> {
             throw new AppException(ErrorCode.INVALID_INPUT, "Email is required");
         }
         String wanted = email.trim().toLowerCase();
-        List<Fan> found = findByCondition(
+        List<Fan> found = this.findByCondition(
                 fan -> fan.getEmail().toLowerCase().equals(wanted));
         if (found.size() > 1) {
             throw new AppException(ErrorCode.CSV_ERROR, "Duplicate fan email in CSV");
@@ -29,15 +29,15 @@ public class FanRepository extends CsvRepository<Fan> {
 
     public List<Fan> search(String keyword) {
         String wanted = keyword == null ? "" : keyword.trim().toLowerCase();
-        return findByCondition(fan -> fan.getFullName().toLowerCase().contains(wanted)
+        return this.findByCondition(fan -> fan.getFullName().toLowerCase().contains(wanted)
                 || fan.getEmail().toLowerCase().contains(wanted));
     }
 
     @Override
     public Fan parseLine(String line) {
         String[] parts = line.split(",", -1);
-        if (parts.length != 7 || !valid(parts[1]) || !valid(parts[2])
-                || !valid(parts[3]) || !valid(parts[4]) || !parts[5].equals("FAN")) {
+        if (parts.length != 7 || !this.valid(parts[1]) || !this.valid(parts[2])
+                || !this.valid(parts[3]) || !this.valid(parts[4]) || !parts[5].equals("FAN")) {
             throw new AppException(ErrorCode.CSV_ERROR, "Invalid fan row");
         }
         long id = Long.parseLong(parts[0]);
@@ -51,8 +51,8 @@ public class FanRepository extends CsvRepository<Fan> {
     @Override
     public String formatLine(Fan entity) {
         if (entity == null || entity.getId() == null || entity.getId() <= 0
-                || !valid(entity.getFullName()) || !valid(entity.getEmail())
-                || !valid(entity.getPasswordHash()) || !valid(entity.getPhone())
+                || !this.valid(entity.getFullName()) || !this.valid(entity.getEmail())
+                || !this.valid(entity.getPasswordHash()) || !this.valid(entity.getPhone())
                 || entity.getRole() != UserRole.FAN || entity.getStatus() == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid fan CSV data");
         }

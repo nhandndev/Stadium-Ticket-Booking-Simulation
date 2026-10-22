@@ -45,26 +45,26 @@ public class User extends BaseEntity {
     }
 
     public String getFullName() {
-        return fullName;
+        return this.fullName;
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 
     public String getPasswordHash() {
-        return passwordHash;
+        return this.passwordHash;
     }
 
     public String getPhone() {
-        return phone;
+        return this.phone;
     }
 
     public UserRole getRole() {
-        return role;
+        return this.role;
     }
 
     public UserStatus getStatus() {
-        return status;
+        return this.status;
     }
 }
