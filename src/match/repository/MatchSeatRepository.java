@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import match.model.MatchSeat;
-import match.model.SeatStatus;
+import match.enums.SeatStatus;
 
 public class MatchSeatRepository {
     private final Path filePath;

@@ -1,7 +1,7 @@
 package match.dto;
 
 import java.time.LocalDateTime;
-import match.model.SaleStatus;
+import match.enums.SaleStatus;
 
 public class MatchResponseDto {
     private Long id;

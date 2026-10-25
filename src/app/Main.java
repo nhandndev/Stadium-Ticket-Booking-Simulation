@@ -1,7 +1,6 @@
 package app;
 
 import admin.controller.AdminController;
-import admin.data.DataGenerator;
 import admin.repository.AuditLogRepository;
 import admin.service.AdminService;
 import admin.view.AdminManagementView;
@@ -59,7 +58,6 @@ public class Main {
         AccountAdminController accountAdminController = new AccountAdminController(
                 new AccountAdminService(fanRepository, staffRepository));
         AdminService adminService = new AdminService(
-                new DataGenerator(dataFolder.resolve("generated")),
                 fanRepository, staffRepository, stadiumRepository,
                 matchRepository, auditLogRepository);
 

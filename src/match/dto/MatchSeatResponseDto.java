@@ -1,6 +1,6 @@
 package match.dto;
 
-import match.model.SeatStatus;
+import match.enums.SeatStatus;
 
 public class MatchSeatResponseDto {
     private Long id;

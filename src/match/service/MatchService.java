@@ -9,7 +9,7 @@ import match.dto.MatchRequestDto;
 import match.dto.MatchResponseDto;
 import match.dto.TicketPriceRequestDto;
 import match.model.Match;
-import match.model.SaleStatus;
+import match.enums.SaleStatus;
 import match.model.TicketPrice;
 import match.repository.MatchRepository;
 import match.repository.MatchSeatRepository;

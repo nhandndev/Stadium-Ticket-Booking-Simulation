@@ -23,6 +23,8 @@ Bộ tài liệu này cung cấp toàn bộ kịch bản, lời thuyết minh v�
 11. [Kịch bản demo thực tế và câu hỏi phản biện](09_DEMO_VA_PHAN_BIEN.md)
 12. [**Kịch bản báo cáo tiến độ 65% (Dành cho buổi báo cáo tiến độ)**](10_KICH_BAN_BAO_CAO_TIEN_DO.md)
 13. [**Chi tiết luồng code từ MainController đến toàn bộ dự án (Call-Stack Tracing)**](11_CHI_TIET_LUONG_CODE_FLOW.md)
+14. [**Nguyên lý hoạt động của CSV và Repository Pattern (Giải thích chi tiết cơ chế lưu trữ)**](12_NGUYEN_LY_CSV_VA_REPOSITORY.md)
+15. [**Kịch bản Demo Full Tính Năng thực chiến (Từng bước bấm phím & Lời thoại)**](13_KICH_BAN_DEMO_FULL_FEATURE.md)
 
 ---
 

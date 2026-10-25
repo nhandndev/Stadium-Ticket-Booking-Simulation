@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 import match.model.Match;
-import match.model.SaleStatus;
+import match.enums.SaleStatus;
 
 public class MatchRepository extends CsvRepository<Match> {
     public MatchRepository(Path filePath) {

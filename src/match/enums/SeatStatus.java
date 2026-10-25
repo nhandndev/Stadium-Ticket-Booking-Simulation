@@ -1,4 +1,4 @@
-package match.model;
+package match.enums;
 
 public enum SeatStatus {
     AVAILABLE,

@@ -3,6 +3,7 @@ package match.model;
 import common.entity.BaseEntity;
 import common.exception.AppException;
 import common.exception.ErrorCode;
+import match.enums.SeatStatus;
 
 public class MatchSeat extends BaseEntity {
     private Long matchId;

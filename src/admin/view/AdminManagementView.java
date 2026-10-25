@@ -22,7 +22,7 @@ public class AdminManagementView {
         System.out.println("\n=== ADMINISTRATOR ===");
         System.out.println("1 Stadium/Section/Seat | 2 Match/Pricing/Sales");
         System.out.println("3 Fan accounts | 4 Staff accounts | 5 Audit logs");
-        System.out.println("6 Generate sample CSV | 7 System summary | 0 Back");
+        System.out.println("6 System summary | 0 Back");
         return this.readInt("Choose: ");
     }
 
@@ -57,12 +57,6 @@ public class AdminManagementView {
         System.out.println("1 Create | 2 List | 3 Details | 4 Search");
         System.out.println("5 Filter role/status | 6 Update | 7 Activate | 8 Deactivate");
         System.out.println("9 Assign role | 10 Change role | 11 Revoke role | 0 Back");
-        return this.readInt("Choose: ");
-    }
-
-    public int showDataGenerationMenu() {
-        System.out.println("\n=== DATA GENERATION ===");
-        System.out.println("1 Generate sample dataset | 0 Back");
         return this.readInt("Choose: ");
     }
 
@@ -102,7 +96,7 @@ public class AdminManagementView {
     public int readInt(String prompt) {
         System.out.print(prompt);
         String line = this.scanner.nextLine().trim();
-        return line.isEmpty() ? 0 : Integer.parseInt(line);
+        return line.isEmpty() ? -1 : Integer.parseInt(line);
     }
 
     public BigDecimal readAmount(String prompt) {
@@ -112,32 +106,75 @@ public class AdminManagementView {
     }
 
     public void displayResult(Object result) {
-        if (result != null) {
-            System.out.println(result);
+        if (result == null) {
+            System.out.println("No result found.");
+        } else if (result instanceof List) {
+            List<?> list = (List<?>) result;
+            if (list.isEmpty()) {
+                System.out.println("List is empty.");
+            } else {
+                for (Object item : list) {
+                    System.out.println(formatItem(item));
+                }
+            }
+        } else {
+            System.out.println(formatItem(result));
         }
+    }
+
+    private String formatItem(Object item) {
+        if (item == null) return "null";
+        if (item instanceof stadium.dto.StadiumResponseDto) {
+            stadium.dto.StadiumResponseDto s = (stadium.dto.StadiumResponseDto) item;
+            return s.getId() + " | " + s.getName() + " | " + s.getAddress();
+        }
+        if (item instanceof stadium.model.Section) {
+            stadium.model.Section sec = (stadium.model.Section) item;
+            return sec.getId() + " | " + sec.getName() + " (Stadium ID: " + sec.getStadiumId() + ")";
+        }
+        if (item instanceof stadium.model.Seat) {
+            stadium.model.Seat seat = (stadium.model.Seat) item;
+            return seat.getId() + " | Row: " + seat.getRowLabel() + ", Seat: " + seat.getSeatNumber() + " | Section: " + seat.getSectionId() + " | Active: " + seat.isActive();
+        }
+        if (item instanceof match.dto.MatchResponseDto) {
+            match.dto.MatchResponseDto m = (match.dto.MatchResponseDto) item;
+            return m.getId() + " | " + m.getHomeTeam() + " vs " + m.getAwayTeam() + " | Stadium: " + m.getStadiumId() + " | Time: " + m.getStartTime() + " | Sales: " + m.getSaleStatus();
+        }
+        if (item instanceof match.model.TicketPrice) {
+            match.model.TicketPrice p = (match.model.TicketPrice) item;
+            return "Match: " + p.getMatchId() + " | Section: " + p.getSectionId() + " | Price: " + p.getAmount() + " VND";
+        }
+        if (item instanceof user.dto.UserResponseDto) {
+            user.dto.UserResponseDto u = (user.dto.UserResponseDto) item;
+            return u.getId() + " | " + u.getFullName() + " | " + u.getEmail() + " | Role: " + u.getRole() + " | Status: " + u.getStatus();
+        }
+        if (item instanceof admin.dto.AccountResponseDto) {
+            admin.dto.AccountResponseDto a = (admin.dto.AccountResponseDto) item;
+            return a.getId() + " | " + a.getFullName() + " | " + a.getEmail() + " | Role: " + a.getRole() + " | Status: " + a.getStatus();
+        }
+        if (item instanceof admin.model.AuditLog) {
+            admin.model.AuditLog log = (admin.model.AuditLog) item;
+            return log.getId() + " | Actor #" + log.getActorId() + " | " + log.getAction() + " | Target: " + log.getTargetType() + " #" + log.getTargetId() + " | Result: " + log.getResult() + " | " + log.getCreatedAt();
+        }
+        return item.toString();
     }
 
     public void showSystemSummary(SystemSummaryDto summary) {
-        if (summary == null) return;
-        System.out.println("=== SYSTEM SUMMARY ===");
-        System.out.println("Fans: " + summary.getFanCount()
-                + " | Staff: " + summary.getStaffCount()
-                + " | Total Accounts: " + summary.getTotalAccounts());
-        System.out.println("Stadiums: " + summary.getStadiumCount()
-                + " | Matches: " + summary.getMatchCount()
-                + " | Bookings: " + summary.getBookingCount()
-                + " | Tickets: " + summary.getTicketCount());
+        System.out.println("\n=== SYSTEM SUMMARY ===");
+        System.out.println("Total fans: " + summary.getFanCount());
+        System.out.println("Total staff: " + summary.getStaffCount());
+        System.out.println("Total stadiums: " + summary.getStadiumCount());
+        System.out.println("Total matches: " + summary.getMatchCount());
     }
 
     public void showAuditLogs(List<AuditLog> logs) {
-        if (logs == null || logs.isEmpty()) {
-            System.out.println("No audit logs found.");
+        System.out.println("\n=== AUDIT LOGS ===");
+        if (logs.isEmpty()) {
+            System.out.println("No audit logs available.");
             return;
         }
         for (AuditLog log : logs) {
-            System.out.println(log.getCreatedAt() + " | Actor " + log.getActorId()
-                    + " | " + log.getAction() + " | " + log.getTargetType() + " #"
-                    + log.getTargetId() + " -> " + log.getResult());
+            System.out.println(formatItem(log));
         }
     }
 }

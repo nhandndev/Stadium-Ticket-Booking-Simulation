@@ -1,6 +1,8 @@
 package match.model;
 
 import common.entity.BaseEntity;
+import match.enums.SaleStatus;
+
 import java.time.LocalDateTime;
 
 public class Match extends BaseEntity {

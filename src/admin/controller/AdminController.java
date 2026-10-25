@@ -31,9 +31,6 @@ public class AdminController {
         this.accountAdminController = accountAdminController;
     }
 
-    public void generateCsvDataset(int recordCount) {
-        this.adminService.generateCsvDataset(recordCount);
-    }
 
     public SystemSummaryDto getSystemSummary() {
         return this.adminService.getSystemSummary();
@@ -166,11 +163,6 @@ public class AdminController {
                         this.adminManagementView.showAuditLogs(this.getAuditLogs());
                         break;
                     case 6:
-                        int count = this.adminManagementView.readInt("Seat count (1..100000): ");
-                        this.generateCsvDataset(count);
-                        this.adminManagementView.displayResult("Sample dataset generated.");
-                        break;
-                    case 7:
                         this.adminManagementView.showSystemSummary(this.getSystemSummary());
                         break;
                     default:
