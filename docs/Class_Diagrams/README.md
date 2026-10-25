@@ -2,7 +2,7 @@
 
 ## Controller-first redraw
 
-`Controller_First_Full.drawio` is the single canonical seven-page design for the console application. Pages 00, 05, and 06 preserve the prior approved visible content. Pages 01–04 keep the domain classes while Controller starts each console workflow, asks View for input/output, and reaches Repository through Service. The implemented Guest flow now follows that direction; later role modules are still planned.
+`ClassDiagram.drawio` is the single canonical seven-page design for the console application. Pages 00, 05, and 06 preserve the prior approved visible content. Pages 01–04 keep the domain classes while Controller starts each console workflow, asks View for input/output, and reaches Repository through Service. The implemented Guest flow now follows that direction; later role modules are still planned.
 
 Page 01 gives `MainController` a `SeatMapView` dependency because Guest can view seat availability before logging in. Page 03 also allows `BookingController` to use the same View type for Fan/Seller booking. The current Java constructor contains only dependencies already implemented; later-stage controllers will be added as those modules are built.
 
@@ -12,7 +12,7 @@ Page 02 shows the no-argument constructors and setters already present in the im
 
 The `.mmd` files below remain copies of the earlier View-first design. Use the new draw.io file for the controller-first presentation, not those copies.
 
-> The `.mmd` files are older View-first working copies. Use the visible canvas of `Controller_First_Full.drawio` for implementation and presentation. Hidden Mermaid metadata must not override the visible tables.
+> The `.mmd` files are older View-first working copies. Use the visible canvas of `ClassDiagram.drawio` for implementation and presentation. Hidden Mermaid metadata must not override the visible tables.
 
 ## Architecture
 

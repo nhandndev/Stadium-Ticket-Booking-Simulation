@@ -1,7 +1,7 @@
 # Implementation Roadmap
 
 The canonical Use Case and class design is
-[Controller_First_Full.drawio](Class_Diagrams/Controller_First_Full.drawio),
+[ClassDiagram.drawio](Class_Diagrams/ClassDiagram.drawio),
 pages 00-06. This is one plain-Java console application with CSV persistence.
 The completed code lives in `src/`; diagram classes for later stages are a
 target, not proof that those features already run.

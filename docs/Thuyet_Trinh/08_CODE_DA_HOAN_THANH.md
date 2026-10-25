@@ -4,7 +4,7 @@
 > **Sinh viên thực hiện:** Đoàn Ngọc Nhân - MSSV: QE210282  
 > **Tiến độ mã nguồn hiện tại:** Đã hoàn thành 7/11 chặng (~65% toàn bộ hệ thống).  
 > **Trạng thái biên dịch:** 60/60 file Java biên dịch thành công (`javac PASS 100%`), không cảnh báo, không lỗi runtime.  
-> **Độ khớp thiết kế:** Khớp 100% với Class Diagram chuẩn `Controller_First_Full (2).drawio` (Trang 01, 02, 05, 06).
+> **Độ khớp thiết kế:** Khớp 100% với Class Diagram chuẩn `ClassDiagram.drawio` (Trang 01, 02, 05, 06).
 
 ---
 
@@ -101,6 +101,6 @@ Dự án hiện tuân thủ nguyên tắc triển khai theo từng chặng độ
 
 ## 4. Cam kết chất lượng và chuẩn mực kỹ thuật
 
-1. **Tuân thủ thiết kế (Strict UML Compliance):** Mọi class, method, tham số và quan hệ trong `src/` đều khớp 100% với Class Diagram chuẩn `Controller_First_Full (2).drawio`. Tuyệt đối không tự ý thêm các method tiện ích ngoài sơ đồ.
+1. **Tuân thủ thiết kế (Strict UML Compliance):** Mọi class, method, tham số và quan hệ trong `src/` đều khớp 100% với Class Diagram chuẩn `ClassDiagram.drawio`. Tuyệt đối không tự ý thêm các method tiện ích ngoài sơ đồ.
 2. **Không Over-engineering:** Giữ mã nguồn trong sáng, dễ bảo trì, đúng chuẩn mực đồ án Java Console của học phần LAB211. Tránh xa các framework cồng kềnh, database phức tạp hoặc cơ chế hash mật khẩu không cần thiết.
 3. **Trung thực học thuật (Academic Integrity):** Báo cáo đúng thực trạng 65% đã hoàn thành và chứng minh được bằng lệnh chạy `javac` thực tế. Không giả lập hoặc nói quá về các module chưa code (Stage 08 - 11).

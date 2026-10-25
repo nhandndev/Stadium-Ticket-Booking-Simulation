@@ -18,7 +18,7 @@
 > 
 > Hôm nay, em rất vui mừng báo cáo rằng toàn bộ cấu trúc nền móng, hệ thống lưu trữ dữ liệu CSV, toàn bộ nghiệp vụ quản lý Sân vận động, Trận đấu, Sơ đồ ghế động, Phân quyền người dùng và Phân hệ Quản trị viên (Administrator) thuộc **Chặng 1 đến Chặng 7 đã được hoàn thiện 100%**, tương đương khoảng **65% khối lượng toàn bộ dự án**.  
 > 
-> Toàn bộ 60 file mã nguồn trong thư mục `src/` hiện đã biên dịch hoàn toàn sạch sẽ bằng `javac`, không hề có lỗi hay warning, và tuân thủ nghiêm ngặt theo đúng Class Diagram chuẩn `Controller_First_Full.drawio` mà Thầy đã duyệt."
+> Toàn bộ 60 file mã nguồn trong thư mục `src/` hiện đã biên dịch hoàn toàn sạch sẽ bằng `javac`, không hề có lỗi hay warning, và tuân thủ nghiêm ngặt theo đúng Class Diagram chuẩn `ClassDiagram.drawio` mà Thầy đã duyệt."
 
 ---
 

@@ -122,7 +122,7 @@ public class AdminManagementView {
         }
     }
 
-    private String formatItem(Object item) {
+    public String formatItem(Object item) {
         if (item == null) return "null";
         if (item instanceof stadium.dto.StadiumResponseDto) {
             stadium.dto.StadiumResponseDto s = (stadium.dto.StadiumResponseDto) item;

@@ -1,6 +1,6 @@
 # Bộ Tài Liệu & Kịch Bản Thuyết Trình Dự Án
 
-> **Sơ đồ chuẩn hiện tại:** [Controller_First_Full.drawio](../Class_Diagrams/Controller_First_Full.drawio) (Trang 00 đến 06).  
+> **Sơ đồ chuẩn hiện tại:** [ClassDiagram.drawio](../Class_Diagrams/ClassDiagram.drawio) (Trang 00 đến 06).  
 > Kiến trúc triển khai: **Controller-First MVC + Service + CSV Repository**.  
 > Tiến độ mã nguồn: **Hoàn thành Chặng 1 - 7 (~65% toàn bộ hệ thống)**.
 

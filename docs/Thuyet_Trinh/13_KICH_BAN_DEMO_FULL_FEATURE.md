@@ -286,7 +286,7 @@ java -cp out app.Main
    * Hoàn thành 100% các mục tiêu từ Stage 01 đến Stage 07.
    * Không sử dụng bất kỳ thư viện ngoài phức tạp nào, ứng dụng thuần Java Core (OOP, Collection, Streams, Exception Handling).
    * Toàn bộ 60 file mã nguồn biên dịch với **0 lỗi và 0 cảnh báo**.
-   * Hệ số khớp UML Class Diagram đạt mức tuyệt đối: mọi class, method, field đều khớp chính xác với bản vẽ thiết kế `docs/Class_Diagrams/Controller_First_Full (2).drawio`.
+   * Hệ số khớp UML Class Diagram đạt mức tuyệt đối: mọi class, method, field đều khớp chính xác với bản vẽ thiết kế `docs/Class_Diagrams/ClassDiagram.drawio`.
 2. **Về mặt Lưu trữ (Persistence):**
    * Sử dụng kiến trúc `CsvRepository<T>` tổng quát kế thừa `BaseEntity`.
    * Toàn bộ dữ liệu được lưu trữ dạng file phẳng `.csv` độc lập, dễ dàng kiểm tra, sao lưu và minh chứng dữ liệu khi chấm điểm.

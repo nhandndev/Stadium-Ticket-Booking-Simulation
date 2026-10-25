@@ -32,7 +32,7 @@ java -cp out app.Main
    - Thực hiện lệnh `Generate Test Dataset`: Kích hoạt `DataGenerator` tự động tạo hơn 10.000 dòng dữ liệu vào các file CSV chuẩn bị cho chặng mô phỏng tải.
    - Xem nhật ký hoạt động qua `AuditLog`.
 5. **Đối chiếu kiến trúc:**
-   - Mở đối chiếu các class đại diện: `AdminController`, `AdminService`, `AdminManagementView` với trang 02 của Class Diagram `Controller_First_Full (2).drawio` để chứng minh độ khớp 100% về method và quan hệ phụ thuộc.
+   - Mở đối chiếu các class đại diện: `AdminController`, `AdminService`, `AdminManagementView` với trang 02 của Class Diagram `ClassDiagram.drawio` để chứng minh độ khớp 100% về method và quan hệ phụ thuộc.
 
 ---
 
