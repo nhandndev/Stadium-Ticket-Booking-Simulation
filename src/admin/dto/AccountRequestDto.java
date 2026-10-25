@@ -2,7 +2,6 @@ package admin.dto;
 
 import user.enums.UserRole;
 
-
 public class AccountRequestDto {
     private final String fullName;
     private final String email;
@@ -19,24 +18,9 @@ public class AccountRequestDto {
         this.role = role;
     }
 
-    public UserRole getRole() {
-        return role;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
+    public UserRole getRole() { return role; }
+    public String getFullName() { return fullName; }
+    public String getEmail() { return email; }
+    public String getPassword() { return password; }
+    public String getPhone() { return phone; }
 }
-

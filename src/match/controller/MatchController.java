@@ -2,14 +2,12 @@ package match.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
-
 import match.dto.MatchRequestDto;
 import match.dto.MatchResponseDto;
 import match.dto.TicketPriceRequestDto;
 import match.model.SaleStatus;
 import match.model.TicketPrice;
 import match.service.MatchService;
-
 
 public class MatchController {
     private final MatchService matchService;
@@ -70,3 +68,4 @@ public class MatchController {
         return this.matchService.getTicketSalesStatus(matchId);
     }
 }
+

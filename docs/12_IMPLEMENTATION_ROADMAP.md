@@ -19,17 +19,17 @@ does not implement a business use case.
 
 | Stage | Scope | UML page | Status in `src/` |
 | --- | --- | --- | --- |
-| 01 | Console/Common foundation | 01, 05 | Implemented |
-| 02 | Stadium/Section/Seat model and DTO | 02, 06 | Implemented |
-| 03 | CSV base and stadium repositories | 05 | Implemented; restart verification pending |
-| 04 | Match, MatchSeat, pricing and repositories | 02, 05, 06 | Implemented; demo data pending |
-| 05 | Guest browse and controller-first menu | 01, 03 | Refactored; seeded end-to-end demo pending |
-| 06 | User/Fan/Staff authentication | 01, 06 | Model and repositories only |
-| 07 | Administrator CRUD, sales, account roles, monitoring | 02 | Planned |
-| 08 | Fan booking, online payment, tickets, refund | 03 | Planned |
-| 09 | Seller counter flow and Gate check-in | 03 | Planned |
-| 10 | Isolated concurrency simulation and reporting | 04 | Planned |
-| 11 | Cross-role integration, CSV restart, delivery | 00-06 | Planned |
+| 01 | Console/Common foundation | 01, 05 | Implemented & Verified |
+| 02 | Stadium/Section/Seat model and DTO | 02, 06 | Implemented & Verified |
+| 03 | CSV base and stadium repositories | 05 | Implemented & Verified |
+| 04 | Match, MatchSeat, pricing and repositories | 02, 05, 06 | Implemented & Verified |
+| 05 | Guest browse and controller-first menu | 01, 03 | Implemented & Verified |
+| 06 | User/Fan/Staff authentication & profile | 01, 06 | Implemented & Verified |
+| 07 | Administrator CRUD, sales, roles, DataGenerator | 02 | Implemented & Verified (Strict UML) |
+| 08 | Fan booking, online payment, tickets, refund | 03 | Planned (~20%) |
+| 09 | Seller counter flow and Gate check-in | 03 | Planned (~8%) |
+| 10 | Isolated concurrency simulation and reporting | 04 | Planned (~5%) |
+| 11 | Cross-role integration, CSV restart, delivery | 00-06 | Planned (~2%) |
 
 ## Work sequence
 

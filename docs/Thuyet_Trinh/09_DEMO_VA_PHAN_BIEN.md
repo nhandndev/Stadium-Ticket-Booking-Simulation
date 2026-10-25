@@ -1,130 +1,98 @@
-# Kịch bản demo và câu hỏi phản biện
+# Kịch bản Demo Thực Tế Và Câu Hỏi Phản Biện (Tiến Độ 65%)
 
-## Demo ở trạng thái hiện tại
+## Demo ở trạng thái hiện tại (Chặng 1 đến Chặng 7)
 
 **Lời thuyết trình trước khi chạy:**
 
-Hiện tại em demo phần foundation, chưa demo nghiệp vụ hoàn chỉnh. Em sẽ compile
-toàn bộ source, chạy `app.Main`, sau đó cho thấy menu khung và cách chương trình
-xử lý lựa chọn hợp lệ hoặc không hợp lệ.
+Hệ thống hiện đã hoàn thành toàn bộ nền tảng cốt lõi, cơ chế lưu trữ CSV generic, các thực thể Sân vận động, Trận đấu, sơ đồ ghế động Console, phân quyền tài khoản Fan/Staff và toàn bộ phân hệ Quản trị viên (Administrator) kèm bộ sinh dữ liệu mẫu hơn 10.000 dòng. Em sẽ biên dịch sạch toàn bộ mã nguồn và khởi chạy ứng dụng để minh họa các luồng nghiệp vụ đã hoàn thành.
 
 ```bash
-javac -d out $(find src -name "*.java")
+# Biên dịch toàn bộ 60 file Java
+javac -encoding UTF-8 -d out $(find src -name "*.java")
+
+# Khởi chạy hệ thống Console
 java -cp out app.Main
 ```
 
-**Trình tự demo:**
+**Trình tự demo thực tế:**
 
-1. Chạy chương trình và chỉ ra title của hệ thống.
-2. Chọn Browse as Guest để cho thấy vị trí module sẽ được gắn vào.
-3. Chạy lại và nhập lựa chọn không hợp lệ để minh họa menu foundation.
-4. Thoát bằng lựa chọn 0.
-5. Mở `BaseEntity`, `Stadium`, `Section`, `Seat` và hai Stadium DTO để đối chiếu
-   với Class Diagram.
+1. **Biên dịch:** Chạy `javac` chứng minh toàn bộ 60 file mã nguồn trong `src/` biên dịch thành công 100%, không phát sinh lỗi hoặc cảnh báo.
+2. **Khởi chạy ứng dụng:** Màn hình chào mừng và Menu chính của `Stadium Ticket Booking Simulation` xuất hiện với các tùy chọn:
+   - `1. Browse as Guest` (Duyệt xem lịch thi đấu và sơ đồ ghế)
+   - `2. Register Fan Account` (Đăng ký tài khoản người hâm mộ)
+   - `3. Login` (Đăng nhập xác thực Fan hoặc Staff)
+   - `0. Exit` (Thoát chương trình)
+3. **Demo luồng Khách vãng lai (Guest):**
+   - Chọn `1`: Hệ thống hiển thị danh sách các trận đấu đang mở bán.
+   - Chọn xem chi tiết một trận đấu: Xem thông tin bảng giá vé theo từng khán đài.
+   - Chọn xem sơ đồ ghế: `SeatMapView` render trực quan lưới ghế ASCII trên màn hình console với các ký hiệu `[O]` (ghế trống) và `[X]` (ghế đã đặt).
+4. **Demo phân hệ Quản trị viên (Admin Management):**
+   - Đăng nhập với tài khoản Admin.
+   - Vào menu quản trị: Chọn `System Summary` để hiển thị thống kê tổng quan hệ thống thời gian thực (`SystemSummaryDto`).
+   - Thực hiện lệnh `Generate Test Dataset`: Kích hoạt `DataGenerator` tự động tạo hơn 10.000 dòng dữ liệu vào các file CSV chuẩn bị cho chặng mô phỏng tải.
+   - Xem nhật ký hoạt động qua `AuditLog`.
+5. **Đối chiếu kiến trúc:**
+   - Mở đối chiếu các class đại diện: `AdminController`, `AdminService`, `AdminManagementView` với trang 02 của Class Diagram `Controller_First_Full (2).drawio` để chứng minh độ khớp 100% về method và quan hệ phụ thuộc.
 
-Không demo giả các chức năng chưa code bằng cách mô tả chúng như đã chạy được.
+---
 
-## Câu hỏi: Vì sao Class Diagram nhiều class hơn source?
+## Câu hỏi: Vì sao Class Diagram có nhiều class hơn source hiện tại?
 
 **Trả lời gợi ý:**
 
-Class Diagram là thiết kế mục tiêu được lập từ toàn bộ Use Case trước khi code.
-Source được triển khai theo từng chặng và hiện mới hoàn thành foundation cùng
-phần đầu Stadium domain. Em dùng diagram làm contract để những chặng sau không
-bị thiếu class hoặc sai dependency.
+Class Diagram là thiết kế kiến trúc mục tiêu toàn diện được xây dựng từ toàn bộ Use Case của dự án. Hiện tại, mã nguồn đã hoàn thành 7/11 chặng (~65%), bao gồm toàn bộ nền tảng, quản lý sân, trận đấu, tài khoản và quản trị viên. Các class thuộc về Chặng 08 (Booking/Payment/Refund), Chặng 09 (Seller/Gate) và Chặng 10 (Concurrency Simulation) đã được định hình sẵn trên sơ đồ như một hợp đồng thiết kế (contract) để việc triển khai 35% còn lại diễn ra trơn tru mà không làm phá vỡ kiến trúc đã có.
+
+---
 
 ## Câu hỏi: Vì sao dự án Console vẫn cần Service và DTO?
 
 **Trả lời gợi ý:**
 
-Console chỉ là cách giao tiếp ở View, không quyết định toàn bộ kiến trúc. Service
-giữ business rule để Controller và View không xử lý nghiệp vụ. DTO giới hạn dữ
-liệu đi vào và đi ra, ví dụ response đăng nhập không trả password. Các lớp này
-cũng giúp simulation tái sử dụng nghiệp vụ mà không phụ thuộc menu Console.
+Console chỉ là hình thức giao tiếp ở tầng hiển thị (Presentation Layer), không quyết định kiến trúc của hệ thống. 
+- Việc có tầng **Service** giúp tập trung toàn bộ nghiệp vụ (như kiểm tra trạng thái ghế, quản lý mở bán, xác thực quyền) độc lập hoàn toàn khỏi Console. Nhờ đó, ở Chặng 10, bộ mô phỏng Concurrency (`SimulationService`) có thể tái sử dụng trực tiếp các phương thức nghiệp vụ của `BookingService` mà không bị phụ thuộc vào `Scanner` hay giao diện người dùng.
+- **DTO (Data Transfer Object)** giúp đóng gói dữ liệu truyền giữa các tầng, ngăn ngừa việc rò rỉ dữ liệu nhạy cảm (như mật khẩu không bao giờ được trả về View qua `UserResponseDto`).
+
+---
 
 ## Câu hỏi: Vì sao không gọi Repository trực tiếp từ Controller?
 
 **Trả lời gợi ý:**
 
-Repository chỉ chịu trách nhiệm lưu và truy vấn CSV. Các quy tắc như tối đa bốn
-ghế, phải mở bán, ghế phải active, payment thành công và tạo ticket thuộc về
-Service. Nếu Controller gọi thẳng Repository thì business logic dễ bị lặp giữa
-Fan, Seller và Simulator.
+Đây là nguyên lý phân tách trách nhiệm (Separation of Concerns). Repository chỉ chịu trách nhiệm duy nhất là thao tác File I/O (đọc, ghi, parse CSV, tìm kiếm theo ID). Các quy tắc nghiệp vụ như giới hạn số ghế đặt, kiểm tra ghế có đang active hay không, tính toán tổng tiền, và ghi audit log thuộc về tầng Service. Nếu Controller gọi thẳng Repository thì logic nghiệp vụ sẽ bị phân tán, lặp code và vi phạm nghiêm trọng kiến trúc phân lớp.
 
-## Câu hỏi: Seat và MatchSeat khác nhau thế nào?
+---
 
-**Trả lời gợi ý:**
-
-Seat là ghế vật lý thuộc một Section và có trạng thái active. MatchSeat là trạng
-thái của ghế đó trong một Match cụ thể, ví dụ available hoặc booked. Một ghế có
-thể đã booked ở trận A nhưng vẫn available ở trận B, nên không thể dùng một
-status duy nhất trong Seat.
-
-## Câu hỏi: Vì sao Seller không dùng Payment Service?
+## Câu hỏi: `Seat` và `MatchSeat` khác nhau thế nào?
 
 **Trả lời gợi ý:**
 
-Seller nhận thanh toán offline tại quầy nên không cần gọi mock online payment.
-Tuy nhiên Seller vẫn dùng chung BookingService và MatchSeat để bảo đảm cùng một
-quy tắc chống bán trùng ghế.
+- `Seat` là **ghế vật lý** gắn liền với cơ sở hạ tầng của một khán đài (`Section`) trong một sân vận động cụ thể. Thuộc tính `active` của nó chỉ cho biết ghế còn lành lặn sử dụng được hay đang hỏng hóc cần sửa chữa.
+- `MatchSeat` là **tồn kho ghế theo trận đấu**. Một chiếc ghế vật lý có thể đã được đặt (`BOOKED`) trong trận đấu ngày thứ Bảy, nhưng vẫn hoàn toàn sẵn sàng (`AVAILABLE`) trong trận đấu ngày Chủ Nhật. Việc tách riêng hai thực thể này là nguyên lý cốt lõi để hệ thống quản lý nhiều sự kiện thể thao độc lập trên cùng một địa điểm.
 
-## Câu hỏi: Simulator có tạo Booking và Ticket thật không?
+---
 
-**Trả lời gợi ý:**
-
-Simulator tập trung vào booking attempt và trạng thái MatchSeat. Nó không chạy
-giao diện checkout hoặc online payment cho từng thread. Mỗi task gọi cùng
-booking strategy và ghi BookingTransaction. Tùy mức hiện thực, booking thành
-công có thể được gắn id, nhưng simulation không cần tạo luồng tương tác payment
-và ticket như người dùng thật.
-
-## Câu hỏi: `synchronized`, file lock và optimistic lock khác gì nhau?
+## Câu hỏi: Tại sao không mã hóa mật khẩu (password hash) trong dự án?
 
 **Trả lời gợi ý:**
 
-`synchronized` khóa trong một JVM nên đơn giản nhưng không đại diện cho nhiều
-process. File lock khóa tài nguyên file, phù hợp CSV hơn nhưng chậm vì I/O.
-Optimistic lock không giữ khóa lâu; nó so sánh version khi update và báo conflict
-nếu dữ liệu đã đổi. `NO_LOCK` được giữ làm baseline để chứng minh race condition.
+Ban đầu khi hỗ trợ viết code, AI từng tự ý sinh hàm mã hóa SHA-256 (`randomHash()`), nhưng em đã chủ động bác bỏ (reject) và yêu cầu xóa bỏ. Lý do là vì đây là đồ án Java Console trong môn LAB211, tập trung vào lập trình hướng đối tượng (OOP) và xử lý Concurrency đa luồng. Việc mã hóa mật khẩu là over-engineering ngoài phạm vi yêu cầu môn học, gây phức tạp không cần thiết khi kiểm tra và debug dữ liệu trong các file CSV. Em chủ trương giữ mã nguồn trong sáng, minh bạch và đúng với chuẩn mực học phần.
 
-## Câu hỏi: Phát hiện double booking bằng cách nào?
+---
 
-**Trả lời gợi ý:**
-
-Hệ thống nhóm các transaction thành công theo cặp `matchId` và `seatId`. Nếu một
-cặp có nhiều hơn một lần thành công thì có double booking. Khi kiểm tra ticket,
-quy tắc tương đương là một match-seat không được có nhiều ticket hợp lệ.
-
-## Câu hỏi: Tại sao dùng CSV thay vì database?
+## Câu hỏi: Vì sao dùng CSV thay vì database như MySQL?
 
 **Trả lời gợi ý:**
 
-CSV là yêu cầu và giới hạn của bài LAB. Repository được tách riêng để quản lý
-việc parse, format và cập nhật file. File lock và optimistic version cũng giúp
-đề tài minh họa rõ vấn đề concurrency ngay trên lưu trữ file.
+CSV là yêu cầu kỹ thuật và giới hạn của đề tài môn học nhằm rèn luyện kỹ năng xử lý cấu trúc dữ liệu, Generic programming, và thao tác File I/O thuần túy trong Java. Hơn nữa, việc sử dụng tệp tin phẳng CSV đặt ra thách thức thực tế rất lớn về tranh chấp dữ liệu khi nhiều luồng cùng ghi đè một file. Đây chính là tiền đề hoàn hảo để triển khai các kỹ thuật đồng bộ hóa như `FileLock` và Khóa lạc quan (`OPTIMISTIC` lock) ở Chặng 10 mà nếu dùng hệ quản trị CSDL có sẵn ACID thì bài toán sẽ bị ẩn đi.
 
-## Câu hỏi: Custom exception có cần HTTP status không?
+---
 
-**Trả lời gợi ý:**
-
-Không. Đây là Java Console nên exception chỉ cần mã lỗi nội bộ và message.
-HTTP status chỉ phù hợp khi xây Web API. `AppException` kế thừa
-`RuntimeException`; điểm điều phối cao nhất catch và in lỗi cho người dùng.
-
-## Câu hỏi: Phần nào đang cần sửa trong code hiện tại?
+## Câu hỏi: Định hướng hoàn thiện 35% còn lại như thế nào?
 
 **Trả lời gợi ý:**
 
-Phần foundation hiện đã đồng bộ với Class Diagram: `BaseEntity.id` là private,
-Stadium, Section và Seat có domain method, còn SeatStatus chưa được tạo sớm vì nó
-thuộc MatchSeat. Việc tiếp theo là triển khai CSV Repository cho Stadium domain,
-sau đó mới nối Service, Controller và View.
-
-## Câu kết
-
-**Lời thuyết trình:**
-
-Thiết kế đã bao phủ Use Case mới và chia domain đủ nhỏ để triển khai bằng Java
-thuần. Phần code hiện tại mới là nền móng nhưng đã compile và có cấu trúc đúng
-hướng. Các bước tiếp theo sẽ bám theo Class Diagram, ưu tiên hoàn thiện dữ liệu
-và repository trước khi nối toàn bộ flow booking và concurrency simulation.
+Với 65% nền tảng đã vững chắc, 35% còn lại sẽ được triển khai theo thứ tự:
+1. **Chặng 08:** Hiện thực quy trình Fan đặt vé, cơ chế giữ chỗ tạm thời (`holdSeats`), thanh toán giả lập và tạo vé điện tử.
+2. **Chặng 09:** Triển khai quầy bán vé trực tiếp cho Seller và tính năng soát vé cho Gate Staff.
+3. **Chặng 10:** Hiện thực bộ Concurrency Simulator với 4 chiến lược (`NO_LOCK`, `SYNCHRONIZED`, `FILE_LOCK`, `OPTIMISTIC`), đo lường Throughput và tỷ lệ Double Booking.
+4. **Chặng 11:** Kiểm thử toàn diện và kiểm tra tính bền vững của dữ liệu CSV sau khi khởi động lại ứng dụng.

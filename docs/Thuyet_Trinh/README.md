@@ -1,18 +1,17 @@
-# Kịch bản thuyết trình dự án
+# Bộ Tài Liệu & Kịch Bản Thuyết Trình Dự Án
 
-> Các kịch bản bên dưới viết theo sơ đồ View-first cũ. Sơ đồ chuẩn hiện tại là
-> [Controller_First_Full.drawio](../Class_Diagrams/Controller_First_Full.drawio).
-> Trước khi thuyết trình, cần đổi phần giải thích hướng gọi thành Controller
-> điều phối View và gọi Service.
+> **Sơ đồ chuẩn hiện tại:** [Controller_First_Full.drawio](../Class_Diagrams/Controller_First_Full.drawio) (Trang 00 đến 06).  
+> Kiến trúc triển khai: **Controller-First MVC + Service + CSV Repository**.  
+> Tiến độ mã nguồn: **Hoàn thành Chặng 1 - 7 (~65% toàn bộ hệ thống)**.
 
-Bộ tài liệu này là lời nói gợi ý để thuyết trình dựa trên Use Case mới nhất,
-sáu trang Class Diagram và source code hiện có của dự án Stadium Ticket Booking
-Simulation.
+Bộ tài liệu này cung cấp toàn bộ kịch bản, lời thuyết minh và các câu hỏi phản biện bám sát hệ thống Use Case, sáu trang Class Diagram và 60 file mã nguồn Java đã hoàn thành trong thư mục `src/`.
 
-## Thứ tự trình bày
+---
 
-1. [Kịch bản tổng quan](00_KICH_BAN_TONG_QUAN.md)
-2. [Use Case hệ thống](01_USE_CASE.md)
+## Danh mục tài liệu theo thứ tự trình bày
+
+1. [Kịch bản tổng quan toàn dự án](00_KICH_BAN_TONG_QUAN.md)
+2. [Use Case hệ thống và phân quyền Actor](01_USE_CASE.md)
 3. [Script gạch đầu dòng từ Use Case đến Class Diagram](01A_SCRIPT_USECASE_DEN_CLASS_DIAGRAM.md)
 4. [Class Diagram trang 1 - Main, View và Authentication](02_CLASS_01_MAIN_VIEW_AUTH.md)
 5. [Class Diagram trang 2 - Stadium, Match và Administrator](03_CLASS_02_STADIUM_MATCH_ADMIN.md)
@@ -20,26 +19,16 @@ Simulation.
 7. [Class Diagram trang 4 - Concurrency Simulation](05_CLASS_04_SIMULATION.md)
 8. [Class Diagram trang 5 - CSV Repository và BaseEntity](06_CLASS_05_REPOSITORY_BASE_ENTITY.md)
 9. [Class Diagram trang 6 - Quan hệ Model](07_CLASS_06_MODEL_RELATIONSHIPS.md)
-10. [Phần source code đã hoàn thành](08_CODE_DA_HOAN_THANH.md)
-11. [Kịch bản demo và câu hỏi phản biện](09_DEMO_VA_PHAN_BIEN.md)
+10. [Báo cáo chi tiết mã nguồn đã hoàn thành (Chặng 1 - 7, ~65%)](08_CODE_DA_HOAN_THANH.md)
+11. [Kịch bản demo thực tế và câu hỏi phản biện](09_DEMO_VA_PHAN_BIEN.md)
+12. [**Kịch bản báo cáo tiến độ 65% (Dành cho buổi báo cáo tiến độ)**](10_KICH_BAN_BAO_CAO_TIEN_DO.md)
 
-## Cách sử dụng
+---
 
-- Đoạn bắt đầu bằng **Lời thuyết trình** có thể nói trực tiếp.
-- Đoạn bắt đầu bằng **Chỉ trên sơ đồ** là thao tác trỏ chuột khi trình bày.
-- Đoạn bắt đầu bằng **Điểm cần nhấn mạnh** là ý không nên bỏ qua.
-- Script số 01A là bản để nhìn và nói theo ý: mỗi feature có mục đích và ví dụ;
-  các trang Class Diagram có ý nghĩa và lý do của relationship.
-- Mỗi file Class Diagram có phần **Mối quan hệ UML**, giải thích loại quan hệ,
-  chiều nối, multiplicity và lý do sử dụng từng đường nối.
-- File Use Case giải thích mục đích của từng actor trước, sau đó giải thích riêng
-  từng feature mà actor được sử dụng.
-- Không nói các class trong Class Diagram là đã code xong. Class Diagram là thiết
-  kế mục tiêu; trạng thái code thật được trình bày riêng ở file số 08.
-- Khi thời gian ngắn, dùng file số 00 rồi chọn các ý chính trong từng trang.
+## Hướng dẫn sử dụng hiệu quả
 
-## Nguồn đối chiếu
-
-- Use Case: trang `System Overview - UseCase` trong file Draw.io mới nhất.
-- Class Diagram: sáu file Mermaid trong `docs/Class_Diagrams/`.
-- Code hiện tại: thư mục `src/`.
+- **Báo cáo tiến độ Milestone (Hiện tại):** Sử dụng trực tiếp file số 10 ([10_KICH_BAN_BAO_CAO_TIEN_DO.md](10_KICH_BAN_BAO_CAO_TIEN_DO.md)) và số 11 ([09_DEMO_VA_PHAN_BIEN.md](09_DEMO_VA_PHAN_BIEN.md)).
+- Đoạn bắt đầu bằng **Lời thuyết trình:** Là văn phong tự nhiên có thể dùng trực tiếp khi nói trước giảng viên.
+- Đoạn bắt đầu bằng **Chỉ trên sơ đồ:** Hướng dẫn thao tác trỏ chuột trực quan vào các phần tử tương ứng trên Class Diagram.
+- Đoạn bắt đầu bằng **Điểm cần nhấn mạnh:** Các luận điểm kỹ thuật quan trọng thể hiện độ sâu kiến thức OOP và Concurrency.
+- **Tính chính xác về tiến độ:** Phân định rạch ròi giữa các module đã code (`src/` - 65%) và các module mục tiêu sẽ làm ở giai đoạn tiếp theo (Stage 08 Booking, Stage 09 Seller/Gate, Stage 10 Simulation - 35%).

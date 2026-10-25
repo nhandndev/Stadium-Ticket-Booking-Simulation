@@ -178,6 +178,10 @@ Doan mau tren chua du 500 tu; moi thanh vien can viet them trai nghiem ca nhan, 
 | Them Seat Hold Timeout | Dung voi he thong booking thuc te | Dua vao SRS/edge case/P2 implementation |
 | Them Refund/Check-in/Notification | Hop ly nhung khong bat buoc LAB | Dua vao enterprise-like P2/P3 |
 | CRUD Admin bung het len Use Case Diagram | Co the lam diagram roi | Ghi Manage X = CRUD + Search |
+| Tu y sinh randomHash() trong DataGenerator | Over-engineering, khong phu hop console LAB211 | Reject, dung plain-text "password" + id de de verify |
+| Tu y sinh 15+ helper methods trong AdminManagementView | Pha vo tinh nhat quan voi Class Diagram Trang 02 | Purge toan bo method thua, giu 100% dung UML |
+| Inject AuthController vao AdminController | Sai dependency direction, gay tight coupling | Reject, xu ly phan quyen o MainController theo Controller-First |
+| Giu nguyen tai lieu cu (chi co foundation, chua co CSV/Admin) | Outdated, lam sai lech bao cao tien do thuc te 65% | Refactor lai 08_CODE_DA_HOAN_THANH.md va tao script tien do |
 
 ## Final AI Submission Checklist
 

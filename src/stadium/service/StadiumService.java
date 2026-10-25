@@ -2,10 +2,8 @@ package stadium.service;
 
 import common.exception.AppException;
 import common.exception.ErrorCode;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import stadium.dto.StadiumRequestDto;
 import stadium.dto.StadiumResponseDto;
 import stadium.model.Seat;
@@ -14,7 +12,6 @@ import stadium.model.Stadium;
 import stadium.repository.SeatRepository;
 import stadium.repository.SectionRepository;
 import stadium.repository.StadiumRepository;
-
 
 public class StadiumService {
     private final StadiumRepository stadiumRepository;

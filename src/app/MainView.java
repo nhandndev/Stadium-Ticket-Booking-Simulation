@@ -1,10 +1,12 @@
 package app;
 
+import auth.controller.AuthController;
 import match.dto.MatchResponseDto;
 import user.dto.LoginRequestDto;
 import user.dto.ProfileUpdateRequestDto;
 import user.dto.RegisterFanRequestDto;
 import user.dto.UserResponseDto;
+import user.enums.UserRole;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,7 +28,7 @@ public class MainView {
         System.out.println("4. Register Fan Account");
         System.out.println("0. Exit");
         System.out.print("Choose: ");
-        return Integer.parseInt(this.scanner.nextLine().trim());
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public int showGuestMenu() {
@@ -38,27 +40,33 @@ public class MainView {
         System.out.println("4. View seat availability");
         System.out.println("0. Back");
         System.out.print("Choose: ");
-        return Integer.parseInt(this.scanner.nextLine().trim());
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public int showFanMenu() {
-        return this.showAccountMenu("FAN");
+        return showAccountMenu("FAN");
     }
 
     public int showSellerMenu() {
-        return this.showAccountMenu("SELLER");
+        return showAccountMenu("SELLER");
     }
 
     public int showGateStaffMenu() {
-        return this.showAccountMenu("GATE STAFF");
+        return showAccountMenu("GATE STAFF");
     }
 
     public int showAdminMenu() {
-        return this.showAccountMenu("ADMINISTRATOR");
+        System.out.println("=== ADMINISTRATOR ===");
+        System.out.println("1. View profile");
+        System.out.println("2. Update profile");
+        System.out.println("3. Manage system");
+        System.out.println("0. Logout");
+        System.out.print("Choose: ");
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public int showSimulatorMenu() {
-        return this.showAccountMenu("SIMULATOR OPERATOR");
+        return showAccountMenu("SIMULATOR OPERATOR");
     }
 
     private int showAccountMenu(String label) {
@@ -68,62 +76,62 @@ public class MainView {
         System.out.println("2. Update profile");
         System.out.println("0. Logout");
         System.out.print("Choose: ");
-        return Integer.parseInt(this.scanner.nextLine().trim());
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public LoginRequestDto readLoginRequest() {
         System.out.print("Email: ");
-        String email = this.scanner.nextLine();
+        String email = scanner.nextLine();
         System.out.print("Password: ");
-        String password = this.scanner.nextLine();
+        String password = scanner.nextLine();
         return new LoginRequestDto(email, password);
     }
 
     public RegisterFanRequestDto readRegisterFanRequest() {
         System.out.print("Full name: ");
-        String fullName = this.scanner.nextLine();
+        String fullName = scanner.nextLine();
         System.out.print("Email: ");
-        String email = this.scanner.nextLine();
+        String email = scanner.nextLine();
         System.out.print("Password: ");
-        String password = this.scanner.nextLine();
+        String password = scanner.nextLine();
         System.out.print("Phone: ");
-        String phone = this.scanner.nextLine();
+        String phone = scanner.nextLine();
         return new RegisterFanRequestDto(fullName, email, password, phone);
     }
 
     public ProfileUpdateRequestDto readProfileUpdateRequest() {
         System.out.print("New full name: ");
-        String fullName = this.scanner.nextLine();
+        String fullName = scanner.nextLine();
         System.out.print("New phone: ");
-        String phone = this.scanner.nextLine();
+        String phone = scanner.nextLine();
         return new ProfileUpdateRequestDto(fullName, phone);
     }
 
     public String readKeyword() {
         System.out.print("Team keyword: ");
-        return this.scanner.nextLine();
+        return scanner.nextLine();
     }
 
     public Long readStadiumId() {
         System.out.print("Stadium ID (blank = all): ");
-        String input = this.scanner.nextLine().trim();
+        String input = scanner.nextLine().trim();
         return input.isEmpty() ? null : Long.parseLong(input);
     }
 
     public LocalDate readStartDate() {
         System.out.print("Date yyyy-MM-dd (blank = all): ");
-        String input = this.scanner.nextLine().trim();
+        String input = scanner.nextLine().trim();
         return input.isEmpty() ? null : LocalDate.parse(input);
     }
 
     public Long readMatchId() {
         System.out.print("Match ID: ");
-        return Long.parseLong(this.scanner.nextLine().trim());
+        return Long.parseLong(scanner.nextLine().trim());
     }
 
     public void displayMatches(List<MatchResponseDto> matches) {
         if (matches.isEmpty()) {
-            this.displayMessage("No matches found.");
+            displayMessage("No matches found.");
             return;
         }
         for (MatchResponseDto match : matches) {
@@ -144,6 +152,7 @@ public class MainView {
         System.out.println("Role: " + user.getRole() + " | Status: " + user.getStatus());
         System.out.println("Phone: " + user.getPhone());
     }
+
 
     public void displayMessage(String message) {
         System.out.println(message);

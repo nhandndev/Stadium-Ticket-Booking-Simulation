@@ -4,17 +4,14 @@ import admin.dto.AccountRequestDto;
 import admin.dto.AccountResponseDto;
 import common.exception.AppException;
 import common.exception.ErrorCode;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import user.enums.UserRole;
 import user.enums.UserStatus;
 import user.model.Fan;
 import user.model.Staff;
 import user.repository.FanRepository;
 import user.repository.StaffRepository;
-
 
 public class AccountAdminService {
     private final FanRepository fanRepository;

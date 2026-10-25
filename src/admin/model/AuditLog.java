@@ -1,9 +1,7 @@
 package admin.model;
 
 import common.entity.BaseEntity;
-
 import java.time.LocalDateTime;
-
 
 public class AuditLog extends BaseEntity {
     private final Long actorId;
@@ -24,28 +22,10 @@ public class AuditLog extends BaseEntity {
         this.createdAt = createdAt;
     }
 
-    public Long getActorId() {
-        return actorId;
-    }
-
-    public String getAction() {
-        return action;
-    }
-
-    public String getTargetType() {
-        return targetType;
-    }
-
-    public Long getTargetId() {
-        return targetId;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public Long getActorId() { return actorId; }
+    public String getAction() { return action; }
+    public String getTargetType() { return targetType; }
+    public Long getTargetId() { return targetId; }
+    public String getResult() { return result; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
 }
-

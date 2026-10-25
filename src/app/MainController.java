@@ -1,6 +1,7 @@
 package app;
 
 import auth.controller.AuthController;
+import admin.controller.AdminController;
 import common.exception.AppException;
 import match.controller.BrowseController;
 import match.view.SeatMapView;
@@ -17,151 +18,161 @@ public class MainController {
     private final BrowseController browseController;
     private final AuthController authController;
     private final FanController fanController;
+    private final AdminController adminController;
 
     public MainController(MainView mainView, SeatMapView seatMapView,
-            BrowseController browseController, AuthController authController,
-            FanController fanController) {
+                          BrowseController browseController, AuthController authController,
+                          FanController fanController,
+                          AdminController adminController) {
         this.mainView = mainView;
         this.seatMapView = seatMapView;
         this.browseController = browseController;
         this.authController = authController;
         this.fanController = fanController;
+        this.adminController = adminController;
     }
 
     public void start() {
         boolean running = true;
         while (running) {
             try {
-                switch (this.mainView.showMainMenu()) {
+                switch (mainView.showMainMenu()) {
                     case 1:
-                        this.runGuestMenu();
+                        runGuestMenu();
                         break;
                     case 2:
-                        this.handleFanLogin();
+                        handleFanLogin();
                         break;
                     case 3:
-                        this.handleStaffLogin();
+                        handleStaffLogin();
                         break;
                     case 4:
-                        this.handleFanRegistration();
+                        handleFanRegistration();
                         break;
                     case 0:
                         running = false;
                         break;
                     default:
-                        this.mainView.displayMessage("Invalid choice.");
+                        mainView.displayMessage("Invalid choice.");
                 }
             } catch (AppException e) {
-                this.mainView.displayMessage(e.getMessage());
+                mainView.displayMessage(e.getMessage());
             } catch (NumberFormatException e) {
-                this.mainView.displayMessage("Invalid number.");
+                mainView.displayMessage("Invalid number.");
             } catch (NoSuchElementException e) {
                 running = false;
             }
         }
-        this.mainView.displayMessage("Goodbye!");
+        mainView.displayMessage("Goodbye!");
     }
 
     public void runGuestMenu() {
         boolean browsing = true;
         while (browsing) {
             try {
-                switch (this.mainView.showGuestMenu()) {
+                switch (mainView.showGuestMenu()) {
                     case 1:
-                        this.mainView.displayMatches(this.browseController.searchMatches(this.mainView.readKeyword()));
+                        mainView.displayMatches(browseController.searchMatches(mainView.readKeyword()));
                         break;
                     case 2:
-                        this.mainView.displayMatches(this.browseController.filterMatches(
-                                this.mainView.readStadiumId(), this.mainView.readStartDate()));
+                        mainView.displayMatches(browseController.filterMatches(
+                                mainView.readStadiumId(), mainView.readStartDate()));
                         break;
                     case 3:
-                        this.mainView.displayMatchDetails(this.browseController.viewMatchDetails(
-                                this.mainView.readMatchId()));
+                        mainView.displayMatchDetails(browseController.viewMatchDetails(
+                                mainView.readMatchId()));
                         break;
                     case 4:
-                        this.seatMapView.displaySeatMap(this.browseController.getSeatMap(
-                                this.mainView.readMatchId()));
+                        seatMapView.displaySeatMap(browseController.getSeatMap(
+                                mainView.readMatchId()));
                         break;
                     case 0:
                         browsing = false;
                         break;
                     default:
-                        this.mainView.displayMessage("Invalid choice.");
+                        mainView.displayMessage("Invalid choice.");
                 }
             } catch (AppException e) {
-                this.mainView.displayMessage(e.getMessage());
+                mainView.displayMessage(e.getMessage());
             } catch (NumberFormatException e) {
-                this.mainView.displayMessage("Invalid number.");
+                mainView.displayMessage("Invalid number.");
             } catch (DateTimeParseException e) {
-                this.mainView.displayMessage("Invalid date format.");
+                mainView.displayMessage("Invalid date format.");
             }
         }
     }
 
     public void handleFanLogin() {
-        this.loginForRole(true);
+        loginForRole(true);
     }
 
     public void handleStaffLogin() {
-        this.loginForRole(false);
+        loginForRole(false);
     }
 
     private void loginForRole(boolean fanLogin) {
-        UserResponseDto user = this.authController.login(this.mainView.readLoginRequest());
+        UserResponseDto user = authController.login(mainView.readLoginRequest());
         boolean isFan = user.getRole() == UserRole.FAN;
         if (fanLogin != isFan) {
-            this.authController.logout();
-            this.mainView.displayMessage("This account belongs to the other login menu.");
+            authController.logout();
+            mainView.displayMessage("This account belongs to the other login menu.");
             return;
         }
-        this.mainView.displayUser(user);
-        this.routeAuthenticatedUser(user);
+        mainView.displayUser(user);
+        routeAuthenticatedUser(user);
     }
 
     public void handleFanRegistration() {
-        this.mainView.displayUser(this.fanController.register(this.mainView.readRegisterFanRequest()));
+        mainView.displayUser(fanController.register(mainView.readRegisterFanRequest()));
     }
 
     public void routeAuthenticatedUser(UserResponseDto user) {
-        while (this.authController.getCurrentUser() != null) {
+        while (authController.getCurrentUser() != null) {
             try {
-                int choice = this.menuForRole(user.getRole());
+                int choice = menuForRole(user.getRole());
                 switch (choice) {
                     case 1:
-                        this.mainView.displayUser(this.authController.getCurrentUser());
+                        mainView.displayUser(authController.getCurrentUser());
                         break;
                     case 2:
-                        user = this.authController.updateCurrentUserProfile(
-                                this.mainView.readProfileUpdateRequest());
-                        this.mainView.displayUser(user);
+                        user = authController.updateCurrentUserProfile(
+                                mainView.readProfileUpdateRequest());
+                        mainView.displayUser(user);
+                        break;
+                    case 3:
+                        if (user.getRole() == UserRole.ADMIN) {
+                            adminController.runAdminMenu();
+                        } else {
+                            mainView.displayMessage("Invalid choice.");
+                        }
                         break;
                     case 0:
-                        this.authController.logout();
-                        this.mainView.displayMessage("Logged out.");
+                        authController.logout();
+                        mainView.displayMessage("Logged out.");
                         break;
                     default:
-                        this.mainView.displayMessage("Invalid choice.");
+                        mainView.displayMessage("Invalid choice.");
                 }
             } catch (AppException e) {
-                this.mainView.displayMessage(e.getMessage());
+                mainView.displayMessage(e.getMessage());
             } catch (NumberFormatException e) {
-                this.mainView.displayMessage("Invalid number.");
+                mainView.displayMessage("Invalid number.");
             }
         }
     }
 
-    public int menuForRole(UserRole role) {
+    private int menuForRole(UserRole role) {
         switch (role) {
             case FAN:
-                return this.mainView.showFanMenu();
+                return mainView.showFanMenu();
             case SELLER:
-                return this.mainView.showSellerMenu();
+                return mainView.showSellerMenu();
             case GATE_STAFF:
-                return this.mainView.showGateStaffMenu();
+                return mainView.showGateStaffMenu();
             case ADMIN:
-                return this.mainView.showAdminMenu();
+                return mainView.showAdminMenu();
             case SIMULATOR_OPERATOR:
-                return this.mainView.showSimulatorMenu();
+                return mainView.showSimulatorMenu();
             default:
                 throw new IllegalStateException("Unknown role: " + role);
         }

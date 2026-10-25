@@ -2,11 +2,9 @@ package match.service;
 
 import common.exception.AppException;
 import common.exception.ErrorCode;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
 import match.dto.MatchRequestDto;
 import match.dto.MatchResponseDto;
 import match.dto.TicketPriceRequestDto;
@@ -16,7 +14,6 @@ import match.model.TicketPrice;
 import match.repository.MatchRepository;
 import match.repository.MatchSeatRepository;
 import match.repository.TicketPriceRepository;
-
 
 public class MatchService {
     private final MatchRepository matchRepository;

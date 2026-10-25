@@ -1,27 +1,17 @@
 package admin.controller;
 
+import admin.dto.SystemSummaryDto;
+import admin.model.AuditLog;
 import admin.service.AdminService;
 import admin.view.AdminManagementView;
-import auth.controller.AuthController;
 import common.exception.AppException;
-import common.exception.ErrorCode;
-
-import java.time.format.DateTimeParseException;
-
+import java.util.List;
 import match.controller.MatchController;
-import match.dto.MatchResponseDto;
 import match.dto.TicketPriceRequestDto;
-import match.model.TicketPrice;
 import stadium.controller.StadiumController;
-import stadium.dto.StadiumRequestDto;
-import stadium.dto.StadiumResponseDto;
-import stadium.model.Seat;
-import stadium.model.Section;
 import user.controller.AccountAdminController;
-import user.dto.UserResponseDto;
 import user.enums.UserRole;
 import user.enums.UserStatus;
-
 
 public class AdminController {
     private final AdminService adminService;
@@ -29,23 +19,31 @@ public class AdminController {
     private final StadiumController stadiumController;
     private final MatchController matchController;
     private final AccountAdminController accountAdminController;
-    private final AuthController authController;
 
     public AdminController(AdminService adminService, AdminManagementView adminManagementView,
                            StadiumController stadiumController,
                            MatchController matchController,
-                           AccountAdminController accountAdminController,
-                           AuthController authController) {
+                           AccountAdminController accountAdminController) {
         this.adminService = adminService;
         this.adminManagementView = adminManagementView;
         this.stadiumController = stadiumController;
         this.matchController = matchController;
         this.accountAdminController = accountAdminController;
-        this.authController = authController;
+    }
+
+    public void generateCsvDataset(int recordCount) {
+        this.adminService.generateCsvDataset(recordCount);
+    }
+
+    public SystemSummaryDto getSystemSummary() {
+        return this.adminService.getSystemSummary();
+    }
+
+    public List<AuditLog> getAuditLogs() {
+        return this.adminService.getAuditLogs();
     }
 
     public void runAdminMenu() {
-        requireAdmin();
         while (true) {
             try {
                 switch (this.adminManagementView.showAdminMenu()) {
@@ -62,32 +60,25 @@ public class AdminController {
                         runStaffManagementMenu();
                         break;
                     case 5:
-                        this.adminManagementView.printAuditLogs(adminService.getAuditLogs());
+                        this.adminManagementView.showAuditLogs(this.getAuditLogs());
                         break;
                     case 6:
                         int count = this.adminManagementView.readInt("Seat count (1..100000): ");
-                        if (this.adminManagementView.confirm("GENERATE")) {
-                            adminService.generateCsvDataset(count);
-                            this.adminManagementView.displayMessage("Sample dataset generated.");
-                        }
+                        this.generateCsvDataset(count);
+                        this.adminManagementView.displayResult("Sample dataset generated.");
                         break;
                     case 7:
-                        if (this.adminManagementView.confirm("DELETE SAMPLE DATA")) {
-                            adminService.clearGeneratedData();
-                            this.adminManagementView.displayMessage("Sample dataset cleared.");
-                        }
+                        this.adminManagementView.showSystemSummary(this.getSystemSummary());
                         break;
                     case 0:
                         return;
                     default:
-                        this.adminManagementView.displayMessage("Invalid choice.");
+                        this.adminManagementView.displayResult("Invalid choice.");
                 }
             } catch (AppException e) {
-                this.adminManagementView.displayMessage(e.getMessage());
-            } catch (DateTimeParseException e) {
-                this.adminManagementView.displayMessage("Use yyyy-MM-ddTHH:mm for date and time.");
-            } catch (IllegalArgumentException e) {
-                this.adminManagementView.displayMessage("Invalid number, role or status.");
+                this.adminManagementView.displayResult(e.getMessage());
+            } catch (Exception e) {
+                this.adminManagementView.displayResult("Error: " + e.getMessage());
             }
         }
     }
@@ -99,9 +90,9 @@ public class AdminController {
                 if (choice == 0) return;
                 stadiumAction(choice);
             } catch (AppException e) {
-                this.adminManagementView.displayMessage(e.getMessage());
-            } catch (IllegalArgumentException e) {
-                this.adminManagementView.displayMessage("Invalid input.");
+                this.adminManagementView.displayResult(e.getMessage());
+            } catch (Exception e) {
+                this.adminManagementView.displayResult("Invalid input.");
             }
         }
     }
@@ -113,11 +104,9 @@ public class AdminController {
                 if (choice == 0) return;
                 matchAction(choice);
             } catch (AppException e) {
-                this.adminManagementView.displayMessage(e.getMessage());
-            } catch (DateTimeParseException e) {
-                this.adminManagementView.displayMessage("Use yyyy-MM-ddTHH:mm for date and time.");
-            } catch (IllegalArgumentException e) {
-                this.adminManagementView.displayMessage("Invalid input.");
+                this.adminManagementView.displayResult(e.getMessage());
+            } catch (Exception e) {
+                this.adminManagementView.displayResult("Invalid input.");
             }
         }
     }
@@ -129,9 +118,9 @@ public class AdminController {
                 if (choice == 0) return;
                 fanAction(choice);
             } catch (AppException e) {
-                this.adminManagementView.displayMessage(e.getMessage());
-            } catch (IllegalArgumentException e) {
-                this.adminManagementView.displayMessage("Invalid input.");
+                this.adminManagementView.displayResult(e.getMessage());
+            } catch (Exception e) {
+                this.adminManagementView.displayResult("Invalid input.");
             }
         }
     }
@@ -143,256 +132,193 @@ public class AdminController {
                 if (choice == 0) return;
                 staffAction(choice);
             } catch (AppException e) {
-                this.adminManagementView.displayMessage(e.getMessage());
-            } catch (IllegalArgumentException e) {
-                this.adminManagementView.displayMessage("Invalid input.");
+                this.adminManagementView.displayResult(e.getMessage());
+            } catch (Exception e) {
+                this.adminManagementView.displayResult("Invalid input.");
             }
         }
     }
 
-    private void requireAdmin() {
-        UserResponseDto current = authController.getCurrentUser();
-        if (current == null || current.getRole() != UserRole.ADMIN || current.getStatus() != UserStatus.ACTIVE) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Admin login required");
-        }
-    }
-
     private void stadiumAction(int choice) {
-        Long id;
         switch (choice) {
             case 1:
-                this.adminManagementView.printStadium(stadiumController.createStadium(new StadiumRequestDto(
-                        this.adminManagementView.ask("Name: "), this.adminManagementView.ask("Address: "))));
+                this.adminManagementView.displayResult(this.stadiumController.createStadium(this.adminManagementView.readStadiumRequest()));
                 break;
             case 2:
-                for (StadiumResponseDto stadium : stadiumController.getStadiums()) {
-                    this.adminManagementView.printStadium(stadium);
-                }
+                this.adminManagementView.displayResult(this.stadiumController.getStadiums());
                 break;
             case 3:
-                this.adminManagementView.printStadium(stadiumController.getStadiumDetails(this.adminManagementView.readId("Stadium ID: ")));
+                this.adminManagementView.displayResult(this.stadiumController.getStadiumDetails(this.adminManagementView.readLong("Stadium ID: ")));
                 break;
             case 4:
-                id = this.adminManagementView.readId("Stadium ID: ");
-                this.adminManagementView.printStadium(stadiumController.updateStadium(id,
-                        new StadiumRequestDto(this.adminManagementView.ask("Name: "), this.adminManagementView.ask("Address: "))));
+                this.adminManagementView.displayResult(this.stadiumController.updateStadium(this.adminManagementView.readLong("Stadium ID: "), this.adminManagementView.readStadiumRequest()));
                 break;
             case 5:
-                id = this.adminManagementView.readId("Stadium ID: ");
-                if (this.adminManagementView.confirm("DELETE")) {
-                    this.adminManagementView.displayMessage("Deleted: " + stadiumController.deleteStadium(id));
-                }
+                this.adminManagementView.displayResult(this.stadiumController.deleteStadium(this.adminManagementView.readLong("Stadium ID: ")));
                 break;
             case 6:
-                this.adminManagementView.printSection(stadiumController.createSection(
-                        this.adminManagementView.readId("Stadium ID: "), this.adminManagementView.ask("Section name: ")));
+                this.adminManagementView.displayResult(this.stadiumController.createSection(this.adminManagementView.readLong("Stadium ID: "), this.adminManagementView.readText("Section name: ")));
                 break;
             case 7:
-                for (Section section : stadiumController.getSections(this.adminManagementView.readId("Stadium ID: "))) {
-                    this.adminManagementView.printSection(section);
-                }
+                this.adminManagementView.displayResult(this.stadiumController.getSections(this.adminManagementView.readLong("Stadium ID: ")));
                 break;
             case 8:
-                this.adminManagementView.printSection(stadiumController.getSectionDetails(this.adminManagementView.readId("Section ID: ")));
+                this.adminManagementView.displayResult(this.stadiumController.getSectionDetails(this.adminManagementView.readLong("Section ID: ")));
                 break;
             case 9:
-                id = this.adminManagementView.readId("Section ID: ");
-                this.adminManagementView.printSection(stadiumController.updateSection(id, this.adminManagementView.ask("Section name: ")));
+                this.adminManagementView.displayResult(this.stadiumController.updateSection(this.adminManagementView.readLong("Section ID: "), this.adminManagementView.readText("New name: ")));
                 break;
             case 10:
-                id = this.adminManagementView.readId("Section ID: ");
-                if (this.adminManagementView.confirm("DELETE")) {
-                    this.adminManagementView.displayMessage("Deleted: " + stadiumController.deleteSection(id));
-                }
+                this.adminManagementView.displayResult(this.stadiumController.deleteSection(this.adminManagementView.readLong("Section ID: ")));
                 break;
             case 11:
-                this.adminManagementView.printSeat(stadiumController.createSeat(this.adminManagementView.readId("Section ID: "),
-                        this.adminManagementView.ask("Row: "), this.adminManagementView.readInt("Seat number: ")));
+                this.adminManagementView.displayResult(this.stadiumController.createSeat(this.adminManagementView.readLong("Section ID: "), this.adminManagementView.readText("Row label: "), this.adminManagementView.readInt("Seat number: ")));
                 break;
             case 12:
-                for (Seat seat : stadiumController.buildSeatMap(this.adminManagementView.readId("Section ID: "))) {
-                    this.adminManagementView.printSeat(seat);
-                }
+                this.adminManagementView.displayResult(this.stadiumController.buildSeatMap(this.adminManagementView.readLong("Section ID: ")));
                 break;
             case 13:
-                this.adminManagementView.printSeat(stadiumController.getSeatDetails(this.adminManagementView.readId("Seat ID: ")));
+                this.adminManagementView.displayResult(this.stadiumController.getSeatDetails(this.adminManagementView.readLong("Seat ID: ")));
                 break;
             case 14:
-                id = this.adminManagementView.readId("Seat ID: ");
-                this.adminManagementView.printSeat(stadiumController.updateSeat(id, this.adminManagementView.ask("Row: "),
-                        this.adminManagementView.readInt("Seat number: ")));
+                this.adminManagementView.displayResult(this.stadiumController.updateSeat(this.adminManagementView.readLong("Seat ID: "), this.adminManagementView.readText("New row label: "), this.adminManagementView.readInt("New seat number: ")));
                 break;
             case 15:
-                id = this.adminManagementView.readId("Seat ID: ");
-                if (this.adminManagementView.confirm("DELETE")) {
-                    this.adminManagementView.displayMessage("Deleted: " + stadiumController.deleteSeat(id));
-                }
+                this.adminManagementView.displayResult(this.stadiumController.deleteSeat(this.adminManagementView.readLong("Seat ID: ")));
                 break;
             case 16:
-                this.adminManagementView.printSeat(stadiumController.activateSeat(this.adminManagementView.readId("Seat ID: ")));
+                this.adminManagementView.displayResult(this.stadiumController.activateSeat(this.adminManagementView.readLong("Seat ID: ")));
                 break;
             case 17:
-                this.adminManagementView.printSeat(stadiumController.deactivateSeat(this.adminManagementView.readId("Seat ID: ")));
+                this.adminManagementView.displayResult(this.stadiumController.deactivateSeat(this.adminManagementView.readLong("Seat ID: ")));
                 break;
             default:
-                this.adminManagementView.displayMessage("Invalid choice.");
+                this.adminManagementView.displayResult("Invalid choice.");
         }
     }
 
     private void matchAction(int choice) {
-        Long matchId;
-        Long sectionId;
         switch (choice) {
             case 1:
-                this.adminManagementView.printMatch(matchController.createMatch(this.adminManagementView.readMatchRequest()));
+                this.adminManagementView.displayResult(this.matchController.createMatch(this.adminManagementView.readMatchRequest()));
                 break;
             case 2:
-                for (MatchResponseDto match : matchController.getMatches()) {
-                    this.adminManagementView.printMatch(match);
-                }
+                this.adminManagementView.displayResult(this.matchController.getMatches());
                 break;
             case 3:
-                this.adminManagementView.printMatch(matchController.getMatchDetails(this.adminManagementView.readId("Match ID: ")));
+                this.adminManagementView.displayResult(this.matchController.getMatchDetails(this.adminManagementView.readLong("Match ID: ")));
                 break;
             case 4:
-                matchId = this.adminManagementView.readId("Match ID: ");
-                this.adminManagementView.printMatch(matchController.updateMatch(matchId, this.adminManagementView.readMatchRequest()));
+                this.adminManagementView.displayResult(this.matchController.updateMatch(this.adminManagementView.readLong("Match ID: "), this.adminManagementView.readMatchRequest()));
                 break;
             case 5:
-                matchId = this.adminManagementView.readId("Match ID: ");
-                if (this.adminManagementView.confirm("DELETE")) {
-                    this.adminManagementView.displayMessage("Deleted: " + matchController.deleteMatch(matchId));
-                }
+                this.adminManagementView.displayResult(this.matchController.deleteMatch(this.adminManagementView.readLong("Match ID: ")));
                 break;
             case 6:
-                this.adminManagementView.printPrice(matchController.createTicketPrice(new TicketPriceRequestDto(
-                        this.adminManagementView.readId("Match ID: "), this.adminManagementView.readId("Section ID: "),
-                        this.adminManagementView.readMoney("Amount: "))));
+                this.adminManagementView.displayResult(this.matchController.createTicketPrice(new TicketPriceRequestDto(this.adminManagementView.readLong("Match ID: "), this.adminManagementView.readLong("Section ID: "), this.adminManagementView.readAmount("Price: "))));
                 break;
             case 7:
-                for (TicketPrice price : matchController.getTicketPrices(this.adminManagementView.readId("Match ID: "))) {
-                    this.adminManagementView.printPrice(price);
-                }
+                this.adminManagementView.displayResult(this.matchController.getTicketPrices(this.adminManagementView.readLong("Match ID: ")));
                 break;
             case 8:
-                this.adminManagementView.printPrice(matchController.getTicketPriceDetails(this.adminManagementView.readId("Match ID: "),
-                        this.adminManagementView.readId("Section ID: ")));
+                this.adminManagementView.displayResult(this.matchController.getTicketPriceDetails(this.adminManagementView.readLong("Match ID: "), this.adminManagementView.readLong("Section ID: ")));
                 break;
             case 9:
-                matchId = this.adminManagementView.readId("Match ID: ");
-                sectionId = this.adminManagementView.readId("Section ID: ");
-                this.adminManagementView.printPrice(matchController.updateTicketPrice(matchId, sectionId,
-                        this.adminManagementView.readMoney("Amount: ")));
+                this.adminManagementView.displayResult(this.matchController.updateTicketPrice(this.adminManagementView.readLong("Match ID: "), this.adminManagementView.readLong("Section ID: "), this.adminManagementView.readAmount("New price: ")));
                 break;
             case 10:
-                matchId = this.adminManagementView.readId("Match ID: ");
-                sectionId = this.adminManagementView.readId("Section ID: ");
-                if (this.adminManagementView.confirm("DELETE")) {
-                    this.adminManagementView.displayMessage("Deleted: "
-                            + matchController.deleteTicketPrice(matchId, sectionId));
-                }
+                this.adminManagementView.displayResult(this.matchController.deleteTicketPrice(this.adminManagementView.readLong("Match ID: "), this.adminManagementView.readLong("Section ID: ")));
                 break;
             case 11:
-                this.adminManagementView.printMatch(matchController.openTicketSales(this.adminManagementView.readId("Match ID: ")));
+                this.adminManagementView.displayResult(this.matchController.openTicketSales(this.adminManagementView.readLong("Match ID: ")));
                 break;
             case 12:
-                this.adminManagementView.printMatch(matchController.closeTicketSales(this.adminManagementView.readId("Match ID: ")));
+                this.adminManagementView.displayResult(this.matchController.closeTicketSales(this.adminManagementView.readLong("Match ID: ")));
                 break;
             case 13:
-                this.adminManagementView.displayMessage("Sales: "
-                        + matchController.getTicketSalesStatus(this.adminManagementView.readId("Match ID: ")));
+                this.adminManagementView.displayResult(this.matchController.getTicketSalesStatus(this.adminManagementView.readLong("Match ID: ")));
                 break;
             default:
-                this.adminManagementView.displayMessage("Invalid choice.");
+                this.adminManagementView.displayResult("Invalid choice.");
         }
     }
 
     private void fanAction(int choice) {
-        Long id;
         switch (choice) {
             case 1:
-                this.adminManagementView.printAccount(accountAdminController.createFanAccount(this.adminManagementView.readAccount(UserRole.FAN, true)));
+                this.adminManagementView.displayResult(this.accountAdminController.createFanAccount(this.adminManagementView.readAccountRequest()));
                 break;
             case 2:
-                this.adminManagementView.printAccounts(accountAdminController.getFans());
+                this.adminManagementView.displayResult(this.accountAdminController.getFans());
                 break;
             case 3:
-                this.adminManagementView.printAccount(accountAdminController.getFanDetails(this.adminManagementView.readId("Fan ID: ")));
+                this.adminManagementView.displayResult(this.accountAdminController.getFanDetails(this.adminManagementView.readLong("Fan ID: ")));
                 break;
             case 4:
-                this.adminManagementView.printAccounts(accountAdminController.searchFans(this.adminManagementView.ask("Keyword: ")));
+                this.adminManagementView.displayResult(this.accountAdminController.searchFans(this.adminManagementView.readText("Keyword: ")));
                 break;
             case 5:
-                this.adminManagementView.printAccounts(accountAdminController.filterFans(this.adminManagementView.readStatus(true)));
+                String s = this.adminManagementView.readText("Status (ACTIVE/INACTIVE, blank = all): ");
+                this.adminManagementView.displayResult(this.accountAdminController.filterFans(s.isEmpty() ? null : UserStatus.valueOf(s.toUpperCase())));
                 break;
             case 6:
-                id = this.adminManagementView.readId("Fan ID: ");
-                this.adminManagementView.printAccount(accountAdminController.updateFan(id, this.adminManagementView.readAccount(UserRole.FAN, false)));
+                this.adminManagementView.displayResult(this.accountAdminController.updateFan(this.adminManagementView.readLong("Fan ID: "), this.adminManagementView.readAccountRequest()));
                 break;
             case 7:
-                this.adminManagementView.printAccount(accountAdminController.activateFan(this.adminManagementView.readId("Fan ID: ")));
+                this.adminManagementView.displayResult(this.accountAdminController.activateFan(this.adminManagementView.readLong("Fan ID: ")));
                 break;
             case 8:
-                this.adminManagementView.printAccount(accountAdminController.deactivateFan(this.adminManagementView.readId("Fan ID: ")));
+                this.adminManagementView.displayResult(this.accountAdminController.deactivateFan(this.adminManagementView.readLong("Fan ID: ")));
                 break;
             case 9:
-                id = this.adminManagementView.readId("Fan ID: ");
-                if (this.adminManagementView.confirm("DELETE")) {
-                    this.adminManagementView.displayMessage("Deleted: " + accountAdminController.deleteFan(id));
-                }
+                this.adminManagementView.displayResult(this.accountAdminController.deleteFan(this.adminManagementView.readLong("Fan ID: ")));
                 break;
             default:
-                this.adminManagementView.displayMessage("Invalid choice.");
+                this.adminManagementView.displayResult("Invalid choice.");
         }
     }
 
     private void staffAction(int choice) {
-        Long id;
         switch (choice) {
             case 1:
-                this.adminManagementView.printAccount(accountAdminController.createStaffAccount(
-                        this.adminManagementView.readAccount(this.adminManagementView.readRole(false), true)));
+                this.adminManagementView.displayResult(this.accountAdminController.createStaffAccount(this.adminManagementView.readAccountRequest()));
                 break;
             case 2:
-                this.adminManagementView.printAccounts(accountAdminController.getStaffs());
+                this.adminManagementView.displayResult(this.accountAdminController.getStaffs());
                 break;
             case 3:
-                this.adminManagementView.printAccount(accountAdminController.getStaffDetails(this.adminManagementView.readId("Staff ID: ")));
+                this.adminManagementView.displayResult(this.accountAdminController.getStaffDetails(this.adminManagementView.readLong("Staff ID: ")));
                 break;
             case 4:
-                this.adminManagementView.printAccounts(accountAdminController.searchStaff(this.adminManagementView.ask("Keyword: ")));
+                this.adminManagementView.displayResult(this.accountAdminController.searchStaff(this.adminManagementView.readText("Keyword: ")));
                 break;
             case 5:
-                this.adminManagementView.printAccounts(accountAdminController.filterStaff(this.adminManagementView.readRole(true), this.adminManagementView.readStatus(true)));
+                String r = this.adminManagementView.readText("Role (blank = all): ");
+                String st = this.adminManagementView.readText("Status (blank = all): ");
+                this.adminManagementView.displayResult(this.accountAdminController.filterStaff(
+                        r.isEmpty() ? null : UserRole.valueOf(r.toUpperCase()),
+                        st.isEmpty() ? null : UserStatus.valueOf(st.toUpperCase())));
                 break;
             case 6:
-                id = this.adminManagementView.readId("Staff ID: ");
-                this.adminManagementView.printAccount(accountAdminController.updateStaff(id, this.adminManagementView.readAccount(null, false)));
+                this.adminManagementView.displayResult(this.accountAdminController.updateStaff(this.adminManagementView.readLong("Staff ID: "), this.adminManagementView.readAccountRequest()));
                 break;
             case 7:
-                this.adminManagementView.printAccount(accountAdminController.activateStaff(this.adminManagementView.readId("Staff ID: ")));
+                this.adminManagementView.displayResult(this.accountAdminController.activateStaff(this.adminManagementView.readLong("Staff ID: ")));
                 break;
             case 8:
-                this.adminManagementView.printAccount(accountAdminController.deactivateStaff(this.adminManagementView.readId("Staff ID: ")));
+                this.adminManagementView.displayResult(this.accountAdminController.deactivateStaff(this.adminManagementView.readLong("Staff ID: ")));
                 break;
             case 9:
-                id = this.adminManagementView.readId("Staff ID: ");
-                this.adminManagementView.printAccount(accountAdminController.assignRole(id, this.adminManagementView.readRole(false)));
+                this.adminManagementView.displayResult(this.accountAdminController.assignRole(this.adminManagementView.readLong("Staff ID: "), UserRole.valueOf(this.adminManagementView.readText("Role: ").toUpperCase())));
                 break;
             case 10:
-                id = this.adminManagementView.readId("Staff ID: ");
-                this.adminManagementView.printAccount(accountAdminController.changeRole(id, this.adminManagementView.readRole(false)));
+                this.adminManagementView.displayResult(this.accountAdminController.changeRole(this.adminManagementView.readLong("Staff ID: "), UserRole.valueOf(this.adminManagementView.readText("Role: ").toUpperCase())));
                 break;
             case 11:
-                id = this.adminManagementView.readId("Staff ID: ");
-                if (this.adminManagementView.confirm("REVOKE")) {
-                    this.adminManagementView.printAccount(accountAdminController.revokeRole(id));
-                }
+                this.adminManagementView.displayResult(this.accountAdminController.revokeRole(this.adminManagementView.readLong("Staff ID: ")));
                 break;
             default:
-                this.adminManagementView.displayMessage("Invalid choice.");
+                this.adminManagementView.displayResult("Invalid choice.");
         }
     }
 }
-
-

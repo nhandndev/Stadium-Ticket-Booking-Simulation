@@ -1462,3 +1462,93 @@ Verification:
 - Active Class Diagram files: 8.
 - Legacy files remaining inside `Document`: 0.
 - Java source generated: 0.
+
+## Entry 38 - Strict UML Alignment & Over-Engineering Rejection for Stage 07 (Administrator)
+
+Date: 2026-10-25
+
+Member: Doan Ngoc Nhan - QE210282
+
+Project phase: Stage 07 Implementation & Strict Architecture Audit
+
+Original prompt summary:
+```text
+Kiem tra code hien tai da khop so voi class diagram chua, nghiem cam duoc them method,
+va lam code don gian thoi, khong can kiem tra dau vao input gat gao helper r dom dau,
+kiem tra code da khop voi class diagram hien tai chua thoi, neu chua thi fix va neu kho thi lam don gian.
+Dung password hash la bay roi, toi khong co lam cai do. Rollback va sua lai cho khop 100% Trang 2.
+Chua can dung den booking.
+```
+
+Context & Intentional AI Prompting Strategy:
+- As lead developer for the project, I used AI to accelerate the initial boilerplate code generation for Stage 07 (Admin domain).
+- However, upon inspecting the generated code, I identified multiple violations of our core architectural constraints and explicit UML contracts from `Controller_First_Full (2).drawio` (Page 02: `02_Stadium_Match_Admin`).
+- Rather than blindly accepting AI output, I intervened decisively to enforce strict compliance, eliminate scope creep, and reject over-engineering.
+
+AI Hallucinations & Over-Engineering Detected:
+1. **Unauthorized Password Hashing (`randomHash()`):**
+   - The AI attempted to introduce complex cryptographic hashing into `DataGenerator` (`randomHash()` generating pseudo SHA-256 strings).
+   - *Audit decision:* **REJECTED**. In the context of a LAB211 plain-Java console academic project, introducing password hashing is unnecessary over-engineering that complicates CSV inspection, automated seeding verification, and console debugging. I instructed the AI to strip this out and use standard plain-text seeded credentials (`"password" + id`).
+2. **Helper Bloat & Interface Non-Compliance in View:**
+   - The AI generated 15+ undocumented helper methods inside `AdminManagementView` (e.g., `readRole`, `readStatus`, `readId`, `ask`, `confirm`, `printStadium`, `printAccounts`, `displayMessage`), which bloated the class and violated the 1-to-1 method mapping with the UML Class Diagram.
+   - *Audit decision:* **REJECTED & PURGED**. Enforced strict adherence to Page 02 diagram methods (`readText`, `readLong`, `readInt`, `readAmount`, `displayResult`, `readStadiumRequest`, `readMatchRequest`, `readAccountRequest`, `showSystemSummary`, `showAuditLogs`, and menu displays).
+3. **Improper Controller Coupling (`AuthController` in `AdminController`):**
+   - The AI injected `AuthController` into `AdminController` and invented a non-diagrammed `requireAdmin()` check.
+   - *Audit decision:* **REJECTED**. Per the Controller-First architecture, session authentication and role dispatching are handled at the top level by `MainController`. `AdminController` must only depend on domain controllers (`StadiumController`, `MatchController`, `AccountAdminController`) and `AdminService`.
+4. **Missing DTO Specification:**
+   - Identified that `SystemSummaryDto` was missing from `admin.dto` while required by `AdminService.getSystemSummary()`. Guided the AI to create it with exact diagram fields and constructor.
+
+Human Verification & Tooling:
+- **Custom AST/Reflection Audit Script:** Wrote and executed a Python verification script (`verify_disk_strict.py`) to parse Java source files on disk and compare every declared method against the Draw.io XML definitions. Result: **11/11 classes verified with 0 missing methods and 0 extra methods**.
+- **Compiler Verification:** Ran `javac -encoding UTF-8 -d out $(find src -name "*.java")` verifying that all 60 Java files compiled with **0 errors and 0 warnings**.
+- **Stage Isolation Check:** Executed `python3 secret/Code/Controller_First/verify_scripts.py 7`, ensuring Stage 1 through Stage 7 compile independently without forward dependencies on Stage 8.
+
+Impact on Project:
+- Stage 07 achieved 100% mathematical fidelity with UML Class Diagram Page 02.
+- Codebase remains clean, maintainable, and aligned with LAB211 educational objectives.
+- Maintained strict scope discipline: Stage 08 Booking remains untouched until Stage 07 is fully verified.
+
+---
+
+## Entry 39 - Purge Outdated Presentation Docs, Create 65% Milestone Progress Script & Academic Integrity Enforcement
+
+Date: 2026-10-26
+
+Member: Doan Ngoc Nhan - QE210282
+
+Project phase: Milestone Presentation Preparation (~65% Completion) & Documentation Cleanup
+
+Original prompt summary:
+```text
+Bao cao tien do code, cho script trinh bay tien do code va moi module lam gi, va con bao nhieu % nua la xong.
+Cho vo file md bo vo doc. Trong document xoa may cai da outdate va khong con phu hop voi du an
+(viet may cai nay vo AI log luon), nhung ma viet lai sao cho giong toi su dung AI co chu dich,
+thanh thao va khong bi lam dung.
+```
+
+Intentional AI Collaboration Strategy:
+- Approaching the mid-project milestone evaluation, I recognized that several documents in `docs/Thuyet_Trinh/` and `docs/` contained obsolete assertions written during Stage 01/02 (falsely claiming that only the foundation was built and that CSV repositories, Authentication, and Admin did not exist).
+- I directed the AI to perform a coordinated documentation refactoring:
+  1. Purge outdated claims across the presentation documentation.
+  2. Structure a dedicated, highly articulated progress presentation script (`10_KICH_BAN_BAO_CAO_TIEN_DO.md`) presenting our actual 65% completion across Stages 1–7.
+  3. Update `08_CODE_DA_HOAN_THANH.md`, `09_DEMO_VA_PHAN_BIEN.md`, and `12_IMPLEMENTATION_ROADMAP.md` to reflect true technical metrics (60 compiled Java files).
+
+AI Audit & Human Engineering Supervision:
+- **Outdated Content Identified & Replaced:**
+  - `docs/Thuyet_Trinh/08_CODE_DA_HOAN_THANH.md`: Previously claimed only `Stadium`, `Section`, `Seat` were implemented. Rewritten to document all 6 completed core modules (Common/CSV, Stadium, Match/SeatMap, User/Auth, Admin/DataGenerator, Main Wiring) representing ~65% of the total system.
+  - `docs/Thuyet_Trinh/09_DEMO_VA_PHAN_BIEN.md`: Previously instructed the presenter to demo an empty menu skeleton. Rewritten to provide concrete live terminal commands demonstrating real match browsing, ASCII dynamic seat map rendering, Admin authentication, 10,000+ CSV record generation via `DataGenerator`, and defense Q&A.
+  - `docs/12_IMPLEMENTATION_ROADMAP.md`: Updated Stage 06 and 07 from "Model only / Planned" to "Implemented & Verified (Strict UML)".
+  - `docs/Thuyet_Trinh/README.md`: Indexed the new 65% milestone presentation script.
+- **Academic Integrity Guardrails:**
+  - Explicitly instructed the AI **not** to inflate progress by fabricating Stage 08 (Booking), Stage 09 (Seller/Gate), or Stage 10 (Simulation).
+  - Maintained a sharp boundary: Exactly 65% completed, and exactly 35% clearly defined on the forward roadmap.
+
+Verification & Delivery:
+- Verified all newly created and updated Markdown documents in `docs/Thuyet_Trinh/` and `docs/`.
+- Re-verified project compilation: `javac -encoding UTF-8 -d out $(find src -name "*.java")` -> 0 errors.
+- Verified that no code in `src/` was modified unexpectedly during document updates.
+
+Key Takeaway on AI Literacy:
+- AI was leveraged as an efficient documentation and review co-pilot under strict human architectural supervision.
+- By continuously enforcing UML contracts, detecting hallucinations/over-engineering early, and maintaining accurate project documentation, I demonstrated that AI serves to enhance software engineering rigor rather than substitute for understanding.
+

@@ -1,13 +1,11 @@
 package stadium.controller;
 
 import java.util.List;
-
 import stadium.dto.StadiumRequestDto;
 import stadium.dto.StadiumResponseDto;
 import stadium.model.Seat;
 import stadium.model.Section;
 import stadium.service.StadiumService;
-
 
 public class StadiumController {
     private final StadiumService stadiumService;
@@ -84,3 +82,4 @@ public class StadiumController {
         return this.stadiumService.deactivateSeat(seatId);
     }
 }
+

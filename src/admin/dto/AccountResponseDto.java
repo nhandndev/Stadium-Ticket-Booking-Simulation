@@ -3,7 +3,6 @@ package admin.dto;
 import user.enums.UserRole;
 import user.enums.UserStatus;
 
-
 public class AccountResponseDto {
     private final Long id;
     private final String fullName;
@@ -22,28 +21,10 @@ public class AccountResponseDto {
         this.status = status;
     }
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getFullName() {
-        return this.fullName;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getPhone() {
-        return this.phone;
-    }
-
-    public UserRole getRole() {
-        return this.role;
-    }
-
-    public UserStatus getStatus() {
-        return this.status;
-    }
+    public Long getId() { return this.id; }
+    public String getFullName() { return this.fullName; }
+    public String getEmail() { return this.email; }
+    public String getPhone() { return this.phone; }
+    public UserRole getRole() { return this.role; }
+    public UserStatus getStatus() { return this.status; }
 }
-

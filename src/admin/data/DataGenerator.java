@@ -2,7 +2,6 @@ package admin.data;
 
 import common.exception.AppException;
 import common.exception.ErrorCode;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import match.model.Match;
 import match.model.MatchSeat;
 import match.model.SaleStatus;
@@ -36,11 +34,10 @@ import user.enums.UserStatus;
 import user.repository.FanRepository;
 import user.repository.StaffRepository;
 
-
 public class DataGenerator {
     private static final String[] FILES = {
-            "stadiums.csv", "sections.csv", "seats.csv", "fans.csv", "staff.csv",
-            "matches.csv", "ticket_prices.csv", "match_seats.csv"
+        "stadiums.csv", "sections.csv", "seats.csv", "fans.csv", "staff.csv",
+        "matches.csv", "ticket_prices.csv", "match_seats.csv"
     };
     private static final String MARKER = ".stadium-generated.marker";
     private final Path outputDirectory;
@@ -107,7 +104,7 @@ public class DataGenerator {
         List<String> rows = new ArrayList<>();
         for (long i = 1; i <= 100; i++) {
             Fan fan = new Fan(i, "Generated Fan " + i,
-                    "fan" + i + "@example.invalid", randomHash(), "000" + i,
+                    "fan" + i + "@example.invalid", "password" + i, "000" + i,
                     UserStatus.INACTIVE);
             rows.add(repository.formatLine(fan));
         }
@@ -122,7 +119,7 @@ public class DataGenerator {
         for (int i = 0; i < roles.length; i++) {
             long id = i + 1L;
             Staff staff = new Staff(id, "Generated Staff " + id,
-                    "staff" + id + "@example.invalid", randomHash(), "001" + id,
+                    "staff" + id + "@example.invalid", "password" + id, "001" + id,
                     roles[i], UserStatus.INACTIVE);
             rows.add(repository.formatLine(staff));
         }
@@ -187,10 +184,6 @@ public class DataGenerator {
         }
     }
 
-    private String randomHash() {
-        return "pass_" + UUID.randomUUID().toString().substring(0, 8);
-    }
-
     private void writeNew(String name, List<String> rows) {
         Path target = path(name);
         if (Files.exists(target)) {
@@ -212,8 +205,7 @@ public class DataGenerator {
             Files.write(temporary, rows, StandardCharsets.UTF_8);
             try {
                 Files.move(temporary, target, StandardCopyOption.ATOMIC_MOVE);
-            } catch (
-                    AtomicMoveNotSupportedException e) {
+            } catch (AtomicMoveNotSupportedException e) {
                 Files.move(temporary, target);
             }
         } catch (IOException e) {
@@ -230,4 +222,3 @@ public class DataGenerator {
         }
     }
 }
-
