@@ -103,48 +103,20 @@ public class MainController {
     }
 
     public void handleFanLogin() {
-        loginForRole(true);
-    }
-
-    public void handleStaffLogin() {
-        loginForRole(false);
-    }
-
-    private void loginForRole(boolean fanLogin) {
         UserResponseDto user = authController.login(mainView.readLoginRequest());
-        boolean isFan = user.getRole() == UserRole.FAN;
-        if (fanLogin != isFan) {
+        if (user.getRole() != UserRole.FAN) {
             authController.logout();
             mainView.displayMessage("This account belongs to the other login menu.");
             return;
         }
         mainView.displayUser(user);
-        routeAuthenticatedUser(user);
-    }
 
-    public void handleFanRegistration() {
-        mainView.displayUser(fanController.register(mainView.readRegisterFanRequest()));
-    }
-
-    public void routeAuthenticatedUser(UserResponseDto user) {
         while (authController.getCurrentUser() != null) {
             try {
-                int choice = menuForRole(user.getRole());
+                int choice = mainView.showFanMenu();
                 switch (choice) {
                     case 1:
                         mainView.displayUser(authController.getCurrentUser());
-                        break;
-                    case 2:
-                        user = authController.updateCurrentUserProfile(
-                                mainView.readProfileUpdateRequest());
-                        mainView.displayUser(user);
-                        break;
-                    case 3:
-                        if (user.getRole() == UserRole.ADMIN) {
-                            adminController.runAdminMenu();
-                        } else {
-                            mainView.displayMessage("Invalid choice.");
-                        }
                         break;
                     case 0:
                         authController.logout();
@@ -161,7 +133,119 @@ public class MainController {
         }
     }
 
-    private int menuForRole(UserRole role) {
+    public void handleStaffLogin() {
+        UserResponseDto user = authController.login(mainView.readLoginRequest());
+        if (user.getRole() == UserRole.FAN) {
+            authController.logout();
+            mainView.displayMessage("This account belongs to the other login menu.");
+            return;
+        }
+        mainView.displayUser(user);
+
+        switch (user.getRole()) {
+            case ADMIN:
+                while (authController.getCurrentUser() != null) {
+                    try {
+                        switch (mainView.showAdminMenu()) {
+                            case 1:
+                                mainView.displayUser(authController.getCurrentUser());
+                                break;
+                            case 2:
+                                adminController.runAdminMenu();
+                                break;
+                            case 0:
+                                authController.logout();
+                                mainView.displayMessage("Logged out.");
+                                break;
+                            default:
+                                mainView.displayMessage("Invalid choice.");
+                        }
+                    } catch (AppException e) {
+                        mainView.displayMessage(e.getMessage());
+                    } catch (NumberFormatException e) {
+                        mainView.displayMessage("Invalid number.");
+                    }
+                }
+                break;
+
+            case SELLER:
+                while (authController.getCurrentUser() != null) {
+                    try {
+                        switch (mainView.showSellerMenu()) {
+                            case 1:
+                                mainView.displayUser(authController.getCurrentUser());
+                                break;
+                            case 0:
+                                authController.logout();
+                                mainView.displayMessage("Logged out.");
+                                break;
+                            default:
+                                mainView.displayMessage("Invalid choice.");
+                        }
+                    } catch (AppException e) {
+                        mainView.displayMessage(e.getMessage());
+                    } catch (NumberFormatException e) {
+                        mainView.displayMessage("Invalid number.");
+                    }
+                }
+                break;
+
+            case GATE_STAFF:
+                while (authController.getCurrentUser() != null) {
+                    try {
+                        switch (mainView.showGateStaffMenu()) {
+                            case 1:
+                                mainView.displayUser(authController.getCurrentUser());
+                                break;
+                            case 0:
+                                authController.logout();
+                                mainView.displayMessage("Logged out.");
+                                break;
+                            default:
+                                mainView.displayMessage("Invalid choice.");
+                        }
+                    } catch (AppException e) {
+                        mainView.displayMessage(e.getMessage());
+                    } catch (NumberFormatException e) {
+                        mainView.displayMessage("Invalid number.");
+                    }
+                }
+                break;
+
+            case SIMULATOR_OPERATOR:
+                while (authController.getCurrentUser() != null) {
+                    try {
+                        switch (mainView.showSimulatorMenu()) {
+                            case 1:
+                                mainView.displayUser(authController.getCurrentUser());
+                                break;
+                            case 0:
+                                authController.logout();
+                                mainView.displayMessage("Logged out.");
+                                break;
+                            default:
+                                mainView.displayMessage("Invalid choice.");
+                        }
+                    } catch (AppException e) {
+                        mainView.displayMessage(e.getMessage());
+                    } catch (NumberFormatException e) {
+                        mainView.displayMessage("Invalid number.");
+                    }
+                }
+                break;
+
+            default:
+                authController.logout();
+                mainView.displayMessage("Access denied for role: " + user.getRole());
+                break;
+        }
+    }
+
+    public void handleFanRegistration() {
+        mainView.displayUser(fanController.register(mainView.readRegisterFanRequest()));
+    }
+
+    public int menuForRole(UserRole role) {
         switch (role) {
             case FAN:
                 return mainView.showFanMenu();

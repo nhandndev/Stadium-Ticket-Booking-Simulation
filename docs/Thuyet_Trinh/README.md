@@ -22,6 +22,7 @@ Bộ tài liệu này cung cấp toàn bộ kịch bản, lời thuyết minh v�
 10. [Báo cáo chi tiết mã nguồn đã hoàn thành (Chặng 1 - 7, ~65%)](08_CODE_DA_HOAN_THANH.md)
 11. [Kịch bản demo thực tế và câu hỏi phản biện](09_DEMO_VA_PHAN_BIEN.md)
 12. [**Kịch bản báo cáo tiến độ 65% (Dành cho buổi báo cáo tiến độ)**](10_KICH_BAN_BAO_CAO_TIEN_DO.md)
+13. [**Chi tiết luồng code từ MainController đến toàn bộ dự án (Call-Stack Tracing)**](11_CHI_TIET_LUONG_CODE_FLOW.md)
 
 ---
 

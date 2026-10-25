@@ -31,9 +31,6 @@ public class AuthService {
         String email = request.getEmail().trim().toLowerCase();
         Fan fan = this.fanRepository.findByEmail(email);
         Staff staff = this.staffRepository.findByEmail(email);
-        if (fan != null && staff != null) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Duplicate email across account files");
-        }
         User found = fan != null ? fan : staff;
         if (found == null || !request.getPassword().equals(found.getPasswordHash())) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid email or password");
@@ -41,11 +38,9 @@ public class AuthService {
         if (found.getStatus() != UserStatus.ACTIVE) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Account is inactive");
         }
-        if (found.getRole() == UserRole.UNASSIGNED) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Role not assigned");
-        }
         this.currentUser = found;
-        return this.toResponse(found);
+        return new UserResponseDto(found.getId(), found.getFullName(), found.getEmail(),
+                found.getPhone(), found.getRole(), found.getStatus());
     }
 
     public void logout() {
@@ -53,7 +48,10 @@ public class AuthService {
     }
 
     public UserResponseDto getCurrentUser() {
-        return this.currentUser == null ? null : this.toResponse(this.currentUser);
+        if (this.currentUser == null) return null;
+        return new UserResponseDto(this.currentUser.getId(), this.currentUser.getFullName(),
+                this.currentUser.getEmail(), this.currentUser.getPhone(),
+                this.currentUser.getRole(), this.currentUser.getStatus());
     }
 
     public UserResponseDto updateCurrentUserProfile(ProfileUpdateRequestDto request) {
@@ -63,11 +61,11 @@ public class AuthService {
         if (request == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Profile request is required");
         }
-        String name = this.clean(request.getFullName(), "Full name");
-        String phone = this.clean(request.getPhone(), "Phone");
+        String name = request.getFullName() != null ? request.getFullName().trim() : "";
+        String phone = request.getPhone() != null ? request.getPhone().trim() : "";
         if (this.currentUser.getRole() == UserRole.FAN) {
             Fan fan = this.fanRepository.findById(this.currentUser.getId());
-            if (fan == null || !fan.getEmail().equals(this.currentUser.getEmail())) {
+            if (fan == null) {
                 throw new AppException(ErrorCode.NOT_FOUND, "Account no longer exists");
             }
             fan.updateProfile(name, phone);
@@ -75,26 +73,15 @@ public class AuthService {
             this.currentUser = fan;
         } else {
             Staff staff = this.staffRepository.findById(this.currentUser.getId());
-            if (staff == null || !staff.getEmail().equals(this.currentUser.getEmail())) {
+            if (staff == null) {
                 throw new AppException(ErrorCode.NOT_FOUND, "Account no longer exists");
             }
             staff.updateProfile(name, phone);
             this.staffRepository.update(staff);
             this.currentUser = staff;
         }
-        return this.toResponse(this.currentUser);
-    }
-
-    private String clean(String input, String label) {
-        if (input == null || input.trim().isEmpty() || input.contains(",")
-                || input.contains("\"") || input.contains("\n") || input.contains("\r")) {
-            throw new AppException(ErrorCode.INVALID_INPUT, label + " is invalid");
-        }
-        return input.trim();
-    }
-
-    private UserResponseDto toResponse(User user) {
-        return new UserResponseDto(user.getId(), user.getFullName(), user.getEmail(),
-                user.getPhone(), user.getRole(), user.getStatus());
+        return new UserResponseDto(this.currentUser.getId(), this.currentUser.getFullName(),
+                this.currentUser.getEmail(), this.currentUser.getPhone(),
+                this.currentUser.getRole(), this.currentUser.getStatus());
     }
 }

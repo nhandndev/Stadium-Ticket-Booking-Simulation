@@ -27,23 +27,11 @@ public class StadiumRepository extends CsvRepository<Stadium> {
             throw new AppException(ErrorCode.CSV_ERROR, "Expected 3 stadium columns");
         }
         long id = Long.parseLong(parts[0]);
-        if (id <= 0 || !isValidText(parts[1]) || !isValidText(parts[2])) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Invalid stadium data");
-        }
         return new Stadium(id, parts[1], parts[2]);
     }
+
     @Override
     public String formatLine(Stadium entity) {
-        if (entity == null || entity.getId() == null || entity.getId() <= 0
-                || !isValidText(entity.getName()) || !isValidText(entity.getAddress())) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Invalid stadium CSV data");
-        }
         return entity.getId() + "," + entity.getName() + "," + entity.getAddress();
-
-    }
-    private boolean isValidText(String value) {
-        return value != null && !value.trim().isEmpty()
-                && !value.contains(",") && !value.contains("\"")
-                && !value.contains("\n") && !value.contains("\r");
     }
 }

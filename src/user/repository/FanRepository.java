@@ -36,33 +36,18 @@ public class FanRepository extends CsvRepository<Fan> {
     @Override
     public Fan parseLine(String line) {
         String[] parts = line.split(",", -1);
-        if (parts.length != 7 || !this.valid(parts[1]) || !this.valid(parts[2])
-                || !this.valid(parts[3]) || !this.valid(parts[4]) || !parts[5].equals("FAN")) {
+        if (parts.length != 7) {
             throw new AppException(ErrorCode.CSV_ERROR, "Invalid fan row");
         }
         long id = Long.parseLong(parts[0]);
         UserStatus status = UserStatus.valueOf(parts[6]);
-        if (id <= 0) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Invalid fan ID");
-        }
         return new Fan(id, parts[1], parts[2], parts[3], parts[4], status);
     }
 
     @Override
     public String formatLine(Fan entity) {
-        if (entity == null || entity.getId() == null || entity.getId() <= 0
-                || !this.valid(entity.getFullName()) || !this.valid(entity.getEmail())
-                || !this.valid(entity.getPasswordHash()) || !this.valid(entity.getPhone())
-                || entity.getRole() != UserRole.FAN || entity.getStatus() == null) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Invalid fan CSV data");
-        }
         return entity.getId() + "," + entity.getFullName() + "," + entity.getEmail()
                 + "," + entity.getPasswordHash() + "," + entity.getPhone()
                 + "," + entity.getRole() + "," + entity.getStatus();
-    }
-
-    private boolean valid(String value) {
-        return value != null && !value.trim().isEmpty() && !value.contains(",")
-                && !value.contains("\"") && !value.contains("\n") && !value.contains("\r");
     }
 }

@@ -25,43 +25,29 @@ public class FanService {
         if (request == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Registration is required");
         }
-        String name = this.clean(request.getFullName(), "Full name");
-        String email = this.clean(request.getEmail(), "Email").toLowerCase();
-        String phone = this.clean(request.getPhone(), "Phone");
-        String password = this.clean(request.getPassword(), "Password");
+        String name = request.getFullName() != null ? request.getFullName().trim() : "";
+        String email = request.getEmail() != null ? request.getEmail().trim().toLowerCase() : "";
+        String phone = request.getPhone() != null ? request.getPhone().trim() : "";
+        String password = request.getPassword() != null ? request.getPassword().trim() : "";
 
-        if (!email.contains("@") || email.startsWith("@") || email.endsWith("@")) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Invalid email");
-        }
         if (this.fanRepository.findByEmail(email) != null || this.staffRepository.findByEmail(email) != null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Email already exists");
         }
         Fan saved = this.fanRepository.save(new Fan(null, name, email, password, phone, UserStatus.ACTIVE));
-        return this.toResponse(saved);
+        return new UserResponseDto(saved.getId(), saved.getFullName(), saved.getEmail(),
+                saved.getPhone(), saved.getRole(), saved.getStatus());
     }
 
     public List<UserResponseDto> searchFans(String keyword) {
         List<UserResponseDto> results = new ArrayList<>();
         for (Fan fan : this.fanRepository.search(keyword)) {
-            results.add(this.toResponse(fan));
+            results.add(new UserResponseDto(fan.getId(), fan.getFullName(), fan.getEmail(),
+                    fan.getPhone(), fan.getRole(), fan.getStatus()));
         }
         return results;
     }
 
     public List getMyTickets(Long fanId) {
         return Collections.emptyList();
-    }
-
-    private String clean(String input, String label) {
-        if (input == null || input.trim().isEmpty() || input.contains(",")
-                || input.contains("\"") || input.contains("\n") || input.contains("\r")) {
-            throw new AppException(ErrorCode.INVALID_INPUT, label + " is invalid");
-        }
-        return input.trim();
-    }
-
-    private UserResponseDto toResponse(Fan fan) {
-        return new UserResponseDto(fan.getId(), fan.getFullName(), fan.getEmail(),
-                fan.getPhone(), fan.getRole(), fan.getStatus());
     }
 }

@@ -1,12 +1,9 @@
 package app;
 
-import auth.controller.AuthController;
 import match.dto.MatchResponseDto;
 import user.dto.LoginRequestDto;
-import user.dto.ProfileUpdateRequestDto;
 import user.dto.RegisterFanRequestDto;
 import user.dto.UserResponseDto;
-import user.enums.UserRole;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,36 +41,45 @@ public class MainView {
     }
 
     public int showFanMenu() {
-        return showAccountMenu("FAN");
+        System.out.println();
+        System.out.println("=== FAN ===");
+        System.out.println("1. View profile");
+        System.out.println("0. Logout");
+        System.out.print("Choose: ");
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public int showSellerMenu() {
-        return showAccountMenu("SELLER");
+        System.out.println();
+        System.out.println("=== SELLER ===");
+        System.out.println("1. View profile");
+        System.out.println("0. Logout");
+        System.out.print("Choose: ");
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public int showGateStaffMenu() {
-        return showAccountMenu("GATE STAFF");
+        System.out.println();
+        System.out.println("=== GATE STAFF ===");
+        System.out.println("1. View profile");
+        System.out.println("0. Logout");
+        System.out.print("Choose: ");
+        return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public int showAdminMenu() {
         System.out.println("=== ADMINISTRATOR ===");
         System.out.println("1. View profile");
-        System.out.println("2. Update profile");
-        System.out.println("3. Manage system");
+        System.out.println("2. Manage system");
         System.out.println("0. Logout");
         System.out.print("Choose: ");
         return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public int showSimulatorMenu() {
-        return showAccountMenu("SIMULATOR OPERATOR");
-    }
-
-    private int showAccountMenu(String label) {
         System.out.println();
-        System.out.println("=== " + label + " ===");
+        System.out.println("=== SIMULATOR OPERATOR ===");
         System.out.println("1. View profile");
-        System.out.println("2. Update profile");
         System.out.println("0. Logout");
         System.out.print("Choose: ");
         return Integer.parseInt(scanner.nextLine().trim());
@@ -97,14 +103,6 @@ public class MainView {
         System.out.print("Phone: ");
         String phone = scanner.nextLine();
         return new RegisterFanRequestDto(fullName, email, password, phone);
-    }
-
-    public ProfileUpdateRequestDto readProfileUpdateRequest() {
-        System.out.print("New full name: ");
-        String fullName = scanner.nextLine();
-        System.out.print("New phone: ");
-        String phone = scanner.nextLine();
-        return new ProfileUpdateRequestDto(fullName, phone);
     }
 
     public String readKeyword() {

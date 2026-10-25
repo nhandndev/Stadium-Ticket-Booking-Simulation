@@ -3,6 +3,23 @@
   <component name="ChangeListManager">
     <list default="true" id="ed48d2cf-23cb-4a8f-8886-19397743c96c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/Controller_First_Full (2).drawio" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/Controller_First_Full (2).drawio" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/admin/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/admin/controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/admin/data/DataGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/admin/data/DataGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/admin/repository/AuditLogRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/admin/repository/AuditLogRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/MainView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auth/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/auth/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/match/repository/MatchRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/match/repository/MatchRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/match/repository/MatchSeatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/match/repository/MatchSeatRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/match/repository/TicketPriceRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/match/repository/TicketPriceRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stadium/repository/SeatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stadium/repository/SeatRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stadium/repository/SectionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stadium/repository/SectionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stadium/repository/StadiumRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/stadium/repository/StadiumRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/user/repository/FanRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/repository/FanRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/user/repository/StaffRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/repository/StaffRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/user/service/FanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/user/service/FanService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

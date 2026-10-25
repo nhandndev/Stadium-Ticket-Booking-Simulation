@@ -33,35 +33,20 @@ public class AuditLogRepository extends CsvRepository<AuditLog> {
     @Override
     public AuditLog parseLine(String line) {
         String[] p = line.split(",", -1);
-        if (p.length != 7 || !valid(p[2]) || !valid(p[3]) || !valid(p[5])) {
+        if (p.length != 7) {
             throw new AppException(ErrorCode.CSV_ERROR, "Invalid audit log row");
         }
         long id = Long.parseLong(p[0]);
         long actorId = Long.parseLong(p[1]);
         long targetId = Long.parseLong(p[4]);
         LocalDateTime createdAt = LocalDateTime.parse(p[6]);
-        if (id <= 0 || actorId <= 0 || targetId <= 0) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Invalid audit log IDs");
-        }
         return new AuditLog(id, actorId, p[2], p[3], targetId, p[5], createdAt);
     }
 
     @Override
     public String formatLine(AuditLog log) {
-        if (log == null || log.getId() == null || log.getId() <= 0
-                || log.getActorId() == null || log.getActorId() <= 0
-                || log.getTargetId() == null || log.getTargetId() <= 0
-                || !valid(log.getAction()) || !valid(log.getTargetType())
-                || !valid(log.getResult()) || log.getCreatedAt() == null) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Invalid audit log");
-        }
         return log.getId() + "," + log.getActorId() + "," + log.getAction()
                 + "," + log.getTargetType() + "," + log.getTargetId() + ","
                 + log.getResult() + "," + log.getCreatedAt();
-    }
-
-    private boolean valid(String text) {
-        return text != null && !text.trim().isEmpty() && !text.contains(",")
-                && !text.contains("\"") && !text.contains("\n") && !text.contains("\r");
     }
 }
