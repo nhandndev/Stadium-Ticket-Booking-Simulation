@@ -2,9 +2,9 @@
 
 > **Sơ đồ chuẩn hiện tại:** [ClassDiagram.drawio](../Class_Diagrams/ClassDiagram.drawio) (Trang 00 đến 06).  
 > Kiến trúc triển khai: **Controller-First MVC + Service + CSV Repository**.  
-> Tiến độ mã nguồn: **Hoàn thành Chặng 1 - 7 (~65% toàn bộ hệ thống)**.
+> Demo hiện tại: **Chặng 01-09; Simulation execution còn ở chặng 10**.
 
-Bộ tài liệu này cung cấp toàn bộ kịch bản, lời thuyết minh và các câu hỏi phản biện bám sát hệ thống Use Case, sáu trang Class Diagram và 60 file mã nguồn Java đã hoàn thành trong thư mục `src/`.
+Bản demo hiện tại là [14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md](14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md): từng feature, phím nhập, kết quả và lời giải thích. Các tài liệu milestone 65% và file 13 bên dưới phản ánh giai đoạn cũ; không dùng các menu/dữ liệu cũ đó thay cho script 14.
 
 ---
 
@@ -25,13 +25,14 @@ Bộ tài liệu này cung cấp toàn bộ kịch bản, lời thuyết minh v�
 13. [**Chi tiết luồng code từ MainController đến toàn bộ dự án (Call-Stack Tracing)**](11_CHI_TIET_LUONG_CODE_FLOW.md)
 14. [**Nguyên lý hoạt động của CSV và Repository Pattern (Giải thích chi tiết cơ chế lưu trữ)**](12_NGUYEN_LY_CSV_VA_REPOSITORY.md)
 15. [**Kịch bản Demo Full Tính Năng thực chiến (Từng bước bấm phím & Lời thoại)**](13_KICH_BAN_DEMO_FULL_FEATURE.md)
+16. [**Kịch bản demo từng feature hiện tại: Admin, Guest, Fan, Seller, Gate và Refund**](14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md)
 
 ---
 
 ## Hướng dẫn sử dụng hiệu quả
 
-- **Báo cáo tiến độ Milestone (Hiện tại):** Sử dụng trực tiếp file số 10 ([10_KICH_BAN_BAO_CAO_TIEN_DO.md](10_KICH_BAN_BAO_CAO_TIEN_DO.md)) và số 11 ([09_DEMO_VA_PHAN_BIEN.md](09_DEMO_VA_PHAN_BIEN.md)).
+- **Demo hiện tại:** dùng script 14. Báo cáo milestone chặng 01-07 chỉ còn là tài liệu lịch sử tiến độ, không đại diện toàn bộ feature hiện đã code.
 - Đoạn bắt đầu bằng **Lời thuyết trình:** Là văn phong tự nhiên có thể dùng trực tiếp khi nói trước giảng viên.
 - Đoạn bắt đầu bằng **Chỉ trên sơ đồ:** Hướng dẫn thao tác trỏ chuột trực quan vào các phần tử tương ứng trên Class Diagram.
 - Đoạn bắt đầu bằng **Điểm cần nhấn mạnh:** Các luận điểm kỹ thuật quan trọng thể hiện độ sâu kiến thức OOP và Concurrency.
-- **Tính chính xác về tiến độ:** Phân định rạch ròi giữa các module đã code (`src/` - 65%) và các module mục tiêu sẽ làm ở giai đoạn tiếp theo (Stage 08 Booking, Stage 09 Seller/Gate, Stage 10 Simulation - 35%).
+- **Tính chính xác về tiến độ:** Booking, Payment, Refund, Seller và Gate đã có trong `src/`; không giới thiệu màn hình chạy Simulation như phần đã hoàn thành.

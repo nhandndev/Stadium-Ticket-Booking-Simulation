@@ -10,6 +10,10 @@ import java.util.Scanner;
 import match.dto.MatchRequestDto;
 import stadium.dto.StadiumRequestDto;
 import user.enums.UserRole;
+import user.enums.UserStatus;
+import refund.dto.RefundReviewRequestDto;
+import refund.dto.RefundResponseDto;
+import refund.model.RefundRequest;
 
 public class AdminManagementView {
     private final Scanner scanner;
@@ -20,66 +24,120 @@ public class AdminManagementView {
 
     public int showAdminMenu() {
         System.out.println("\n=== ADMINISTRATOR ===");
-        System.out.println("1 Stadium/Section/Seat | 2 Match/Pricing/Sales");
-        System.out.println("3 Fan accounts | 4 Staff accounts | 5 Audit logs");
-        System.out.println("6 System summary | 0 Back");
+        System.out.println("1. Stadium / Section / Seat\n2. Match / Pricing / Sales");
+        System.out.println("3. Fan accounts\n4. Staff accounts\n5. Audit logs");
+        System.out.println("6. System summary\n7. Review refund requests\n0. Back");
         return this.readInt("Choose: ");
     }
 
     public int showStadiumMenu() {
         System.out.println("\n=== STADIUM / SECTION / SEAT ===");
-        System.out.println("1 Create stadium | 2 List stadiums | 3 Stadium details | 4 Update stadium");
-        System.out.println("5 Delete stadium | 6 Create section | 7 List sections | 8 Section details");
-        System.out.println("9 Update section | 10 Delete section | 11 Create seat | 12 List seats");
-        System.out.println("13 Seat details | 14 Update seat | 15 Delete seat");
-        System.out.println("16 Activate seat | 17 Deactivate seat | 0 Back");
+        System.out.println("-- Stadium --\n1. Create stadium\n2. List stadiums\n3. Stadium details\n4. Update stadium\n5. Delete stadium");
+        System.out.println("-- Section --\n6. Create section\n7. List sections\n8. Section details\n9. Update section\n10. Delete section");
+        System.out.println("-- Seat --\n11. Create seat\n12. List seats\n13. Seat details\n14. Update seat\n15. Delete seat");
+        System.out.println("16. Activate seat\n17. Deactivate seat\n0. Back");
         return this.readInt("Choose: ");
     }
 
     public int showMatchMenu() {
         System.out.println("\n=== MATCH / PRICE / SALES ===");
-        System.out.println("1 Create match | 2 List matches | 3 Match details | 4 Update match");
-        System.out.println("5 Delete match | 6 Create price | 7 List prices | 8 Price details");
-        System.out.println("9 Update price | 10 Delete price | 11 Open sales | 12 Close sales");
-        System.out.println("13 Sales status | 0 Back");
+        System.out.println("-- Match --\n1. Create match\n2. List matches\n3. Match details\n4. Update match\n5. Delete match");
+        System.out.println("-- Pricing --\n6. Create price\n7. List prices\n8. Price details\n9. Update price\n10. Delete price");
+        System.out.println("-- Sales --\n11. Open sales\n12. Close sales\n13. Sales status\n0. Back");
         return this.readInt("Choose: ");
     }
 
     public int showFanManagementMenu() {
         System.out.println("\n=== FAN ACCOUNTS ===");
-        System.out.println("1 Create | 2 List | 3 Details | 4 Search");
-        System.out.println("5 Filter status | 6 Update | 7 Activate | 8 Deactivate | 9 Delete | 0 Back");
+        System.out.println("1. Create\n2. List\n3. Details\n4. Search\n5. Filter status");
+        System.out.println("6. Update\n7. Activate\n8. Deactivate\n9. Delete\n0. Back");
         return this.readInt("Choose: ");
     }
 
     public int showStaffManagementMenu() {
         System.out.println("\n=== STAFF ACCOUNTS ===");
-        System.out.println("1 Create | 2 List | 3 Details | 4 Search");
-        System.out.println("5 Filter role/status | 6 Update | 7 Activate | 8 Deactivate");
-        System.out.println("9 Assign role | 10 Change role | 11 Revoke role | 0 Back");
+        System.out.println("1. Create\n2. List\n3. Details\n4. Search\n5. Filter role/status");
+        System.out.println("6. Update\n7. Activate\n8. Deactivate\n9. Assign role\n10. Change role\n11. Revoke role\n0. Back");
         return this.readInt("Choose: ");
     }
 
     public StadiumRequestDto readStadiumRequest() {
-        return new StadiumRequestDto(this.readText("Name: "), this.readText("Address: "));
+        String name = readText("Name (Enter = Cancel): ");
+        if (name.isEmpty()) return null;
+        return new StadiumRequestDto(name, this.readText("Address: "));
     }
 
     public MatchRequestDto readMatchRequest() {
-        Long stadiumId = this.readLong("Stadium ID: ");
+        Long stadiumId = this.readLong("Stadium ID (0 = Back): ");
+        if (stadiumId == null) return null;
         String home = this.readText("Home team: ");
         String away = this.readText("Away team: ");
-        LocalDateTime time = LocalDateTime.parse(this.readText("Start yyyy-MM-ddTHH:mm: "));
+        LocalDateTime time = LocalDateTime.parse(this.readText("Kick-off yyyy-MM-ddTHH:mm (e.g. 2030-11-15T19:00): "));
         return new MatchRequestDto(stadiumId, home, away, time);
     }
 
-    public AccountRequestDto readAccountRequest() {
-        String name = this.readText("Full name: ");
+    public AccountRequestDto readAccountRequest(UserRole role, boolean create) {
+        String name = this.readText("Full name (Enter = Cancel): ");
+        if (name.isEmpty()) return null;
         String email = this.readText("Email: ");
-        String password = this.readText("Password: ");
+        String password = this.readText(create ? "Password (at least 8 characters): " : "New password (Enter = Keep current): ");
         String phone = this.readText("Phone: ");
-        String roleStr = this.readText("Role (FAN/SELLER/GATE_STAFF/ADMIN/SIMULATOR_OPERATOR): ");
-        UserRole role = roleStr.isEmpty() ? UserRole.FAN : UserRole.valueOf(roleStr.toUpperCase());
+        if (role == null && create) {
+            role = readRole(false);
+            if (role == null) return null;
+        }
         return new AccountRequestDto(name, email, password, phone, role);
+    }
+
+    public UserRole readRole(boolean allowAll) {
+        System.out.println("1 Seller | 2 Gate Staff | 3 Administrator | 4 Simulator Operator | 5 Unassigned");
+        int choice = readInt(allowAll ? "Role (0 = All): " : "Role (0 = Back): ");
+        switch (choice) {
+            case 0: return null;
+            case 1: return UserRole.SELLER;
+            case 2: return UserRole.GATE_STAFF;
+            case 3: return UserRole.ADMIN;
+            case 4: return UserRole.SIMULATOR_OPERATOR;
+            case 5: return UserRole.UNASSIGNED;
+            default: throw new IllegalArgumentException("Choose one of the displayed roles.");
+        }
+    }
+
+    public UserStatus readStatus() {
+        System.out.println("1 Active | 2 Inactive | 0 All");
+        switch (readInt("Status: ")) {
+            case 0: return null;
+            case 1: return UserStatus.ACTIVE;
+            case 2: return UserStatus.INACTIVE;
+            default: throw new IllegalArgumentException("Choose one of the displayed statuses.");
+        }
+    }
+
+    public boolean confirm(String action) {
+        while (true) {
+            String answer = readText(action + "? (y/n, Enter = No): ");
+            if (answer.isEmpty() || answer.equalsIgnoreCase("n") || answer.equals("0")) return false;
+            if (answer.equalsIgnoreCase("y")) return true;
+            displayResult("Please enter y or n.");
+        }
+    }
+
+    public int showRefundReviewMenu() {
+        System.out.println("1. Review a request | 0. Back");
+        return readInt("Choose: ");
+    }
+
+    public RefundReviewRequestDto readRefundReviewRequest(Long adminId) {
+        Long requestId = readLong("Refund request ID (0 = Back): ");
+        if (requestId == null) return null;
+        String decision = readText("Approve refund? (y/n): ");
+        if (!decision.equalsIgnoreCase("y") && !decision.equalsIgnoreCase("n")) {
+            throw new IllegalArgumentException("Enter y or n");
+        }
+        String note = readText("Review note (required, 0 = Cancel): ");
+        if (note.equals("0")) return null;
+        if (note.isEmpty()) throw new IllegalArgumentException("Review note is required.");
+        return new RefundReviewRequestDto(adminId, requestId, decision.equalsIgnoreCase("y"), note);
     }
 
     public String readText(String prompt) {
@@ -90,7 +148,10 @@ public class AdminManagementView {
     public Long readLong(String prompt) {
         System.out.print(prompt);
         String line = this.scanner.nextLine().trim();
-        return line.isEmpty() ? null : Long.parseLong(line);
+        if (line.isEmpty() || line.equals("0")) return null;
+        long id = Long.parseLong(line);
+        if (id <= 0) throw new IllegalArgumentException("ID must be positive.");
+        return id;
     }
 
     public int readInt(String prompt) {
@@ -102,7 +163,7 @@ public class AdminManagementView {
     public BigDecimal readAmount(String prompt) {
         System.out.print(prompt);
         String line = this.scanner.nextLine().trim();
-        return line.isEmpty() ? null : new BigDecimal(line);
+        return line.isEmpty() || line.equals("0") ? null : new BigDecimal(line);
     }
 
     public void displayResult(Object result) {
@@ -117,6 +178,8 @@ public class AdminManagementView {
                     System.out.println(formatItem(item));
                 }
             }
+        } else if (result instanceof Boolean) {
+            System.out.println((Boolean) result ? "Operation completed." : "No record was changed.");
         } else {
             System.out.println(formatItem(result));
         }
@@ -130,19 +193,19 @@ public class AdminManagementView {
         }
         if (item instanceof stadium.model.Section) {
             stadium.model.Section sec = (stadium.model.Section) item;
-            return sec.getId() + " | " + sec.getName() + " (Stadium ID: " + sec.getStadiumId() + ")";
+            return sec.getId() + " | " + sec.getName() + " | Stadium #" + sec.getStadiumId();
         }
         if (item instanceof stadium.model.Seat) {
             stadium.model.Seat seat = (stadium.model.Seat) item;
-            return seat.getId() + " | Row: " + seat.getRowLabel() + ", Seat: " + seat.getSeatNumber() + " | Section: " + seat.getSectionId() + " | Active: " + seat.isActive();
+            return seat.getId() + " | Row " + seat.getRowLabel() + ", Seat " + seat.getSeatNumber() + " | Section #" + seat.getSectionId() + " | Active: " + seat.isActive();
         }
         if (item instanceof match.dto.MatchResponseDto) {
             match.dto.MatchResponseDto m = (match.dto.MatchResponseDto) item;
-            return m.getId() + " | " + m.getHomeTeam() + " vs " + m.getAwayTeam() + " | Stadium: " + m.getStadiumId() + " | Time: " + m.getStartTime() + " | Sales: " + m.getSaleStatus();
+            return m.getId() + " | " + m.getHomeTeam() + " vs " + m.getAwayTeam() + " | " + m.getStadiumName() + " | " + m.getStartTime() + " | Sales: " + m.getSaleStatus();
         }
         if (item instanceof match.model.TicketPrice) {
             match.model.TicketPrice p = (match.model.TicketPrice) item;
-            return "Match: " + p.getMatchId() + " | Section: " + p.getSectionId() + " | Price: " + p.getAmount() + " VND";
+            return "Match #" + p.getMatchId() + " | Section #" + p.getSectionId() + " | Price: " + p.getAmount() + " VND";
         }
         if (item instanceof user.dto.UserResponseDto) {
             user.dto.UserResponseDto u = (user.dto.UserResponseDto) item;
@@ -156,6 +219,16 @@ public class AdminManagementView {
             admin.model.AuditLog log = (admin.model.AuditLog) item;
             return log.getId() + " | Actor #" + log.getActorId() + " | " + log.getAction() + " | Target: " + log.getTargetType() + " #" + log.getTargetId() + " | Result: " + log.getResult() + " | " + log.getCreatedAt();
         }
+        if (item instanceof RefundRequest) {
+            RefundRequest r = (RefundRequest) item;
+            return "Request #" + r.getId() + " | Booking #" + r.getBookingId()
+                    + " | Fan #" + r.getFanId() + " | " + r.getReason() + " | " + r.getStatus();
+        }
+        if (item instanceof RefundResponseDto) {
+            RefundResponseDto r = (RefundResponseDto) item;
+            return "Request #" + r.getRequestId() + " | Booking #" + r.getBookingId()
+                    + " | " + r.getStatus();
+        }
         return item.toString();
     }
 
@@ -165,6 +238,8 @@ public class AdminManagementView {
         System.out.println("Total staff: " + summary.getStaffCount());
         System.out.println("Total stadiums: " + summary.getStadiumCount());
         System.out.println("Total matches: " + summary.getMatchCount());
+        System.out.println("Total bookings: " + summary.getBookingCount());
+        System.out.println("Total tickets: " + summary.getTicketCount());
     }
 
     public void showAuditLogs(List<AuditLog> logs) {
@@ -177,4 +252,5 @@ public class AdminManagementView {
             System.out.println(formatItem(log));
         }
     }
+
 }

@@ -25,28 +25,42 @@ does not implement a business use case.
 | 04 | Match, MatchSeat, pricing and repositories | 02, 05, 06 | Implemented & Verified |
 | 05 | Guest browse and controller-first menu | 01, 03 | Implemented & Verified |
 | 06 | User/Fan/Staff authentication & profile | 01, 06 | Implemented & Verified |
-| 07 | Administrator CRUD, sales, roles, DataGenerator | 02 | Implemented & Verified (Strict UML) |
-| 08 | Fan booking, online payment, tickets, refund | 03 | Planned (~20%) |
-| 09 | Seller counter flow and Gate check-in | 03 | Planned (~8%) |
-| 10 | Isolated concurrency simulation and reporting | 04 | Planned (~5%) |
-| 11 | Cross-role integration, CSV restart, delivery | 00-06 | Planned (~2%) |
+| 07 | Administrator CRUD, sales, roles, summary/audit | 02 | Implemented; booking history guards added in 08 |
+| 08 | Fan booking, online payment, tickets, cancellation/refund | 03 | Implemented; console and CSV restart verified |
+| 09 | Seller counter flow and Gate check-in | 03 | Implemented; console and duplicate check-in verified |
+| 10 | Isolated concurrency simulation, datasets and reporting | 04 | Deferred |
+| 11 | Final cross-role integration, report and delivery | 00-06 | Not complete |
 
 ## Work sequence
 
-1. Finish Stage 05 verification with seeded `matches.csv` and
-   `match_seats.csv`; check search, filter, details and empty/invalid input.
-2. Finish Stage 06 vertically: DTO -> Auth/Fan Service -> Controller ->
-   MainView input/output -> MainController role routing. Do not create empty
-   Admin/Booking/Simulation classes just to match the final constructor.
-3. Build Stage 07 as four small features: Stadium/Section/Seat, Match/Pricing/
-   Sales, Fan/Staff/Role, Summary/Audit. `AdminController` owns the admin View.
-4. Build Stage 08 as booking inventory -> online checkout -> tickets/history
-   -> refunds -> Fan menu. Keep payment separate from the simulator.
-5. Reuse booking and ticket services for Stage 09 Seller and Gate flows.
-6. Add Stage 10 simulation on a copy of seat data. Configure and Run are
+1. Stages 01-07 provide the Console, account, stadium, match and repository foundation.
+2. Stage 08 adds Model/enum -> Repository -> DTO -> synchronized seat core ->
+   Booking/Ticket/Refund Service -> Controller -> View -> Main wiring.
+3. Stage 09 reuses those services for Seller and Gate menus. Seller cash
+   collection and ticket issuance are separate actions.
+4. Next: add Stage 10 simulation on a copy of seat data. Configure and Run are
    separate menu actions; compare four mechanisms on equivalent starting data.
-7. In Stage 11, execute one full Admin -> Guest -> Fan -> Seller -> Gate ->
+5. In Stage 11, execute one full Admin -> Guest -> Fan -> Seller -> Gate ->
    Simulator demonstration, reopen CSV and reconcile code with the diagrams.
+
+## Stage 08-09 Checklist
+
+- [x] Retain a Details/Seat Availability submenu after Guest search and filter.
+- [x] Show stadium/section names and physical seat labels beside selectable IDs.
+- [x] Create a pending booking for 1-4 unique seats and capture its price total.
+- [x] Recheck and commit all seats during payment; no seat hold/expiry is implemented.
+- [x] Record online/cash payments and booking transactions, and issue tickets without duplicates.
+- [x] Show own booking details, booking history, ticket details and ticket history.
+- [x] Cancel an unpaid pending booking; submit/view own paid refund requests.
+- [x] Let Admin approve/reject refunds; approval cancels tickets and releases seats.
+- [x] Let Seller find/create a Fan, book for that Fan, confirm received cash and issue tickets.
+- [x] Let Gate Staff validate the match/ticket and persist a one-time check-in.
+- [x] Check ownership/roles and protect referenced account, match and seat data.
+- [x] Compile 97 source files and compare their public contracts with 196 visible UML boxes.
+
+See [the exact UML changes](Class_Diagrams/CHANGES_STAGE_08_09.md).
+`SimulationController`, Simulator Views and three remaining strategies have not
+been implemented. Only the shared synchronized strategy is currently used.
 
 Each feature should end with a clean Java compilation and a focused console
 check. Commit one working feature at a time. Stage 11 also includes the report,

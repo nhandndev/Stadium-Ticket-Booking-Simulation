@@ -6,6 +6,7 @@ import match.enums.SaleStatus;
 public class MatchResponseDto {
     private Long id;
     private Long stadiumId;
+    private String stadiumName;
     private String homeTeam;
     private String awayTeam;
     private LocalDateTime startTime;
@@ -13,8 +14,14 @@ public class MatchResponseDto {
 
     public MatchResponseDto(Long id, Long stadiumId, String homeTeam, String awayTeam,
             LocalDateTime startTime, SaleStatus saleStatus) {
+        this(id, stadiumId, homeTeam, awayTeam, startTime, saleStatus, "Stadium #" + stadiumId);
+    }
+
+    public MatchResponseDto(Long id, Long stadiumId, String homeTeam, String awayTeam,
+            LocalDateTime startTime, SaleStatus saleStatus, String stadiumName) {
         this.id = id;
         this.stadiumId = stadiumId;
+        this.stadiumName = stadiumName;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.startTime = startTime;
@@ -27,6 +34,10 @@ public class MatchResponseDto {
 
     public Long getStadiumId() {
         return stadiumId;
+    }
+
+    public String getStadiumName() {
+        return stadiumName;
     }
 
     public String getHomeTeam() {

@@ -31,12 +31,18 @@ public class AuthService {
         String email = request.getEmail().trim().toLowerCase();
         Fan fan = this.fanRepository.findByEmail(email);
         Staff staff = this.staffRepository.findByEmail(email);
+        if (fan != null && staff != null) {
+            throw new AppException(ErrorCode.CSV_ERROR, "Duplicate email across account files");
+        }
         User found = fan != null ? fan : staff;
         if (found == null || !request.getPassword().equals(found.getPasswordHash())) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid email or password");
         }
         if (found.getStatus() != UserStatus.ACTIVE) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Account is inactive");
+        }
+        if (found.getRole() == UserRole.UNASSIGNED) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Staff role has not been assigned");
         }
         this.currentUser = found;
         return new UserResponseDto(found.getId(), found.getFullName(), found.getEmail(),
@@ -49,13 +55,23 @@ public class AuthService {
 
     public UserResponseDto getCurrentUser() {
         if (this.currentUser == null) return null;
+        User saved = this.currentUser instanceof Fan
+                ? fanRepository.findById(currentUser.getId())
+                : staffRepository.findById(currentUser.getId());
+        if (saved == null || saved.getStatus() != UserStatus.ACTIVE
+                || saved.getRole() == UserRole.UNASSIGNED
+                || !saved.getEmail().equalsIgnoreCase(currentUser.getEmail())) {
+            this.currentUser = null;
+            return null;
+        }
+        this.currentUser = saved;
         return new UserResponseDto(this.currentUser.getId(), this.currentUser.getFullName(),
                 this.currentUser.getEmail(), this.currentUser.getPhone(),
                 this.currentUser.getRole(), this.currentUser.getStatus());
     }
 
     public UserResponseDto updateCurrentUserProfile(ProfileUpdateRequestDto request) {
-        if (this.currentUser == null) {
+        if (this.getCurrentUser() == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Login required");
         }
         if (request == null) {
@@ -63,6 +79,11 @@ public class AuthService {
         }
         String name = request.getFullName() != null ? request.getFullName().trim() : "";
         String phone = request.getPhone() != null ? request.getPhone().trim() : "";
+        for (String value : new String[]{name, phone}) {
+            if (value.isEmpty() || value.contains(",") || value.contains("\n") || value.contains("\r")) {
+                throw new AppException(ErrorCode.INVALID_INPUT, "Name and phone are required and must fit one CSV column");
+            }
+        }
         if (this.currentUser.getRole() == UserRole.FAN) {
             Fan fan = this.fanRepository.findById(this.currentUser.getId());
             if (fan == null) {

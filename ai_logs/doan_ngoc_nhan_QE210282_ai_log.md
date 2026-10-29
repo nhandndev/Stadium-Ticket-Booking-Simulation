@@ -1552,3 +1552,53 @@ Key Takeaway on AI Literacy:
 - AI was leveraged as an efficient documentation and review co-pilot under strict human architectural supervision.
 - By continuously enforcing UML contracts, detecting hallucinations/over-engineering early, and maintaining accurate project documentation, I demonstrated that AI serves to enhance software engineering rigor rather than substitute for understanding.
 
+---
+
+## Entry 40 - Console View Logic Review And Smoke Checks
+
+Date: 2026-10-26
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Review every implemented console View from an ordinary user's perspective, smoke the workflows, and make simple fixes within the Class Diagram scope.
+
+AI contribution:
+- Reviewed and edited the console navigation and input/output code. This included AI-generated implementation changes, not only suggestions.
+- Added contextual match/customer/booking lists, readable match and seat labels, cancellation paths, payment confirmations and validation before check-in confirmation.
+- Simplified Admin role/status selection and grouped its menus. Business rules remain in Services; Views do not access CSV files.
+- Updated both canonical draw.io copies and documented exact Page/Class member changes in `docs/15_CONSOLE_VIEW_REVIEW.md`.
+
+Tool verification performed by the AI agent:
+- Compiled all project source with Java 17.
+- Ran 50 scripted CLI smoke scenarios on isolated temporary CSV folders, including successful and failed payment, empty lists, invalid input, ownership, cancellation, Seller sales, Gate check-in, and Admin approval/rejection of refunds.
+- Checked selected persisted CSV outcomes and compared 97 source classes with 196 visible class boxes. No newly introduced box overlap, invalid XML reference or member overflow was detected by the structural checks.
+- Project `data/` was not used as the smoke fixture. Existing unrelated workspace edits were left untouched.
+
+Limits and follow-up:
+- These are agent-executed smoke checks, not evidence that the student independently wrote or manually verified the changes.
+- Student review and understanding of the modified methods remain pending; the changes should be reviewed before presentation or submission.
+- Simulation execution remains planned for Stage 10. This review checked the implemented Simulator profile menu only, not concurrency experiments.
+- No framework, HTTP layer, new business Use Case, CSV schema change or separate mapper layer was introduced.
+
+---
+
+## Entry 41 - Feature-By-Feature Presentation Demo Script
+
+Date: 2026-10-28
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Create a Markdown script to demonstrate each implemented feature to the lecturer.
+
+AI contribution:
+- Read the implemented menus, application wiring, account/match/refund rules and existing CSV samples.
+- Created `docs/Thuyet_Trinh/14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md` in Vietnamese, with menu paths, sample input, expected results and short explanations.
+- Included Admin CRUD, Guest browsing, authentication/profile, Fan booking/payment/tickets, Seller cash sales, Gate check-in, refund approval/rejection, account administration and CSV persistence.
+- Added instructions for a separate temporary demo dataset, a dynamic ID worksheet, an optional failed-payment run and short/full presentation routes.
+- Indexed the new script and marked the Stage 01-07 demo as historical without replacing its content.
+
+Accuracy boundaries:
+- No Java source or project CSV data was changed for this request. The script was checked against source, not replayed end-to-end in this documentation turn.
+- Existing sample passwords are distinguished from the current minimum length for new accounts. Offline payment uses `OFFLINE_CASH`.
+- Simulation execution is explicitly unfinished. Audit logging is not claimed for every CRUD action; payment/refund are not claimed to transfer real money.
+- The student should rehearse with actual generated IDs and verify outcomes before presenting. The script is AI-assisted documentation, not proof of independent implementation.

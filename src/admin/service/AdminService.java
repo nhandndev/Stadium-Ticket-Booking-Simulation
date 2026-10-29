@@ -3,6 +3,8 @@ package admin.service;
 import admin.dto.SystemSummaryDto;
 import admin.model.AuditLog;
 import admin.repository.AuditLogRepository;
+import booking.repository.BookingRepository;
+import ticket.repository.TicketRepository;
 import java.util.List;
 import match.repository.MatchRepository;
 import stadium.repository.StadiumRepository;
@@ -15,15 +17,20 @@ public class AdminService {
     private final StadiumRepository stadiumRepository;
     private final MatchRepository matchRepository;
     private final AuditLogRepository auditLogRepository;
+    private final BookingRepository bookingRepository;
+    private final TicketRepository ticketRepository;
 
     public AdminService(FanRepository fanRepository,
                         StaffRepository staffRepository, StadiumRepository stadiumRepository,
-                        MatchRepository matchRepository, AuditLogRepository auditLogRepository) {
+                        MatchRepository matchRepository, AuditLogRepository auditLogRepository,
+                        BookingRepository bookingRepository, TicketRepository ticketRepository) {
         this.fanRepository = fanRepository;
         this.staffRepository = staffRepository;
         this.stadiumRepository = stadiumRepository;
         this.matchRepository = matchRepository;
         this.auditLogRepository = auditLogRepository;
+        this.bookingRepository = bookingRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     public SystemSummaryDto getSystemSummary() {
@@ -32,8 +39,8 @@ public class AdminService {
                 this.staffRepository.findAll().size(),
                 this.stadiumRepository.findAll().size(),
                 this.matchRepository.findAll().size(),
-                0,
-                0
+                this.bookingRepository.findAll().size(),
+                this.ticketRepository.findAll().size()
         );
     }
 

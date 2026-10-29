@@ -96,23 +96,29 @@ java -cp out app.Main
 
 ---
 
-### ACT 1: DEMO TÍNH NĂNG KHÁCH VÃNG LAI (GUEST BROWSING)
-> **Mục tiêu:** Chứng minh người dùng chưa có tài khoản vẫn có thể tìm kiếm trận đấu, xem lịch thi đấu và xem sơ đồ ghế trống theo thời gian thực.
+### ACT 1: DEMO TÍNH NĂNG KHÁCH VÃNG LAI (GUEST BROWSING & SEAT MAP)
+> **Mục tiêu:** Chứng minh người dùng chưa có tài khoản vẫn có thể tìm kiếm trận đấu, lọc lịch thi đấu, và ngay tại kết quả tìm kiếm có thể bấm xem chi tiết trận đấu hoặc xem trực tiếp sơ đồ ghế trống theo thời gian thực mà không cần gõ lại từ đầu.
 
 #### Các bước bấm phím:
 1. Tại Main Menu: Nhập **`1`** (Browse As Guest).
-2. Tại Guest Menu: Nhập **`1`** (Search matches) -> Nhập từ khóa: **`Vietnam`**.
-   * *Kết quả:* Hiển thị 2 trận đấu của đội tuyển Việt Nam (Match 1 vs Thailand, Match 2 vs Indonesia).
-3. Tại Guest Menu: Nhập **`2`** (Filter matches / list all) -> Nhấn **`Enter`** (bỏ trống Stadium ID) -> Nhấn **`Enter`** (bỏ trống Ngày).
-   * *Kết quả:* Hiển thị tất cả 3 trận đấu có trong hệ thống.
-4. Tại Guest Menu: Nhập **`3`** (View match details) -> Nhập Match ID: **`1`**.
-   * *Kết quả:* Xem chi tiết trận Vietnam vs Thailand, Stadium 1, Trạng thái: OPEN.
-5. Tại Guest Menu: Nhập **`4`** (View seat availability) -> Nhập Match ID: **`1`**.
-   * *Kết quả:* Hiển thị danh sách 20 ghế của Match 1 với trạng thái `AVAILABLE`.
-6. Nhập **`0`** để quay lại Main Menu.
+2. Tại Guest Menu: Nhập **`1`** (Search matches by team keyword) -> Nhập từ khóa: **`Viet`**.
+   * *Kết quả:* Hiển thị bảng lịch thi đấu đẹp mắt với ngày giờ định dạng chuẩn (`15/11/2026 19:00`):
+     - Match 1: Vietnam vs Thailand (OPEN)
+     - Match 2: Vietnam vs Indonesia (OPEN)
+   * *Ngay dưới kết quả, hệ thống hiển thị Sub-Action Menu để thao tác trực tiếp:*
+     - Nhập **`1`** (View match details) -> Nhập Match ID: **`1`** -> Xem chi tiết trận đấu với tên sân rõ ràng: `My Dinh National Stadium (Le Duc Tho - Hanoi) [ID: 1]`.
+     - Tiếp tục nhập **`2`** (View seat availability) -> Nhập Match ID: **`1`** -> Hiển thị ma trận 20 ghế kèm tên khán đài trực quan: `Stand A VIP (Sec 1)`, `Stand B (Sec 2)` với trạng thái `AVAILABLE`.
+     - Nhập **`0`** để quay lại Guest Menu.
+3. Tại Guest Menu: Nhập **`2`** (Filter matches / List all schedule):
+   * Hệ thống gợi ý danh sách sân: `Available Stadiums: [1] My Dinh National Stadium | [2] Hang Day Stadium`.
+   * Nhấn **`Enter`** (bỏ trống Stadium ID để chọn tất cả sân).
+   * Nhấn **`Enter`** (bỏ trống Ngày để chọn tất cả ngày).
+   * *Kết quả:* Hiển thị trọn bộ 3 trận đấu trong hệ thống kèm Sub-Action Menu cho phép tra cứu nhanh bất kỳ trận nào.
+   * Nhập **`0`** để quay lại Guest Menu.
+4. Nhập **`0`** để quay lại Main Menu.
 
 🗣️ **Lời thoại thuyết minh:**
-> *"Kính thưa Thầy/Cô, đầu tiên em xin phép demo phân hệ Khách vãng lai. Hệ thống cho phép khán giả chưa đăng nhập có thể tra cứu nhanh các trận cầu theo từ khóa như 'Vietnam', lọc theo ngày giờ hoặc sân vận động. Đặc biệt, chức năng số 4 cho phép xem trực quan sơ đồ 20 ghế của trận đấu, toàn bộ ghế hiện tại đều đang ở trạng thái AVAILABLE với số phiên bản version = 0, sẵn sàng cho việc đặt chỗ."*
+> *"Kính thưa Thầy/Cô, đầu tiên em xin phép demo phân hệ Khách vãng lai (Guest Browsing). Giao diện Console đã được thiết kế lại theo dạng bảng và thẻ thông tin trực quan, ngày giờ được format chuẩn dd/MM/yyyy. Đặc biệt, khi khán giả tìm kiếm trận đấu (ví dụ từ khóa 'Viet') hoặc lọc lịch thi đấu, hệ thống không bắt người dùng phải quay lại menu chính mà cung cấp ngay Action Menu ngữ cảnh: cho phép nhập Match ID để xem chi tiết sân vận động đầy đủ tên địa chỉ, hoặc xem ngay ma trận ghế trống hiển thị rõ từng khán đài như 'Stand A VIP' hay 'Stand B'. Điều này giúp trải nghiệm tra cứu cực kỳ mượt mà và thân thiện."*
 
 ---
 

@@ -1,0 +1,5 @@
+1,Administrator,admin@stadium.com,admin123,0900000001,ADMIN,ACTIVE
+2,Seller Nguyen,seller1@stadium.com,seller123,0900000002,SELLER,ACTIVE
+3,Seller Tran,seller2@stadium.com,seller123,0900000003,SELLER,ACTIVE
+4,Gate Staff Le,gate1@stadium.com,gate123,0900000004,GATE_STAFF,ACTIVE
+5,Simulator Operator,sim@stadium.com,sim123,0900000005,SIMULATOR_OPERATOR,ACTIVE
