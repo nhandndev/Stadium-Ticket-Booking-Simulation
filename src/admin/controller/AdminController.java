@@ -65,11 +65,9 @@ public class AdminController {
                     case 0: return;
                     case 1: runStadiumMenu(); break;
                     case 2: runMatchMenu(); break;
-                    case 3: runAccountMenu(false); break;
-                    case 4: runAccountMenu(true); break;
-                    case 5: adminManagementView.showAuditLogs(getAuditLogs()); break;
-                    case 6: adminManagementView.showSystemSummary(getSystemSummary()); break;
-                    case 7: runRefundReviewMenu(); break;
+                    case 3: runAccountsMenu(); break;
+                    case 4: runRefundReviewMenu(); break;
+                    case 5: runReportsMenu(); break;
                     default: adminManagementView.displayResult("Invalid choice.");
                 }
             } catch (NumberFormatException e) {
@@ -84,12 +82,29 @@ public class AdminController {
         while (true) {
             requireAdmin();
             try {
-                int choice = adminManagementView.showStadiumMenu();
-                if (choice == 0) return;
-                if (choice < 1 || choice > 17) {
+                int group = adminManagementView.showStadiumMenu();
+                if (group == 0) return;
+                if (group >= 1 && group <= 3) runVenueActions(group);
+                else adminManagementView.displayResult("Invalid choice.");
+            } catch (NumberFormatException e) {
+                adminManagementView.displayResult("Please enter a valid number.");
+            } catch (AppException | IllegalArgumentException e) {
+                adminManagementView.displayResult(e.getMessage());
+            }
+        }
+    }
+
+    private void runVenueActions(int group) {
+        while (true) {
+            requireAdmin();
+            try {
+                int action = adminManagementView.showVenueActionsMenu(group);
+                if (action == 0) return;
+                if (action < 1 || action > (group == 3 ? 7 : 5)) {
                     adminManagementView.displayResult("Invalid choice.");
                     continue;
                 }
+                int choice = action + (group - 1) * 5;
                 if (choice == 1) {
                     stadium.dto.StadiumRequestDto request = adminManagementView.readStadiumRequest();
                     if (request != null) adminManagementView.displayResult(stadiumController.createStadium(request));
@@ -170,12 +185,29 @@ public class AdminController {
         while (true) {
             requireAdmin();
             try {
-                int choice = adminManagementView.showMatchMenu();
-                if (choice == 0) return;
-                if (choice < 1 || choice > 13) {
+                int group = adminManagementView.showMatchMenu();
+                if (group == 0) return;
+                if (group >= 1 && group <= 3) runMatchActions(group);
+                else adminManagementView.displayResult("Invalid choice.");
+            } catch (NumberFormatException e) {
+                adminManagementView.displayResult("Please enter a valid number.");
+            } catch (AppException | IllegalArgumentException e) {
+                adminManagementView.displayResult(e.getMessage());
+            }
+        }
+    }
+
+    private void runMatchActions(int group) {
+        while (true) {
+            requireAdmin();
+            try {
+                int action = adminManagementView.showMatchActionsMenu(group);
+                if (action == 0) return;
+                if (action < 1 || action > (group == 3 ? 3 : 5)) {
                     adminManagementView.displayResult("Invalid choice.");
                     continue;
                 }
+                int choice = action + (group - 1) * 5;
                 if (choice == 1 || choice == 4) {
                     adminManagementView.displayResult(stadiumController.getStadiums());
                 }
@@ -235,14 +267,81 @@ public class AdminController {
         }
     }
 
+    private void runAccountsMenu() {
+        while (true) {
+            requireAdmin();
+            try {
+                int choice = adminManagementView.showAccountsMenu();
+                if (choice == 0) return;
+                if (choice == 1 || choice == 2) runAccountMenu(choice == 2);
+                else adminManagementView.displayResult("Invalid choice.");
+            } catch (NumberFormatException e) {
+                adminManagementView.displayResult("Please enter a valid number.");
+            } catch (AppException | IllegalArgumentException e) {
+                adminManagementView.displayResult(e.getMessage());
+            }
+        }
+    }
+
+    private void runReportsMenu() {
+        while (true) {
+            requireAdmin();
+            try {
+                switch (adminManagementView.showReportsMenu()) {
+                    case 0: return;
+                    case 1: adminManagementView.showSystemSummary(getSystemSummary()); break;
+                    case 2: adminManagementView.showAuditLogs(getAuditLogs()); break;
+                    default: adminManagementView.displayResult("Invalid choice.");
+                }
+            } catch (NumberFormatException e) {
+                adminManagementView.displayResult("Please enter a valid number.");
+            } catch (AppException | IllegalArgumentException e) {
+                adminManagementView.displayResult(e.getMessage());
+            }
+        }
+    }
+
+    private void runStaffRoles() {
+        while (true) {
+            requireAdmin();
+            try {
+                int choice = adminManagementView.showStaffRoleMenu();
+                if (choice == 0) return;
+                if (choice < 1 || choice > 3) {
+                    adminManagementView.displayResult("Invalid choice.");
+                    continue;
+                }
+                adminManagementView.displayResult(accountAdminController.getStaffs());
+                Long id = adminManagementView.readLong("Staff ID (0 = Back): ");
+                if (id == null) continue;
+                if (choice == 3) {
+                    if (adminManagementView.confirm("Revoke role from staff #" + id))
+                        adminManagementView.displayResult(accountAdminController.revokeRole(id));
+                } else {
+                    UserRole role = adminManagementView.readRole(false);
+                    if (role != null) adminManagementView.displayResult(choice == 1
+                            ? accountAdminController.assignRole(id, role) : accountAdminController.changeRole(id, role));
+                }
+            } catch (NumberFormatException e) {
+                adminManagementView.displayResult("Please enter a valid number.");
+            } catch (AppException | IllegalArgumentException e) {
+                adminManagementView.displayResult(e.getMessage());
+            }
+        }
+    }
+
     private void runAccountMenu(boolean staff) {
         while (true) {
             requireAdmin();
             try {
                 int choice = staff ? adminManagementView.showStaffManagementMenu() : adminManagementView.showFanManagementMenu();
                 if (choice == 0) return;
-                if (choice < 1 || choice > (staff ? 11 : 9)) {
+                if (choice < 1 || choice > 9) {
                     adminManagementView.displayResult("Invalid choice.");
+                    continue;
+                }
+                if (staff && choice == 9) {
+                    runStaffRoles();
                     continue;
                 }
                 if (choice == 1) {
@@ -284,19 +383,8 @@ public class AdminController {
                                     : accountAdminController.deactivateFan(id));
                         break;
                     case 9:
-                        if (!staff) {
-                            if (adminManagementView.confirm("Delete fan #" + id))
-                                adminManagementView.displayResult(accountAdminController.deleteFan(id));
-                            break;
-                        }
-                    case 10:
-                        UserRole role = adminManagementView.readRole(false);
-                        if (role != null) adminManagementView.displayResult(choice == 9
-                                ? accountAdminController.assignRole(id, role) : accountAdminController.changeRole(id, role));
-                        break;
-                    case 11:
-                        if (adminManagementView.confirm("Revoke role from staff #" + id))
-                            adminManagementView.displayResult(accountAdminController.revokeRole(id));
+                        if (adminManagementView.confirm("Delete fan #" + id))
+                            adminManagementView.displayResult(accountAdminController.deleteFan(id));
                         break;
                     default: break;
                 }

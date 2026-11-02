@@ -68,7 +68,32 @@ public class BookingController {
         while (true) {
             UserResponseDto fan = requireRole(UserRole.FAN);
             try {
-                int choice = bookingView.showBookingMenu();
+                int group = bookingView.showBookingMenu();
+                if (group == 0) return;
+                if (group == 4) runRefundMenu(fan.getId());
+                else if (group >= 1 && group <= 3) runFanBookingActions(group);
+                else bookingView.displayMessage("Invalid choice.");
+            } catch (NumberFormatException e) {
+                bookingView.displayMessage("Please enter a valid number.");
+            } catch (AppException | IllegalArgumentException e) {
+                bookingView.displayMessage(e.getMessage());
+            }
+        }
+    }
+
+    private void runFanBookingActions(int group) {
+        while (true) {
+            UserResponseDto fan = requireRole(UserRole.FAN);
+            try {
+                int action = bookingView.showBookingActionsMenu(group);
+                if (action == 0) return;
+                if (action < 1 || action > (group == 2 ? 3 : 2)) {
+                    bookingView.displayMessage("Invalid choice.");
+                    continue;
+                }
+                int choice = action;
+                if (group == 2) choice = action == 1 ? 4 : action == 2 ? 8 : 3;
+                if (group == 3) choice = action + 4;
                 switch (choice) {
                     case 1:
                     case 2:
@@ -116,9 +141,6 @@ public class BookingController {
                         if (ticketId != null) {
                             bookingView.displayTicketDetails(ticketController.getTicketDetails(ticketId));
                         }
-                        break;
-                    case 7:
-                        runRefundMenu(fan.getId());
                         break;
                     case 8:
                         List<BookingResponseDto> bookings = getMyBookings(fan.getId());
@@ -173,7 +195,7 @@ public class BookingController {
     private void payBooking(BookingResponseDto booking) {
         PaymentRequestDto payment = bookingView.readPaymentRequest(booking);
         if (payment == null) {
-            bookingView.displayMessage("Not paid. This booking remains pending; use Pay pending booking later.");
+            bookingView.displayMessage("Not paid. This booking remains pending; open My bookings and payments > Pay pending booking later.");
             return;
         }
         PaymentResponseDto result = makeOnlinePayment(payment);
@@ -235,9 +257,33 @@ public class BookingController {
 
     public void runSellerMenu() {
         while (true) {
+            requireRole(UserRole.SELLER);
+            try {
+                int group = sellerView.showSellerMenu();
+                if (group == 0) return;
+                if (group >= 1 && group <= 3) runSellerActions(group);
+                else sellerView.displayMessage("Invalid choice.");
+            } catch (NumberFormatException e) {
+                sellerView.displayMessage("Please enter a valid number.");
+            } catch (AppException | IllegalArgumentException e) {
+                sellerView.displayMessage(e.getMessage());
+            }
+        }
+    }
+
+    private void runSellerActions(int group) {
+        while (true) {
             UserResponseDto seller = requireRole(UserRole.SELLER);
             try {
-                int choice = sellerView.showSellerMenu();
+                int action = sellerView.showSellerActionsMenu(group);
+                if (action == 0) return;
+                if (action < 1 || action > (group == 2 ? 3 : 2)) {
+                    sellerView.displayMessage("Invalid choice.");
+                    continue;
+                }
+                int choice = action;
+                if (group == 2) choice = action == 3 ? 7 : action + 2;
+                if (group == 3) choice = action + 4;
                 switch (choice) {
                     case 1:
                         String keyword = sellerView.readFanKeyword();

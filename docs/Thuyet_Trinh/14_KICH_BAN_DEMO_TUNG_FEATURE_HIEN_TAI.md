@@ -104,526 +104,386 @@ Với dữ liệu hiện tại chưa thay đổi, sân mới thường có ID `3
 - **Nói thêm:** “Controller điều phối màn hình và gọi Service. View chỉ nhập/xuất; Service xử lý nghiệp vụ; Repository đọc/ghi CSV. Hôm nay em demo phần đã chạy được, kể cả các tình huống nhập sai và huỷ thao tác.”
 - **Giới hạn:** “Thanh toán và hoàn tiền là mô phỏng, không có chuyển tiền thật. Phần benchmark bốn cơ chế concurrency còn ở chặng 10.”
 
-## 4. Administrator: tạo dữ liệu và demo CRUD
+## 4. Quy tắc menu mới
 
-### 4.1. Đăng nhập và phân biệt hai menu Admin
+- Cập nhật ngày 01/11/2026: mỗi nhóm nghiệp vụ có submenu riêng; không dùng số menu của bản cũ.
+- `0` quay về đúng một menu cha. Từ màn hình nghiệp vụ phải về dashboard trước khi chọn Logout.
+- Thao tác xong hoặc nhập sai vẫn ở submenu hiện tại; đọc tiêu đề để biết vị trí.
+- Các đường dẫn dưới đây tính từ **menu gốc được ghi trong từng mục**. Giữa hai dòng trong bảng, bấm `0` đủ số cấp để quay lại gốc đó.
+- Ví dụ: `1 > 3 > 7` tại Admin Operations nghĩa là Venues -> Seats -> Deactivate, không phải nhập liên tiếp ở ô ID.
+- Form, trường nhập và nghiệp vụ không đổi; chỉ cách nhóm và số menu thay đổi.
 
-1. Main Menu: chọn `3. Login As Staff`.
-2. Nhập tài khoản Admin ở mục 2.2.
-3. Tại dashboard Admin: chọn `1. View profile` để cho thấy role `ADMIN`.
-4. Chọn `2. Manage system operations` để vào menu nghiệp vụ.
+## 5. Admin: chuẩn bị sân, ghế và trận demo
 
-- **Kết quả:** Có các nhóm `1` sân/khán đài/ghế, `2` trận/giá/mở bán, `3` Fan, `4` Staff, `5` audit, `6` summary, `7` refund.
-- **Nói với thầy:** “Sau xác thực, hệ thống lấy role trong tài khoản để chọn menu. Người dùng không tự chọn mình là Admin.”
+### 5.1. Vào đúng menu gốc
 
-### 4.2. Stadium: tạo, danh sách, chi tiết, cập nhật
+- Main `3` -> login Admin -> dashboard `2. Manage system operations`.
+- Gốc Admin Operations có: `1 Venues`, `2 Matches/Pricing/Sales`, `3 Accounts/Roles`, `4 Refund reviews`, `5 Reports/Audit`.
+- **Nói:** “Em chia quản trị theo đối tượng quản lý, thay vì bắt người dùng đọc một danh sách 17 thao tác.”
+- Mọi đường dẫn trong mục 5 tính từ **Admin Operations**.
 
-Từ menu nghiệp vụ Admin chọn `1. Stadium / Section / Seat`.
+### 5.2. Stadium: đủ CRUD
 
-| Feature | Thao tác tại menu này | Kết quả và lời giải thích |
+| Feature | Đường dẫn | Nhập và điều cần chỉ |
 | --- | --- | --- |
-| Create Stadium | Chọn `1`; name `Demo Presentation Stadium`; address `Hanoi Demo` | Sân được tạo; ghi ID `S`. “ID được sinh khi lưu.” |
-| View Stadium List | Chọn `2` | Tìm dòng sân vừa tạo. “Không cần nhớ ID từ trước.” |
-| View Stadium Details | Chọn `3`; ID `S` | Hiện tên và địa chỉ. |
-| Update Stadium | Chọn `4`; ID `S`; name `Demo Presentation Stadium`; address `Hanoi Presentation Area` | Xem lại bằng `3`, ID `S`. “Cập nhật được lưu xuống CSV.” |
+| Create | `1 > 1 > 1` | Name `Demo Presentation Stadium`, address `Hanoi Demo`; ghi ID `S`. |
+| List | `1 > 1 > 2` | Tìm sân vừa tạo trong danh sách. |
+| Details | `1 > 1 > 3` | Nhập `S`; xem tên và địa chỉ. |
+| Update | `1 > 1 > 4` | Nhập `S`, tên giữ nguyên, address `Hanoi Presentation Area`. |
+| Delete | `1 > 1 > 5` | Chỉ xoá sân phụ chưa có khán đài/trận, xác nhận `y`; không xoá S. |
 
-### 4.3. Section: tạo, danh sách, chi tiết, cập nhật
+- **Nói:** “Danh sách và chi tiết giúp Admin chọn đúng đối tượng. Xoá phải xác nhận, và không được xoá sân còn dữ liệu phụ thuộc.”
 
-Vẫn tại menu sân/khán đài/ghế:
+### 5.3. Section: đủ CRUD
 
-| Feature | Thao tác | Kết quả và lời giải thích |
+| Feature | Đường dẫn | Nhập và điều cần chỉ |
 | --- | --- | --- |
-| Create Section | `6`; Stadium ID `S`; name `Demo Stand` | Ghi Section ID `K`. “Khán đài thuộc một sân cụ thể.” |
-| View Sections by Stadium | `7`; Stadium ID `S` | Chỉ ra khán đài thuộc sân demo. |
-| View Section Details | `8`; Section ID `K` | Hiện ID sân cha. |
-| Update Section | `9`; Section ID `K`; name `Demo Stand Updated` | Dùng tên mới này xuyên suốt phần vé sau đó. |
+| Create | `1 > 2 > 1` | Sân `S`, name `Demo Stand`; ghi `K`. |
+| List by stadium | `1 > 2 > 2` | Sân `S`; chỉ ra khán đài thuộc sân này. |
+| Details | `1 > 2 > 3` | Section ID `K`; có Stadium ID. |
+| Update | `1 > 2 > 4` | `K`, name `Demo Stand Updated`. |
+| Delete | `1 > 2 > 5` | Dùng khán đài phụ không có ghế/giá; xác nhận `y`. |
 
-### 4.4. Seat: tạo tám ghế, xem và cập nhật
+- **Nói:** “Section thuộc Stadium, nhưng giá vé lại phụ thuộc cả Section và Match.”
 
-1. Chọn `11. Create seat`.
-2. Section ID nhập `K`; row label nhập `A`; seat number nhập `1`.
-3. Ghi Seat ID `A1` từ kết quả.
-4. Lặp lại chức năng `11` cho seat number `2` đến `8`, cùng khán đài `K` và row `A`.
-5. Ghi đủ tám Seat ID vào phiếu; đừng nhầm seat number với Seat ID.
+### 5.4. Seat: tạo tám ghế và demo quản lý
 
-| Feature | Thao tác tiếp theo | Kết quả và lời giải thích |
+1. Từ Admin Operations đi `1 > 3 > 1`.
+2. Section ID `K`, row `A`, seat number `1`; ghi Seat ID A1.
+3. Vẫn trong submenu Seats, chọn `1` tiếp cho số ghế `2` đến `8`.
+4. Ghi đủ Seat ID A1-A8. Đó là ID số, không phải nhãn ghế.
+5. Về Admin Operations trước khi dùng đường dẫn của dòng khác.
+
+| Feature | Đường dẫn | Nhập và kết quả |
 | --- | --- | --- |
-| View Seats by Section | `12`; Section ID `K` | Hiện đủ tám ghế A1-A8. |
-| View Seat Details | `13`; Seat ID `A8` | Hiện row, số ghế, khán đài, trạng thái hoạt động. |
-| Update Seat | `14`; Seat ID `A8`; row `A`; number `80` | Ghế đổi thành A80; làm lại `14` để trả về row `A`, number `8` trước khi bán vé. |
-| Deactivate Seat | `17`; Seat ID `A8`; xác nhận `y` | Dùng `13` xem `Active: false`. “Ghế bảo trì không được đưa vào bán như ghế đang hoạt động.” |
-| Activate Seat | `16`; Seat ID `A8` | Xem lại `Active: true`. Khôi phục trước khi mở bán. |
+| List seats | `1 > 3 > 2` | `K`; đủ tám ghế A1-A8. |
+| Seat details | `1 > 3 > 3` | Seat ID A8; thấy row, số ghế, khán đài, active. |
+| Update | `1 > 3 > 4` | A8, row `A`, number `80`; làm lại để trả number `8` trước khi bán. |
+| Deactivate | `1 > 3 > 7` | A8, `y`; xem Active false. |
+| Activate | `1 > 3 > 6` | A8; trả về Active true trước mở bán. |
+| Delete | `1 > 3 > 5` | Tạo một ghế phụ row X trước khi có inventory; xoá bằng ID ghế phụ, `y`. |
 
-- **Nói với thầy:** “Seat là ghế vật lý. Khi mở bán, MatchSeat giữ trạng thái ghế của từng trận. Cùng một ghế vật lý có thể được bán ở hai trận khác nhau.”
-- Không đổi vị trí hoặc xoá tám ghế chính sau khi đã có inventory cho trận.
+- **Nói:** “Seat là ghế vật lý, MatchSeat là tình trạng ghế ở từng trận. Bảo trì ghế khác với bán ghế cho một trận.”
+- Không sửa vị trí/xoá tám ghế chính sau khi đã mở bán.
 
-### 4.5. Demo xoá Seat, Section, Stadium bằng dữ liệu phụ
+### 5.5. Thử chặn xoá cha trước con
 
-Không xoá sân `S`, khán đài `K` hoặc tám ghế chính.
+- Tạo sân phụ SX qua `1 > 1 > 1`, tên `Delete Demo Stadium`, address `Temporary`.
+- Tạo khán đài KX trong SX qua `1 > 2 > 1`; tạo ghế AX trong KX qua `1 > 3 > 1`.
+- Thử `1 > 1 > 5`, SX, `y`: bị chặn vì còn khán đài.
+- Thử `1 > 2 > 5`, KX, `y`: bị chặn vì còn ghế.
+- Xoá đúng thứ tự: `1 > 3 > 5` AX -> `1 > 2 > 5` KX -> `1 > 1 > 5` SX.
+- Mỗi lần quay lại Admin Operations trước đường dẫn tiếp theo.
+- **Nói:** “Hệ thống không xoá cha rồi để dữ liệu con mồ côi.”
 
-1. Tạo thêm một sân `Delete Demo Stadium`, address `Temporary`; ghi ID `SX`.
-2. Chọn `6`, sân `SX`, name `Delete Demo Section`; ghi ID `KX`.
-3. Chọn `11`, khán đài `KX`, row `X`, number `1`; ghi ID `AX`.
-4. **Chặn xoá cha còn con:** chọn `5`, Stadium ID `SX`, xác nhận `y`. Kết quả: yêu cầu xoá khán đài trước.
-5. Chọn `10`, Section ID `KX`, `y`. Kết quả: yêu cầu xoá ghế trước.
-6. **Delete Seat:** chọn `15`, Seat ID `AX`, thử `n` trước; xem lại bằng `13` để chứng minh chưa xoá.
-7. Chọn `15`, Seat ID `AX`, lần này `y`: xoá thành công.
-8. **Delete Section:** chọn `10`, Section ID `KX`, `y`: xoá thành công.
-9. **Delete Stadium:** chọn `5`, Stadium ID `SX`, `y`: xoá thành công.
+### 5.6. Match: đủ CRUD trước khi có giá và inventory
 
-- **Nói với thầy:** “Xoá đi từ ghế lên khán đài rồi tới sân. Hệ thống không cho xoá cha làm dữ liệu con mồ côi, và có xác nhận trước thao tác xoá.”
-- Chọn `0` để về menu nghiệp vụ Admin.
-
-### 4.6. Match: tạo, danh sách, chi tiết, cập nhật
-
-Từ menu nghiệp vụ Admin chọn `2. Match / Pricing / Sales`.
-
-| Feature | Thao tác | Kết quả |
+| Feature | Đường dẫn | Nhập và kết quả |
 | --- | --- | --- |
-| Create Match | `1`; Stadium ID `S`; home `Demo Red`; away `Demo Blue`; kick-off `2030-11-15T19:00` | Ghi Match ID `M`; trận mới `CLOSED`. Nếu ngày này đã qua, thay bằng một ngày tương lai. |
-| View Match List | `2` | Có trận demo trong danh sách. |
-| View Match Details | `3`; Match ID `M` | Kiểm tra sân, hai đội, giờ và trạng thái. |
-| Update Match | `4`; ID `M`; Stadium ID `S`; home `Demo Red`; away `Demo Blue`; kick-off `2030-11-15T19:30` | Cập nhật lúc trận chưa có giá/inventory/booking. |
+| Create | `2 > 1 > 1` | Sân S; home `Demo Red`; away `Demo Blue`; time `2030-11-15T19:00`; ghi M. |
+| List | `2 > 1 > 2` | Có M, ban đầu CLOSED. |
+| Details | `2 > 1 > 3` | M; kiểm tra sân và hai đội. |
+| Update | `2 > 1 > 4` | M; S; hai đội giữ nguyên; time `2030-11-15T19:30`. |
+| Delete | `2 > 1 > 5` | Tạo trận phụ MX bằng Create, chưa mở bán/chưa booking; nhập MX và `y`. Không xoá M. |
 
-- **Nói với thầy:** “Nhóm giới hạn chỉnh lịch khi trận đã có dữ liệu liên quan để tránh thay đổi thông tin của vé đã bán.”
+- Nếu ngày mẫu đã qua, chọn ngày tương lai.
+- **Nói:** “Chỉnh lịch trước khi có giá, inventory và lịch sử booking; không tuỳ tiện đổi thông tin trận đã có vé liên quan.”
 
-### 4.7. Pricing: đủ tạo, xem, cập nhật và xoá
+### 5.7. Ticket pricing: đủ CRUD
 
-Vẫn tại menu trận/giá/mở bán, khi `M` còn `CLOSED`:
-
-1. **Create Ticket Price:** `6`; Match ID `M`; Section ID `K`; price `250000`.
-2. **View Prices by Match:** `7`; Match ID `M`.
-3. **View Price Details:** `8`; Match ID `M`; Section ID `K`.
-4. **Update Ticket Price:** `9`; Match ID `M`; Section ID `K`; new price `260000`.
-5. **Delete Ticket Price:** `10`; Match ID `M`; Section ID `K`; xác nhận `y`.
-6. Xem lại bằng `7`, `M`: bảng giá trận demo rỗng.
-7. **Tạo lại giá bắt buộc cho phần mua vé:** `6`; `M`; `K`; `250000`.
-
-- **Kết quả:** Giá cuối cùng là `250000 VND` cho khán đài `K` của trận `M`.
-- **Nói với thầy:** “Giá theo cặp trận và khán đài, không phải một giá cố định cho tất cả trận.”
-
-### 4.8. Sales: mở bán, đóng bán, xem trạng thái
-
-1. **View Sales Status:** `13`; Match ID `M`: ban đầu `CLOSED`.
-2. **Open Ticket Sales:** `11`; Match ID `M`: kết quả `OPEN` và có inventory cho tám ghế đang hoạt động.
-3. **Close Ticket Sales:** `12`; Match ID `M`; xác nhận `y`: kết quả `CLOSED`.
-4. Chọn `13`, `M`: chứng minh đã đóng.
-5. Chọn `11`, `M`: **mở lại để Fan/Seller mua ở phần sau**.
-6. Thử `9`, `M`, `K`, giá `270000` khi đang mở bán: bị từ chối đổi giá.
-
-- **Nói với thầy:** “Phải có giá cho khán đài có ghế hoạt động trước khi mở bán. Đang mở bán thì không được tự thay giá.”
-
-### 4.9. Delete Match bằng trận phụ
-
-1. `1`; sân `S`; home `Delete Red`; away `Delete Blue`; kick-off `2030-12-01T19:00`; ghi ID `MX`.
-2. `5`; Match ID `MX`; thử `n` để huỷ.
-3. `5`; Match ID `MX`; xác nhận `y`: xoá trận phụ thành công.
-4. Không xoá trận `M` dùng để bán vé. Trận có booking history sẽ không được xoá.
-5. `0` về menu nghiệp vụ, `0` về dashboard, `0` đăng xuất về Main Menu.
-
-## 5. Guest: từng chức năng tra cứu
-
-Tại Main Menu chọn `1. Browse As Guest`.
-
-### 5.1. Search Matches
-
-- **Thao tác:** chọn `1`; keyword `Demo Red`.
-- **Kết quả:** Có trận `M`, giờ đấu, sân và trạng thái `OPEN`.
-- **Nói với thầy:** “Guest tìm theo tên đội mà chưa cần đăng nhập.”
-
-### 5.2. View Match Details từ kết quả
-
-- **Thao tác:** ngay dưới kết quả, chọn `1`; Match ID `M`.
-- **Kết quả:** Hiện chi tiết trận; vẫn ở menu thao tác của kết quả.
-- **Nói với thầy:** “Tìm thấy trận xong có thể mở chi tiết ngay, không phải tìm lại.”
-
-### 5.3. View Seat Availability từ kết quả
-
-- **Thao tác:** trong menu kết quả chọn `2`; Match ID `M`.
-- **Kết quả:** Có Seat ID, nhãn A1-A8, tên khán đài, giá `250000`, trạng thái `AVAILABLE`.
-- **Nói với thầy:** “Khách biết khu vực và giá trước khi quyết định đăng ký mua. Bảng hiện tại không hiển thị version và không có bước HOLD trong checkout.”
-- Chọn `0` về menu Guest.
-
-### 5.4. Filter Matches và List All
-
-1. Chọn `2`; Stadium ID `S`; date `2030-11-15`: lọc ra trận demo, rồi `0` khỏi menu kết quả.
-2. Chọn `2`; Stadium ID để trống; date để trống: xem toàn bộ lịch, rồi `0` khỏi kết quả.
-3. Chọn `2`; Stadium ID `S`; date `abc`: thông báo đúng định dạng ngày, không thoát chương trình.
-
-- **Nói với thầy:** “Có thể lọc theo sân và ngày; bỏ trống là không áp điều kiện đó.”
-
-### 5.5. Hai lối tra cứu trực tiếp bằng Match ID
-
-- **View Match Details:** tại Guest chọn `3`, rồi `M`.
-- **View Seat Map:** tại Guest chọn `4`, rồi `M`.
-- Danh sách trận được hiện trước khi hỏi ID; nhập `0` tại ô Match ID để quay lại.
-- Chọn `0` tại Guest để về Main Menu.
-
-## 6. Đăng ký, đăng nhập, profile và logout
-
-### 6.1. Register Fan
-
-1. Main Menu chọn `4. Register Fan Account`.
-2. Full name `Demo Fan`; email `demo.fan@example.com`; password `DemoPass123`; phone `0901234567`.
-3. Ghi Fan ID `F` từ kết quả. Chưa có phiên đăng nhập tự động.
-4. Thử đăng ký lại cùng email: bị từ chối trùng email. Nếu đã tạo tài khoản này khi tập trước, dùng email mới và ghi lại.
-
-- **Nói với thầy:** “Đăng ký chỉ tạo Fan, không thể tự đăng ký thành Admin. Sau đăng ký người dùng đăng nhập riêng.”
-
-### 6.2. Login Fan và View Profile
-
-- Main Menu `2`; email `demo.fan@example.com`; password `DemoPass123`.
-- Tại Fan dashboard chọn `1`: hiện tên, email, số điện thoại, role `FAN`, status `ACTIVE`.
-- **Nói với thầy:** “Thông tin menu lấy từ tài khoản đã xác thực, không lấy role do người dùng nhập.”
-
-### 6.3. Update Profile
-
-- Tại Fan dashboard chọn `3`; new full name `Demo Fan Updated`; new phone `0901234568`.
-- Chọn `1` để xem tên và số điện thoại mới.
-- Chọn `3` rồi để trống tên: huỷ cập nhật, không ghi đè hồ sơ.
-- **Nói với thầy:** “Đổi tên/số điện thoại không làm đổi định danh tài khoản hay quyền.”
-
-### 6.4. Logout và các lỗi xác thực
-
-1. Tại Fan dashboard chọn `0`: có `Logged out.` và quay về Main Menu.
-2. Login Fan bằng email đúng nhưng password `wrong`: `Invalid email or password`.
-3. Login Fan bằng `em.do@gmail.com` / `123456`: `Account is inactive`.
-4. Login Fan bằng tài khoản Admin: hướng dẫn `Use Login As Staff for this account.`
-5. Main Menu `3`, nhập tài khoản Fan: hướng dẫn `Use Login As Fan for this account.`
-6. Main Menu `2`, tại Email nhấn Enter: huỷ đăng nhập mà không hỏi password.
-
-- **Nói với thầy:** “Sai mật khẩu, tài khoản không hoạt động và dùng sai cổng đăng nhập đều được xử lý, không tạo phiên truy cập sai quyền.”
-
-## 7. Fan: booking, thanh toán, lịch sử và chi tiết vé
-
-Đăng nhập lại `demo.fan@example.com` / `DemoPass123`. Từ dashboard chọn `2. Booking / Payment / Tickets / Refund`.
-
-### 7.1. View Seat Map trước khi đặt
-
-- Chọn `1`; Match ID `M`.
-- Chỉ ra tám ghế, giá `250000 VND` và tên `Demo Stand Updated`.
-- **Nói với thầy:** “Fan chọn từ Seat ID có trên bảng, không phải đoán ID.”
-
-### 7.2. Create Booking nhưng chưa trả tiền
-
-1. Chọn `2`; Match ID `M`; Seat IDs nhập ID `A1`.
-2. Ghi Booking ID `B1` từ biên nhận.
-3. Tại `Pay now?` nhập `n`.
-4. Chọn `4. My bookings`: `B1` là `PENDING`.
-5. Chọn `8. Booking details`; nhập `B1`: có tên Fan, tên trận, ghế và tổng tiền `250000 VND`.
-6. Chọn `1`, trận `M`: ghế A1 vẫn `AVAILABLE`.
-
-- **Nói với thầy:** “Booking PENDING ghi nhận yêu cầu và giá, chưa giữ ghế. Hệ thống kiểm tra lại và commit ghế lúc thanh toán, nên không nói rằng tạo booking đã chắc chắn có ghế.”
-
-### 7.3. Cancel Unpaid Booking
-
-1. Tại Booking menu chọn `7`, rồi `2. Cancel unpaid pending booking`.
-2. Nhập `B1`, tại xác nhận nhấn Enter: chưa huỷ.
-3. Vẫn trong menu Cancellation/Refund, chọn `2`, nhập `B1`, lần này `y`.
-4. Kết quả `CANCELLED`. Chọn `0` về Booking menu.
-
-- **Nói với thầy:** “Chưa thanh toán thì huỷ trực tiếp, không cần yêu cầu hoàn tiền và không phát sinh vé.”
-
-### 7.4. Create Booking hai ghế và Pay Pending Booking
-
-1. Chọn `2`; Match ID `M`; Seat IDs là `A1,A2` bằng số, ví dụ `21,22`.
-2. Ghi `B2`; tổng tiền `500000 VND`; tại Pay now chọn `n`.
-3. Chọn `3. Pay pending booking`: danh sách chỉ gồm booking đang chờ trả tiền.
-4. Nhập `B2`; tại Pay now chọn `y`.
-5. Kết quả Payment `SUCCESS`; vé tự động xuất hiện cùng ticket code.
-
-- **Nói với thầy:** “Em đang demo thanh toán mô phỏng. Khi thành công booking CONFIRMED, cả hai ghế được bán cùng nhóm và vé online được phát hành tự động.”
-- Tạo booking giữ giá tại lúc tạo; không cho người dùng tự nhập một số tiền khác để thanh toán.
-
-### 7.5. My Bookings, Booking Details, My Tickets và Ticket Details
-
-| Feature | Thao tác tại Booking menu | Điều cần chỉ |
+| Feature | Đường dẫn | Nhập và kết quả |
 | --- | --- | --- |
-| My Bookings | `4` | Có `B1 CANCELLED`, `B2 CONFIRMED`; kèm tên trận/ghế. |
-| Booking Details | `8`; ID `B2` | Hai ghế, tổng `500000 VND`, đúng Fan sở hữu. |
-| My Tickets / Ticket History | `5` | Hai ticket `ISSUED` và mã riêng; ghi Ticket ID `T1`, ticket code `C1` của ghế A1. |
-| Ticket Details | `6`; Ticket ID `T1` | Có code, trạng thái, tên ghế/trận và `Not checked in`. |
-| Kiểm tra ghế sau mua | `1`; Match ID `M` | A1 và A2 chuyển `BOOKED`. |
+| Create price | `2 > 2 > 1` | M, K, `250000`. |
+| List prices | `2 > 2 > 2` | M; thấy giá theo khán đài. |
+| Price details | `2 > 2 > 3` | M, K. |
+| Update price | `2 > 2 > 4` | M, K, `260000`. |
+| Delete price | `2 > 2 > 5` | M, K, `y`; xem danh sách để chứng minh đã xoá. |
 
-- **Nói với thầy:** “Ticket ID dùng tra cứu nội bộ; ticket code là mã đưa cho nhân viên cổng. Lịch sử vé là danh sách vé của chính Fan, gồm trạng thái hiện tại, không phải nhật ký mọi lần đổi trạng thái.”
+- **Bắt buộc:** tạo lại giá `250000` cho M/K trước phần mở bán.
+- **Nói:** “Giá theo cặp trận và khán đài, không phải giá cố định cho mọi trận.”
 
-### 7.6. Đường tắt Book This Match khi đang browse
+### 5.8. Ticket sales: mở, đóng và xem trạng thái
 
-- Từ Booking chọn `0` về dashboard; chọn `4. Browse matches`.
-- Chọn search `1`, keyword `Demo Red`.
-- Menu kết quả có thêm `3. Book this match` vì đang đăng nhập Fan.
-- Chọn `3`, ID `M`; ở câu hỏi Seat IDs nhập `0` để huỷ, không tạo thêm booking.
-- Chọn `0` về browsing; `0` về dashboard; `0` logout.
-- **Nói với thầy:** “Cùng là xem trận, nhưng Guest không có nút đặt trực tiếp. Fan đã xác thực có thể đặt từ kết quả tìm kiếm.”
+- `2 > 3 > 3`, M: xem CLOSED.
+- `2 > 3 > 1`, M: mở bán OPEN, tạo inventory cho tám ghế hoạt động.
+- `2 > 3 > 2`, M, `y`: đóng bán.
+- `2 > 3 > 3`, M: kiểm tra CLOSED.
+- `2 > 3 > 1`, M: **mở lại cho phần mua vé**.
+- Thử `2 > 2 > 4`, M, K, `270000` khi OPEN: bị chặn đổi giá.
+- **Nói:** “Muốn mở bán cần giá cho các khán đài có ghế hoạt động. Muốn đổi giá phải đóng bán.”
+- Về Admin Operations rồi `0` về dashboard, `0` logout.
 
-## 8. Seller: tất cả chức năng bán tại quầy
+## 6. Guest và xác thực tài khoản
 
-Main Menu `3`, đăng nhập Seller. Tại dashboard chọn `2. Sales counter`.
+### 6.1. Guest browsing
 
-### 8.1. Search Fan và Create Fan
+Từ Main chọn `1`. Mỗi dòng bắt đầu tại Guest menu:
 
-1. **Search Fan:** chọn `1`; keyword `demo.fan` để tìm Fan online vừa tạo.
-2. Chọn `1`; để trống keyword để xem toàn bộ Fan.
-3. **Create Fan:** chọn `2`; name `Demo Counter Customer`; email `demo.counter@example.com`; password `Counter123`; phone `0902222222`.
-4. Ghi Fan ID khách tại quầy `FC`.
-
-- **Nói với thầy:** “Seller tìm khách đã có trước, chỉ tạo tài khoản Fan nếu khách chưa có.”
-
-### 8.2. View Seat Map và Create Booking For Fan
-
-1. **View seat map:** chọn `3`; Match ID `M`.
-2. **Create booking for Fan:** chọn `4`; keyword `demo.counter`; chọn Fan ID `FC` từ kết quả.
-3. Match ID `M`; Seat IDs `A3,A4` bằng số.
-4. Ghi Booking ID `B3`, trạng thái `PENDING`, tổng `500000 VND`.
-5. Booking tại quầy không tự hỏi thanh toán ngay trong bước tạo; tiếp tục chức năng `5` ở dưới.
-
-- **Nói với thầy:** “Booking đứng tên Fan khách hàng. Seller là người thao tác tại quầy, không phải người sở hữu vé.”
-
-### 8.3. Customer Bookings
-
-- Chọn `7`; keyword `demo.counter`; chọn `FC`.
-- Kết quả có `B3 PENDING` cùng hai ghế A3/A4.
-- **Nói với thầy:** “Seller chọn khách trước rồi mới nhìn các booking của khách, tránh thu tiền nhầm người.”
-
-### 8.4. Accept Offline Payment
-
-1. Chọn `5`; keyword `demo.counter`; Fan ID `FC`; Booking ID `B3`.
-2. Hệ thống hiện số tiền phải thu.
-3. Nhấn Enter tại câu `Type RECEIVED...`: không ghi nhận thanh toán.
-4. Chọn lại `5`, tìm/chọn cùng khách và booking.
-5. Gõ `RECEIVED` sau khi giả lập đã thu tiền.
-6. Kết quả Payment `SUCCESS`, phương thức `OFFLINE_CASH`.
-7. Tại `Issue tickets now?` chọn `n` để còn demo chức năng phát vé riêng.
-
-- **Nói với thầy:** “Offline ở đây là ghi nhận đã nhận tiền mặt, không gọi cổng thanh toán online. Bỏ qua xác nhận thì hệ thống không ghi đã thu tiền.”
-
-### 8.5. Issue Tickets và gọi lại không sinh vé trùng
-
-1. Chọn `6. Issue tickets`; keyword `demo.counter`; chọn `FC`; Booking ID `B3`.
-2. Hai vé A3/A4 được phát hành; chỉ ra mã vé.
-3. Lặp lại đúng chức năng `6` với cùng khách/booking.
-4. Kết quả vẫn trả các vé đã phát hành, không tạo thêm hai vé mới.
-
-- **Nói với thầy:** “Thao tác phát vé gọi lại không làm tăng số vé cho cùng booking và ghế.”
-- Ở giao dịch khác có thể chọn `y` ngay sau thanh toán thành công để phát hành mà không phải mở chức năng `6` lại.
-- Từ dashboard Seller còn có `4. Browse matches`; chức năng tra cứu dùng chung với mục Guest. Seller không có lựa chọn `Book this match` dành cho Fan; bán hộ khách qua Sales counter.
-- Chọn `0` về dashboard; `0` logout.
-
-## 9. Refund: Fan gửi, Admin duyệt hoặc từ chối
-
-### 9.1. Fan tạo hai booking có thể hoàn tiền
-
-Đăng nhập Fan `demo.fan@example.com`, dashboard `2` vào Booking.
-
-1. Chọn `2`, trận `M`, ghế `A5`, tại Pay now chọn `y`; ghi booking `B4`.
-2. Chọn `2`, trận `M`, ghế `A6`, tại Pay now chọn `y`; ghi booking `B5`.
-3. Hai booking phải `CONFIRMED`, vé chưa check-in; tổng mỗi booking `250000 VND`.
-
-### 9.2. Request Refund và View Refund Status
-
-1. Chọn `7. Cancellation / Refund`.
-2. Chọn `1. Request refund for paid booking`; ID `B4`; reason `Cannot attend the match`; ghi Request ID `R1`.
-3. Chọn `1`; ID `B5`; reason `Changed travel plan`; ghi `R2`.
-4. Chọn `3. My refund requests`: cả hai `REQUESTED`.
-5. Có thể thử gửi lại cho `B4`: bị chặn do đã có yêu cầu đang hoạt động.
-6. `0` về Booking; `0` về dashboard; `0` logout.
-
-- **Nói với thầy:** “Gửi yêu cầu không đồng nghĩa đã hoàn tiền. Vé và ghế chưa bị giải phóng chỉ vì vừa gửi request.”
-
-### 9.3. Admin Approve Refund
-
-1. Đăng nhập Admin; dashboard `2`; nghiệp vụ `7. Review refund requests`.
-2. Danh sách chờ có `R1`, `R2`; chọn `1. Review a request`.
-3. Refund request ID `R1`; Approve nhập `y`; note `Approved before kick-off`.
-4. Kết quả `APPROVED`.
-
-- **Nói với thầy:** “Service kiểm tra lại điều kiện, huỷ booking và vé liên quan, rồi trả ghế về AVAILABLE. Đây là hoàn tiền mô phỏng; không có tiền thật chuyển tới ngân hàng.”
-
-### 9.4. Admin Reject Refund
-
-1. Vẫn trong màn hình review, request `R2` còn đang chờ.
-2. Chọn `1`; ID `R2`; Approve nhập `n`; note `Rejected after policy review`.
-3. Kết quả `REJECTED`.
-4. Hết yêu cầu chờ thì chương trình tự quay lại menu nghiệp vụ; không nhập thêm số như thể còn ở màn hình review.
-5. Nếu vẫn còn request khác trong CSV, chọn `0` để ra khỏi review.
-
-- **Nói với thầy:** “Từ chối request không huỷ vé hợp lệ và không giải phóng ghế của booking.”
-- Màn hình yêu cầu có note, nhưng chương trình chưa có engine tự chấm điều kiện chính sách hoàn tiền phức tạp; đây là quyết định của Admin.
-
-### 9.5. Fan kiểm tra kết quả sau review
-
-- Logout Admin, login lại Fan, dashboard `2` vào Booking.
-- `7` rồi `3`: `R1 APPROVED`, `R2 REJECTED`; `0` về Booking.
-- `4`: `B4 CANCELLED`, `B5 CONFIRMED`.
-- `5`: vé của `B4 CANCELLED`; vé `B5` vẫn `ISSUED`.
-- `1`, Match ID `M`: A5 `AVAILABLE`, A6 `BOOKED`.
-- `0` về dashboard, `0` logout.
-
-## 10. Gate Staff: validate, check-in và chặn dùng vé lại
-
-Đăng nhập `gate1@stadium.com` / `gate123`; dashboard `2. Validate / Check in ticket`.
-
-### 10.1. Validate Ticket
-
-- Chọn `1`; ticket code `C1` của ghế A1; Match ID `M`.
-- Kết quả hiện tên trận, ghế và trạng thái `ISSUED`.
-- **Nói với thầy:** “Validate là kiểm tra, chưa đánh dấu khách đã vào cổng.”
-
-### 10.2. Check-in nhưng huỷ xác nhận
-
-- Chọn `2`; code `C1`; Match ID `M`.
-- Hệ thống kiểm tra và hiện vé hợp lệ trước; tại xác nhận nhập `n`.
-- Kết quả `Check-in cancelled.`; vé chưa chuyển `CHECKED_IN`.
-- **Nói với thầy:** “Nhân viên có cơ hội đối chiếu trận và ghế trước khi xác nhận.”
-
-### 10.3. Check-in thành công
-
-- Chọn `2`; code `C1`; Match ID `M`; xác nhận `y`.
-- Kết quả `CHECKED_IN` và có thời gian check-in.
-- **Nói với thầy:** “Chỉ lúc xác nhận thành công trạng thái vé mới đổi.”
-
-### 10.4. Check-in lặp, sai trận, mã không tồn tại
-
-| Tình huống | Thao tác tại Gate menu | Kết quả |
+| Feature | Thao tác | Điều cần chỉ |
 | --- | --- | --- |
-| Dùng lại vé | `2`; code `C1`; Match ID `M` | Từ chối vì đã check-in; không hỏi xác nhận lại. |
-| Sai trận | `1`; dùng code của vé B2 ghế A2 chưa check-in; Match ID của trận khác, ví dụ `1` nếu `M` không phải `1` | Từ chối do không đúng trận. |
-| Mã không tồn tại | `2`; code `UNKNOWN_TICKET`; Match ID `M` | `Ticket not found`, không hỏi xác nhận. |
-| Vé đã hoàn tiền | `1`; code vé cũ của B4; Match ID `M` | Từ chối vì vé đã huỷ. Lấy code từ Ticket History của Fan nếu cần. |
+| Search | `1`, keyword `Demo Red` | Có M, tên sân, giờ, sales OPEN. |
+| Details từ kết quả | Sau search chọn `1`, M | Xem chi tiết; vẫn ở menu kết quả. |
+| Seat map từ kết quả | Sau search chọn `2`, M | Nhãn ghế, khu, giá 250000 và AVAILABLE; `0` về Guest. |
+| Filter | `2`, sân S, date `2030-11-15` | Lọc ra trận; `0` khỏi kết quả. |
+| List all | `2`, Enter sân, Enter ngày | Lịch toàn bộ; `0` khỏi kết quả. |
+| Details bằng ID | `3`, M | Danh sách được hiện trước khi chọn. |
+| Seat map bằng ID | `4`, M | Xem lại trạng thái ghế. |
 
-- Chọn `0` về dashboard; `0` logout.
-- **Nói với thầy:** “Hệ thống không chỉ kiểm tra có mã vé, mà còn kiểm tra trận và trạng thái sử dụng.”
+- **Nói:** “Chưa cần đăng nhập vẫn tra cứu được trận và giá. Guest không có chức năng Book this match.”
+- `0` về Main.
 
-## 11. Administrator: toàn bộ quản lý Fan và Staff
+### 6.2. Register, login, profile, update và logout
 
-Đăng nhập Admin, dashboard `2` vào menu nghiệp vụ.
+1. Main `4`: name `Demo Fan`, email `demo.fan@example.com`, password `DemoPass123`, phone `0901234567`; ghi F.
+2. Tạo lại cùng email để thấy chống trùng; tài khoản đã có từ lần tập trước thì dùng email mới.
+3. Main `2`: login tài khoản vừa tạo; dashboard `1` xem profile.
+4. Dashboard `3`: name `Demo Fan Updated`, phone `0901234568`.
+5. Dashboard `1`: thấy thông tin mới; thử `3` rồi Enter tại tên để huỷ.
+6. Dashboard `0`: logout về Main.
 
-### 11.1. Fan Management
+- **Nói:** “Register chỉ tạo Fan. Role lấy từ dữ liệu tài khoản đã xác thực, không do người dùng tự chọn.”
+- Demo thêm login sai password; tài khoản INACTIVE `em.do@gmail.com`; Admin login ở cổng Fan và Fan login ở cổng Staff. Phải bị từ chối hoặc hướng dẫn dùng đúng cổng.
 
-Chọn `3. Fan accounts`. Dùng một tài khoản phụ, không xoá `F` đã có booking.
+## 7. Fan: menu mới cho mua vé, booking và vé
 
-| Feature | Thao tác tại Fan accounts | Kết quả / lời giải thích |
+- Login Fan demo; dashboard `2. Tickets and bookings`.
+- Đây là **gốc Fan Tickets**: `1 Book tickets`, `2 My bookings and payments`, `3 My tickets`, `4 Cancellations and refunds`.
+- Các đường dẫn trong mục 7 tính từ gốc này; quay về gốc giữa các dòng.
+
+### 7.1. Xem ghế, tạo PENDING và huỷ
+
+1. `1 > 1`, M: xem giá và seat map.
+2. Về gốc rồi `1 > 2`, M, Seat ID A1; Pay now chọn `n`; ghi B1.
+3. `2 > 1`: xem B1 PENDING. `2 > 2`, B1: xem biên nhận.
+4. `1 > 1`, M: A1 vẫn AVAILABLE.
+5. `4 > 2`, B1, Enter tại xác nhận: chưa huỷ.
+6. Vẫn trong Cancellations, chọn `2`, B1, lần này `y`: CANCELLED.
+7. `0` về gốc Fan Tickets.
+
+- **Nói:** “PENDING chưa giữ ghế. Huỷ booking chưa trả tiền không cần quy trình hoàn tiền.”
+
+### 7.2. Hai ghế và thanh toán booking để sau
+
+1. Từ gốc `1 > 2`, M, hai Seat ID A1/A2 bằng số; ghi B2; Pay now `n`.
+2. `0` về gốc; chọn `2 > 3. Pay pending booking`.
+3. Chọn B2; hệ thống hiện tổng `500000 VND`; xác nhận `y`.
+4. Payment SUCCESS, booking CONFIRMED, hai vé online được phát hành.
+5. `0` về gốc.
+
+- **Nói:** “Đây là thanh toán mô phỏng. Checkout kiểm tra lại và commit nhóm ghế, không chỉ tin vào lần xem ghế trước đó.”
+
+### 7.3. Lịch sử và chi tiết
+
+| Feature | Đường dẫn từ gốc Fan Tickets | Kết quả |
 | --- | --- | --- |
-| Create Fan Account | `1`; name `Admin Created Fan`; email `demo.adminfan@example.com`; password `AdminFan123`; phone `0903333333` | Ghi ID `FX`; không có câu hỏi role vì đây là Fan. |
-| View Fan List | `2` | Có `FX` trong danh sách. |
-| View Fan Details | `3`; `FX` | Đúng thông tin vừa tạo. |
-| Search Fan | `4`; keyword `demo.adminfan` | Tìm được tài khoản phụ. |
-| Filter Fan Status | `5`; status `1` | Lọc ACTIVE; `2` là INACTIVE, `0` là tất cả. |
-| Update Fan | `6`; `FX`; name `Admin Fan Updated`; email cũ; password Enter; phone `0903333334` | Đổi thông tin, giữ mật khẩu cũ; không đổi role. |
-| Deactivate Fan | `8`; `FX`; `y` | `INACTIVE`; lọc `5`, status `2` để nhìn thấy. |
-| Activate Fan | `7`; `FX` | Trở lại `ACTIVE`. |
-| Delete Fan Account | `9`; `FX`; `y` | Xoá được vì tài khoản phụ chưa có booking. |
-| Chặn xoá Fan có lịch sử | `9`; Fan ID `F`; `y` | Bị từ chối vì Fan đã có booking history. |
+| Booking history | `2 > 1` | B1 CANCELLED, B2 CONFIRMED. |
+| Booking details | `2 > 2`, B2 | Hai ghế, đúng Fan, tổng 500000 VND. |
+| Ticket history | `3 > 1` | Hai vé ISSUED; ghi Ticket ID T1 và code C1 của A1. |
+| Ticket details | `3 > 2`, T1 | Code, ghế, trận và Not checked in. |
+| Seat map sau trả tiền | `1 > 1`, M | A1/A2 BOOKED. |
 
-- **Nói với thầy:** “Deactivate là ngừng hoạt động tài khoản, không xoá lịch sử. Code hiện tại chưa có hai trạng thái LOCKED và INACTIVE riêng biệt.”
-- Chọn `0` về menu nghiệp vụ.
+- **Nói:** “Ticket ID để tra cứu nội bộ; ticket code để đưa cho cổng. Ticket history hiện trạng thái hiện tại, không phải nhật ký mọi lần đổi trạng thái.”
 
-### 11.2. Staff Management
+### 7.4. Đặt từ kết quả browsing
 
-Chọn `4. Staff accounts`. Không đổi role hay ngừng hoạt động của Admin đang dùng.
+- Từ gốc Fan Tickets `0` về dashboard; `4` Browse; search `1`, keyword `Demo Red`.
+- Trong kết quả chọn `3. Book this match`, M; nhập `0` ở Seat IDs để demo huỷ.
+- Không tạo thêm booking. `0` về browsing; `0` về dashboard; `0` logout.
 
-| Feature | Thao tác tại Staff accounts | Kết quả / lời giải thích |
+## 8. Seller: khách hàng, booking, thu tiền và phát vé
+
+- Login Seller; dashboard `2. Sales counter`.
+- Đây là **gốc Sales counter**: `1 Customers`, `2 Customer bookings`, `3 Payments and ticket issue`.
+- Các đường dẫn dưới đây tính từ gốc này.
+
+### 8.1. Customers
+
+- `1 > 1`: keyword `demo.fan`; tìm thấy Fan online.
+- Ở submenu Customers chọn `1` rồi Enter: danh sách toàn bộ.
+- Chọn `2`: name `Demo Counter Customer`, email `demo.counter@example.com`, password `Counter123`, phone `0902222222`; ghi FC.
+- `0` về Sales counter.
+- **Nói:** “Tìm khách trước, chưa có mới tạo Fan; Seller không tự tạo Admin.”
+
+### 8.2. Customer bookings
+
+- `2 > 1`, M: xem seat map.
+- Về gốc rồi `2 > 2`: keyword `demo.counter`, chọn FC, M, Seat ID A3/A4 bằng số.
+- Ghi B3 PENDING, tổng `500000 VND`.
+- Vẫn trong Customer bookings chọn `3`, keyword `demo.counter`, FC: xem history B3.
+- `0` về Sales counter.
+- **Nói:** “Booking đứng tên Fan; Seller là nhân viên thao tác hộ.”
+
+### 8.3. Cash payment
+
+1. `3 > 1`: keyword `demo.counter`, FC, B3.
+2. Enter thay vì RECEIVED: không ghi đã thu tiền.
+3. Vẫn trong Payments, chọn `1`, chọn lại khách/booking; lần này nhập `RECEIVED`.
+4. Payment SUCCESS, method OFFLINE_CASH.
+5. Tại Issue tickets now chọn `n` để demo phát vé riêng.
+
+- **Nói:** “Offline chỉ ghi nhận tiền mặt; không đi qua online payment. Nhân viên phải xác nhận đã nhận tiền.”
+
+### 8.4. Issue tickets và gọi lại không trùng
+
+- Vẫn trong Payments chọn `2`, keyword `demo.counter`, FC, B3.
+- Có hai vé A3/A4; lặp lại cùng thao tác, code không đổi và không sinh thêm vé.
+- Ở giao dịch khác có thể chọn `y` ngay sau cash payment để phát hành liền.
+- `0` về Sales counter; `0` dashboard; `0` logout.
+- **Nói:** “Chia menu không thay đổi kiểm tra thanh toán trước khi phát vé hay tính idempotent.”
+
+## 9. Refund: Fan gửi, Admin xử lý
+
+### 9.1. Tạo B4, B5 và gửi request
+
+- Login Fan demo; dashboard `2` vào gốc Fan Tickets.
+- `1 > 2`, M, A5, Pay now `y`; ghi B4.
+- Vẫn trong Book tickets chọn `2`, M, A6, Pay now `y`; ghi B5.
+- `0` về gốc, chọn `4` Cancellations and refunds.
+- `1`, B4, reason `Cannot attend the match`; ghi R1.
+- `1`, B5, reason `Changed travel plan`; ghi R2.
+- `3`: hai request REQUESTED. Thử gửi lại B4 để thấy bị chặn request trùng.
+- `0` về gốc; `0` dashboard; `0` logout.
+
+- **Nói:** “Gửi request chưa giải phóng ghế và chưa huỷ vé. Cần Admin review.”
+
+### 9.2. Approve và reject
+
+- Login Admin; dashboard `2`; Admin Operations `4. Refund reviews`.
+- Chọn `1`, R1, approve `y`, note `Approved before kick-off`: APPROVED.
+- Vẫn ở review chọn `1`, R2, approve `n`, note `Rejected after policy review`: REJECTED.
+- Hết request chờ thì tự về Admin Operations. Nếu còn request khác, chọn `0` để quay lại.
+- Về dashboard và logout.
+
+- **Nói:** “Duyệt thì kiểm tra lại điều kiện, huỷ vé/booking và trả ghế. Từ chối chỉ đổi trạng thái request. Không chuyển tiền ngân hàng thật.”
+
+### 9.3. Fan kiểm tra kết quả
+
+Từ gốc Fan Tickets sau login:
+
+| Kiểm tra | Đường dẫn | Kết quả |
 | --- | --- | --- |
-| Create Staff Account | `1`; name `Demo Staff`; email `demo.staff@example.com`; password `StaffPass123`; phone `0904444444`; role `1` | Tạo Seller phụ, ghi ID `ST`. |
-| View Staff List | `2` | Có `ST`, role `SELLER`. |
-| View Staff Details | `3`; `ST` | Hiện role/status hiện tại. |
-| Search Staff | `4`; keyword `demo.staff` | Tìm đúng nhân viên phụ. |
-| Filter Role/Status | `5`; role `1`; status `1` | Lọc Seller ACTIVE. Role `0` là tất cả; status `0` là tất cả. |
-| Update Staff | `6`; `ST`; name `Demo Staff Updated`; email cũ; password Enter; phone `0904444445` | Cập nhật thông tin, không hỏi đổi role. |
-| Deactivate Staff | `8`; `ST`; `y` | INACTIVE. |
-| Activate Staff | `7`; `ST` | ACTIVE. |
-| Change Staff Role | `10`; `ST`; new role `2` | Đổi từ Seller sang Gate Staff. |
-| Revoke Staff Role | `11`; `ST`; `y` | Role `UNASSIGNED`; chưa được vào menu nghiệp vụ. |
-| Assign Staff Role | `9`; `ST`; role `1` | Gán lại Seller cho nhân viên chưa có role. |
-| Xem role có thể chọn | Nhìn menu role khi tạo/gán/đổi hoặc lọc | `1 Seller`, `2 Gate`, `3 Admin`, `4 Simulator`, `5 Unassigned`. |
+| Refund status | `4 > 3` | R1 APPROVED, R2 REJECTED. |
+| Booking history | `2 > 1` | B4 CANCELLED, B5 CONFIRMED. |
+| Tickets | `3 > 1` | Vé B4 CANCELLED, vé B5 ISSUED; ghi code B4 để thử chặn tại cổng. |
+| Seat map | `1 > 1`, M | A5 AVAILABLE, A6 BOOKED. |
 
-- Trong thao tác gán/đổi role, không chọn `5 Unassigned`: Service sẽ yêu cầu dùng chức năng Revoke để thu hồi role.
-- **Nói với thầy:** “Assign dành cho nhân viên chưa có role; Change dành cho đổi role đã có; Revoke thu hồi role. Chưa có chức năng Delete Staff trong menu hiện tại.”
-- **Bảo vệ Admin cuối cùng, nếu thầy hỏi:** hệ thống chặn deactivate/đổi role/thu hồi role làm mất Admin ACTIVE cuối cùng. Chỉ thử trên dữ liệu demo sau khi chắc chắn hiểu số tài khoản Admin hiện có.
-- Chọn `0` về nghiệp vụ; có thể logout rồi login bằng `demo.staff@example.com` / `StaffPass123` để thấy menu Seller; logout và quay lại Admin nếu demo tiếp summary.
+- Về gốc, dashboard rồi logout.
 
-## 12. Profile dùng chung của Staff và Simulator
+## 10. Gate: validate và check-in
 
-### 12.1. Staff thông thường
+- Login Gate, dashboard `2`; menu này vẫn có `1 Validate`, `2 Check in`, `0 Back`.
+- `1`, code C1, Match ID M: hiện ISSUED; chưa đánh dấu vào cổng.
+- `2`, C1, M, xác nhận `n`: Check-in cancelled.
+- `2`, C1, M, xác nhận `y`: CHECKED_IN, có thời gian.
+- Lặp lại `2`, C1, M: bị chặn, không hỏi xác nhận lại.
+- Thử code của vé A2 chưa dùng nhưng nhập Match ID khác M: chặn sai trận.
+- Thử `2`, code UNKNOWN_TICKET, M: không tìm thấy và không hỏi xác nhận.
+- Thử code vé B4 đã hoàn tiền: bị chặn vì CANCELLED.
+- `0` dashboard, `0` logout.
+- **Nói:** “Kiểm tra trước khi hỏi xác nhận; validate không thay đổi trạng thái, check-in mới ghi nhận sử dụng.”
 
-- Tại dashboard Seller/Gate/Admin: `1` xem profile; `3` update profile; `0` logout.
-- Demo trên Seller phụ `ST` để không đổi tài khoản mẫu: tên `Demo Staff Profile`, phone `0904444446`.
-- Sau cập nhật chọn `1` để chứng minh đã đổi, sau đó logout.
+## 11. Admin: account management và staff roles
 
-### 12.2. Simulator Operator hiện tại
+Login Admin, dashboard `2`. Mỗi đường dẫn tính từ **Admin Operations**.
 
-1. Main Menu `3`; login `sim@stadium.com` / `sim123`.
-2. Dashboard `1`: xem profile.
-3. Dashboard `2`: update profile, hoặc Enter tại tên để huỷ.
-4. Dashboard `0`: logout.
+### 11.1. Fan accounts
 
-- **Nói với thầy:** “Role Simulator đã có xác thực và hồ sơ. Cấu hình, chạy, so sánh và xuất kết quả concurrency chưa được triển khai. Em không coi phần thiết kế trên sơ đồ là feature đã chạy.”
+| Feature | Đường dẫn | Dữ liệu / kết quả |
+| --- | --- | --- |
+| Create | `3 > 1 > 1` | Name Admin Created Fan, email demo.adminfan@example.com, password AdminFan123, phone 0903333333; ghi FX. |
+| List | `3 > 1 > 2` | Có FX. |
+| Details | `3 > 1 > 3`, FX | Đúng tài khoản. |
+| Search | `3 > 1 > 4`, demo.adminfan | Tìm được FX. |
+| Filter | `3 > 1 > 5`, status 1 | ACTIVE; status 2 INACTIVE, 0 All. |
+| Update | `3 > 1 > 6`, FX | Name Admin Fan Updated, email cũ, password Enter, phone 0903333334. |
+| Deactivate | `3 > 1 > 8`, FX, y | INACTIVE. |
+| Activate | `3 > 1 > 7`, FX | ACTIVE. |
+| Delete | `3 > 1 > 9`, FX, y | Được xoá vì chưa booking. |
+| Chặn xoá có lịch sử | `3 > 1 > 9`, F, y | Không cho xoá Fan đang có booking history. |
 
-## 13. System Summary và Audit Log
+- **Nói:** “Deactivate không xoá lịch sử. Hiện chỉ có ACTIVE/INACTIVE, không có LOCKED riêng.”
 
-Admin dashboard `2` vào nghiệp vụ.
+### 11.2. Staff accounts
 
-### 13.1. View System Summary
+| Feature | Đường dẫn | Dữ liệu / kết quả |
+| --- | --- | --- |
+| Create | `3 > 2 > 1` | Name Demo Staff, email demo.staff@example.com, password StaffPass123, phone 0904444444, role 1; ghi ST. |
+| List / Details | `3 > 2 > 2`; hoặc `3 > 2 > 3`, ST | SELLER, ACTIVE. |
+| Search | `3 > 2 > 4`, demo.staff | Đúng nhân viên phụ. |
+| Filter | `3 > 2 > 5`, role 1, status 1 | SELLER ACTIVE; 0 là All. |
+| Update | `3 > 2 > 6`, ST | Name Demo Staff Updated, email cũ, password Enter, phone 0904444445; role không đổi. |
+| Deactivate / Activate | `3 > 2 > 8`, ST, y; rồi `3 > 2 > 7`, ST | INACTIVE rồi ACTIVE. |
 
-- Chọn `6`.
-- Chỉ ra `Total fans`, `Total staff`, `Total stadiums`, `Total matches`, `Total bookings`, `Total tickets`.
-- Số liệu phụ thuộc bản sao CSV và những thao tác vừa demo, không cam kết một con số cố định.
-- **Nói với thầy:** “Đây là đếm bản ghi hiện có, không phải dashboard doanh thu, cũng không phải số vé còn hiệu lực. Vé CANCELLED vẫn có trong tổng bản ghi vé.”
+### 11.3. Staff roles có menu riêng
 
-### 13.2. View Audit Log
+| Feature | Đường dẫn | Dữ liệu / kết quả |
+| --- | --- | --- |
+| Change role | `3 > 2 > 9 > 2`, ST, role 2 | SELLER -> GATE_STAFF. |
+| Revoke role | `3 > 2 > 9 > 3`, ST, y | UNASSIGNED. |
+| Assign role | `3 > 2 > 9 > 1`, ST, role 1 | Gán lại SELLER. |
 
-- Chọn `5`.
-- Tìm dòng mới `REVIEW_REFUND` của `R1` hoặc `R2`: actor ID, target REFUND, kết quả và thời gian.
-- **Nói với thầy:** “Trong code hiện tại, việc review refund có ghi audit. Những dòng cũ có thể là seed; chưa phải mọi thao tác CRUD hay mọi lỗi đều tự ghi audit.”
-- Không trình bày Audit Log nghiệp vụ này như file AI Audit; hai loại nhật ký có mục đích khác nhau.
+- Role picker: 1 Seller, 2 Gate, 3 Admin, 4 Simulator, 5 Unassigned; 0 Back/All theo prompt.
+- Không dùng role 5 khi Assign/Change: thu hồi bằng Revoke.
+- **Nói:** “Assign cho nhân viên chưa có role, Change đổi role, Revoke thu hồi role. Service vẫn chặn mất Admin ACTIVE cuối cùng.”
+- Chưa có Delete Staff trong menu. Không demo quyền bằng cách thay đổi Admin đang đăng nhập.
 
-## 14. CSV Persistence: thoát và mở lại vẫn còn dữ liệu
+## 12. Profile dùng chung và Simulator
 
-1. Từ nghiệp vụ Admin chọn `0` về dashboard, `0` logout, `0` tại Main để thoát.
-2. Terminal chạy lại **đúng thư mục demo cũ**:
+- Dashboard Fan/Seller/Gate/Admin vẫn giữ `1 View profile`, `3 Update profile`, `0 Logout`.
+- Demo update trên Seller phụ ST: name Demo Staff Profile, phone 0904444446; xem lại bằng 1.
+- Login Simulator: dashboard `1 Profile`, `2 Update profile`, `0 Logout`.
+- **Nói:** “Simulator hiện mới có xác thực và profile. Chạy/so sánh/xuất benchmark bốn cơ chế chưa có trong mã nguồn.”
+
+## 13. Reports, audit và CSV persistence
+
+### 13.1. System summary
+
+- Login Admin, dashboard 2 -> Admin Operations `5 > 1`.
+- Có tổng Fan, Staff, Stadium, Match, Booking và Ticket; số thực tế phụ thuộc CSV.
+- **Nói:** “Đây là đếm bản ghi, không phải số vé còn hiệu lực hay báo cáo doanh thu.”
+
+### 13.2. Audit log
+
+- Vẫn trong Reports chọn `2`.
+- Chỉ dòng REVIEW_REFUND cho R1/R2: actor, target, kết quả, thời gian.
+- **Nói:** “Review refund có ghi audit; chưa phải mọi CRUD hay lỗi đều có audit. Không nhầm audit nghiệp vụ với AI Audit.”
+
+### 13.3. Khởi động lại vẫn còn dữ liệu
+
+- Từ Reports `0` về Admin Operations; `0` dashboard; `0` logout; `0` Main để thoát.
+- Chạy lại đúng bản sao cũ:
 
 ```bash
 java -cp out app.Main "$DEMO_DIR"
 ```
 
-3. Đăng nhập Fan `demo.fan@example.com` / `DemoPass123`.
-4. Dashboard `1`: tên đã cập nhật vẫn còn.
-5. Dashboard `2`, Booking `4`/`5`: lịch sử booking và trạng thái vé vẫn còn.
-6. Đưa thầy xem đường dẫn `DEMO_DIR` nếu cần minh hoạ file lưu trữ; chỉ đọc CSV, không sửa bằng tay giữa lúc demo.
+- Login Fan, dashboard 1 xem tên mới; dashboard 2 -> 2 -> 1 xem booking history.
+- **Nói:** “Dữ liệu lưu trong CSV, không chỉ trong RAM. Nhiều CSV vẫn không phải transaction ACID xuyên file.”
 
-- **Nói với thầy:** “Dữ liệu không chỉ tồn tại trong RAM của phiên console. Repository ghi CSV, lần chạy tiếp theo nạp lại. Tuy nhiên nhiều file CSV không phải một transaction ACID như cơ sở dữ liệu.”
+## 14. Các lỗi nên demo thêm
 
-## 15. Các tình huống lỗi nên chọn demo thêm
-
-Không cần làm hết nếu thời lượng ngắn. Chọn 3-5 trường hợp thầy quan tâm.
-
-| Tình huống | Cách demo | Mong đợi |
+| Tình huống | Đường dẫn / thao tác | Kết quả |
 | --- | --- | --- |
-| Menu nhập chữ | Ở một menu gõ `abc` | Thông báo số không hợp lệ, chương trình còn chạy. |
-| ID âm | Ở ô Match ID nhập `-1` | Báo ID phải dương. |
-| Quay lại khi nhập ID | Nhập `0` hoặc để trống tại ô ID có hướng dẫn Back | Không thực hiện thao tác. |
-| Huỷ đăng ký/tạo tài khoản | Enter tại Full name | Không hỏi tiếp mọi trường hoặc tạo tài khoản rỗng. |
-| Seat ID trùng | Fan Booking `2`, `M`, nhập cùng ID hai lần, ví dụ `21,21` | Chặn ghế trùng trước tạo booking. |
-| Chọn quá bốn ghế | Fan Booking `2`, `M`, nhập năm ID khác nhau | `Choose 1 to 4 seats`. |
-| Danh sách Seat ID lỗi | Nhập `21,abc` hoặc `21,` | Thông báo nhập số hợp lệ, không tạo booking một phần. |
-| Ghế đã bán | Fan khác thử chọn A1 đang BOOKED | Từ chối đặt ghế đó; không tạo vé trùng. |
-| Thu tiền nhưng chưa xác nhận | Seller Pay, Enter thay vì RECEIVED | Không ghi nhận đã nhận tiền mặt. |
-| Request refund trùng | Gửi lần hai cho booking có request REQUESTED | Từ chối tạo request đang hoạt động thứ hai. |
-| Refund vé đã dùng | Fan request refund B2 sau khi C1 CHECKED_IN | `Used or cancelled ticket cannot be refunded`. |
-| Đóng bán rồi đặt | Admin đóng M bằng `12`, `M`, `y`; Fan Booking `2`, chọn M | Báo đóng bán, không hỏi chọn ghế; sau demo nhớ mở lại. |
-| Truy cập booking Fan khác | Login Fan Binh, tạo một booking PENDING A7 rồi chọn Booking Details `8`, nhập B2 | Từ chối đọc booking của Fan khác. Booking phụ không trả tiền thì huỷ sau demo. |
-| Sai khách tại quầy | Seller chọn khách có một booking PENDING, nhưng nhập ID booking của khách khác ở chức năng `5` | Báo booking thuộc khách khác. Phải có booking PENDING để màn hình có bước nhập ID. |
-| Không có booking chờ trả tiền | Fan có tất cả booking đã CONFIRMED/CANCELLED, chọn `3` | Báo không có booking chờ; không hỏi Booking ID. |
-| Không có khách phù hợp | Seller `4`, keyword `khongcotentaikhoannay` | Báo không tìm thấy và gợi ý tạo Fan; không bắt nhập Fan ID. |
-| Tên chứa dấu phẩy | Nhập tên tài khoản `Demo,Fan` với các trường khác hợp lệ | Chặn dữ liệu không phù hợp định dạng CSV hiện tại. |
+| Menu nhập chữ / ngoài phạm vi | Nhập abc hoặc 99 tại submenu | Báo lỗi, vẫn ở nhóm hiện tại. |
+| ID âm / Back | -1 hoặc 0 tại ô ID | Chặn ID âm / quay lại, không ghi dữ liệu. |
+| Huỷ form | Enter tại tên tài khoản hoặc tên sân | Không tạo đối tượng rỗng. |
+| Ghế trùng | Fan Tickets `1 > 2`, M, hai lần cùng Seat ID | Từ chối. |
+| Quá bốn ghế | Fan Tickets `1 > 2`, M, năm ID | Choose 1 to 4 seats. |
+| Lỗi danh sách ghế | Nhập 21,abc hoặc 21, | Không tạo booking một phần. |
+| Ghế đã bán | Fan khác đặt A1 sau B2 | Từ chối, không tạo vé trùng. |
+| Refund vé đã dùng | Fan Tickets `4 > 1`, B2 sau khi C1 check-in | Used or cancelled ticket cannot be refunded. |
+| Đóng bán rồi đặt | Admin Operations `2 > 3 > 2`, M, y; Fan đặt M | Không hỏi chọn ghế; nhớ mở lại bằng `2 > 3 > 1`. |
+| Booking của Fan khác | Fan thứ hai cần có ít nhất một booking để dùng Details; Fan Tickets `2 > 2`, nhập B2 | Chặn xem booking không sở hữu. |
+| Không có booking chờ | Fan Tickets `2 > 3` khi không còn PENDING | Không hỏi Booking ID. |
+| Seller không tìm thấy khách | Sales counter `2 > 2`, keyword không tồn tại | Không bắt nhập Fan ID, gợi ý tạo khách. |
+| Xác nhận huỷ | Chọn n/Enter ở xác nhận xoá | Không xoá. |
+| Không có trận/khách/vé | Chọn chức năng tương ứng trên dữ liệu rỗng | Báo rỗng, không hỏi ID vô nghĩa. |
 
-- **Nói với thầy:** “Hệ thống xử lý cả thao tác người dùng làm sai, không chỉ luồng nhập đúng.”
-- Thử hai người mua ghế đã bán lần lượt chỉ chứng minh kiểm tra nghiệp vụ; **không đủ chứng minh chống race condition dưới nhiều thread**.
+- Kiểm tra lần lượt hai người mua cùng ghế không đủ chứng minh chống race condition nhiều thread.
 
-## 16. Demo thanh toán thất bại riêng, không làm lệch luồng chính
+## 15. Thanh toán thất bại trên bản sao thứ hai
 
-1. Thoát ứng dụng về Terminal, giữ biến `DEMO_DIR`.
-2. Tạo bản sao thứ hai từ trạng thái demo đang có:
+Thoát ứng dụng, giữ biến DEMO_DIR. Chạy từng lệnh:
 
 ```bash
 FAIL_DIR=$(mktemp -d /tmp/stadium-payment-fail.XXXXXX)
@@ -637,13 +497,20 @@ cp "$DEMO_DIR"/*.csv "$FAIL_DIR/"
 java -cp out app.Main "$FAIL_DIR" --payment-fails
 ```
 
-3. Login Fan demo; dashboard `2`; Booking `2`; trận `M`; chọn A7 nếu còn AVAILABLE; Pay now `y`.
-4. Kết quả Payment `FAILED`; booking `CANCELLED`; không có vé mới của booking này.
-5. Xem seat map để chứng minh A7 không bị bán do payment lỗi.
-6. Nếu A7 đã dùng ở bài test phụ, chọn A8 hoặc một ghế AVAILABLE khác.
-7. Thoát; muốn quay lại bản demo chính thì chạy `java -cp out app.Main "$DEMO_DIR"` không có cờ lỗi.
+- Login Fan -> dashboard 2 -> Fan Tickets `1 > 2`, M, A7 nếu AVAILABLE, Pay now y.
+- Payment FAILED, booking CANCELLED; không có vé mới của booking lỗi.
+- Xem seat map qua Fan Tickets `1 > 1`: A7 không bị bán.
+- Nếu A7 đã dùng, chọn A8 hoặc ghế AVAILABLE khác.
+- Thoát, chạy lại bản chính không có cờ lỗi: `java -cp out app.Main "$DEMO_DIR"`.
+- **Nói:** “Cờ cấu hình MockPaymentService giả lập lỗi online, không phải Fan tự chọn kết quả thanh toán.”
 
-- **Nói với thầy:** “Cờ này cấu hình MockPaymentService để giả lập thất bại cho online payment. Không phải cổng thanh toán thật hay tính năng tự chọn kết quả thanh toán của Fan.”
+## 16. Ghi nhớ nhanh trước buổi demo
+
+- Không đoán ID hay code; ghi chúng vào phiếu ở mục 2.3.
+- Mỗi bảng có menu gốc riêng. Quay về gốc trước khi dùng đường dẫn dòng tiếp theo.
+- Không đưa dữ liệu demo vào CSV gốc.
+- Menu mới được smoke riêng bằng `python3 scripts/smoke_console_menus.py`.
+- Script smoke dùng CSV tạm tự tạo, không chạy trên data/ thật.
 
 ## 17. Gợi ý chia thời lượng
 

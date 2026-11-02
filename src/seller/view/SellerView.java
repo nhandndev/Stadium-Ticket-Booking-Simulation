@@ -21,15 +21,32 @@ public class SellerView {
 
     public int showSellerMenu() {
         System.out.println();
-        System.out.println("=== SELLER ===");
-        System.out.println("1. Search Fan");
-        System.out.println("2. Create Fan");
-        System.out.println("3. View seat map");
-        System.out.println("4. Create booking for Fan");
-        System.out.println("5. Accept offline payment");
-        System.out.println("6. Issue tickets");
-        System.out.println("7. Customer bookings");
-        System.out.println("0. Back");
+        System.out.println("=== SELLER > SALES COUNTER ===");
+        System.out.println("1. Customers");
+        System.out.println("2. Customer bookings");
+        System.out.println("3. Payments and ticket issue");
+        System.out.println("0. Back to dashboard");
+        System.out.print("Choose: ");
+        return Integer.parseInt(scanner.nextLine().trim());
+    }
+
+    public int showSellerActionsMenu(int group) {
+        switch (group) {
+            case 1:
+                System.out.println("\n=== SELLER > CUSTOMERS ===");
+                System.out.println("1. Search / List customers\n2. Create Fan account");
+                break;
+            case 2:
+                System.out.println("\n=== SELLER > CUSTOMER BOOKINGS ===");
+                System.out.println("1. View seat map and prices\n2. Create booking for customer\n3. Customer booking history");
+                break;
+            case 3:
+                System.out.println("\n=== SELLER > PAYMENTS AND TICKET ISSUE ===");
+                System.out.println("1. Accept cash payment\n2. Issue tickets for paid booking");
+                break;
+            default: throw new IllegalArgumentException("Invalid seller group.");
+        }
+        System.out.println("0. Back to sales counter");
         System.out.print("Choose: ");
         return Integer.parseInt(scanner.nextLine().trim());
     }

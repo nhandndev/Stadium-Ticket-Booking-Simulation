@@ -4,7 +4,7 @@
 > Kiến trúc triển khai: **Controller-First MVC + Service + CSV Repository**.  
 > Demo hiện tại: **Chặng 01-09; Simulation execution còn ở chặng 10**.
 
-Bản demo hiện tại là [14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md](14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md): từng feature, phím nhập, kết quả và lời giải thích. Các tài liệu milestone 65% và file 13 bên dưới phản ánh giai đoạn cũ; không dùng các menu/dữ liệu cũ đó thay cho script 14.
+Bản demo **từng phím nhập và console phản hồi thực tế** là [15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md](15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md), có 142 flow và mục lục bấm tới từng feature. File [14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md](14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md) là bản hướng dẫn ngắn hơn theo nhóm nghiệp vụ. Các tài liệu milestone 65% và file 13 phản ánh giai đoạn cũ.
 
 ---
 
@@ -26,12 +26,13 @@ Bản demo hiện tại là [14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md](14_KICH_
 14. [**Nguyên lý hoạt động của CSV và Repository Pattern (Giải thích chi tiết cơ chế lưu trữ)**](12_NGUYEN_LY_CSV_VA_REPOSITORY.md)
 15. [**Kịch bản Demo Full Tính Năng thực chiến (Từng bước bấm phím & Lời thoại)**](13_KICH_BAN_DEMO_FULL_FEATURE.md)
 16. [**Kịch bản demo từng feature hiện tại: Admin, Guest, Fan, Seller, Gate và Refund**](14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md)
+17. [**Demo từng phím: mỗi feature một flow, bạn nhập gì và console trả gì**](15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md)
 
 ---
 
 ## Hướng dẫn sử dụng hiệu quả
 
-- **Demo hiện tại:** dùng script 14. Báo cáo milestone chặng 01-07 chỉ còn là tài liệu lịch sử tiến độ, không đại diện toàn bộ feature hiện đã code.
+- **Demo từng lượt thao tác:** dùng script 15; muốn bản tóm tắt đường dẫn và lời thuyết trình thì dùng script 14. Báo cáo milestone chặng 01-07 chỉ còn là tài liệu lịch sử tiến độ.
 - Đoạn bắt đầu bằng **Lời thuyết trình:** Là văn phong tự nhiên có thể dùng trực tiếp khi nói trước giảng viên.
 - Đoạn bắt đầu bằng **Chỉ trên sơ đồ:** Hướng dẫn thao tác trỏ chuột trực quan vào các phần tử tương ứng trên Class Diagram.
 - Đoạn bắt đầu bằng **Điểm cần nhấn mạnh:** Các luận điểm kỹ thuật quan trọng thể hiện độ sâu kiến thức OOP và Concurrency.

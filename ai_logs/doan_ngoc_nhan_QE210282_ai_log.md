@@ -1602,3 +1602,52 @@ Accuracy boundaries:
 - Existing sample passwords are distinguished from the current minimum length for new accounts. Offline payment uses `OFFLINE_CASH`.
 - Simulation execution is explicitly unfinished. Audit logging is not claimed for every CRUD action; payment/refund are not claimed to transfer real money.
 - The student should rehearse with actual generated IDs and verify outcomes before presenting. The script is AI-assisted documentation, not proof of independent implementation.
+
+---
+
+## Entry 42 - Task-Focused Console Menu Redesign
+
+Date: 2026-11-01
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Redesign and separate console menus so ordinary users can navigate them more easily.
+
+AI contribution:
+- Split Fan operations into Book tickets, My bookings/payments, My tickets, and Cancellations/refunds.
+- Split Seller operations into Customers, Customer bookings, and Payments/ticket issue.
+- Split Admin venue and match screens into short object/task menus; grouped account management, role changes, refunds and monitoring separately.
+- Kept existing use-case logic, authentication, confirmations and CSV schemas. Added submenu loops in Controllers and menu-printing methods in Views; no framework or navigation abstraction was added.
+- Synchronized both canonical diagrams, updated the Vietnamese demo paths and documented the menu tree in `docs/16_CONSOLE_MENU_STRUCTURE.md`.
+
+Agent verification:
+- Added and ran `scripts/smoke_console_menus.py`: 27 passing isolated CLI scenarios, compiling Java 17 and checking navigation plus selected persisted outcomes.
+- Used temporary fixture CSV data, not the student's modified project data. Existing IDE and data changes were preserved.
+- Checked diagram XML consistency, added visible menu methods, row bounds and newly introduced overlaps; did not manually inspect rendered diagrams in the editor.
+
+Limits:
+- This entry records AI-generated edits and agent-run tests, not independent student implementation or verification.
+- Menu numbers inside the operation screens changed; the updated demo document must be used instead of old recordings/scripts.
+- Concurrency benchmarking, production security and exhaustive failure recovery are outside this menu change.
+
+---
+
+## Entry 43 - Per-Keystroke Feature Demo Transcripts
+
+Date: 2026-11-01
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Give each feature its own demo flow, beginning with Main option 1 for Guest, and explicitly show each input, the console response, and the next input.
+
+AI contribution:
+- Created `docs/Thuyet_Trinh/15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md` with a clickable flow index and step-by-step input/output blocks.
+- Compiled the Java source and replayed 142 flows on a temporary copy of the current CSV files, capturing actual stdout after each prompt. The count includes setup repetitions and error variants, not 142 distinct business features.
+- Each flow starts at Main Menu and shows its own login/navigation/return steps. Added sample ID/code mappings and warnings to replace generated values with the presenter's own run values.
+- Covered Guest, authentication/profile, all exposed Admin CRUD and roles, Fan booking/payment/tickets/refunds, Seller sales, Gate checks, reporting, failure cases and exit.
+
+Verification and limits:
+- All 142 replay flows completed with their expected output checks. Selected persisted states were also checked for approved/rejected refunds and duplicate ticket issuance.
+- No Java source or project CSV data was edited for this documentation request. Existing user changes were preserved.
+- Long list output is explicitly abbreviated; ID, code, timestamps and counts are snapshot examples. Simulation execution remains unfinished.
+- The replay was agent-executed, not a recording of the student typing. The student still needs to rehearse and understand the script before presenting.

@@ -21,24 +21,42 @@ public class BookingView {
 
     public int showBookingMenu() {
         System.out.println();
-        System.out.println("=== FAN BOOKING ===");
-        System.out.println("1. View seat map");
-        System.out.println("2. Create booking");
-        System.out.println("3. Pay pending booking");
-        System.out.println("4. My bookings");
-        System.out.println("5. My tickets / Ticket history");
-        System.out.println("6. Ticket details");
-        System.out.println("7. Cancellation / Refund");
-        System.out.println("8. Booking details");
-        System.out.println("0. Back");
+        System.out.println("=== FAN > TICKETS AND BOOKINGS ===");
+        System.out.println("1. Book tickets");
+        System.out.println("2. My bookings and payments");
+        System.out.println("3. My tickets");
+        System.out.println("4. Cancellations and refunds");
+        System.out.println("0. Back to dashboard");
         System.out.print("Choose: ");
         return Integer.parseInt(scanner.nextLine().trim());
     }
 
     public int showRefundMenu() {
+        System.out.println("\n=== FAN > CANCELLATIONS AND REFUNDS ===");
         System.out.println("1. Request refund for paid booking");
         System.out.println("2. Cancel unpaid pending booking");
-        System.out.println("3. My refund requests | 0. Back");
+        System.out.println("3. My refund requests\n0. Back to tickets and bookings");
+        System.out.print("Choose: ");
+        return Integer.parseInt(scanner.nextLine().trim());
+    }
+
+    public int showBookingActionsMenu(int group) {
+        switch (group) {
+            case 1:
+                System.out.println("\n=== FAN > BOOK TICKETS ===");
+                System.out.println("1. View seat map and prices\n2. Create booking");
+                break;
+            case 2:
+                System.out.println("\n=== FAN > MY BOOKINGS AND PAYMENTS ===");
+                System.out.println("1. Booking history\n2. Booking details\n3. Pay pending booking");
+                break;
+            case 3:
+                System.out.println("\n=== FAN > MY TICKETS ===");
+                System.out.println("1. My tickets / Ticket history\n2. Ticket details");
+                break;
+            default: throw new IllegalArgumentException("Invalid booking group.");
+        }
+        System.out.println("0. Back to tickets and bookings");
         System.out.print("Choose: ");
         return Integer.parseInt(scanner.nextLine().trim());
     }

@@ -23,42 +23,95 @@ public class AdminManagementView {
     }
 
     public int showAdminMenu() {
-        System.out.println("\n=== ADMINISTRATOR ===");
-        System.out.println("1. Stadium / Section / Seat\n2. Match / Pricing / Sales");
-        System.out.println("3. Fan accounts\n4. Staff accounts\n5. Audit logs");
-        System.out.println("6. System summary\n7. Review refund requests\n0. Back");
+        System.out.println("\n=== ADMIN > SYSTEM OPERATIONS ===");
+        System.out.println("1. Venues and seating\n2. Matches, pricing and sales");
+        System.out.println("3. Accounts and roles\n4. Refund reviews\n5. Reports and audit logs");
+        System.out.println("0. Back to dashboard");
         return this.readInt("Choose: ");
     }
 
     public int showStadiumMenu() {
-        System.out.println("\n=== STADIUM / SECTION / SEAT ===");
-        System.out.println("-- Stadium --\n1. Create stadium\n2. List stadiums\n3. Stadium details\n4. Update stadium\n5. Delete stadium");
-        System.out.println("-- Section --\n6. Create section\n7. List sections\n8. Section details\n9. Update section\n10. Delete section");
-        System.out.println("-- Seat --\n11. Create seat\n12. List seats\n13. Seat details\n14. Update seat\n15. Delete seat");
-        System.out.println("16. Activate seat\n17. Deactivate seat\n0. Back");
+        System.out.println("\n=== ADMIN > VENUES AND SEATING ===");
+        System.out.println("1. Stadiums\n2. Sections\n3. Seats\n0. Back to system operations");
         return this.readInt("Choose: ");
+    }
+
+    public int showVenueActionsMenu(int group) {
+        switch (group) {
+            case 1:
+                System.out.println("\n=== ADMIN > VENUES > STADIUMS ===");
+                System.out.println("1. Create stadium\n2. List stadiums\n3. Stadium details\n4. Update stadium\n5. Delete stadium");
+                break;
+            case 2:
+                System.out.println("\n=== ADMIN > VENUES > SECTIONS ===");
+                System.out.println("1. Create section\n2. List sections by stadium\n3. Section details\n4. Update section\n5. Delete section");
+                break;
+            case 3:
+                System.out.println("\n=== ADMIN > VENUES > SEATS ===");
+                System.out.println("1. Create seat\n2. List seats by section\n3. Seat details\n4. Update seat\n5. Delete seat\n6. Activate seat\n7. Deactivate seat");
+                break;
+            default: throw new IllegalArgumentException("Invalid venue group.");
+        }
+        System.out.println("0. Back to venues and seating");
+        return readInt("Choose: ");
     }
 
     public int showMatchMenu() {
-        System.out.println("\n=== MATCH / PRICE / SALES ===");
-        System.out.println("-- Match --\n1. Create match\n2. List matches\n3. Match details\n4. Update match\n5. Delete match");
-        System.out.println("-- Pricing --\n6. Create price\n7. List prices\n8. Price details\n9. Update price\n10. Delete price");
-        System.out.println("-- Sales --\n11. Open sales\n12. Close sales\n13. Sales status\n0. Back");
+        System.out.println("\n=== ADMIN > MATCHES, PRICING AND SALES ===");
+        System.out.println("1. Matches\n2. Ticket pricing\n3. Ticket sales\n0. Back to system operations");
         return this.readInt("Choose: ");
     }
 
+    public int showMatchActionsMenu(int group) {
+        switch (group) {
+            case 1:
+                System.out.println("\n=== ADMIN > MATCHES > MATCH MANAGEMENT ===");
+                System.out.println("1. Create match\n2. List matches\n3. Match details\n4. Update match\n5. Delete match");
+                break;
+            case 2:
+                System.out.println("\n=== ADMIN > MATCHES > TICKET PRICING ===");
+                System.out.println("1. Create price\n2. List prices by match\n3. Price details\n4. Update price\n5. Delete price");
+                break;
+            case 3:
+                System.out.println("\n=== ADMIN > MATCHES > TICKET SALES ===");
+                System.out.println("1. Open ticket sales\n2. Close ticket sales\n3. View sales status");
+                break;
+            default: throw new IllegalArgumentException("Invalid match group.");
+        }
+        System.out.println("0. Back to matches, pricing and sales");
+        return readInt("Choose: ");
+    }
+
+    public int showAccountsMenu() {
+        System.out.println("\n=== ADMIN > ACCOUNTS AND ROLES ===");
+        System.out.println("1. Fan accounts\n2. Staff accounts\n0. Back to system operations");
+        return readInt("Choose: ");
+    }
+
+    public int showReportsMenu() {
+        System.out.println("\n=== ADMIN > REPORTS AND AUDIT LOGS ===");
+        System.out.println("1. System summary\n2. Audit logs\n0. Back to system operations");
+        return readInt("Choose: ");
+    }
+
     public int showFanManagementMenu() {
-        System.out.println("\n=== FAN ACCOUNTS ===");
+        System.out.println("\n=== ADMIN > ACCOUNTS > FANS ===");
         System.out.println("1. Create\n2. List\n3. Details\n4. Search\n5. Filter status");
-        System.out.println("6. Update\n7. Activate\n8. Deactivate\n9. Delete\n0. Back");
+        System.out.println("6. Update\n7. Activate\n8. Deactivate\n9. Delete\n0. Back to accounts and roles");
         return this.readInt("Choose: ");
     }
 
     public int showStaffManagementMenu() {
-        System.out.println("\n=== STAFF ACCOUNTS ===");
+        System.out.println("\n=== ADMIN > ACCOUNTS > STAFF ===");
         System.out.println("1. Create\n2. List\n3. Details\n4. Search\n5. Filter role/status");
-        System.out.println("6. Update\n7. Activate\n8. Deactivate\n9. Assign role\n10. Change role\n11. Revoke role\n0. Back");
+        System.out.println("6. Update\n7. Activate\n8. Deactivate\n9. Staff roles\n0. Back to accounts and roles");
         return this.readInt("Choose: ");
+    }
+
+    public int showStaffRoleMenu() {
+        System.out.println("\n=== ADMIN > ACCOUNTS > STAFF > ROLES ===");
+        System.out.println("1. Assign role\n2. Change role\n3. Revoke role\n0. Back to staff accounts");
+        return readInt("Choose: ");
     }
 
     public StadiumRequestDto readStadiumRequest() {
@@ -123,7 +176,8 @@ public class AdminManagementView {
     }
 
     public int showRefundReviewMenu() {
-        System.out.println("1. Review a request | 0. Back");
+        System.out.println("\n=== ADMIN > REFUND REVIEWS ===");
+        System.out.println("1. Review a request\n0. Back to system operations");
         return readInt("Choose: ");
     }
 

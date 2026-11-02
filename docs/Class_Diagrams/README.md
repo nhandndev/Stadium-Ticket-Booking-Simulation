@@ -12,6 +12,10 @@ The [Console View Review](../15_CONSOLE_VIEW_REVIEW.md) documents later usabilit
 50 passing CLI smoke scenarios and exact Page/Class member changes. Both draw.io copies
 include those changes, while retaining the original colors, columns and relationship style.
 
+The later [Menu Structure update](../16_CONSOLE_MENU_STRUCTURE.md) splits the Fan,
+Seller and Admin operation menus into task-focused submenus. Its additional View
+menu methods are included in both canonical draw.io copies.
+
 Page 02 shows the no-argument constructors and setters already present in the implemented Stadium request/response DTOs. These are Java Console DTO conveniences, not new business features.
 
 The `.mmd` files below remain copies of the earlier View-first design. Use the new draw.io file for the controller-first presentation, not those copies.

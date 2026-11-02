@@ -327,6 +327,11 @@ The [Console View Review](docs/15_CONSOLE_VIEW_REVIEW.md) records usability fixe
 50 passing isolated CLI smoke scenarios and exact visible Class Diagram changes.
 All six implemented View classes were checked; simulation execution remains Stage 10 work.
 
+Operation menus are now grouped by task: Fan booking/payment/tickets/refunds,
+Seller customers/bookings/cash sales, and Admin venues/matches/accounts/reports.
+See [Menu Structure](docs/16_CONSOLE_MENU_STRUCTURE.md) and run
+`python3 scripts/smoke_console_menus.py` for the 27 isolated menu smoke scenarios.
+
 ---
 
 ## 8. Responsible AI Collaboration & Academic Integrity

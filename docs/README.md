@@ -24,6 +24,9 @@ docs/
 Console usability review and 50 isolated smoke scenarios:
 [15_CONSOLE_VIEW_REVIEW.md](15_CONSOLE_VIEW_REVIEW.md), including exact visible UML member changes.
 
+Current grouped menus and their 27 navigation/flow checks:
+[16_CONSOLE_MENU_STRUCTURE.md](16_CONSOLE_MENU_STRUCTURE.md).
+
 ## 1. 🌟 KHỐI SƠ ĐỒ THIẾT KẾ CHUẨN (CLASS DIAGRAMS & USE CASE)
 
 *   📐 **[ClassDiagram.drawio](ClassDiagram.drawio)** (Bản sao tại [Class_Diagrams/ClassDiagram.drawio](Class_Diagrams/ClassDiagram.drawio)):  
@@ -37,6 +40,7 @@ Console usability review and 50 isolated smoke scenarios:
 
 *   📖 **[Thuyet_Trinh/README.md](Thuyet_Trinh/README.md)**: Danh mục kịch bản báo cáo toàn diện.
 *   **[14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md](Thuyet_Trinh/14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md)**: Script demo hiện tại: từng feature, dữ liệu nhập, kết quả, lời giải thích, luồng Fan/Seller/Gate/Refund và dữ liệu demo riêng. File 13 là bản chặng 01-07 cũ.
+*   **[15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md](Thuyet_Trinh/15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md)**: Bản chi tiết nhất: 142 flow có lượt bấm cụ thể và output console lấy từ chạy thật, từ Main đến chức năng và quay lại Main.
 *   🔍 **[11_CHI_TIET_LUONG_CODE_FLOW.md](Thuyet_Trinh/11_CHI_TIET_LUONG_CODE_FLOW.md)**: Truy vết luồng thực thi (Call-Stack Tracing) từ `MainController` qua từng tầng.
 *   💾 **[12_NGUYEN_LY_CSV_VA_REPOSITORY.md](Thuyet_Trinh/12_NGUYEN_LY_CSV_VA_REPOSITORY.md)**: Giải trình chi tiết nguyên lý hoạt động của Generic CSV Repository Pattern.
 *   📊 **[10_KICH_BAN_BAO_CAO_TIEN_DO.md](Thuyet_Trinh/10_KICH_BAN_BAO_CAO_TIEN_DO.md)**: Kịch bản báo cáo tiến độ 65% trước Giảng viên.

@@ -58,7 +58,7 @@ public class MainView {
     public int showFanMenu() {
         System.out.println("\n=== FAN DASHBOARD ===");
         System.out.println("1. View profile");
-        System.out.println("2. Booking / Payment / Tickets / Refund");
+        System.out.println("2. Tickets and bookings");
         System.out.println("3. Update profile");
         System.out.println("4. Browse matches");
         System.out.println("0. Logout");
