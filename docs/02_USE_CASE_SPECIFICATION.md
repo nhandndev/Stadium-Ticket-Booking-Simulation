@@ -67,6 +67,6 @@ Approval cancels the sale/tickets and releases BOOKED inventory.
 ## Full Feature Coverage
 
 [Use Case traceability](06_USE_CASE_TRACEABILITY.md) maps every visible feature
-node to code and a captured feature guide. The [feature index](Demo_Tung_Feature/README.md)
+node to code and a captured feature guide. The [feature index](Feature_Demos/README.md)
 groups all delivered operations by actor/domain. Hold expiry is a business rule of
 booking, payment and seat availability, and is explained in the diagram note.

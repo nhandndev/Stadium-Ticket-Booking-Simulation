@@ -2111,3 +2111,29 @@ Limits and student verification
 - Expiry is evaluated on application operations using stored wall-clock timestamps. Legacy PENDING without timestamps needs a new booking after expiry.
 - Synchronization coordinates one JVM. Payments/refunds are mocked and multi-file CSV changes retain their documented interruption/reconciliation limits.
 - The student should rehearse with the documented copied fixture and distinguish agent-generated contributions/checks from independent understanding and authorship.
+
+## Entry 59 - Translate Project Documentation to English
+
+Date — 2026-11-13. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Convert the Vietnamese project documentation to English.
+
+AI contribution
+
+- Translated all remaining Vietnamese documentation prose in docs, including 87 feature guides, 148 scenario descriptions, setup/navigation instructions, full Use Case traceability and the presentation guide.
+- Translated repeated step captions, prerequisites, feature purposes and explanation notes while preserving scenario identifiers, operation order and implementation meaning.
+- Renamed docs/Demo_Tung_Feature to docs/Feature_Demos and the three Vietnamese navigation filenames to 00_SETUP.md, 01_DEMO_ORDER.md and 02_MENU_MAP.md.
+- Updated current relative links, fixture-copy command paths, root README and agent context to the English names and language convention.
+- Preserved original captured inputs and Console output, including proper names in runtime data. CSV fixtures, draw.io and Mermaid contracts retain their exact contents.
+
+Agent verification
+
+- Checked English prose, local links, code fences and explicit flow anchors across 103 current Markdown files, including root and agent READMEs.
+- Confirmed all 87 feature guides, 148 unique flows and 1546 step/output pairs remain.
+- Compared fenced commands, input sequences and Console blocks against the pre-translation snapshot, allowing only the required renamed documentation paths.
+- Compared the canonical draw.io, five Mermaid files and supplied CSV fixtures byte-for-byte against the snapshot.
+- Confirmed current documentation/source/inspection references contain no old Vietnamese documentation paths or old language-convention instructions. git diff --check passed.
+
+Translation boundary
+
+Captured runtime data and historical personal audit entries retain their source wording and proper names. The authored project documentation now uses English.

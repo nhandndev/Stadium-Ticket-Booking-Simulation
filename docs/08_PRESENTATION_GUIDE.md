@@ -1,64 +1,64 @@
-# Kịch bản thuyết trình dự án
+# Project Presentation Guide
 
-## Bài toán của nhóm
+## The Group's Problem Statement
 
-- Nhóm xây dựng hệ thống đặt vé sân vận động bằng Java Console, lưu CSV.
-- Administrator chuẩn bị sân, khu vực, ghế, trận, giá và trạng thái mở bán.
-- Guest tìm trận, xem thông tin và đăng ký tài khoản.
-- Fan chọn tối đa bốn ghế rồi tạo booking.
-- Seller hỗ trợ khách tại quầy, nhận tiền offline và xuất vé.
-- Gate Staff xác thực và check-in vé. Administrator xử lý refund đủ điều kiện.
+- Our group develops a Java Console stadium ticket booking system with CSV persistence.
+- Administrator prepares Stadiums, Sections, Seats, Matches, prices and sales status.
+- Guest searches Matches, reads information and registers an account.
+- Fan selects up to four seats and creates a booking.
+- Seller serves counter customers, accepts offline payment and issues tickets.
+- Gate Staff validates tickets and checks them in. Administrator reviews eligible refunds.
 
-## Giải thích luồng booking
+## Explaining the Booking Workflow
 
-- Khi tạo PENDING, hệ thống lưu tổng tiền, createdAt và expiresAt.
-- Mỗi ghế được giữ có trạng thái LOCKED và holdBookingId chỉ đúng booking sở hữu.
-- Thời hạn tối đa 30 phút, kết thúc sớm nếu trận bắt đầu trước đó.
-- Fan trả online ngay hoặc trả sau. Fan cũng có thể đưa Booking ID cho Seller
-  nhận thanh toán offline trong cùng hạn.
-- Hết hạn thì booking thành EXPIRED, từ chối thanh toán và trả ghế đang giữ.
-- Huỷ booking chưa trả hoặc thanh toán thất bại cũng trả ghế của booking đó.
-- SYNCHRONIZED bảo vệ bước kiểm tra và thay đổi trạng thái trong một JVM.
+- Creating PENDING stores the total, createdAt and expiresAt.
+- Each held Seat has LOCKED status and holdBookingId identifying its owning booking.
+- The maximum window is 30 minutes, ending earlier if the Match starts sooner.
+- Fan can pay online immediately or later, or give the Booking ID to Seller for
+  offline payment within the same deadline.
+- At expiry, the booking becomes EXPIRED, payment is rejected and owned holds are released.
+- Cancelling an unpaid booking or failing payment also releases that booking's holds.
+- SYNCHRONIZED protects validation and state changes within one JVM.
 
-## Bảy feature Seller
+## The Seven Seller Features
 
-1. Search Fan dùng tìm khách theo tên/email hoặc xem danh sách.
-2. Create Fan dùng đăng ký tài khoản khi khách muốn có tài khoản.
-3. Create booking for Fan dùng chọn khách ACTIVE, trận và ghế. Nhánh vãng lai
-   mua trực tiếp tại quầy và giữ mã booking/mã vé.
-4. Accept offline payment dùng nhận tiền cho booking còn hạn. Ví dụ Fan chọn
-   trả sau và đưa Booking ID cho Seller.
-5. Issue ticket dùng xuất vé sau khi booking đã CONFIRMED và trả tiền thành công.
-6. View seat map and prices dùng xem mã ghế, giá và trạng thái.
-7. View customer booking history dùng xem các đơn của tài khoản Fan đã chọn.
+1. Search Fan finds accounts by name/email or lists them.
+2. Create Fan registers an account when the customer wants one.
+3. Create booking for Fan selects an ACTIVE customer, Match and seats. The walk-in
+   branch buys directly at the counter and keeps booking/ticket codes.
+4. Accept offline payment collects cash for an unexpired booking. For example,
+   Fan chooses later payment and brings the Booking ID to Seller.
+5. Issue ticket issues tickets after the booking is CONFIRMED and payment succeeds.
+6. View seat map and prices shows Seat IDs, prices and availability.
+7. View customer booking history lists the selected Fan account's orders.
 
-Tạo booking, nhận tiền offline và xuất vé là ba thao tác riêng. Tài khoản
-INACTIVE bị chặn trước khi chọn trận. Nhập Seat IDs 1,2,3,4 là chọn bốn mã ghế
-trong cột SEAT ID. Lỗi phải chỉ ra ghế sai và nguyên nhân.
+Booking creation, offline payment and ticket issue are separate operations.
+INACTIVE accounts are rejected before Match selection. Seat IDs 1,2,3,4 select
+four numeric IDs from the SEAT ID column. Errors identify the failed Seat ID and reason.
 
-## Phân biệt các bảng và quan hệ
+## Explaining Classes and Relationships
 
-- Seat là ghế vật lý. MatchSeat là ghế của một trận cụ thể.
-- Booking history là lịch sử đơn/tổng tiền/trạng thái. Ticket history là từng
-  vé đã phát hành và trạng thái sử dụng.
-- Booking tới Fan có multiplicity 0..1 vì có nhánh khách vãng lai.
-- MatchSeat.holdBookingId tham chiếu booking đang giữ ghế.
-- Controller điều phối View và Service. Service gọi Repository để đọc/ghi CSV.
-- Request/Response DTO chuyển dữ liệu giữa các tầng.
-- Mũi tên class thể hiện quan hệ cấu trúc. Luồng thao tác được giải thích riêng.
+- Seat is the physical layout. MatchSeat is its inventory for a particular Match.
+- Booking history represents orders, totals and status. Ticket history represents
+  individual issued tickets and their use state.
+- Booking-to-Fan multiplicity is 0..1 because walk-in bookings leave fanId empty.
+- MatchSeat.holdBookingId refers to the booking currently holding that seat.
+- Controller coordinates View and Service. Service uses Repository for CSV access.
+- Request/Response DTOs carry data between layers.
+- Class arrows express structural relationships. Explain runtime operation separately.
 
-## Đọc sơ đồ theo trang
+## Diagram Reading Order
 
-- Trang 00 giới thiệu actor và chức năng. [Đối chiếu đầy đủ](06_USE_CASE_TRACEABILITY.md)
-  có đường dẫn từ từng Use Case tới code và demo.
-- Trang 01 giới thiệu Main, authentication, browsing và dịch vụ dọn booking hết hạn.
-- Trang 02 giới thiệu quản trị, bao gồm kiểm tra hold đã hết hạn trước khi tắt ghế.
-- Trang 03 giới thiệu booking, payment, ticket, refund, deadline và chủ sở hữu hold.
-- Trang 04 giới thiệu CSV repository, phiên bản dữ liệu cũ/mới và entity chung.
-- Trang 05 giới thiệu quan hệ model và multiplicity.
+- Page 00 introduces actors and features. The [full traceability review](06_USE_CASE_TRACEABILITY.md)
+  links each Use Case to code and a demo.
+- Page 01 introduces Main, authentication, browsing and booking-expiry cleanup.
+- Page 02 covers administration, including elapsed-hold cleanup before Seat deactivation.
+- Page 03 covers booking, payment, tickets, refunds, deadlines and hold ownership.
+- Page 04 explains CSV repositories, old/new data layouts and shared entities.
+- Page 05 explains model relationships and multiplicities.
 
-## Demo
+## Demonstration
 
-Theo [chuẩn bị](Demo_Tung_Feature/00_CHUAN_BI.md) và
-[thứ tự thao tác](Demo_Tung_Feature/01_THU_TU_DEMO.md). Dùng đúng bản sao đã ghi
-trong từng flow để giữ ID và trạng thái khớp Console.
+Follow the [setup guide](Feature_Demos/00_SETUP.md) and
+[execution order](Feature_Demos/01_DEMO_ORDER.md). Use the copied dataset
+specified by each flow so Console IDs and state match the captures.

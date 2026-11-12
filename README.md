@@ -214,12 +214,12 @@ Read the documents in this order.
 5. [Verification and delivery](docs/05_VERIFICATION_AND_DELIVERY.md) for checks and submission preparation.
 6. [Use Case traceability](docs/06_USE_CASE_TRACEABILITY.md) for feature-demo links.
 7. [AI reflection guide](docs/07_AI_REFLECTION_GUIDE.md) for T10 and usage records.
-8. [Vietnamese presentation guide](docs/08_PRESENTATION_GUIDE.md).
+8. [Presentation guide](docs/08_PRESENTATION_GUIDE.md).
 
 - [Canonical Use Case and Class Diagram](docs/ClassDiagram.drawio) contains
   pages 00–05. The [diagram guide and five Mermaid files](docs/Class_Diagrams/README.md)
   describe the class contracts.
-- [Per-feature Console demos](docs/Demo_Tung_Feature/README.md) contain 87 feature
+- [Per-feature Console demos](docs/Feature_Demos/README.md) contain 87 feature
   files and 148 recorded flows. Start with their preparation guide.
 - [Agent project context](READMEFORAGENT.md) explains source locations,
   conventions and how to keep changes aligned.

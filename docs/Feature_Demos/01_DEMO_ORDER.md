@@ -1,0 +1,155 @@
+# Complete Demo Order
+
+Start with the [setup guide](00_SETUP.md). Flows 001–142 share CORE_DIR and
+run in order because they reuse records. Each flow starts at Main. Retired IDs
+are 091 and 133–135. Continue with 092 after 090 and 136 after 132.
+Flows 143–150 use COUNTER_DEMO_DIR, and Flows 151–152 use EXPIRY_DEMO_DIR.
+
+- [Flow 001 — Search Matches by team name](01_Guest/01_Search_Matches.md#flow-001).
+- [Flow 002 — View Match Details from search results](01_Guest/02_View_Match_Details.md#flow-002).
+- [Flow 003 — View Seat Availability from search results](01_Guest/03_View_Seat_Availability.md#flow-003).
+- [Flow 004 — Filter Matches by Stadium and date](01_Guest/04_Filter_Matches_and_List_Schedule.md#flow-004).
+- [Flow 005 — List All Matches with empty filters](01_Guest/04_Filter_Matches_and_List_Schedule.md#flow-005).
+- [Flow 006 — View Match Details directly by ID](01_Guest/02_View_Match_Details.md#flow-006).
+- [Flow 007 — View Seat Map directly by ID](01_Guest/03_View_Seat_Availability.md#flow-007).
+- [Flow 008 — Search with no matching result](01_Guest/01_Search_Matches.md#flow-008).
+- [Flow 009 — Register Fan Account](02_Authentication_User/01_Register_Fan_Account.md#flow-009).
+- [Flow 010 — Reject duplicate registration email](02_Authentication_User/01_Register_Fan_Account.md#flow-010).
+- [Flow 011 — Login As Fan](02_Authentication_User/02_Login_As_Fan.md#flow-011).
+- [Flow 012 — View Fan Profile](02_Authentication_User/04_View_Profile.md#flow-012).
+- [Flow 013 — Update Fan Profile](02_Authentication_User/05_Update_Profile.md#flow-013).
+- [Flow 014 — Log out as Fan](02_Authentication_User/06_Logout.md#flow-014).
+- [Flow 015 — Reject an incorrect password](02_Authentication_User/02_Login_As_Fan.md#flow-015).
+- [Flow 016 — Reject an INACTIVE account](02_Authentication_User/02_Login_As_Fan.md#flow-016).
+- [Flow 017 — Use a Staff account at Fan login](02_Authentication_User/02_Login_As_Fan.md#flow-017).
+- [Flow 018 — Use a Fan account at Staff login](02_Authentication_User/03_Login_As_Staff.md#flow-018).
+- [Flow 019 — Cancel the login form](02_Authentication_User/02_Login_As_Fan.md#flow-019).
+- [Flow 020 — Log in as Administrator](02_Authentication_User/03_Login_As_Staff.md#flow-020).
+- [Flow 021 — Create Stadium](03_Admin_Venues/01_Create_Stadium.md#flow-021).
+- [Flow 022 — View Stadium List](03_Admin_Venues/02_View_Stadium_List.md#flow-022).
+- [Flow 023 — View Stadium Details](03_Admin_Venues/03_View_Stadium_Details.md#flow-023).
+- [Flow 024 — Update Stadium](03_Admin_Venues/04_Update_Stadium.md#flow-024).
+- [Flow 025 — Create Section](03_Admin_Venues/06_Create_Section.md#flow-025).
+- [Flow 026 — View Sections by Stadium](03_Admin_Venues/07_View_Sections_by_Stadium.md#flow-026).
+- [Flow 027 — View Section Details](03_Admin_Venues/08_View_Section_Details.md#flow-027).
+- [Flow 028 — Update Section](03_Admin_Venues/09_Update_Section.md#flow-028).
+- [Flow 029 — Create Seat A1](03_Admin_Venues/11_Create_Seat.md#flow-029).
+- [Flow 030 — Create Seat A2](03_Admin_Venues/11_Create_Seat.md#flow-030).
+- [Flow 031 — Create Seat A3](03_Admin_Venues/11_Create_Seat.md#flow-031).
+- [Flow 032 — Create Seat A4](03_Admin_Venues/11_Create_Seat.md#flow-032).
+- [Flow 033 — Create Seat A5](03_Admin_Venues/11_Create_Seat.md#flow-033).
+- [Flow 034 — Create Seat A6](03_Admin_Venues/11_Create_Seat.md#flow-034).
+- [Flow 035 — Create Seat A7](03_Admin_Venues/11_Create_Seat.md#flow-035).
+- [Flow 036 — Create Seat A8](03_Admin_Venues/11_Create_Seat.md#flow-036).
+- [Flow 037 — View Seats by Section](03_Admin_Venues/12_View_Seats_by_Section.md#flow-037).
+- [Flow 038 — View Seat Details](03_Admin_Venues/13_View_Seat_Details.md#flow-038).
+- [Flow 039 — Update Seat](03_Admin_Venues/14_Update_Seat.md#flow-039).
+- [Flow 040 — Restore Seat A8 before ticket sales](03_Admin_Venues/14_Update_Seat.md#flow-040).
+- [Flow 041 — Deactivate Seat](03_Admin_Venues/16_Deactivate_Seat.md#flow-041).
+- [Flow 042 — Activate Seat](03_Admin_Venues/15_Activate_Seat.md#flow-042).
+- [Flow 043 — Create an auxiliary Seat for deletion](03_Admin_Venues/11_Create_Seat.md#flow-043).
+- [Flow 044 — Cancel Seat deletion confirmation](03_Admin_Venues/17_Delete_Seat.md#flow-044).
+- [Flow 045 — Confirm Seat deletion](03_Admin_Venues/17_Delete_Seat.md#flow-045).
+- [Flow 046 — Create an auxiliary Section for deletion](03_Admin_Venues/06_Create_Section.md#flow-046).
+- [Flow 047 — Delete Section](03_Admin_Venues/10_Delete_Section.md#flow-047).
+- [Flow 048 — Create an auxiliary Stadium for deletion](03_Admin_Venues/01_Create_Stadium.md#flow-048).
+- [Flow 049 — Delete Stadium](03_Admin_Venues/05_Delete_Stadium.md#flow-049).
+- [Flow 050 — Reject Stadium deletion while Sections remain](03_Admin_Venues/05_Delete_Stadium.md#flow-050).
+- [Flow 051 — Create Match](04_Admin_Matches_Prices/01_Create_Match.md#flow-051).
+- [Flow 052 — View Match List](04_Admin_Matches_Prices/02_View_Match_List.md#flow-052).
+- [Flow 053 — View Match Details](04_Admin_Matches_Prices/03_View_Match_Details.md#flow-053).
+- [Flow 054 — Update Match](04_Admin_Matches_Prices/04_Update_Match.md#flow-054).
+- [Flow 055 — Create an auxiliary Match for deletion](04_Admin_Matches_Prices/01_Create_Match.md#flow-055).
+- [Flow 056 — Delete Match](04_Admin_Matches_Prices/05_Delete_Match.md#flow-056).
+- [Flow 057 — Create Ticket Price](04_Admin_Matches_Prices/06_Create_Ticket_Price.md#flow-057).
+- [Flow 058 — View Ticket Prices by Match](04_Admin_Matches_Prices/07_View_Ticket_Prices_by_Match.md#flow-058).
+- [Flow 059 — View Ticket Price Details](04_Admin_Matches_Prices/08_View_Ticket_Price_Details.md#flow-059).
+- [Flow 060 — Update Ticket Price](04_Admin_Matches_Prices/09_Update_Ticket_Price.md#flow-060).
+- [Flow 061 — Delete Ticket Price](04_Admin_Matches_Prices/10_Delete_Ticket_Price.md#flow-061).
+- [Flow 062 — Restore the ticket price before opening sales](04_Admin_Matches_Prices/06_Create_Ticket_Price.md#flow-062).
+- [Flow 063 — View sales status before opening](04_Admin_Matches_Prices/13_View_Ticket_Sales_Status.md#flow-063).
+- [Flow 064 — Open Ticket Sales](04_Admin_Matches_Prices/11_Open_Ticket_Sales.md#flow-064).
+- [Flow 065 — Close Ticket Sales](04_Admin_Matches_Prices/12_Close_Ticket_Sales.md#flow-065).
+- [Flow 066 — View sales status after closing](04_Admin_Matches_Prices/13_View_Ticket_Sales_Status.md#flow-066).
+- [Flow 067 — Reopen ticket sales for the purchase flows](04_Admin_Matches_Prices/11_Open_Ticket_Sales.md#flow-067).
+- [Flow 068 — View Seat Map and Prices](05_Fan_Booking_Tickets/01_View_Seat_Map_and_Prices.md#flow-068).
+- [Flow 069 — Create Booking and defer payment](05_Fan_Booking_Tickets/02_Create_Booking.md#flow-069).
+- [Flow 070 — Booking History](05_Fan_Booking_Tickets/03_Booking_History.md#flow-070).
+- [Flow 071 — Booking Details](05_Fan_Booking_Tickets/04_Booking_Details.md#flow-071).
+- [Flow 072 — Cancel Unpaid Pending Booking](07_Cancellation_Refund/01_Cancel_Unpaid_Booking.md#flow-072).
+- [Flow 073 — Create a two-seat Booking for later payment](05_Fan_Booking_Tickets/02_Create_Booking.md#flow-073).
+- [Flow 074 — Pay Pending Booking](05_Fan_Booking_Tickets/05_Pay_Pending_Booking.md#flow-074).
+- [Flow 075 — My Tickets / Ticket History](05_Fan_Booking_Tickets/06_Ticket_History.md#flow-075).
+- [Flow 076 — Ticket Details](05_Fan_Booking_Tickets/07_Ticket_Details.md#flow-076).
+- [Flow 077 — Book the selected Match from browsing and cancel seat selection](05_Fan_Booking_Tickets/08_Book_This_Match_from_Browsing.md#flow-077).
+- [Flow 078 — Create Booking and pay immediately](05_Fan_Booking_Tickets/02_Create_Booking.md#flow-078).
+- [Flow 079 — Create and pay a second Booking immediately](05_Fan_Booking_Tickets/02_Create_Booking.md#flow-079).
+- [Flow 080 — Log in as Seller](02_Authentication_User/03_Login_As_Staff.md#flow-080).
+- [Flow 081 — Search Customer](06_Seller/01_Search_and_List_Customers.md#flow-081).
+- [Flow 082 — List Customers with an empty keyword](06_Seller/01_Search_and_List_Customers.md#flow-082).
+- [Flow 083 — Create a Fan Account at the counter](06_Seller/02_Create_Customer_Fan_Account.md#flow-083).
+- [Flow 084 — View Seat Map and Prices at the counter](06_Seller/03_View_Seat_Map_and_Prices.md#flow-084).
+- [Flow 085 — Create Booking for Customer](06_Seller/04_Create_Booking_for_Customer.md#flow-085).
+- [Flow 086 — Customer Booking History](06_Seller/05_Customer_Booking_History.md#flow-086).
+- [Flow 087 — Cancel offline cash receipt confirmation](06_Seller/06_Accept_Cash_Payment.md#flow-087).
+- [Flow 088 — Accept Cash Payment](06_Seller/06_Accept_Cash_Payment.md#flow-088).
+- [Flow 089 — Issue Tickets for Paid Booking](06_Seller/07_Issue_Tickets.md#flow-089).
+- [Flow 090 — Repeat ticket issue without duplicates](06_Seller/07_Issue_Tickets.md#flow-090).
+- [Flow 092 — Request a refund for Booking B4](07_Cancellation_Refund/02_Request_Refund.md#flow-092).
+- [Flow 093 — Request a refund for Booking B5](07_Cancellation_Refund/02_Request_Refund.md#flow-093).
+- [Flow 094 — View refund requests before review](07_Cancellation_Refund/03_My_Refund_Requests.md#flow-094).
+- [Flow 095 — Approve Refund](07_Cancellation_Refund/04_Approve_Refund.md#flow-095).
+- [Flow 096 — Reject Refund](07_Cancellation_Refund/05_Reject_Refund.md#flow-096).
+- [Flow 097 — View refund requests after review](07_Cancellation_Refund/03_My_Refund_Requests.md#flow-097).
+- [Flow 098 — View ticket history after refund](05_Fan_Booking_Tickets/06_Ticket_History.md#flow-098).
+- [Flow 099 — Log in as Gate Staff](02_Authentication_User/03_Login_As_Staff.md#flow-099).
+- [Flow 100 — Validate Ticket](08_Gate/01_Validate_Ticket.md#flow-100).
+- [Flow 101 — Cancel check-in confirmation](08_Gate/02_Check_In_Ticket.md#flow-101).
+- [Flow 102 — Check-in Ticket](08_Gate/02_Check_In_Ticket.md#flow-102).
+- [Flow 103 — Reject repeated ticket use](08_Gate/02_Check_In_Ticket.md#flow-103).
+- [Flow 104 — Reject a ticket for the wrong Match](08_Gate/01_Validate_Ticket.md#flow-104).
+- [Flow 105 — Reject an unknown ticket code](08_Gate/02_Check_In_Ticket.md#flow-105).
+- [Flow 106 — Reject a refund for a checked-in ticket](07_Cancellation_Refund/02_Request_Refund.md#flow-106).
+- [Flow 107 — Create a Fan Account as Administrator](09_Admin_Accounts_Roles/01_Create_Fan_Account.md#flow-107).
+- [Flow 108 — View Fan List](09_Admin_Accounts_Roles/02_View_Fan_List.md#flow-108).
+- [Flow 109 — View Fan Details](09_Admin_Accounts_Roles/03_View_Fan_Details.md#flow-109).
+- [Flow 110 — Search Fan](09_Admin_Accounts_Roles/04_Search_Fan.md#flow-110).
+- [Flow 111 — Filter Fan Status](09_Admin_Accounts_Roles/05_Filter_Fan_Status.md#flow-111).
+- [Flow 112 — Update Fan Information](09_Admin_Accounts_Roles/06_Update_Fan_Information.md#flow-112).
+- [Flow 113 — Deactivate Fan Account](09_Admin_Accounts_Roles/07_Deactivate_Fan.md#flow-113).
+- [Flow 114 — Activate Fan Account](09_Admin_Accounts_Roles/08_Activate_Fan.md#flow-114).
+- [Flow 115 — Delete Fan Account](09_Admin_Accounts_Roles/09_Delete_Fan.md#flow-115).
+- [Flow 116 — Create Staff Account](09_Admin_Accounts_Roles/10_Create_Staff_Account.md#flow-116).
+- [Flow 117 — View Staff List](09_Admin_Accounts_Roles/11_View_Staff_List.md#flow-117).
+- [Flow 118 — View Staff Details](09_Admin_Accounts_Roles/12_View_Staff_Details.md#flow-118).
+- [Flow 119 — Search Staff](09_Admin_Accounts_Roles/13_Search_Staff.md#flow-119).
+- [Flow 120 — Filter Staff Role and Status](09_Admin_Accounts_Roles/14_Filter_Staff_Role_and_Status.md#flow-120).
+- [Flow 121 — Update Staff Information](09_Admin_Accounts_Roles/15_Update_Staff_Information.md#flow-121).
+- [Flow 122 — Deactivate Staff Account](09_Admin_Accounts_Roles/16_Deactivate_Staff.md#flow-122).
+- [Flow 123 — Activate Staff Account](09_Admin_Accounts_Roles/17_Activate_Staff.md#flow-123).
+- [Flow 124 — Change Staff Role](09_Admin_Accounts_Roles/18_Change_Staff_Role.md#flow-124).
+- [Flow 125 — Revoke Staff Role](09_Admin_Accounts_Roles/19_Revoke_Staff_Role.md#flow-125).
+- [Flow 126 — Assign Staff Role](09_Admin_Accounts_Roles/20_Assign_Staff_Role.md#flow-126).
+- [Flow 127 — View Seller Profile](02_Authentication_User/04_View_Profile.md#flow-127).
+- [Flow 128 — Update Seller Profile](02_Authentication_User/05_Update_Profile.md#flow-128).
+- [Flow 129 — View Gate Staff Profile](02_Authentication_User/04_View_Profile.md#flow-129).
+- [Flow 130 — Update Gate Staff Profile](02_Authentication_User/05_Update_Profile.md#flow-130).
+- [Flow 131 — View Administrator Profile](02_Authentication_User/04_View_Profile.md#flow-131).
+- [Flow 132 — Update Administrator Profile](02_Authentication_User/05_Update_Profile.md#flow-132).
+- [Flow 136 — View System Summary](10_Admin_Monitoring/01_View_System_Summary.md#flow-136).
+- [Flow 137 — View Audit Log](10_Admin_Monitoring/02_View_Audit_Log.md#flow-137).
+- [Flow 138 — Verify saved profile after restarting](02_Authentication_User/07_CSV_Profile_Persistence.md#flow-138).
+- [Flow 139 — Recover from nonnumeric menu input](11_System/01_Invalid_Menu_Input.md#flow-139).
+- [Flow 140 — Reject more than four selected seats](05_Fan_Booking_Tickets/02_Create_Booking.md#flow-140).
+- [Flow 141 — Handle failed mock online payment](05_Fan_Booking_Tickets/05_Pay_Pending_Booking.md#flow-141).
+- [Flow 142 — Exit System](11_System/02_Exit_System.md#flow-142).
+- [Flow 143 — Create a walk-in booking with a 30-minute seat hold](06_Seller/04_Create_Booking_for_Customer.md#flow-143).
+- [Flow 144 — Accept offline payment for the walk-in booking](06_Seller/06_Accept_Cash_Payment.md#flow-144).
+- [Flow 145 — Create another walk-in booking and defer offline payment](06_Seller/04_Create_Booking_for_Customer.md#flow-145).
+- [Flow 146 — Accept offline payment within the persisted deadline after restart](06_Seller/06_Accept_Cash_Payment.md#flow-146).
+- [Flow 147 — Issue paid walk-in tickets as a separate Seller action](06_Seller/07_Issue_Tickets.md#flow-147).
+- [Flow 148 — Reject an inactive Fan before selecting the match](06_Seller/04_Create_Booking_for_Customer.md#flow-148).
+- [Flow 149 — Explain malformed Seat IDs](06_Seller/04_Create_Booking_for_Customer.md#flow-149).
+- [Flow 150 — Explain a seat already sold for the chosen match](06_Seller/04_Create_Booking_for_Customer.md#flow-150).
+- [Flow 151 — Expired booking is visible in Fan history and cannot be paid online](05_Fan_Booking_Tickets/05_Pay_Pending_Booking.md#flow-151).
+- [Flow 152 — Seller cannot accept offline payment for an expired booking](06_Seller/06_Accept_Cash_Payment.md#flow-152).

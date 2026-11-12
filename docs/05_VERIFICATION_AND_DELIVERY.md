@@ -47,8 +47,8 @@ javac --release 17 -encoding UTF-8 -d out $(find src -name '*.java')
 java scripts/InspectDiagram.java
 ```
 
-Follow [demo preparation](Demo_Tung_Feature/00_CHUAN_BI.md) and the
-[ordered flows](Demo_Tung_Feature/01_THU_TU_DEMO.md). CORE_DIR uses the checked-in
+Follow [demo preparation](Feature_Demos/00_SETUP.md) and the
+[ordered flows](Feature_Demos/01_DEMO_ORDER.md). CORE_DIR uses the checked-in
 small seed to keep IDs stable. COUNTER_DEMO_DIR copies current source data.
 EXPIRY_DEMO_DIR adds a deliberately elapsed hold to the small seed.
 

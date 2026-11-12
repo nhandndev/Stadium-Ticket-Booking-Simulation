@@ -30,7 +30,7 @@ Doan Ngoc Nhan — QE210282.
 | Persistent fixtures | data/*.csv |
 | Canonical UML and Use Cases | docs/ClassDiagram.drawio |
 | Expanded Mermaid contracts | docs/Class_Diagrams/*.mmd |
-| Recorded Console acceptance flows | docs/Demo_Tung_Feature/ |
+| Recorded Console acceptance flows | docs/Feature_Demos/ |
 
 The canonical draw.io has six pages. Page 00 contains Use Cases, 01 accounts and
 browsing, 02 administration, 03 booking/payment/tickets, 04 repositories and
@@ -75,8 +75,8 @@ Read the SRS, traceability and booking-protection documents before changing rule
 - Keep the supplied unique Fan names, physical-seat layout and business history
   when adjusting fixtures. Use a data copy for demos that write records.
 - Maintain the personal AI audit for substantive agent contributions.
-- Keep root README and this file in English. The presentation and feature demos
-  use Vietnamese.
+- Write all project documentation in English. Captured Console data retains its
+  original proper names, input values and runtime output.
 
 ## Run and Verify
 
