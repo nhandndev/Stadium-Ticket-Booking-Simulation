@@ -1,0 +1,363 @@
+classDiagram
+    direction TB
+    %% Source-aligned booking contracts; see docs/04_BOOKING_CONCURRENCY.md.
+    class CsvRepository~T~ {
+        -filePath: Path
+        +CsvRepository(filePath: Path)
+        +findAll(): List~T~
+        +findById(id: Long): T
+        +findByCondition(condition: Predicate~T~): List~T~
+        +save(entity: T): T
+        +update(entity: T): T
+        +delete(id: Long): boolean
+        +parseLine(line: String): T
+        +formatLine(entity: T): String
+    }
+    class StaffRepository {
+        +StaffRepository(filePath: Path)
+        +findByEmail(email: String): Staff
+        +search(keyword: String): List~Staff~
+        +parseLine(line: String): Staff
+        +formatLine(entity: Staff): String
+    }
+    class StadiumRepository {
+        +StadiumRepository(filePath: Path)
+        +findByName(name: String): List~Stadium~
+        +parseLine(line: String): Stadium
+        +formatLine(entity: Stadium): String
+    }
+    class SectionRepository {
+        +SectionRepository(filePath: Path)
+        +findByStadiumId(stadiumId: Long): List~Section~
+        +parseLine(line: String): Section
+        +formatLine(entity: Section): String
+    }
+    class SeatRepository {
+        +SeatRepository(filePath: Path)
+        +findBySectionId(sectionId: Long): List~Seat~
+        +parseLine(line: String): Seat
+        +formatLine(entity: Seat): String
+    }
+    class MatchRepository {
+        +MatchRepository(filePath: Path)
+        +findUpcoming(): List~Match~
+        +parseLine(line: String): Match
+        +formatLine(entity: Match): String
+    }
+    class BookingRepository {
+        +BookingRepository(filePath: Path)
+        +findByFanId(fanId: Long): List~Booking~
+        +parseLine(line: String): Booking
+        +formatLine(entity: Booking): String
+    }
+    class PaymentRepository {
+        +PaymentRepository(filePath: Path)
+        +findByBookingId(bookingId: Long): Payment
+        +parseLine(line: String): Payment
+        +formatLine(entity: Payment): String
+    }
+    class TicketRepository {
+        -bookingRepository: BookingRepository
+        +TicketRepository(filePath: Path, bookingRepository: BookingRepository)
+        +findByBookingId(bookingId: Long): List~Ticket~
+        +findByCode(ticketCode: String): Ticket
+        +findByFanId(fanId: Long): List~Ticket~
+        +parseLine(line: String): Ticket
+        +formatLine(entity: Ticket): String
+    }
+    class TransactionRepository {
+        +TransactionRepository(filePath: Path)
+        +parseLine(line: String): BookingTransaction
+        +formatLine(entity: BookingTransaction): String
+    }
+    class RefundRepository {
+        +RefundRepository(filePath: Path)
+        +findByFanId(fanId: Long): List~RefundRequest~
+        +findPending(): List~RefundRequest~
+        +parseLine(line: String): RefundRequest
+        +formatLine(entity: RefundRequest): String
+    }
+    class AuditLogRepository {
+        +AuditLogRepository(filePath: Path)
+        +append(log: AuditLog): void
+        +findRecent(limit: int): List~AuditLog~
+        +parseLine(line: String): AuditLog
+        +formatLine(log: AuditLog): String
+    }
+    class MatchSeatRepository {
+        -filePath: Path
+        +MatchSeatRepository(filePath: Path)
+        +findByMatchId(matchId: Long): List~MatchSeat~
+        +find(matchId: Long, seatId: Long): MatchSeat
+        +save(seat: MatchSeat): MatchSeat
+        +deleteByMatchId(matchId: Long): boolean
+        +bookSeatsSynchronized(matchId: Long, seatIds: List~Long~): boolean
+        +releaseSeatsSynchronized(matchId: Long, seatIds: List~Long~): boolean
+        +parseLine(line: String): MatchSeat
+        +formatLine(entity: MatchSeat): String
+    }
+    class TicketPriceRepository {
+        -filePath: Path
+        +TicketPriceRepository(filePath: Path)
+        +findPrice(matchId: Long, sectionId: Long): TicketPrice
+        +findByMatchId(matchId: Long): List~TicketPrice~
+        +save(price: TicketPrice): TicketPrice
+        +update(price: TicketPrice): TicketPrice
+        +delete(matchId: Long, sectionId: Long): boolean
+        +parseLine(line: String): TicketPrice
+        +formatLine(entity: TicketPrice): String
+    }
+    class BaseEntity {
+        -id: Long
+        +BaseEntity(id: Long)
+        +getId(): Long
+        +setId(id: Long): void
+    }
+    class MatchSeat {
+        -matchId: Long
+        -seatId: Long
+        -status: SeatStatus
+        -version: int
+        +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int)
+        +isAvailable(): boolean
+        +lock(): void
+        +markBooked(): void
+        +release(): void
+        +getMatchId(): Long
+        +getSeatId(): Long
+        +getStatus(): SeatStatus
+        +getVersion(): int
+    }
+    class User {
+        -fullName: String
+        -email: String
+        -passwordHash: String
+        -phone: String
+        -role: UserRole
+        -status: UserStatus
+        +User(id: Long, fullName: String, email: String, passwordHash: String, phone: String, role: UserRole, status: UserStatus)
+        +updateProfile(fullName: String, phone: String): void
+        +changeStatus(status: UserStatus): void
+        +changeRole(role: UserRole): void
+        +getFullName(): String
+        +getEmail(): String
+        +getPasswordHash(): String
+        +getPhone(): String
+        +getRole(): UserRole
+        +getStatus(): UserStatus
+    }
+    class Fan {
+        -MAX_TICKETS_PER_TRANSACTION: int = 4
+        +Fan(id: Long, fullName: String, email: String, passwordHash: String, phone: String, status: UserStatus)
+        +canBook(ticketCount: int): boolean
+    }
+    class Staff {
+        +Staff(id: Long, fullName: String, email: String, passwordHash: String, phone: String, role: UserRole, status: UserStatus)
+        +assignRole(role: UserRole): void
+    }
+    class Stadium {
+        -name: String
+        -address: String
+        +Stadium(id: Long, name: String, address: String)
+        +updateDetails(name: String, address: String): void
+        +getName(): String
+        +getAddress(): String
+    }
+    class Section {
+        -stadiumId: Long
+        -name: String
+        +Section(id: Long, stadiumId: Long, name: String)
+        +rename(name: String): void
+        +getStadiumId(): Long
+        +getName(): String
+    }
+    class Seat {
+        -sectionId: Long
+        -rowLabel: String
+        -seatNumber: int
+        -active: boolean
+        +Seat(id: Long, sectionId: Long, rowLabel: String, seatNumber: int, active: boolean)
+        +updateLocation(rowLabel: String, seatNumber: int): void
+        +activate(): void
+        +deactivate(): void
+        +getSectionId(): Long
+        +getRowLabel(): String
+        +getSeatNumber(): int
+        +isActive(): boolean
+    }
+    class Match {
+        -stadiumId: Long
+        -homeTeam: String
+        -awayTeam: String
+        -startTime: LocalDateTime
+        -saleStatus: SaleStatus
+        +Match(id: Long, stadiumId: Long, homeTeam: String, awayTeam: String, startTime: LocalDateTime, saleStatus: SaleStatus)
+        +reschedule(startTime: LocalDateTime): void
+        +changeSaleStatus(status: SaleStatus): void
+        +getStadiumId(): Long
+        +getHomeTeam(): String
+        +getAwayTeam(): String
+        +getStartTime(): LocalDateTime
+        +getSaleStatus(): SaleStatus
+    }
+    class Booking {
+        -fanId: Long
+        -matchId: Long
+        -seatIds: List~Long~
+        -totalAmount: BigDecimal
+        -status: BookingStatus
+        +Booking(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, totalAmount: BigDecimal, status: BookingStatus)
+        +validateTicketLimit(): void
+        +confirm(): void
+        +cancel(): void
+        +getFanId(): Long
+        +getMatchId(): Long
+        +getSeatIds(): List~Long~
+        +getTotalAmount(): BigDecimal
+        +getStatus(): BookingStatus
+    }
+    class Payment {
+        -bookingId: Long
+        -amount: BigDecimal
+        -method: PaymentMethod
+        -status: PaymentStatus
+        +Payment(id: Long, bookingId: Long, amount: BigDecimal, method: PaymentMethod, status: PaymentStatus)
+        +markSuccess(): void
+        +markFailed(): void
+        +getBookingId(): Long
+        +getAmount(): BigDecimal
+        +getMethod(): PaymentMethod
+        +getStatus(): PaymentStatus
+    }
+    class Ticket {
+        -bookingId: Long
+        -matchId: Long
+        -seatId: Long
+        -ticketCode: String
+        -status: TicketStatus
+        -checkedInAt: LocalDateTime
+        +Ticket(id: Long, bookingId: Long, matchId: Long, seatId: Long, ticketCode: String, status: TicketStatus)
+        +issue(): void
+        +isValidForMatch(matchId: Long): boolean
+        +checkIn(time: LocalDateTime): void
+        +cancel(): void
+        +getBookingId(): Long
+        +getMatchId(): Long
+        +getSeatId(): Long
+        +getTicketCode(): String
+        +getStatus(): TicketStatus
+        +getCheckedInAt(): LocalDateTime
+    }
+    class BookingTransaction {
+        -bookingId: Long
+        -fanId: Long
+        -matchId: Long
+        -seatIds: List~Long~
+        -mechanism: SyncMechanism
+        -status: TransactionStatus
+        -createdAt: LocalDateTime
+        -completedAt: LocalDateTime
+        -durationMillis: long
+        -failureReason: String
+        +BookingTransaction(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, mechanism: SyncMechanism)
+        +BookingTransaction(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, mechanism: SyncMechanism, createdAt: LocalDateTime)
+        +attachBooking(bookingId: Long): void
+        +markSuccessful(completedAt: LocalDateTime): void
+        +markFailed(reason: String, completedAt: LocalDateTime): void
+        +markConflict(reason: String, completedAt: LocalDateTime): void
+        +calculateDuration(): long
+        +getBookingId(): Long
+        +getFanId(): Long
+        +getMatchId(): Long
+        +getSeatIds(): List~Long~
+        +getMechanism(): SyncMechanism
+        +getStatus(): TransactionStatus
+        +getCreatedAt(): LocalDateTime
+        +getCompletedAt(): LocalDateTime
+        +getDurationMillis(): long
+        +getFailureReason(): String
+    }
+    class RefundRequest {
+        -bookingId: Long
+        -fanId: Long
+        -reason: String
+        -status: RefundStatus
+        -requestedAt: LocalDateTime
+        -reviewedBy: Long
+        -reviewedAt: LocalDateTime
+        -reviewNote: String
+        +RefundRequest(id: Long, bookingId: Long, fanId: Long, reason: String, requestedAt: LocalDateTime)
+        +approve(adminId: Long, note: String, time: LocalDateTime): void
+        +reject(adminId: Long, note: String, time: LocalDateTime): void
+        +getBookingId(): Long
+        +getFanId(): Long
+        +getReason(): String
+        +getStatus(): RefundStatus
+        +getRequestedAt(): LocalDateTime
+        +getReviewedBy(): Long
+        +getReviewedAt(): LocalDateTime
+        +getReviewNote(): String
+    }
+    class AuditLog {
+        -actorId: Long
+        -action: String
+        -targetType: String
+        -targetId: Long
+        -result: String
+        -createdAt: LocalDateTime
+        +AuditLog(id: Long, actorId: Long, action: String, targetType: String, targetId: Long, result: String, createdAt: LocalDateTime)
+        +getActorId(): Long
+        +getAction(): String
+        +getTargetType(): String
+        +getTargetId(): Long
+        +getResult(): String
+        +getCreatedAt(): LocalDateTime
+    }
+    class AppException {
+        -errorCode: ErrorCode
+        +AppException(errorCode: ErrorCode)
+        +AppException(errorCode: ErrorCode, message: String)
+        +getErrorCode(): ErrorCode
+    }
+    class ErrorCode {
+        <<enumeration>>
+        INVALID_INPUT
+        NOT_FOUND
+        UNKNOWN_ERROR
+        CSV_ERROR
+        -code: String
+        -message: String
+        +getCode(): String
+        +getMessage(): String
+    }
+    class FanRepository {
+        +FanRepository(filePath: Path)
+        +findByEmail(email: String): Fan
+        +search(keyword: String): List~Fan~
+        +parseLine(line: String): Fan
+        +formatLine(entity: Fan): String
+    }
+    StaffRepository --|> CsvRepository
+    SeatRepository --|> CsvRepository
+    MatchRepository --|> CsvRepository
+    TicketRepository --|> CsvRepository
+    StadiumRepository --|> CsvRepository
+    SectionRepository --|> CsvRepository
+    BookingRepository --|> CsvRepository
+    PaymentRepository --|> CsvRepository
+    TransactionRepository --|> CsvRepository
+    RefundRepository --|> CsvRepository
+    AuditLogRepository --|> CsvRepository
+    RefundRequest --|> BaseEntity
+    AuditLog --|> BaseEntity
+    Booking --|> BaseEntity
+    BookingTransaction --|> BaseEntity
+    MatchSeat --|> BaseEntity
+    Match --|> BaseEntity
+    Payment --|> BaseEntity
+    Seat --|> BaseEntity
+    Section --|> BaseEntity
+    Stadium --|> BaseEntity
+    FanRepository --|> CsvRepository
+    User --|> BaseEntity
+    Ticket --|> BaseEntity

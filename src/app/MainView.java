@@ -23,10 +23,10 @@ public class MainView {
     }
 
     public int showMainMenu() {
-        System.out.println("\nSTADIUM TICKET BOOKING SIMULATION");
+        System.out.println("\nSTADIUM TICKET BOOKING");
         System.out.println("1. Browse As Guest (Search matches & View seat availability)");
         System.out.println("2. Login As Fan");
-        System.out.println("3. Login As Staff (Admin, Seller, Gate, Sim)");
+        System.out.println("3. Login As Staff (Admin, Seller, Gate)");
         System.out.println("4. Register Fan Account");
         System.out.println("0. Exit System");
         System.out.print("Choose option: ");
@@ -92,15 +92,6 @@ public class MainView {
         System.out.println("1. View profile");
         System.out.println("2. Manage system operations");
         System.out.println("3. Update profile");
-        System.out.println("0. Logout");
-        System.out.print("Choose option: ");
-        return Integer.parseInt(scanner.nextLine().trim());
-    }
-
-    public int showSimulatorMenu() {
-        System.out.println("\n=== SIMULATOR OPERATOR ===");
-        System.out.println("1. View profile");
-        System.out.println("2. Update profile");
         System.out.println("0. Logout");
         System.out.print("Choose option: ");
         return Integer.parseInt(scanner.nextLine().trim());

@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 
 public class BookingTransaction extends BaseEntity {
-    private Long simulationId;
     private Long bookingId;
     private Long fanId;
     private Long matchId;
@@ -54,19 +53,10 @@ public class BookingTransaction extends BaseEntity {
     }
 
     public void attachBooking(Long bookingId) {
-        if (bookingId == null || bookingId <= 0 || this.bookingId != null
-                || this.simulationId != null) {
+        if (bookingId == null || bookingId <= 0 || this.bookingId != null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid booking link");
         }
         this.bookingId = bookingId;
-    }
-
-    public void attachSimulation(Long simulationId) {
-        if (simulationId == null || simulationId <= 0 || this.simulationId != null
-                || this.bookingId != null) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Invalid simulation link");
-        }
-        this.simulationId = simulationId;
     }
 
     public void markSuccessful(LocalDateTime completedAt) {
@@ -107,7 +97,6 @@ public class BookingTransaction extends BaseEntity {
         return Duration.between(createdAt, completedAt).toMillis();
     }
 
-    public Long getSimulationId() { return simulationId; }
     public Long getBookingId() { return bookingId; }
     public Long getFanId() { return fanId; }
     public Long getMatchId() { return matchId; }

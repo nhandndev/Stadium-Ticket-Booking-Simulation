@@ -228,19 +228,11 @@ public class MainController {
                             case ADMIN:
                                 adminController.runAdminMenu();
                                 break;
-                            case SIMULATOR_OPERATOR:
-                                ProfileUpdateRequestDto simProfile = mainView.readProfileUpdateRequest();
-                                if (simProfile != null) mainView.displayUser(authController.updateCurrentUserProfile(simProfile));
-                                break;
                             default:
                                 mainView.displayMessage("Invalid choice.");
                         }
                         break;
                     case 3:
-                        if (user.getRole() == UserRole.SIMULATOR_OPERATOR) {
-                            mainView.displayMessage("Invalid choice.");
-                            break;
-                        }
                         ProfileUpdateRequestDto profile = mainView.readProfileUpdateRequest();
                         if (profile != null) mainView.displayUser(authController.updateCurrentUserProfile(profile));
                         break;
@@ -272,7 +264,6 @@ public class MainController {
             case SELLER: return mainView.showSellerMenu();
             case GATE_STAFF: return mainView.showGateStaffMenu();
             case ADMIN: return mainView.showAdminMenu();
-            case SIMULATOR_OPERATOR: return mainView.showSimulatorMenu();
             default:
                 authController.logout();
                 throw new AppException(ErrorCode.INVALID_INPUT,

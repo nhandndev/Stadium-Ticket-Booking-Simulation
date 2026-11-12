@@ -1673,3 +1673,282 @@ Agent verification:
 - Checked that all six current Fan rows have passwords of at least eight characters. No authentication API or class diagram change was required.
 
 Limit: Existing demo copies/backups keep their previous passwords until separately updated or recreated. This is sample-data consistency, not production password security or password hashing.
+
+---
+
+## Entry 45 - Reduced-Scope Single-Seat Comparison and Diagram Alignment
+
+Date: 2026-11-12
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Implement the agreed small comparison of an unlocked baseline and synchronized booking; revise surplus/missing Use Case and UML elements to match the actual project and rewrite the README problem scope.
+
+AI contribution:
+- Implemented NoLockStrategy, a deliberately unsafe single-seat Repository method, and a small SimulationController/Service/View with request/result DTOs and BookingTask.
+- Wired the authenticated Simulator Operator dashboard to the comparison; normal online/cash checkout still explicitly selects SYNCHRONIZED.
+- Used independently reset temporary CSV for each mode, task/worker counts, CountDownLatch, ExecutorService/Future result collection and measured timing. Counted extra successful claims, conflicts and errors separately; no fabricated race outcomes or real payment/ticket creation.
+- Removed FILE_LOCK/OPTIMISTIC enum choices and unimplemented large-simulator/DataGenerator classes/methods from the canonical diagrams. Retained the business CSV schemas and data.
+- Synchronized both draw.io copies and all six Mermaid counterparts with 104 production classes and 204 expanded visible boxes. Repaired missing project inheritance, the incomplete FanRepository import and unattached Use Case actor links, and added domain multiplicities.
+- Rewrote README/current documentation indices and scope/traceability notes; older design/demo documents are explicitly historical rather than evidence of unfinished features being present.
+
+Agent verification:
+- Java 17 compilation and assert-based simulation checks, including five 1000-task/32-worker repetitions, invalid configurations and a two-task comparison.
+- In the initial five repetitions NO_LOCK had 11, 6, 6, 5 and 7 successful claims for one seat; SYNCHRONIZED had one each time. Results are measured examples, not fixed outputs or a guarantee that NO_LOCK will always expose a race.
+- The CLI suite now has 29 menu/flow scenarios and checks that running/retrying the demo does not modify application CSV.
+- The Java syntax-tree verifier checks all production fields, enum values, explicit constructors, public methods, project inheritance, diagram IDs/references and member bounds. Both draw.io copies are identical; the supplied data is unchanged.
+
+Limits and student follow-up:
+- These are AI-generated implementation/documentation changes and agent-run checks, not proof that the student independently wrote, manually verified or understands the code.
+- The demo compares a single-seat core in one JVM. It does not test real payment, cross-process concurrency, crash-proof multi-file transactions, production security, saved research results or a generated 10,000-row dataset.
+- Structural UML matching is not a proof of defect-free behavior or manual visual inspection of every wire. The student should rehearse and explain the reduced scope before presenting.
+
+---
+
+## Entry 46 - Expand Supplied CSV Dataset to 10,000 Seats
+
+Date: 2026-11-12
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Add sample data so the CSV dataset reaches 10,000 rows.
+
+AI contribution:
+- Appended 9,980 physical seats, making seats.csv exactly 10,000 rows and all business CSV files 10,097 rows in total.
+- Added one separate Seed Capacity Stadium (ID 3), two sections (6/7), a CLOSED match (5) and two matching section prices. No live inventory or synthetic purchase history was added.
+- Preserved all original bytes/records and IDs. Fan/Staff credentials, bookings, tickets, payments, refunds, inventory, audit and transactions were not modified.
+- Updated the README, review context and demo notes to distinguish the static large fixture from a runtime DataGenerator and to warn about changed auto-generated IDs.
+- Added tests/SeedDataSmoke.java; application classes, CSV schemas, Use Cases and class diagrams did not need changes.
+
+Agent verification:
+- Checked original-file preservation, positive unique IDs, unique section/row/seat positions and valid Stadium/Section/Seat/Match/price relationships.
+- Compiled Java 17 and loaded all 10,000 physical seats through the real SeatRepository. One local read measured 32.96 ms; this is an observed run, not a portable performance guarantee.
+- The test verified the new match remains CLOSED. Large section listings can produce substantial Console output; the separate single-seat comparison still uses its own tiny temporary fixture.
+
+Limit: This is static sample-data preparation by the AI agent, not a new DataGenerator feature, real customer activity or evidence of student-independent implementation.
+
+---
+
+## Entry 47 - Real-Fan Seat and Section Simulation Target Design
+
+Date: 2026-11-12
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Update Class Diagrams, affected Use Cases and README scope for the agreed simulation expansion and keep the documents consistent.
+
+AI contribution:
+- Updated both seven-page draw.io copies and all six Mermaid files for SINGLE_SEAT and SECTION comparisons using distinct ACTIVE CSV Fan IDs and the two existing strategies.
+- Specified one task and at most one success per Fan, bounded section conflict retries, a shared atomic attempt budget, monotonic time limits, private inventory reset and result collection before cleanup.
+- Distinguished distinct successful Fans, attempts, sold-seat claims, duplicated seats, extra claims and final fixture availability. Documented unsafe whole-file lost updates and honest partial outcomes.
+- Expanded all planned class boxes with fields, constructors and public methods. Six existing contracts change and four new types are planned. Amber markers identify the unimplemented extension.
+- Updated README, scope/traceability, roadmap, documentation indices and review context. Added detailed design and a machine-readable target contract for verification.
+- Recorded that existing CSV has 7 Fans with 5 ACTIVE and lacks the dedicated 100-active-seat section. Adding 1000 ACTIVE Fans and the section remains pending.
+- No production Java source or CSV was edited in this design-only update.
+
+Agent verification:
+- Target verification passed for 108 current/target contracts, 216 expanded visible boxes, both identical draw.io copies and all six Mermaid files.
+- Strict source matching correctly exits nonzero, listing six changed contracts and four absent target types. Current production source still contains 104 classes and implements the earlier synthetic single-seat demo.
+- Checked XML IDs/references, member bounds, project inheritance and git diff whitespace. Production compilation and runtime smoke tests were not rerun for this documentation update.
+
+Limits:
+- Design consistency is separate from implementation completeness. The new real-Fan/section scenarios cannot yet be demonstrated through current code.
+- Full rendered wire routing was not manually reviewed in this update. Structural checks do not prove runtime correctness.
+- This entry records AI contributions and checks, not independent student authorship or understanding.
+
+---
+
+## Entry 48 - Project Smoke Review and 1000 ACTIVE Fan Fixtures
+
+Date: 2026-11-12
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Review the full project, smoke-test Console flows, compare source with UML/Use Cases/README, and add 1000 Fan records for testing.
+
+AI contribution:
+- Appended exactly 1000 ACTIVE sample Fans, IDs 8–1007. Current totals are 1007 Fans, 1005 ACTIVE and 11097 business CSV rows.
+- Preserved original Fan bytes/records and verified other business CSV hashes were unchanged. Sample fixture accounts use example.invalid addresses and a documented local-demo password.
+- Corrected the stale single-seat-only heading in both Use Case diagrams and updated current documentation data counts, fixture readiness and implementation status.
+- Added docs/19_PROJECT_SMOKE_REVIEW.md with coverage, observed outcomes and the exact remaining simulation source gaps.
+- Production application source was unchanged. Deleted Python files remain deleted. Test harnesses ran in memory or temporary directories outside the project.
+
+Agent verification:
+- Compiled every source file and both retained Java smoke tests with Java 17.
+- Passed 27 historical Console fixture scenarios recovered from Git, two additional Operator scenarios and 14 scenarios on temporary copies of the actual expanded dataset, totalling 43.
+- Passed SimulationSmoke with assertions enabled, including five 1000-task/32-worker comparisons, a two-task run and invalid configurations. SYNCHRONIZED always had one success and 999 conflicts in the five large runs. NO_LOCK successes were 5, 2, 3, 1 and 4.
+- Passed SeedDataSmoke, loaded all 14 business CSV files through Java repositories, and checked keys/references, account emails, Fan minimum password length and valid-ticket uniqueness.
+- Confirmed first/last added Fan accounts log in and out. Simulation and copied-data Console checks preserved business fixtures/live data.
+- Checked 104 source contracts, 108 target/current contracts, 216 visible boxes and all six Mermaid counterparts. No additional signature drift was found outside the planned six changed and four absent simulation types.
+- Checked XML identities/references, row bounds, project inheritance, absence of protected declarations and git diff whitespace.
+
+Limits:
+- Real-Fan/section execution and the dedicated 100-active-seat section remain pending. The expanded Fan CSV is not yet consumed by the synthetic simulator.
+- Smoke coverage is not exhaustive correctness or proof of production security. Full rendered Mermaid layout and draw.io wire routing were not visually reviewed.
+- AI-generated data, changes and checks are recorded separately from independent student authorship and understanding.
+
+---
+
+## Entry 49 - Complete Real-Fan Simulation and Finalize Random Names
+
+Date: 2026-11-12
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Replace repetitive sample names with random distinct full names without nicknames, finish code within the agreed scope, run final smoke tests, then align Class Diagrams, Use Cases and README.
+
+AI contribution:
+- Replaced the 1000 sample Fan display names with randomly selected distinct Vietnamese full names. The earlier repeated-name/nickname approach was corrected after user clarification. All 1007 current Fan names are unique. One earlier duplicate account display name was changed to Đoàn Ngọc Nhân. IDs, credentials, roles, statuses and historical relationships were preserved.
+- Added Section 8 with 100 active seats (10001–10100) and a price for CLOSED Match 5. Current data totals are 10100 seats, 1007 Fans (1005 ACTIVE) and 11199 business CSV rows.
+- Implemented all previously planned simulation contracts, contextual Controller/View input, real ACTIVE Fan/layout selection, private mode resets, bounded per-Fan tasks, atomic budgets, monotonic deadlines, distinct metrics and worker/file cleanup.
+- Kept normal checkout synchronized and experiments isolated from source bookings/payments/tickets. Added explicit interruption guards so an already completed Future cannot allow a pre-interrupted caller to publish a complete comparison.
+- Wired Main, updated the simulator dashboard label, expanded retained Java smoke tests and marked all corresponding diagram contracts/Use Cases implemented while preserving the layout and styling.
+- Updated README, scope, behavior document, roadmap, diagram guide, review context, documentation index, presentation index and final review report after completing code.
+
+Agent verification:
+- Compiled all production source and both retained Java smoke tests with Java 17.
+- Passed 63 distinct Console scenarios (27 ordinary workflow cases, 22 current simulator cases and 14 supplied-data cases), followed by a final replay of both scenarios with the random-name dataset.
+- Passed five repeated 1000-Fan single-seat comparisons and three repeated 1000-Fan/100-seat section comparisons, invalid configurations, partial runs, inactive exclusion, metrics reconstruction, atomic-budget contention, deadline expiry, bounded retries, I/O error classification and interruption checks.
+- In the last Java batch, SYNCHRONIZED had one successful Fan/999 conflicts for each single-seat run and 100 successful Fans/zero duplicates for each section run. NO_LOCK produced variable duplicate claims and lost updates as expected for the unsafe baseline.
+- Passed authorization checks for anonymous/Fan/Admin/Seller/Gate rejection and Operator access. Verified copied and source CSV remained unchanged during simulation.
+- Seed checks passed for 1000 random distinct full names without nickname suffixes, unique account emails, valid IDs/venue/price relationships and 100 active demo seats.
+- Strict source inspection matched all 108 production class/enum contracts to 216 visible boxes and all six Mermaid files. Both seven-page draw.io copies are identical; IDs/references, member bounds and project inheritance passed. Source has no protected declarations.
+- Python files remain deleted. Temporary review harnesses and build outputs were kept outside the project.
+- The final recursive check found two older Python copies inside ignored private/secret folders. Removed those remaining copies under the earlier deletion request and verified zero Python files remain in the project tree.
+
+Limits:
+- These are AI-generated code/data/documentation changes and agent-run checks, not proof of independent student authorship or understanding.
+- Smoke tests are bounded checks of exercised paths. Full rendered Mermaid layout and every draw.io wire were not visually reviewed.
+- Plaintext demo passwords, mock payment/refund, limited audit coverage and non-ACID multi-file CSV behavior remain documented project limits. Runtime DataGenerator, extra strategies, simulation history/export and real payment integration remain outside scope.
+
+---
+
+## Entry 50 - Current Per-Feature Console Walkthroughs
+
+Date: 2026-11-12
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Review every implemented feature and provide separate Markdown walkthroughs showing its purpose, flow, exact input choices and Console responses.
+
+AI contribution:
+- Created docs/Demo_Tung_Feature with 97 feature files organized by actor/domain, plus preparation, chronological order, menu map and index files.
+- Compiled current Java source and replayed 142 ordinary-workflow scenarios and 24 current simulation scenarios. Captured 1830 input/output steps from real application runs.
+- Reused earlier workflow input sequences, then regenerated Console output by running current code. Related success, cancellation, invalid input, retries and idempotency scenarios are grouped under their feature.
+- Documented Controller/Service/Repository paths, prerequisites, exact Enter sequences, initial screens and the Console response after every input.
+- Used a controlled small CORE_DIR extracted from current CSV for stable ordinary-workflow IDs. Simulation used a full dataset copy with 1000+ ACTIVE Fans and explicit missing fixture rows restored in that copy. The insufficient-Fan case used another copy with one ACTIVE account.
+- Found that current source sections.csv lacks IDs 6/7/8 and matches.csv lacks ID 5 while existing seats/prices still reference them. Current source has 11195 nonblank rows. Informed the user and documented the preparation commands and current data gaps in README/current scope notes.
+- No application source or source CSV was edited during this documentation task. Python capture/build helpers and compilation output were kept in temporary directories outside the project.
+
+Agent verification:
+- All 166 captured flows exited cleanly. Ordinary-flow checks retained key expected operation/status outputs; simulation checks covered full single-seat/section runs, partial budget, cancellation, invalid context/settings, repeated reset, insufficient ACTIVE Fans and a time-bound large section.
+- Simulation copies were checked byte-for-byte before and after each run.
+- Verified all 101 new Markdown files, all 166 flow anchors and 1830 step/output pairs, balanced fences and working local links.
+- Executed the documented CORE_DIR, SIM_DIR and SIM_LIMIT_DIR setup commands and checked their expected fixture identities/counts.
+- Removed trailing spaces from displayed Console lines for readable Markdown; measured outputs and prompt text were retained.
+
+Limits:
+- Ordinary flows depend on earlier data-creating flows and use the documented chronological order. Simulation flows use the explicitly prepared copies. The missing source Match/Section rows remain a separate data issue.
+- Times, throughput and NO_LOCK outcomes are captured observations and vary across runs. These documents do not establish independent student authorship or exhaustive correctness of every input.
+
+---
+
+## Entry 51 - Repair Removed Sample Data and Freeze Submission Baseline
+
+Date: 2026-11-12
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Repair CSV after deleting the generated venue/sections, then review all features and finalize code, Class Diagram, Use Cases, README and per-feature demo files for submission.
+
+AI contribution:
+- Removed the remaining sample Stadium and three orphan price rows for the deleted Match 5.
+- Reassigned 10080 unused physical seats from removed Sections 6/7/8 to existing Sections 4/5/3. Verified none had booking, ticket, transaction or match-inventory references before changing their parent Section IDs.
+- Preserved every seat ID, row label, seat number and active flag, along with all account and business-history records. Existing Section 3 now supplies the 100-seat Match 4 simulation layout. No deleted sample venue/section was restored.
+- Source now has 2 Stadiums, 5 Sections, 4 Matches, 10100 Seats, 10 Prices, 1007 Fans (1005 ACTIVE), and 11191 total nonblank CSV rows.
+- Updated SeedDataSmoke to use the existing Section 3 fixture and removed its old sample-venue assumption. Production Java APIs and current diagram contracts remain aligned.
+- Replayed 142 ordinary flows and 24 simulation flows, refreshed the affected walkthroughs, and updated all demo input choices to Match 4 / Section 3. Used separate copies for empty active inventory and insufficient ACTIVE Fans.
+- Tightened the temporary capture harness to recognize exact interactive prompt prefixes so partially printed metrics are never treated as prompts. Complete two-mode results are recorded after confirmation.
+- Found stale SRS/backlog requirements for Support, notifications, four strategies and timed holds. Replaced the SRS, feature catalog, test plan and delivery checklist with the implemented baseline. Marked earlier research/presentation/change notes as historical.
+- Added docs/20_CHOT_BAN_NOP.md, including an implemented-feature link for every one of the 87 visible Use Case nodes. Updated root README, scope, behavior, review context, indices and AI records.
+
+Agent verification:
+- Compiled Java 17 source and retained smoke tests. SeedDataSmoke and SimulationSmoke passed with assertions enabled.
+- Passed all 166 captured Console flows (1830 input/output steps across 97 feature files), plus six additional guards for last-Admin protection, history-safe Fan deletion and foreign booking detail/payment rejection. The foreign-payment check used an account with an owned PENDING booking to reach the intended input path.
+- Loaded all 14 source CSV files through the real Java repositories, tested role guards and executed both 1000-real-Fan scenarios through SimulationController against current source CSV without source writes.
+- Checked all CSV keys, cross-file references, seat positions, account emails/names and history ownership. No orphan references remain. Compared preserved business records to the pre-repair snapshot.
+- Strict source inspection matched all 108 class/enum contracts to 216 visible boxes and six Mermaid counterparts. Both seven-page draw.io copies match; public signatures, member bounds, project inheritance and IDs/references passed. Source contains no protected declarations.
+- Checked all 101 walkthrough Markdown files, 166 flow anchors and 1830 step/output pairs. Executed the documented dataset-preparation commands. Local links/fences and diff whitespace passed.
+- Temporary capture/test helpers and compilation output were kept outside the project. Python files remain absent from the project tree.
+
+Limits:
+- These are AI changes and agent-executed checks, separate from independent student authorship/understanding.
+- The demonstrated scope is Java Console/CSV with mock payments/refunds, plaintext demo passwords, limited audit coverage and non-ACID multi-file transactions.
+- Physical capacity and published MatchSeat inventory are separate. Current real inventory has 20 seats for Match 1 and 20 for Match 4; simulation resets its own physical-seat copies.
+- Structural matching and bounded smoke coverage do not prove exhaustive correctness. Full rendered Mermaid layout and every draw.io wire were not visually reviewed. Earlier drafts retain historical notices.
+
+## Entry 52 - Remove Simulation and Retain Default Booking Protection
+
+Date — 2026-11-12. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Remove simulation from runtime code, Use Cases, Class Diagrams and README problem scope. Preserve the existing default mechanism preventing double booking during ordinary checkout.
+
+AI contribution
+
+- Removed the simulation Controller, Service, View, task/context, DTOs and enums, the operator role/menu and the unsafe NoLockStrategy branch.
+- Preserved the existing synchronized ordinary online/cash checkout. SyncMechanism now contains SYNCHRONIZED only. Booking protection classes are expanded on the Booking/Payment page.
+- Removed simulation ownership and history APIs from BookingTransaction and TransactionRepository. Converted the three supplied booking transaction rows to the 11-column schema. The parser still accepts legacy 12-column booking rows whose extra second column is empty.
+- Changed Staff ID 5 to UNASSIGNED and display name Unassigned Staff. Preserved its ID, email, password and phone for later Administrator role assignment. This migration was an implementation decision made by the agent.
+- Preserved Fan/seat fixtures and all existing booking, payment, ticket, refund and inventory records. Earlier AI audit entries retain their historical record.
+- Removed the dedicated simulation diagram/page and documentation. Renumbered repository/model pages to 04/05 and synchronized both draw.io copies and five Mermaid files. Removed obsolete floating edges carrying deleted simulation metadata.
+- Updated README, SRS, current scope, Use Case specification, feature catalog, demo preparation/menu map, verification and submission guides. Replaced the older consolidated Console transcript with links to the current per-feature captures.
+- Refreshed 88 feature documents from 139 actual ordinary Console flows and 1469 input/output steps. Retired operator-specific flows 133–135 while retaining the other existing flow IDs.
+- Added BookingConcurrencySmoke for the retained ordinary checkout regression and transaction-schema compatibility. Temporary capture/inspection helpers stayed outside the project.
+
+Agent verification
+
+- Compiled all 97 production Java class/enum contracts and rebuilt local generated output.
+- BookingConcurrencySmoke passed two simultaneous checkouts of one seat, exactly one confirmed sale and ticket, a competing cancelled booking, SYNCHRONIZED transaction records, completed-payment retry and both transaction row layouts.
+- SeedDataSmoke passed the supplied physical-seat links, account/name uniqueness and fixture expectations.
+- Loaded all 14 source CSV files through current repository APIs/parsers, totaling 11191 nonblank rows.
+- Replayed 139 ordinary Console scenarios against copied fixtures. Rejected the former operator account as UNASSIGNED and verified the check left source CSV unchanged.
+- Matched declared attributes, explicit constructors and public methods for all 97 source contracts to 190 expanded class boxes and five Mermaid counterparts. Both six-page draw.io copies are identical. Verified XML IDs/endpoints and member row bounds.
+- Mapped all 82 visible Use Case nodes to implemented feature guides. Checked current Markdown links, code fences, flow anchors, feature counts and diff whitespace.
+- Compared source CSV with the pre-removal snapshot. Only Staff ID 5 name/role and the empty transaction owner column changed. Production source/current diagrams contain no simulation role/classes or unsafe strategy.
+
+Limits
+
+- Agent contributions and checks are distinct from independent student authorship and understanding.
+- Full rendered diagram wire routing has not been visually reviewed. Earlier practice snapshots and audit history retain their original context.
+- Synchronization coordinates cooperating threads in one JVM. Payment/refund remain mocked, passwords are demo plaintext and multi-file CSV writes require reconciliation after interruption.
+
+## Entry 53 - Clarify Group Problem Statement and Consolidate Documentation
+
+Date — 2026-11-12. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Add the group's problem statement and scope to README, remove unnecessary documents and keep agent-facing project context understandable.
+
+AI contribution
+
+- Expanded the English root README with the group's ticket-selling problem, proposed solution, actor responsibilities, delivered business workflows and implementation boundaries. Kept the documented synchronized ordinary checkout as the active mechanism.
+- Used the user's latest group wording for the project description and retained Doan Ngoc Nhan as the recorded contributor. Additional member identities were unspecified.
+- Reorganized the essential documentation into eight consecutively numbered files covering SRS, Use Cases, architecture, booking protection, verification/delivery, traceability, AI reflection and a Vietnamese presentation guide.
+- Consolidated the test plan and delivery checklist into the verification document. Replaced duplicate detailed Use Case inventory with a link to the retained traceability mapping.
+- Removed obsolete scan/scope/backlog/domain/service/menu/change notes, old stage presentation scripts, the redundant checklist in usecase+classdiagram and the duplicate draw.io copy. docs/ClassDiagram.drawio remains canonical.
+- Kept all 88 per-feature guides and their setup/order/menu files because the earlier request requires individual Console walkthroughs. Retained personal AI logs and prompt audit history.
+- Corrected the booking explanation to show BookingService.issueTickets writing tickets, with TicketService supporting ticket lookup, validation and check-in.
+- Expanded READMEFORAGENT.md with source locations, entry points, layer responsibilities, business rules, naming/alignment conventions, fixture handling and inspection commands.
+- Updated document indices, relative links and Mermaid comment references to the new structure. Documentation file count changed from 142 to 108, including the detailed demo set.
+
+Agent verification
+
+- Checked local links, Markdown fences and flow anchors across 104 current Markdown files including the root and agent READMEs.
+- Compared the canonical draw.io byte-for-byte with the pre-cleanup copy and confirmed its six pages remain.
+- Compared all five Mermaid files and confirmed only their documentation comment paths changed.
+- Compared fenced code/Console blocks in the entire demo set with the pre-cleanup snapshot and verified all 88 feature files remain.
+- git diff --check passed. Runtime verification results remain attributed to their earlier recorded review.
+
+Limits
+
+- The retained detailed feature set accounts for most remaining documentation files.
+- Full rendered diagram routing still requires visual review before submission.

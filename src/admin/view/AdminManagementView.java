@@ -143,15 +143,14 @@ public class AdminManagementView {
     }
 
     public UserRole readRole(boolean allowAll) {
-        System.out.println("1 Seller | 2 Gate Staff | 3 Administrator | 4 Simulator Operator | 5 Unassigned");
+        System.out.println("1 Seller | 2 Gate Staff | 3 Administrator | 4 Unassigned");
         int choice = readInt(allowAll ? "Role (0 = All): " : "Role (0 = Back): ");
         switch (choice) {
             case 0: return null;
             case 1: return UserRole.SELLER;
             case 2: return UserRole.GATE_STAFF;
             case 3: return UserRole.ADMIN;
-            case 4: return UserRole.SIMULATOR_OPERATOR;
-            case 5: return UserRole.UNASSIGNED;
+            case 4: return UserRole.UNASSIGNED;
             default: throw new IllegalArgumentException("Choose one of the displayed roles.");
         }
     }

@@ -81,7 +81,7 @@ public class BookingView {
     }
 
     public PaymentRequestDto readPaymentRequest(BookingResponseDto booking) {
-        System.out.println("\n=== SIMULATED ONLINE PAYMENT ===");
+        System.out.println("\n=== MOCK ONLINE PAYMENT ===");
         System.out.println("Amount due: " + booking.getTotalAmount().toPlainString() + " VND");
         while (true) {
             System.out.print("Pay now? (y/n, Enter = No): ");
@@ -210,7 +210,7 @@ public class BookingView {
                 + " | Booking #" + response.getBookingId()
                 + " | Status " + response.getStatus());
         if (response.getStatus() == refund.enums.RefundStatus.REQUESTED) {
-            displayMessage("Admin review is required. Refunds are simulated; no real money is transferred.");
+            displayMessage("Admin review is required. Refunds are mocked; no real money is transferred.");
         }
     }
 

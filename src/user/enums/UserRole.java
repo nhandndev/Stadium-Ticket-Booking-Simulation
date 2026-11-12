@@ -5,6 +5,5 @@ public enum UserRole {
     SELLER,
     GATE_STAFF,
     ADMIN,
-    SIMULATOR_OPERATOR,
     UNASSIGNED
 }
