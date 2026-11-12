@@ -4,6 +4,8 @@
 > Các block console bên dưới được lấy từ lần chạy ứng dụng thật trên bản sao CSV; không phải output tự đoán.
 > Chưa có demo chạy Simulation vì phần thực thi đó chưa triển khai.
 
+> Cập nhật 02/11/2026: năm Fan seed hiện dùng mật khẩu `12345678`. Lượt nhập của flow INACTIVE bên dưới đã được cập nhật và kiểm tra lại; các output snapshot khác vẫn giữ nguyên từ lần replay. Bản sao CSV demo cũ không tự được cập nhật.
+
 ## 0. Chuẩn bị và cách đọc
 
 - Chạy từ đầu đến cuối nếu muốn dữ liệu và điều kiện giống bản replay. Các feature tạo dữ liệu là tiền đề cho những feature phía sau.
@@ -1632,7 +1634,7 @@ Email (Enter = Cancel):
 Password:
 ```
 
-### Lượt 3 - Bạn nhập: `123456` rồi Enter
+### Lượt 3 - Bạn nhập: `12345678` rồi Enter
 
 **Console trả về:**
 

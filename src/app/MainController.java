@@ -44,7 +44,6 @@ public class MainController {
         this.bookingController = bookingController;
         this.ticketController = ticketController;
     }
-
     public void start() {
         boolean running = true;
         while (running) {

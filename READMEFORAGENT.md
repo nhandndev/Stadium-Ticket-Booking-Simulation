@@ -116,8 +116,8 @@ java -cp out app.Main
 | **Nhân viên Bán vé (SELLER)** | `seller1@stadium.com` / `seller123` | Xác thực phân quyền nhân viên bán vé |
 | **Nhân viên Soát vé (GATE_STAFF)** | `gate1@stadium.com` / `gate123` | Xác thực phân quyền nhân viên cổng |
 | **Kỹ thuật viên (SIMULATOR)** | `sim@stadium.com` / `sim123` | Xác thực nhân viên điều hành mô phỏng |
-| **Cổ động viên (FAN ACTIVE)** | `an.nguyen@gmail.com` / `123456` | Đăng nhập Fan bình thường, xem hồ sơ cá nhân |
-| **Cổ động viên (FAN INACTIVE)** | `em.do@gmail.com` / `123456` | Kiểm thử cơ chế an ninh chặn tài khoản bị khóa |
+| **Cổ động viên (FAN ACTIVE)** | `an.nguyen@gmail.com` / `12345678` | Đăng nhập Fan bình thường, xem hồ sơ cá nhân |
+| **Cổ động viên (FAN INACTIVE)** | `em.do@gmail.com` / `12345678` | Kiểm thử cơ chế an ninh chặn tài khoản bị khóa |
 | **Sân vận động (Stadium)** | ID: `1` (Mỹ Đình - 4 khán đài, 20 ghế) | Kiểm thử cấu trúc sân bãi và vô hiệu hóa ghế hỏng |
 | **Trận đấu (Match)** | ID: `1` (Vietnam vs Thailand - OPEN) | Kiểm thử bảng giá vé và đóng/mở cổng bán vé |
 

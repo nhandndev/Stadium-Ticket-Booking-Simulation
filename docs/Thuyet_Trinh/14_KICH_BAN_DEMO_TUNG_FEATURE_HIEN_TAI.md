@@ -58,12 +58,12 @@ java -cp out app.Main "$DEMO_DIR"
 | Seller | `seller1@stadium.com` | `seller123` |
 | Gate Staff | `gate1@stadium.com` | `gate123` |
 | Simulator Operator | `sim@stadium.com` | `sim123` |
-| Fan đang hoạt động | `an.nguyen@gmail.com` | `123456` |
-| Fan thứ hai | `binh.tran@gmail.com` | `123456` |
-| Fan không hoạt động | `em.do@gmail.com` | `123456` |
+| Fan đang hoạt động | `an.nguyen@gmail.com` | `12345678` |
+| Fan thứ hai | `binh.tran@gmail.com` | `12345678` |
+| Fan không hoạt động | `em.do@gmail.com` | `12345678` |
 
 - Đây là tài khoản mẫu đọc từ CSV hiện tại. Nếu đã sửa dữ liệu, dùng giá trị thực tế của bản sao.
-- Mật khẩu ngắn ở tài khoản cũ vẫn đăng nhập được; **tài khoản tạo mới yêu cầu ít nhất 8 ký tự**.
+- Ngày 02/11/2026, mật khẩu của năm Fan seed đã đổi từ `123456` thành `12345678` để khớp yêu cầu tạo tài khoản mới. Login so khớp dữ liệu đã lưu, không tự sửa mật khẩu CSV cũ. Nếu dùng bản sao CSV tạo trước ngày cập nhật, hãy tạo bản sao demo mới.
 - Chưa có mã hoá mật khẩu đúng chuẩn triển khai thật. Không nói rằng cơ chế này đủ an toàn cho production.
 
 ### 2.3. Phiếu ghi ID trong buổi demo

@@ -1651,3 +1651,25 @@ Verification and limits:
 - No Java source or project CSV data was edited for this documentation request. Existing user changes were preserved.
 - Long list output is explicitly abbreviated; ID, code, timestamps and counts are snapshot examples. Simulation execution remains unfinished.
 - The replay was agent-executed, not a recording of the student typing. The student still needs to rehearse and understand the script before presenting.
+
+---
+
+## Entry 44 - Align Fan Seed Passwords With Registration Policy
+
+Date: 2026-11-02
+
+Member: Doan Ngoc Nhan - QE210282
+
+User request: Fix Fan CSV sample passwords and explain why six-character seeded passwords were accepted despite registration requiring at least eight characters.
+
+AI contribution:
+- Confirmed that registration validates minimum length while login compares credentials against the stored CSV password. Loading old seed data does not rerun registration validation.
+- Changed only the passwords of the five original Fan seed rows from `123456` to `12345678`, preserving their IDs, profile details and statuses.
+- Preserved the user's newly registered Fan row and all unrelated existing data edits.
+- Updated the current demo credential references and the INACTIVE-account transcript input. Historical backups and scratch generators were not rewritten.
+
+Agent verification:
+- Compiled Java 17 and ran five focused CLI checks on a temporary copy: old password rejected, updated seed accepted, INACTIVE still blocked, short registration rejected without saving, and the user's existing account still accepted.
+- Checked that all six current Fan rows have passwords of at least eight characters. No authentication API or class diagram change was required.
+
+Limit: Existing demo copies/backups keep their previous passwords until separately updated or recreated. This is sample-data consistency, not production password security or password hashing.

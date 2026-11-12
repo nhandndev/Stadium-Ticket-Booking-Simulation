@@ -3,21 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="ed48d2cf-23cb-4a8f-8886-19397743c96c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/READMEFORAGENT.md" beforeDir="false" afterPath="$PROJECT_DIR$/READMEFORAGENT.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ai_logs/doan_ngoc_nhan_QE210282_ai_log.md" beforeDir="false" afterPath="$PROJECT_DIR$/ai_logs/doan_ngoc_nhan_QE210282_ai_log.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bookings.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/bookings.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/fans.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/fans.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/match_seats.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/match_seats.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/ClassDiagram.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/docs/ClassDiagram.drawio" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/ClassDiagram.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/ClassDiagram.drawio" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/matches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/matches.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/payments.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/payments.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/refunds.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/refunds.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/ticket_prices.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/ticket_prices.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tickets.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/tickets.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/transactions.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/transactions.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/admin/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/admin/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/admin/view/AdminManagementView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/admin/view/AdminManagementView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/MainView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/booking/controller/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/controller/BookingController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/booking/view/BookingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/view/BookingView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/seller/view/SellerView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/seller/view/SellerView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/MainController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
