@@ -123,7 +123,9 @@ classDiagram
         -matchRepository: MatchRepository
         -matchSeatRepository: MatchSeatRepository
         -ticketPriceRepository: TicketPriceRepository
+        -bookingService: BookingService
         +StadiumService(stadiumRepository: StadiumRepository, sectionRepository: SectionRepository, seatRepository: SeatRepository, matchRepository: MatchRepository, matchSeatRepository: MatchSeatRepository, ticketPriceRepository: TicketPriceRepository)
+        +StadiumService(stadiumRepository: StadiumRepository, sectionRepository: SectionRepository, seatRepository: SeatRepository, matchRepository: MatchRepository, matchSeatRepository: MatchSeatRepository, ticketPriceRepository: TicketPriceRepository, bookingService: BookingService)
         +createStadium(request: StadiumRequestDto): StadiumResponseDto
         +getStadiums(): List~StadiumResponseDto~
         +getStadiumDetails(stadiumId: Long): StadiumResponseDto
@@ -259,6 +261,9 @@ classDiagram
         +save(seat: MatchSeat): MatchSeat
         +deleteByMatchId(matchId: Long): boolean
         +bookSeatsSynchronized(matchId: Long, seatIds: List~Long~): boolean
+        +holdSeatsSynchronized(bookingId: Long, matchId: Long, seatIds: List~Long~): boolean
+        +bookSeatsSynchronized(bookingId: Long, matchId: Long, seatIds: List~Long~): boolean
+        +releaseHeldSeatsSynchronized(bookingId: Long, matchId: Long, seatIds: List~Long~): void
         +releaseSeatsSynchronized(matchId: Long, seatIds: List~Long~): boolean
         +parseLine(line: String): MatchSeat
         +formatLine(entity: MatchSeat): String
@@ -492,15 +497,19 @@ classDiagram
         -seatId: Long
         -status: SeatStatus
         -version: int
+        -holdBookingId: Long
         +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int)
+        +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int, holdBookingId: Long)
         +isAvailable(): boolean
         +lock(): void
+        +hold(bookingId: Long): void
         +markBooked(): void
         +release(): void
         +getMatchId(): Long
         +getSeatId(): Long
         +getStatus(): SeatStatus
         +getVersion(): int
+        +getHoldBookingId(): Long
     }
     class TicketPrice {
         -matchId: Long
@@ -606,3 +615,33 @@ classDiagram
     AdminController --> MatchController
     AdminController --> AccountAdminController
     AdminController --> RefundController
+
+    class BookingService {
+        -bookingRepository: BookingRepository
+        -ticketRepository: TicketRepository
+        -paymentRepository: PaymentRepository
+        -transactionRepository: TransactionRepository
+        -seatRepository: SeatRepository
+        -ticketPriceRepository: TicketPriceRepository
+        -strategyFactory: StrategyFactory
+        -mockPaymentService: MockPaymentService
+        -fanRepository: FanRepository
+        -matchRepository: MatchRepository
+        -matchSeatRepository: MatchSeatRepository
+        -sectionRepository: SectionRepository
+        +BookingService(bookingRepository: BookingRepository, ticketRepository: TicketRepository, paymentRepository: PaymentRepository, transactionRepository: TransactionRepository, seatRepository: SeatRepository, ticketPriceRepository: TicketPriceRepository, strategyFactory: StrategyFactory, mockPaymentService: MockPaymentService, fanRepository: FanRepository, matchRepository: MatchRepository, matchSeatRepository: MatchSeatRepository, sectionRepository: SectionRepository)
+        +validateTicketLimit(seatIds: List~Long~): void
+        +calculateTotal(matchId: Long, seatIds: List~Long~): BigDecimal
+        +createBooking(request: BookingRequestDto): BookingResponseDto
+        +createBookingForFan(sellerId: Long, request: BookingRequestDto): BookingResponseDto
+        +createBookingForCustomer(sellerId: Long, request: BookingRequestDto): BookingResponseDto
+        +validateFanAccount(fanId: Long): void
+        +expirePendingBookings(): void
+        +makeOnlinePayment(request: PaymentRequestDto): PaymentResponseDto
+        +acceptOfflinePayment(sellerId: Long, request: PaymentRequestDto): PaymentResponseDto
+        +issueTickets(bookingId: Long): List~TicketResponseDto~
+        +getMyBookings(fanId: Long): List~BookingResponseDto~
+        +getBookingDetails(bookingId: Long): BookingResponseDto
+        +cancelBooking(bookingId: Long): BookingResponseDto
+    }
+    StadiumService --> BookingService : expires unpaid holds before seat deactivation

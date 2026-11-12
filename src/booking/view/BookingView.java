@@ -1,5 +1,6 @@
 package booking.view;
 
+import booking.enums.BookingStatus;
 import booking.dto.BookingRequestDto;
 import booking.dto.BookingResponseDto;
 import java.util.ArrayList;
@@ -135,10 +136,16 @@ public class BookingView {
 
     public void displayBookingResponse(BookingResponseDto response) {
         System.out.println("\n=== BOOKING #" + response.getBookingId() + " ===");
-        System.out.println("Customer: " + response.getFanName() + " (Fan #" + response.getFanId() + ")");
+        System.out.println("Customer: " + response.getFanName()
+                + (response.getFanId() == null ? " (Walk-in customer)"
+                : " (Fan #" + response.getFanId() + ")"));
         System.out.println("Match: " + response.getMatchName() + " (#" + response.getMatchId() + ")");
         System.out.println("Seats: " + response.getSeatLabels() + " | IDs: " + response.getSeatIds());
         System.out.println("Total: " + response.getTotalAmount().toPlainString() + " VND | Status: " + response.getStatus());
+        if (response.getStatus() == booking.enums.BookingStatus.PENDING) {
+            System.out.println("Seats held until: " + response.getExpiresAt());
+            System.out.println("Pay online now or give this Booking ID to a Seller for offline payment before the deadline.");
+        }
     }
 
     public void displayMatches(List<MatchResponseDto> matches) {
@@ -165,6 +172,9 @@ public class BookingView {
             System.out.println("Booking #" + booking.getBookingId() + " | " + booking.getMatchName()
                     + " | " + booking.getSeatLabels() + " | " + booking.getTotalAmount().toPlainString()
                     + " VND | " + booking.getStatus());
+            if (booking.getStatus() == BookingStatus.PENDING) {
+                System.out.println("  Payment deadline: " + booking.getExpiresAt());
+            }
         }
     }
 

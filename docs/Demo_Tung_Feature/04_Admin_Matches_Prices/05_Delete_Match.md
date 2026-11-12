@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 056 — Delete Match
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 055](01_Create_Match.md#flow-055).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 055](../04_Admin_Matches_Prices/01_Create_Match.md#flow-055).
 
 ### Console ban đầu
 

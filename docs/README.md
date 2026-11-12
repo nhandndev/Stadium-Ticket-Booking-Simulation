@@ -23,8 +23,8 @@ links the five expanded Mermaid files.
 
 ## Feature Demos
 
-The [feature-demo index](Demo_Tung_Feature/README.md) contains 88 feature files,
-139 captured Console flows and 1469 input/output steps. Follow its preparation,
+The [feature-demo index](Demo_Tung_Feature/README.md) contains 87 feature files,
+148 captured Console flows and 1546 input/output steps. Follow its preparation,
 menu map and operation order for reproducible IDs and state.
 
 ## Agent and Audit

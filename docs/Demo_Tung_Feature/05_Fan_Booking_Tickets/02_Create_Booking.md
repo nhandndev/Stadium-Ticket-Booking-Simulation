@@ -1,6 +1,6 @@
 # Create Booking
 
-- Dùng để chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và chưa chiếm giữ ghế.
+- Dùng để chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và giữ ghế đến expiresAt, tối đa 30 phút hoặc giờ bắt đầu trận.
 - Luồng xử lý trong code `MainController → BookingController.createBooking → BookingService.createBooking → BookingRepository; chọn Pay Now sẽ đi tiếp makeOnlinePayment`.
 - Mỗi lần nhập bên dưới phải nhấn Enter. Dòng Enter trống là không gõ ký tự.
 
@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 069 — Create Booking - chưa thanh toán
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 068](01_View_Seat_Map_and_Prices.md#flow-068).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 068](../05_Fan_Booking_Tickets/01_View_Seat_Map_and_Prices.md#flow-068).
 
 ### Console ban đầu
 
@@ -153,7 +153,8 @@ Customer: Flow Fan Updated (Fan #6)
 Match: Flow Red vs Flow Blue (#4)
 Seats: [Flow Stand Updated A1] | IDs: [21]
 Total: 250000 VND | Status: PENDING
-Seats are not held until payment succeeds.
+Seats held until: 2026-11-13T00:17:29.188470
+Pay online now or give this Booking ID to a Seller for offline payment before the deadline.
 
 === MOCK ONLINE PAYMENT ===
 Amount due: 250000 VND
@@ -165,7 +166,7 @@ Pay now? (y/n, Enter = No):
 Console trả về
 
 ```text
-Not paid. This booking remains pending; open My bookings and payments > Pay pending booking later.
+Not paid. Pay before 2026-11-13T00:17:29.188470 online or give the Booking ID to a Seller for offline payment.
 
 === FAN > BOOK TICKETS ===
 1. View seat map and prices
@@ -220,7 +221,7 @@ Choose option:
 
 ### Điểm cần chỉ khi demo
 
-- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và chưa chiếm giữ ghế.
+- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và giữ ghế đến expiresAt, tối đa 30 phút hoặc giờ bắt đầu trận.
 - Cuối flow đã trở lại Main. Giữ nguyên CORE_DIR để tiếp tục theo thứ tự.
 
 <a id="flow-073"></a>
@@ -364,7 +365,8 @@ Customer: Flow Fan Updated (Fan #6)
 Match: Flow Red vs Flow Blue (#4)
 Seats: [Flow Stand Updated A1, Flow Stand Updated A2] | IDs: [21, 22]
 Total: 500000 VND | Status: PENDING
-Seats are not held until payment succeeds.
+Seats held until: 2026-11-13T00:17:30.823218
+Pay online now or give this Booking ID to a Seller for offline payment before the deadline.
 
 === MOCK ONLINE PAYMENT ===
 Amount due: 500000 VND
@@ -376,7 +378,7 @@ Pay now? (y/n, Enter = No):
 Console trả về
 
 ```text
-Not paid. This booking remains pending; open My bookings and payments > Pay pending booking later.
+Not paid. Pay before 2026-11-13T00:17:30.823218 online or give the Booking ID to a Seller for offline payment.
 
 === FAN > BOOK TICKETS ===
 1. View seat map and prices
@@ -431,14 +433,14 @@ Choose option:
 
 ### Điểm cần chỉ khi demo
 
-- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và chưa chiếm giữ ghế.
+- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và giữ ghế đến expiresAt, tối đa 30 phút hoặc giờ bắt đầu trận.
 - Cuối flow đã trở lại Main. Giữ nguyên CORE_DIR để tiếp tục theo thứ tự.
 
 <a id="flow-078"></a>
 
 ## Flow 078 — Create Booking và Pay Now ngay
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 077](08_Book_This_Match_from_Browsing.md#flow-077).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 077](../05_Fan_Booking_Tickets/08_Book_This_Match_from_Browsing.md#flow-077).
 
 ### Console ban đầu
 
@@ -575,7 +577,8 @@ Customer: Flow Fan Updated (Fan #6)
 Match: Flow Red vs Flow Blue (#4)
 Seats: [Flow Stand Updated A5] | IDs: [25]
 Total: 250000 VND | Status: PENDING
-Seats are not held until payment succeeds.
+Seats held until: 2026-11-13T00:17:32.992088
+Pay online now or give this Booking ID to a Seller for offline payment before the deadline.
 
 === MOCK ONLINE PAYMENT ===
 Amount due: 250000 VND
@@ -643,14 +646,14 @@ Choose option:
 
 ### Điểm cần chỉ khi demo
 
-- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và chưa chiếm giữ ghế.
+- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và giữ ghế đến expiresAt, tối đa 30 phút hoặc giờ bắt đầu trận.
 - Cuối flow đã trở lại Main. Giữ nguyên CORE_DIR để tiếp tục theo thứ tự.
 
 <a id="flow-079"></a>
 
 ## Flow 079 — Create Booking và Pay Now cho request thứ hai
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 078](02_Create_Booking.md#flow-078).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 078](../05_Fan_Booking_Tickets/02_Create_Booking.md#flow-078).
 
 ### Console ban đầu
 
@@ -787,7 +790,8 @@ Customer: Flow Fan Updated (Fan #6)
 Match: Flow Red vs Flow Blue (#4)
 Seats: [Flow Stand Updated A6] | IDs: [26]
 Total: 250000 VND | Status: PENDING
-Seats are not held until payment succeeds.
+Seats held until: 2026-11-13T00:17:33.436845
+Pay online now or give this Booking ID to a Seller for offline payment before the deadline.
 
 === MOCK ONLINE PAYMENT ===
 Amount due: 250000 VND
@@ -855,7 +859,7 @@ Choose option:
 
 ### Điểm cần chỉ khi demo
 
-- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và chưa chiếm giữ ghế.
+- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và giữ ghế đến expiresAt, tối đa 30 phút hoặc giờ bắt đầu trận.
 - Cuối flow đã trở lại Main. Giữ nguyên CORE_DIR để tiếp tục theo thứ tự.
 
 <a id="flow-140"></a>
@@ -1048,5 +1052,5 @@ Choose option:
 
 ### Điểm cần chỉ khi demo
 
-- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và chưa chiếm giữ ghế.
+- Chọn 1–4 ghế để tạo PENDING, có thể trả tiền ngay hoặc để sau. PENDING lưu báo giá và giữ ghế đến expiresAt, tối đa 30 phút hoặc giờ bắt đầu trận.
 - Cuối flow đã trở lại Main. Giữ nguyên CORE_DIR để tiếp tục theo thứ tự.

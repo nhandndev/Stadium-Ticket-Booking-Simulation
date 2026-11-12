@@ -16,10 +16,12 @@ public class SeatMapView {
         System.out.printf("%-8s | %-8s | %-24s | %-12s | %-12s%n",
                 "SEAT ID", "LABEL", "SECTION", "PRICE (VND)", "STATUS");
         for (MatchSeatResponseDto seat : seats) {
+            String status = seat.isActive() ? seat.getStatus().name() : "INACTIVE";
+            if (seat.isActive() && seat.getStatus() == match.enums.SeatStatus.LOCKED) status = "HELD";
             System.out.printf("%-8d | %-8s | %-24s | %-12s | %-12s%n",
                     seat.getSeatId(), seat.getSeatLabel(), seat.getSectionName(),
                     seat.getPrice() == null ? "Not set" : seat.getPrice().toPlainString(),
-                    seat.isActive() ? seat.getStatus() : "INACTIVE");
+                    status);
         }
     }
 }

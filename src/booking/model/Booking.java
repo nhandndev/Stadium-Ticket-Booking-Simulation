@@ -5,6 +5,8 @@ import common.entity.BaseEntity;
 import common.exception.AppException;
 import common.exception.ErrorCode;
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,12 +17,22 @@ public class Booking extends BaseEntity {
     private List<Long> seatIds;
     private BigDecimal totalAmount;
     private BookingStatus status;
+    private LocalDateTime createdAt;
+    private LocalDateTime expiresAt;
 
     public Booking(Long id, Long fanId, Long matchId, List<Long> seatIds,
                    BigDecimal totalAmount, BookingStatus status) {
+        this(id, fanId, matchId, seatIds, totalAmount, status, null, null);
+        this.createdAt = LocalDateTime.now();
+        this.expiresAt = this.createdAt.plusMinutes(30);
+    }
+
+    public Booking(Long id, Long fanId, Long matchId, List<Long> seatIds,
+                   BigDecimal totalAmount, BookingStatus status,
+                   LocalDateTime createdAt, LocalDateTime expiresAt) {
         super(id);
-        if (fanId == null || fanId <= 0 || matchId == null || matchId <= 0) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Fan and match IDs must be positive");
+        if ((fanId != null && fanId <= 0) || matchId == null || matchId <= 0) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Invalid Fan or Match ID");
         }
         if (seatIds == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Seats are required");
@@ -33,6 +45,13 @@ public class Booking extends BaseEntity {
         this.seatIds = new ArrayList<>(seatIds);
         this.totalAmount = totalAmount;
         this.status = status;
+        if ((createdAt == null) != (expiresAt == null)
+                || (createdAt != null && (!expiresAt.isAfter(createdAt)
+                || Duration.between(createdAt, expiresAt).compareTo(Duration.ofMinutes(30)) > 0))) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Invalid booking payment deadline");
+        }
+        this.createdAt = createdAt;
+        this.expiresAt = expiresAt;
         validateTicketLimit();
     }
 
@@ -58,10 +77,23 @@ public class Booking extends BaseEntity {
     }
 
     public void cancel() {
-        if (status == BookingStatus.CANCELLED) {
-            throw new AppException(ErrorCode.INVALID_INPUT, "Booking already cancelled");
+        if (status == BookingStatus.CANCELLED || status == BookingStatus.EXPIRED) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Booking is already cancelled or expired");
         }
         status = BookingStatus.CANCELLED;
+    }
+
+    public boolean isExpired(LocalDateTime now) {
+        if (now == null) throw new AppException(ErrorCode.INVALID_INPUT, "Current time is required");
+        return status == BookingStatus.PENDING
+                && (expiresAt == null || !now.isBefore(expiresAt));
+    }
+
+    public void expire() {
+        if (status != BookingStatus.PENDING) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Only a pending booking can expire");
+        }
+        status = BookingStatus.EXPIRED;
     }
 
     public Long getFanId() { return fanId; }
@@ -69,4 +101,6 @@ public class Booking extends BaseEntity {
     public List<Long> getSeatIds() { return new ArrayList<>(seatIds); }
     public BigDecimal getTotalAmount() { return totalAmount; }
     public BookingStatus getStatus() { return status; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getExpiresAt() { return expiresAt; }
 }

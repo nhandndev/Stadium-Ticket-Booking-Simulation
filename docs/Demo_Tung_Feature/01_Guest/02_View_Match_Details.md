@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 002 — View Match Details từ kết quả tìm kiếm
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 001](01_Search_Matches.md#flow-001).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 001](../01_Guest/01_Search_Matches.md#flow-001).
 
 ### Console ban đầu
 
@@ -100,9 +100,10 @@ Stadium:    My Dinh National Stadium [ID: 1]
 Kick-off:   15/11/2026 19:00
 Sales Gate: [ OPEN ]
 
---- Choose action for matches ---
-1. View match details (enter Match ID)
-2. View seat availability / Seat map (enter Match ID)
+--- Match #1 ---
+1. View match details
+2. View seat availability / Seat map
+4. Choose another match
 0. Back to match browsing
 Choose action:
 ```
@@ -144,7 +145,7 @@ Choose option:
 
 ## Flow 006 — View Match Details trực tiếp bằng ID
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 005](04_Filter_Matches_and_List_Schedule.md#flow-005).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 005](../01_Guest/04_Filter_Matches_and_List_Schedule.md#flow-005).
 
 ### Console ban đầu
 
@@ -165,6 +166,7 @@ Choose option:
 2. 3
 3. 1
 4. 0
+5. 0
 ```
 
 ### Bước 1 — Nhập `1` rồi Enter
@@ -205,6 +207,19 @@ Stadium:    My Dinh National Stadium [ID: 1]
 Kick-off:   15/11/2026 19:00
 Sales Gate: [ OPEN ]
 
+--- Match #1 ---
+1. View match details
+2. View seat availability / Seat map
+4. Choose another match
+0. Back to match browsing
+Choose action:
+```
+
+### Bước 4 — Nhập `0` rồi Enter
+
+Console trả về
+
+```text
 === MATCH BROWSING ===
 1. Search matches by team keyword
 2. Filter matches / List all schedule
@@ -214,7 +229,7 @@ Sales Gate: [ OPEN ]
 Choose option:
 ```
 
-### Bước 4 — Nhập `0` rồi Enter
+### Bước 5 — Nhập `0` rồi Enter
 
 Console trả về
 

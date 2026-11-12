@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 044 — Delete Seat - huỷ xác nhận
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 043](11_Create_Seat.md#flow-043).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 043](../03_Admin_Venues/11_Create_Seat.md#flow-043).
 
 ### Console ban đầu
 
@@ -269,7 +269,7 @@ Choose option:
 
 ## Flow 045 — Delete Seat - xác nhận xoá
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 044](17_Delete_Seat.md#flow-044).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 044](../03_Admin_Venues/17_Delete_Seat.md#flow-044).
 
 ### Console ban đầu
 

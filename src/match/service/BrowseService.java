@@ -1,5 +1,6 @@
 package match.service;
 
+import booking.service.BookingService;
 import common.exception.AppException;
 import common.exception.ErrorCode;
 import match.dto.MatchResponseDto;
@@ -28,16 +29,26 @@ public class BrowseService {
     private final StadiumRepository stadiumRepository;
     private final SectionRepository sectionRepository;
     private final TicketPriceRepository ticketPriceRepository;
+    private final BookingService bookingService;
 
     public BrowseService(MatchRepository matchRepository, MatchSeatRepository matchSeatRepository,
                          SeatRepository seatRepository, StadiumRepository stadiumRepository,
                          SectionRepository sectionRepository, TicketPriceRepository ticketPriceRepository) {
+        this(matchRepository, matchSeatRepository, seatRepository, stadiumRepository,
+                sectionRepository, ticketPriceRepository, null);
+    }
+
+    public BrowseService(MatchRepository matchRepository, MatchSeatRepository matchSeatRepository,
+                         SeatRepository seatRepository, StadiumRepository stadiumRepository,
+                         SectionRepository sectionRepository, TicketPriceRepository ticketPriceRepository,
+                         BookingService bookingService) {
         this.matchRepository = matchRepository;
         this.matchSeatRepository = matchSeatRepository;
         this.seatRepository = seatRepository;
         this.stadiumRepository = stadiumRepository;
         this.sectionRepository = sectionRepository;
         this.ticketPriceRepository = ticketPriceRepository;
+        this.bookingService = bookingService;
     }
 
     public List<MatchResponseDto> searchMatches(String keyword) {
@@ -87,6 +98,7 @@ public class BrowseService {
     }
 
     public List<MatchSeatResponseDto> getSeatMap(Long matchId) {
+        if (bookingService != null) bookingService.expirePendingBookings();
         Match match = matchRepository.findById(matchId);
         if (match == null) {
             throw new AppException(

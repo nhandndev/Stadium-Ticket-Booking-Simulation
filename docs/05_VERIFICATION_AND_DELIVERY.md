@@ -1,82 +1,72 @@
 # Verification and Delivery
 
-Recorded 2026-11-12 after the scope update. Runtime checks below were executed
-during that review. The subsequent documentation cleanup rechecked links and
-artifact preservation.
+Recorded 2026-11-13 for the seven-feature Seller scope and timed booking holds.
 
-## Executed checks
+## Current Evidence
 
-- Compiled Java 17 source and retained assert-based checks.
-- Replayed 139 Console flows with 1469 captured input/output steps using
-  copied CSV fixtures. The 88 feature files contain actual Console responses.
-- BookingConcurrencySmoke passed simultaneous ordinary checkout of one seat,
-  one successful booking, one ticket, completed-payment retry and transaction CSV
-  roundtrip including legacy booking-only input.
-- All 14 source CSV files loaded through current Java repositories with 11191 rows.
-- The former operator account is rejected as UNASSIGNED without source CSV writes.
-- SeedDataSmoke passed physical-seat parent links, unique sample Fan names and
-  the supplied fixture expectations.
-- Before documentation consolidation, source/UML checks matched 97 class/enum contracts against 190 expanded boxes
-  across six pages and five Mermaid files. The duplicate draw.io copy was subsequently removed.
-- 82 Use Case nodes map to current feature walkthroughs.
+- Compiled all 97 production class/enum contracts with Java 17.
+- Replayed 138 core Console flows on an isolated reproducible fixture.
+- Executed ten counter/expiry flows on separate copied fixtures.
+- Refreshed all 87 feature guides with 148 actual flows and 1546 input/output pairs.
+- Matched source fields, explicit public constructors and public methods to all
+  192 expanded class boxes and five Mermaid files.
+- Mapped all 82 visible Use Case nodes to implemented operations and feature guides.
 
-## Data changes
+## Hold and Payment Checks
 
-- Staff ID 5 has role UNASSIGNED and name Unassigned Staff. Its existing ID,
-  email and credentials remain. Administrator can assign an eligible role.
-- transactions.csv uses 11 columns with bookingId as owner. The removed extra
-  column was empty in all supplied booking records.
-- The 1007 Fans, 10100 physical seats and existing booking/payment/ticket history
-  remain. CSV total remains 11191 nonblank rows.
+- Creating PENDING exclusively holds the requested one-to-four-seat group.
+- A competing Fan/walk-in booking cannot acquire those seats.
+- Invalid groups acquire no partial hold.
+- Hold ownership and timestamps survive restart.
+- Online and offline payment reject expired bookings before a new charge.
+- At the exact expiry timestamp, the booking is expired.
+- Expiry, cancellation and failed payment release only owned holds.
+- Repeated cleanup preserves another booking's newer hold.
+- Seat-map and administrative deactivation requests clean elapsed holds.
+- Kick-off caps a shorter payment window.
+- Offline payment leaves ticket issue to Seller's separate Issue ticket action.
+- Completed online/offline payment and issue retries preserve existing results.
+- Legacy booking/MatchSeat CSV remains readable. Legacy unpaid rows without
+  timestamps expire and paid historical records retain their state.
 
-## Verification limits
+## Scope and Presentation Checks
 
-Full rendered diagram wire routing has not been visually reviewed.
-Synchronization coordinates one JVM. CSV persistence is per-file and multi-file
-checkout is vulnerable to interruption. Passwords are demo plaintext, payment and
-refund are mocked, and audit logging currently covers refund review.
+- Seller has the seven visible features in the Use Case.
+- Account selection rejects INACTIVE immediately.
+- Seat input errors identify the field/Seat ID and reason.
+- Fan role/ownership checks, cancellation/refunds and ticket histories remain covered.
+- Gate rejects wrong-Match/cancelled/used tickets and records one-time check-in.
+- Administrator CRUD, roles, refund review, summary and audit remain covered.
+- Booking-to-Fan multiplicity is optional for the retained walk-in subflow.
+- The expiry-service dependencies are fully expanded in the affected diagram pages.
 
-## Reproducing the checks
-
-### Java checks
+## Reproduce
 
 ```bash
-javac --release 17 -encoding UTF-8 -d /tmp/stadium-check $(find src -name '*.java') tests/BookingConcurrencySmoke.java tests/SeedDataSmoke.java
-java -ea -cp /tmp/stadium-check BookingConcurrencySmoke
-java -ea -cp /tmp/stadium-check SeedDataSmoke data
+javac --release 17 -encoding UTF-8 -d out $(find src -name '*.java')
+java scripts/InspectDiagram.java
 ```
 
-### Console acceptance
+Follow [demo preparation](Demo_Tung_Feature/00_CHUAN_BI.md) and the
+[ordered flows](Demo_Tung_Feature/01_THU_TU_DEMO.md). CORE_DIR uses the checked-in
+small seed to keep IDs stable. COUNTER_DEMO_DIR copies current source data.
+EXPIRY_DEMO_DIR adds a deliberately elapsed hold to the small seed.
 
-Follow [preparation](Demo_Tung_Feature/00_CHUAN_BI.md) and
-[ordered flows](Demo_Tung_Feature/01_THU_TU_DEMO.md) on a copied dataset.
-The current set contains 88 feature guides and 139 executed flows.
+## Delivery Checklist
 
-- Guest search/filter, details and seat map.
-- Registration, both login routes, invalid credentials and account states.
-- Fan booking/payment/history/cancellation/refund and ticket access.
-- Seller customer creation/search, customer booking, cash confirmation and issue.
-- Gate validation, confirmation, wrong-match and repeat check-in rejection.
-- Administrator venue/match/pricing/sales/account/role CRUD and constraints.
-- Refund approval/rejection, summary, audit, invalid menu input and exit.
-- Ordinary checkout concurrency, payment retry and transaction persistence.
+- [x] Seven Seller features and shared User capabilities match the declared scope.
+- [x] Thirty-minute hold, both payment channels and EXPIRED lifecycle implemented.
+- [x] Source/Class Diagram/Mermaid member contracts aligned.
+- [x] Every visible Use Case mapped to code and a feature guide.
+- [x] All Console walkthroughs regenerated for the current menu and lifecycle.
+- [x] README, SRS, architecture, persistence and agent context updated.
+- [ ] Student rehearses on the documented fixture and current dates.
+- [ ] Student visually checks rendered diagram routing before export.
+- [ ] Student prepares the instructor's final report/video/submission package.
 
-Compare every entered value with its captured Console output. Time-dependent
-lists require a future eligible Match on the day of presentation.
+## Operating Limits
 
-## Submission checklist
-
-- [x] Ordinary Guest, Fan, Seller, Gate Staff and Administrator workflows.
-- [x] Default synchronized checkout protects seat commits within one JVM.
-- [x] Current transaction CSV and legacy booking-only parser.
-- [x] 97 source contracts match 190 expanded UML boxes and five Mermaid files.
-- [x] Canonical six-page draw.io and five Mermaid files retained.
-- [x] All 82 Use Case nodes map to feature walkthroughs.
-- [x] 88 feature guides and 139 Console flows refreshed.
-- [x] Retained Java booking/seed checks pass on isolated data.
-- [x] README and current scope documents describe the delivered feature set.
-- [ ] Student rehearses the walkthrough with a future Match and correct demo CSV.
-- [ ] Student visually reviews draw.io routing and export before submission.
-- [ ] Student prepares the final submission package required by the instructor.
-
-See [verification report](05_VERIFICATION_AND_DELIVERY.md) for operating limits.
+Full rendered wire routing remains a visual review step. Structural checks verify
+members, IDs/endpoints and member bounds. Synchronization coordinates one JVM.
+Payments/refunds are mocked, demo credentials are plaintext and multi-file CSV
+operations can require reconciliation after interruption.

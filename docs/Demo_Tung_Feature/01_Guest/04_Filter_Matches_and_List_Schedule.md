@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 004 — Filter Matches theo sân và ngày
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 003](03_View_Seat_Availability.md#flow-003).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 003](../01_Guest/03_View_Seat_Availability.md#flow-003).
 
 ### Console ban đầu
 
@@ -127,7 +127,7 @@ Choose option:
 
 ## Flow 005 — List All Matches - bỏ trống bộ lọc
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 004](04_Filter_Matches_and_List_Schedule.md#flow-004).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 004](../01_Guest/04_Filter_Matches_and_List_Schedule.md#flow-004).
 
 ### Console ban đầu
 

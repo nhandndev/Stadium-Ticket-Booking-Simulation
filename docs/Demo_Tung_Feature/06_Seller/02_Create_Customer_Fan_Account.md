@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 083 — Create Fan Account tại quầy
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 082](01_Search_and_List_Customers.md#flow-082).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 082](../06_Seller/01_Search_and_List_Customers.md#flow-082).
 
 ### Console ban đầu
 
@@ -37,15 +37,13 @@ Choose option:
 2. seller1@stadium.com
 3. seller123
 4. 2
-5. 1
-6. 2
-7. Flow Counter Customer
-8. flow.counter@example.com
-9. Counter123
-10. 0902222222
+5. 2
+6. Flow Counter Customer
+7. flow.counter@example.com
+8. Counter123
+9. 0902222222
+10. 0
 11. 0
-12. 0
-13. 0
 ```
 
 ### Bước 1 — Nhập `3` rồi Enter
@@ -80,7 +78,6 @@ Role:   SELLER | Status: ACTIVE
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
@@ -90,27 +87,19 @@ Choose option:
 Console trả về
 
 ```text
-=== SELLER > SALES COUNTER ===
-1. Customers
-2. Customer bookings
-3. Payments and ticket issue
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Create booking for Fan / walk-in customer
+4. Accept offline payment
+5. Issue ticket
+6. View seat map and prices
+7. View customer booking history
 0. Back to dashboard
 Choose:
 ```
 
-### Bước 5 — Nhập `1` rồi Enter
-
-Console trả về
-
-```text
-=== SELLER > CUSTOMERS ===
-1. Search / List customers
-2. Create Fan account
-0. Back to sales counter
-Choose:
-```
-
-### Bước 6 — Nhập `2` rồi Enter
+### Bước 5 — Nhập `2` rồi Enter
 
 Console trả về
 
@@ -118,7 +107,7 @@ Console trả về
 Full name (Enter = Cancel):
 ```
 
-### Bước 7 — Nhập `Flow Counter Customer` rồi Enter
+### Bước 6 — Nhập `Flow Counter Customer` rồi Enter
 
 Console trả về
 
@@ -126,7 +115,7 @@ Console trả về
 Email:
 ```
 
-### Bước 8 — Nhập `flow.counter@example.com` rồi Enter
+### Bước 7 — Nhập `flow.counter@example.com` rồi Enter
 
 Console trả về
 
@@ -134,7 +123,7 @@ Console trả về
 Password (at least 8 characters):
 ```
 
-### Bước 9 — Nhập `Counter123` rồi Enter
+### Bước 8 — Nhập `Counter123` rồi Enter
 
 Console trả về
 
@@ -142,34 +131,26 @@ Console trả về
 Phone:
 ```
 
-### Bước 10 — Nhập `0902222222` rồi Enter
+### Bước 9 — Nhập `0902222222` rồi Enter
 
 Console trả về
 
 ```text
 Created Fan #7 | Flow Counter Customer | flow.counter@example.com
 
-=== SELLER > CUSTOMERS ===
-1. Search / List customers
-2. Create Fan account
-0. Back to sales counter
-Choose:
-```
-
-### Bước 11 — Nhập `0` rồi Enter
-
-Console trả về
-
-```text
-=== SELLER > SALES COUNTER ===
-1. Customers
-2. Customer bookings
-3. Payments and ticket issue
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Create booking for Fan / walk-in customer
+4. Accept offline payment
+5. Issue ticket
+6. View seat map and prices
+7. View customer booking history
 0. Back to dashboard
 Choose:
 ```
 
-### Bước 12 — Nhập `0` rồi Enter
+### Bước 10 — Nhập `0` rồi Enter
 
 Console trả về
 
@@ -178,12 +159,11 @@ Console trả về
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
 
-### Bước 13 — Nhập `0` rồi Enter
+### Bước 11 — Nhập `0` rồi Enter
 
 Console trả về
 

@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 057 — Create Ticket Price
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 056](05_Delete_Match.md#flow-056).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 056](../04_Admin_Matches_Prices/05_Delete_Match.md#flow-056).
 
 ### Console ban đầu
 
@@ -240,7 +240,7 @@ Choose option:
 
 ## Flow 062 — Create Ticket Price - khôi phục giá để mở bán
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 061](10_Delete_Ticket_Price.md#flow-061).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 061](../04_Admin_Matches_Prices/10_Delete_Ticket_Price.md#flow-061).
 
 ### Console ban đầu
 

@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 039 — Update Seat
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 038](13_View_Seat_Details.md#flow-038).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 038](../03_Admin_Venues/13_View_Seat_Details.md#flow-038).
 
 ### Console ban đầu
 
@@ -279,7 +279,7 @@ Choose option:
 
 ## Flow 040 — Update Seat - trả lại A8 trước bán vé
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 039](14_Update_Seat.md#flow-039).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 039](../03_Admin_Venues/14_Update_Seat.md#flow-039).
 
 ### Console ban đầu
 

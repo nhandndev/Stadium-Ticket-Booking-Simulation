@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 018 — Login Staff bằng tài khoản Fan
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 017](02_Login_As_Fan.md#flow-017).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 017](../02_Authentication_User/02_Login_As_Fan.md#flow-017).
 
 ### Console ban đầu
 
@@ -80,7 +80,7 @@ Choose option:
 
 ## Flow 020 — Login As Staff với quyền Administrator
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 019](02_Login_As_Fan.md#flow-019).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 019](../02_Authentication_User/02_Login_As_Fan.md#flow-019).
 
 ### Console ban đầu
 
@@ -219,7 +219,6 @@ Role:   SELLER | Status: ACTIVE
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```

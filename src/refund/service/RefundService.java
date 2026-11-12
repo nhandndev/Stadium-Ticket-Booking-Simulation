@@ -63,7 +63,7 @@ public class RefundService {
         }
         synchronized (MatchSeatRepository.class) {
             Booking booking = requireBooking(request.getBookingId());
-            if (!booking.getFanId().equals(request.getFanId())) {
+            if (!request.getFanId().equals(booking.getFanId())) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "Fan does not own booking");
             }
@@ -117,7 +117,7 @@ public class RefundService {
                     return toResponse(refundRepository.update(refund));
                 }
                 Booking booking = requireBooking(refund.getBookingId());
-                if (!booking.getFanId().equals(refund.getFanId())) {
+                if (!refund.getFanId().equals(booking.getFanId())) {
                     throw new AppException(ErrorCode.CSV_ERROR,
                             "Refund owner does not match booking");
                 }

@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 063 — View Ticket Sales Status khi chưa mở
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 062](06_Create_Ticket_Price.md#flow-062).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 062](../04_Admin_Matches_Prices/06_Create_Ticket_Price.md#flow-062).
 
 ### Console ban đầu
 
@@ -217,7 +217,7 @@ Choose option:
 
 ## Flow 066 — View Ticket Sales Status sau đóng
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 065](12_Close_Ticket_Sales.md#flow-065).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 065](../04_Admin_Matches_Prices/12_Close_Ticket_Sales.md#flow-065).
 
 ### Console ban đầu
 

@@ -1,5 +1,6 @@
 package stadium.service;
 
+import booking.service.BookingService;
 import common.exception.AppException;
 import common.exception.ErrorCode;
 import java.util.ArrayList;
@@ -26,17 +27,28 @@ public class StadiumService {
     private final MatchRepository matchRepository;
     private final MatchSeatRepository matchSeatRepository;
     private final TicketPriceRepository ticketPriceRepository;
+    private final BookingService bookingService;
 
     public StadiumService(StadiumRepository stadiumRepository,
                           SectionRepository sectionRepository,
                           SeatRepository seatRepository, MatchRepository matchRepository,
                           MatchSeatRepository matchSeatRepository, TicketPriceRepository ticketPriceRepository) {
+        this(stadiumRepository, sectionRepository, seatRepository, matchRepository,
+                matchSeatRepository, ticketPriceRepository, null);
+    }
+
+    public StadiumService(StadiumRepository stadiumRepository,
+                          SectionRepository sectionRepository,
+                          SeatRepository seatRepository, MatchRepository matchRepository,
+                          MatchSeatRepository matchSeatRepository, TicketPriceRepository ticketPriceRepository,
+                          BookingService bookingService) {
         this.stadiumRepository = stadiumRepository;
         this.sectionRepository = sectionRepository;
         this.seatRepository = seatRepository;
         this.matchRepository = matchRepository;
         this.matchSeatRepository = matchSeatRepository;
         this.ticketPriceRepository = ticketPriceRepository;
+        this.bookingService = bookingService;
     }
 
     public StadiumResponseDto createStadium(StadiumRequestDto request) {
@@ -176,6 +188,7 @@ public class StadiumService {
     }
 
     public Seat deactivateSeat(Long seatId) {
+        if (bookingService != null) bookingService.expirePendingBookings();
         Seat seat = this.seatRepository.findById(seatId);
         if (seat == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Seat not found");

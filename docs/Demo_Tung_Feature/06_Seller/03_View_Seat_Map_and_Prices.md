@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 084 — View Seat Map and Prices tại quầy
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 083](02_Create_Customer_Fan_Account.md#flow-083).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 083](../06_Seller/02_Create_Customer_Fan_Account.md#flow-083).
 
 ### Console ban đầu
 
@@ -37,12 +37,10 @@ Choose option:
 2. seller1@stadium.com
 3. seller123
 4. 2
-5. 2
-6. 1
-7. 4
+5. 6
+6. 4
+7. 0
 8. 0
-9. 0
-10. 0
 ```
 
 ### Bước 1 — Nhập `3` rồi Enter
@@ -77,7 +75,6 @@ Role:   SELLER | Status: ACTIVE
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
@@ -87,28 +84,19 @@ Choose option:
 Console trả về
 
 ```text
-=== SELLER > SALES COUNTER ===
-1. Customers
-2. Customer bookings
-3. Payments and ticket issue
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Create booking for Fan / walk-in customer
+4. Accept offline payment
+5. Issue ticket
+6. View seat map and prices
+7. View customer booking history
 0. Back to dashboard
 Choose:
 ```
 
-### Bước 5 — Nhập `2` rồi Enter
-
-Console trả về
-
-```text
-=== SELLER > CUSTOMER BOOKINGS ===
-1. View seat map and prices
-2. Create booking for customer
-3. Customer booking history
-0. Back to sales counter
-Choose:
-```
-
-### Bước 6 — Nhập `1` rồi Enter
+### Bước 5 — Nhập `6` rồi Enter
 
 Console trả về
 
@@ -121,7 +109,7 @@ Console trả về
 Match ID: (0 = Back):
 ```
 
-### Bước 7 — Nhập `4` rồi Enter
+### Bước 6 — Nhập `4` rồi Enter
 
 Console trả về
 
@@ -139,28 +127,19 @@ SEAT ID  | LABEL    | SECTION                  | PRICE (VND)  | STATUS
 27       | A7       | Flow Stand Updated       | 250000       | AVAILABLE
 28       | A8       | Flow Stand Updated       | 250000       | AVAILABLE
 
-=== SELLER > CUSTOMER BOOKINGS ===
-1. View seat map and prices
-2. Create booking for customer
-3. Customer booking history
-0. Back to sales counter
-Choose:
-```
-
-### Bước 8 — Nhập `0` rồi Enter
-
-Console trả về
-
-```text
-=== SELLER > SALES COUNTER ===
-1. Customers
-2. Customer bookings
-3. Payments and ticket issue
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Create booking for Fan / walk-in customer
+4. Accept offline payment
+5. Issue ticket
+6. View seat map and prices
+7. View customer booking history
 0. Back to dashboard
 Choose:
 ```
 
-### Bước 9 — Nhập `0` rồi Enter
+### Bước 7 — Nhập `0` rồi Enter
 
 Console trả về
 
@@ -169,12 +148,11 @@ Console trả về
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
 
-### Bước 10 — Nhập `0` rồi Enter
+### Bước 8 — Nhập `0` rồi Enter
 
 Console trả về
 

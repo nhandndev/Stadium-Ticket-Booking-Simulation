@@ -20,34 +20,25 @@ public class SellerView {
     }
 
     public int showSellerMenu() {
-        System.out.println();
-        System.out.println("=== SELLER > SALES COUNTER ===");
-        System.out.println("1. Customers");
-        System.out.println("2. Customer bookings");
-        System.out.println("3. Payments and ticket issue");
+        System.out.println("\n=== SELLER ===");
+        System.out.println("1. Search Fan");
+        System.out.println("2. Create Fan");
+        System.out.println("3. Create booking for Fan / walk-in customer");
+        System.out.println("4. Accept offline payment");
+        System.out.println("5. Issue ticket");
+        System.out.println("6. View seat map and prices");
+        System.out.println("7. View customer booking history");
         System.out.println("0. Back to dashboard");
         System.out.print("Choose: ");
         return Integer.parseInt(scanner.nextLine().trim());
     }
 
-    public int showSellerActionsMenu(int group) {
-        switch (group) {
-            case 1:
-                System.out.println("\n=== SELLER > CUSTOMERS ===");
-                System.out.println("1. Search / List customers\n2. Create Fan account");
-                break;
-            case 2:
-                System.out.println("\n=== SELLER > CUSTOMER BOOKINGS ===");
-                System.out.println("1. View seat map and prices\n2. Create booking for customer\n3. Customer booking history");
-                break;
-            case 3:
-                System.out.println("\n=== SELLER > PAYMENTS AND TICKET ISSUE ===");
-                System.out.println("1. Accept cash payment\n2. Issue tickets for paid booking");
-                break;
-            default: throw new IllegalArgumentException("Invalid seller group.");
-        }
-        System.out.println("0. Back to sales counter");
-        System.out.print("Choose: ");
+    public int showCustomerTypeMenu() {
+        System.out.println("\n=== WHO IS BUYING AT THE COUNTER? ===");
+        System.out.println("1. Existing Fan account - search and select an ACTIVE account");
+        System.out.println("2. Walk-in customer - buy directly, without an account");
+        System.out.println("0. Back to Seller menu");
+        System.out.print("Choose customer type: ");
         return Integer.parseInt(scanner.nextLine().trim());
     }
 
@@ -71,18 +62,28 @@ public class SellerView {
     }
 
     public BookingRequestDto readBookingRequest(Long fanId, Long matchId) {
+        displayMessage("Use numbers from the SEAT ID column, not row labels such as A1.");
         System.out.print("Seat IDs (comma-separated, 1 to 4; 0 = Back): ");
         String input = scanner.nextLine().trim();
         if (input.isEmpty() || input.equals("0")) return null;
         String[] parts = input.split(",", -1);
         if (parts.length < 1 || parts.length > 4) {
-            throw new IllegalArgumentException("Choose 1 to 4 seats");
+            throw new IllegalArgumentException("Select 1 to 4 SEAT IDs; received " + parts.length + " entries");
         }
         List<Long> seatIds = new ArrayList<>();
         for (String part : parts) {
-            long id = Long.parseLong(part.trim());
-            if (id <= 0 || seatIds.contains(id)) {
-                throw new IllegalArgumentException("Seat IDs must be positive and unique");
+            long id;
+            try {
+                id = Long.parseLong(part.trim());
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid SEAT ID '" + part.trim()
+                        + "'. Use whole numbers separated by commas, for example 1,2,3,4.");
+            }
+            if (id <= 0) {
+                throw new IllegalArgumentException("SEAT ID " + id + " must be positive");
+            }
+            if (seatIds.contains(id)) {
+                throw new IllegalArgumentException("SEAT ID " + id + " was entered more than once");
             }
             seatIds.add(id);
         }
@@ -102,16 +103,6 @@ public class SellerView {
         }
     }
 
-    public boolean confirmIssueTickets() {
-        while (true) {
-            System.out.print("Issue tickets now? (y/n, Enter = No): ");
-            String answer = scanner.nextLine().trim();
-            if (answer.isEmpty() || answer.equalsIgnoreCase("n") || answer.equals("0")) return false;
-            if (answer.equalsIgnoreCase("y")) return true;
-            displayMessage("Please enter y or n.");
-        }
-    }
-
     public Long readFanId() {
         return readPositiveId("Fan ID: ");
     }
@@ -121,6 +112,7 @@ public class SellerView {
     }
 
     public Long readBookingId() {
+        displayMessage("Enter the single Booking ID from the counter receipt, for either customer type.");
         return readPositiveId("Booking ID: ");
     }
 
@@ -128,7 +120,13 @@ public class SellerView {
         System.out.print(label + "(0 = Back): ");
         String input = scanner.nextLine().trim();
         if (input.isEmpty() || input.equals("0")) return null;
-        long id = Long.parseLong(input);
+        long id;
+        try {
+            id = Long.parseLong(input);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(label.trim()
+                    + " requires one numeric ID. Comma-separated values are only accepted at the Seat IDs prompt.");
+        }
         if (id <= 0) {
             throw new IllegalArgumentException("ID must be positive");
         }
@@ -151,14 +149,15 @@ public class SellerView {
 
     public void displayBookingResponse(BookingResponseDto booking) {
         System.out.println("Booking #" + booking.getBookingId()
-                + " | Fan #" + booking.getFanId()
+                + (booking.getFanId() == null ? " | Walk-in customer" : " | Fan #" + booking.getFanId())
                 + " " + booking.getFanName() + " | " + booking.getMatchName()
                 + " | Seats " + booking.getSeatLabels()
                 + " | Total " + booking.getTotalAmount().toPlainString() + " VND"
                 + " | Status " + booking.getStatus());
+        displayMessage("Keep Booking ID " + booking.getBookingId() + " for payment or ticket issuance.");
         if (booking.getStatus() == BookingStatus.PENDING) {
             displayMessage("Collect cash before recording offline payment.");
-            displayMessage("PENDING bookings do not hold seats.");
+            displayMessage("Seats held until: " + booking.getExpiresAt());
         }
     }
 

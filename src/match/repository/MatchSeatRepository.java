@@ -126,6 +126,77 @@ public class MatchSeatRepository {
         }
     }
 
+    public boolean holdSeatsSynchronized(Long bookingId, Long matchId, List<Long> seatIds) {
+        requirePositive(bookingId);
+        synchronized (MatchSeatRepository.class) {
+            List<MatchSeat> seats = readAll();
+            List<MatchSeat> selected = selectSeats(seats, matchId, seatIds);
+            if (selected.size() != seatIds.size()) return false;
+            for (MatchSeat seat : selected) {
+                if (!seat.isAvailable()) return false;
+            }
+            for (MatchSeat seat : selected) seat.hold(bookingId);
+            writeAll(seats);
+            return true;
+        }
+    }
+
+    public boolean bookSeatsSynchronized(Long bookingId, Long matchId, List<Long> seatIds) {
+        requirePositive(bookingId);
+        synchronized (MatchSeatRepository.class) {
+            List<MatchSeat> seats = readAll();
+            List<MatchSeat> selected = selectSeats(seats, matchId, seatIds);
+            if (selected.size() != seatIds.size()) return false;
+            for (MatchSeat seat : selected) {
+                if (seat.getStatus() != SeatStatus.LOCKED
+                        || !bookingId.equals(seat.getHoldBookingId())) return false;
+            }
+            for (MatchSeat seat : selected) seat.markBooked();
+            writeAll(seats);
+            return true;
+        }
+    }
+
+    public void releaseHeldSeatsSynchronized(Long bookingId, Long matchId, List<Long> seatIds) {
+        requirePositive(bookingId);
+        requirePositive(matchId);
+        if (seatIds == null || seatIds.isEmpty()) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Held Seat IDs are required");
+        }
+        synchronized (MatchSeatRepository.class) {
+            List<MatchSeat> seats = readAll();
+            boolean changed = false;
+            for (MatchSeat seat : seats) {
+                if (matchId.equals(seat.getMatchId()) && seatIds.contains(seat.getSeatId())
+                        && seat.getStatus() == SeatStatus.LOCKED
+                        && bookingId.equals(seat.getHoldBookingId())) {
+                    seat.release();
+                    changed = true;
+                }
+            }
+            if (changed) writeAll(seats);
+        }
+    }
+
+    private List<MatchSeat> selectSeats(List<MatchSeat> seats, Long matchId, List<Long> seatIds) {
+        requirePositive(matchId);
+        if (seatIds == null || seatIds.isEmpty() || seatIds.size() > 4
+                || new HashSet<>(seatIds).size() != seatIds.size()) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Choose 1 to 4 unique seats");
+        }
+        List<MatchSeat> selected = new ArrayList<>();
+        for (Long seatId : seatIds) {
+            requirePositive(seatId);
+            for (MatchSeat seat : seats) {
+                if (matchId.equals(seat.getMatchId()) && seatId.equals(seat.getSeatId())) {
+                    selected.add(seat);
+                    break;
+                }
+            }
+        }
+        return selected;
+    }
+
     public boolean releaseSeatsSynchronized(Long matchId, List<Long> seatIds) {
         requirePositive(matchId);
         if (seatIds == null || seatIds.isEmpty()
@@ -155,8 +226,8 @@ public class MatchSeatRepository {
 
     public MatchSeat parseLine(String line) {
         String[] parts = line.split(",", -1);
-        if (parts.length != 5) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Expected 5 match-seat columns");
+        if (parts.length != 5 && parts.length != 6) {
+            throw new AppException(ErrorCode.CSV_ERROR, "Expected 5 legacy or 6 match-seat columns");
         }
         long id = Long.parseLong(parts[0]);
         long matchId = Long.parseLong(parts[1]);
@@ -166,7 +237,9 @@ public class MatchSeatRepository {
         if (id <= 0 || matchId <= 0 || seatId <= 0 || version < 0) {
             throw new AppException(ErrorCode.CSV_ERROR, "Invalid match-seat data");
         }
-        return new MatchSeat(id, matchId, seatId, status, version);
+        Long holdBookingId = parts.length == 6 && !parts[5].isEmpty()
+                ? Long.parseLong(parts[5]) : null;
+        return new MatchSeat(id, matchId, seatId, status, version, holdBookingId);
     }
 
     public String formatLine(MatchSeat entity) {
@@ -177,7 +250,8 @@ public class MatchSeatRepository {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid match-seat CSV data");
         }
         return entity.getId() + "," + entity.getMatchId() + "," + entity.getSeatId()
-                + "," + entity.getStatus() + "," + entity.getVersion();
+                + "," + entity.getStatus() + "," + entity.getVersion()
+                + "," + (entity.getHoldBookingId() == null ? "" : entity.getHoldBookingId());
     }
 
     private void requirePositive(Long id) {

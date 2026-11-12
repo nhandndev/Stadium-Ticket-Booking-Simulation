@@ -1,6 +1,6 @@
 # Danh mục demo từng tính năng
 
-Bản ghi ngày 12/11/2026, chạy bằng code hiện tại. Bộ này có 88 file tính năng và 139 flow ghi Console thực tế.
+Bản ghi ngày 13/11/2026, chạy bằng code hiện tại. Bộ này có 87 file tính năng và 148 flow ghi Console thực tế.
 
 - [Chuẩn bị và tình trạng CSV hiện tại](00_CHUAN_BI.md).
 - [Thứ tự thực hiện từ đầu đến cuối](01_THU_TU_DEMO.md).
@@ -8,7 +8,7 @@ Bản ghi ngày 12/11/2026, chạy bằng code hiện tại. Bộ này có 88 fi
 
 Mỗi file gồm mục đích, luồng Controller/Service/Repository, điều kiện, từng phím nhập và Console sau từng lần Enter. Các trường hợp huỷ hoặc bị chặn nằm trong file tính năng tương ứng.
 
-Các flow dùng CORE_DIR nhỏ để ID ổn định. Đọc file chuẩn bị và thực hiện theo thứ tự toàn cục. Booking mặc định dùng SYNCHRONIZED để chống double booking.
+Các flow dùng CORE_DIR nhỏ để ID ổn định. Đọc file chuẩn bị và thực hiện theo thứ tự toàn cục. Booking giữ ghế tối đa 30 phút và dùng SYNCHRONIZED để chống double booking. Seller có đúng bảy feature như Use Case.
 
 ## 01 Guest
 
@@ -69,7 +69,7 @@ Các flow dùng CORE_DIR nhỏ để ID ổn định. Đọc file chuẩn bị v
 - [Create Booking](05_Fan_Booking_Tickets/02_Create_Booking.md) — Flow 069, 073, 078, 079, 140.
 - [Booking History](05_Fan_Booking_Tickets/03_Booking_History.md) — Flow 070.
 - [Booking Details](05_Fan_Booking_Tickets/04_Booking_Details.md) — Flow 071.
-- [Pay Pending Booking](05_Fan_Booking_Tickets/05_Pay_Pending_Booking.md) — Flow 074, 141.
+- [Pay Pending Booking](05_Fan_Booking_Tickets/05_Pay_Pending_Booking.md) — Flow 074, 141, 151.
 - [Ticket History](05_Fan_Booking_Tickets/06_Ticket_History.md) — Flow 075, 098.
 - [Ticket Details](05_Fan_Booking_Tickets/07_Ticket_Details.md) — Flow 076.
 - [Book This Match from Browsing](05_Fan_Booking_Tickets/08_Book_This_Match_from_Browsing.md) — Flow 077.
@@ -79,11 +79,10 @@ Các flow dùng CORE_DIR nhỏ để ID ổn định. Đọc file chuẩn bị v
 - [Search and List Customers](06_Seller/01_Search_and_List_Customers.md) — Flow 081, 082.
 - [Create Customer Fan Account](06_Seller/02_Create_Customer_Fan_Account.md) — Flow 083.
 - [View Seat Map and Prices](06_Seller/03_View_Seat_Map_and_Prices.md) — Flow 084.
-- [Create Booking for Customer](06_Seller/04_Create_Booking_for_Customer.md) — Flow 085.
+- [Create Booking for Customer](06_Seller/04_Create_Booking_for_Customer.md) — Flow 085, 143, 145, 148, 149, 150.
 - [Customer Booking History](06_Seller/05_Customer_Booking_History.md) — Flow 086.
-- [Accept Cash Payment](06_Seller/06_Accept_Cash_Payment.md) — Flow 087, 088.
-- [Issue Tickets](06_Seller/07_Issue_Tickets.md) — Flow 089, 090.
-- [Browse Matches](06_Seller/08_Browse_Matches.md) — Flow 091.
+- [Accept Cash Payment](06_Seller/06_Accept_Cash_Payment.md) — Flow 087, 088, 144, 146, 152.
+- [Issue Tickets](06_Seller/07_Issue_Tickets.md) — Flow 089, 090, 147.
 
 ## 07 Cancellation Refund
 
@@ -130,4 +129,3 @@ Các flow dùng CORE_DIR nhỏ để ID ổn định. Đọc file chuẩn bị v
 
 - [Invalid Menu Input](11_System/01_Invalid_Menu_Input.md) — Flow 139.
 - [Exit System](11_System/02_Exit_System.md) — Flow 142.
-

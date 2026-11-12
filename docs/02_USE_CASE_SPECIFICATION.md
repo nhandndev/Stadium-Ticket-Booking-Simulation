@@ -1,42 +1,72 @@
 # Use Case Specification
 
-Current baseline follows the visible page 00 in ClassDiagram.drawio.
+The visible page 00 of ClassDiagram.drawio is the official actor/feature overview.
 
-## Actors and responsibilities
+## Actors and Shared Behavior
 
-- Guest searches/filters matches, reads match details and seat availability,
-  registers a Fan and opens login.
-- User represents shared authenticated profile/update/logout behavior.
-- Fan creates and pays its own bookings, reads booking/ticket history, cancels
-  unpaid bookings and submits refund requests.
-- Seller serves customers, creates customer accounts/bookings, records cash
-  and issues tickets.
-- Gate Staff validates ticket codes and checks eligible tickets in once.
-- Administrator manages venues, matches, prices, sales, accounts, roles, refunds,
-  summary and audit records.
-- Payment Service processes the local mock online payment outcome.
+- Guest searches/filters Matches, reads details/seat availability, registers and opens login.
+- User represents shared profile/update/logout behavior after authentication.
+- Fan books and accesses its own bookings, tickets and refund requests.
+- Seller serves the counter through the seven features below.
+- Gate Staff validates and checks in tickets once.
+- Administrator manages venues, Matches, prices, sales, accounts/roles,
+  refunds, summary and audit.
+- Payment Service supplies mock online payment outcomes.
 
-Fan and Staff-role actors share User capabilities through the diagram's
-generalization relationships. Controller routing also checks stored account role.
+Actor generalization expresses shared capability. Controllers also enforce stored
+role and account status. Menu navigation and validation are part of these use-case flows.
 
-## Ordinary booking scenario
+## Seller Use Cases
 
-1. An authenticated Fan selects an OPEN future Match and one to four seats.
-2. BookingService validates Fan, Match, seats and pricing and stores PENDING.
-3. Fan confirms payment for the quoted amount.
-4. Default synchronized checkout rechecks availability and commits all seats.
-5. A successful payment confirms the booking and creates eligible tickets.
-6. A competing checkout receives the seat conflict and its booking is cancelled.
-7. Fan reads its booking and ticket histories.
+1. Search Fan.
+2. Create Fan.
+3. Create booking for Fan.
+4. Accept offline payment.
+5. Issue ticket.
+6. View seat map and prices.
+7. View customer booking history.
 
-Seller follows the customer-booking path with cash confirmation and ticket issue.
-Gate validates/checks in issued tickets. Administrator reviews eligible refunds
-and releases seats when approval cancels the sale.
+Create booking preserves the agreed account-holder/walk-in branches inside the
+same use case. Existing accounts must be ACTIVE immediately after selection.
+Create Fan remains its own explicit feature.
 
-## Detailed Feature Inventory
+## Booking and Payment Scenarios
 
-All 82 visible Use Case nodes are mapped to their feature walkthroughs in
-[Use Case traceability](06_USE_CASE_TRACEABILITY.md). Each linked guide describes
-the purpose, preconditions, Console inputs, outcomes and exercised rejection
-or cancellation cases. The [feature index](Demo_Tung_Feature/README.md) groups
-these guides by actor and domain.
+### Fan
+
+1. Select a future OPEN Match and one to four available seats.
+2. Create PENDING with the quoted amount and persisted payment deadline.
+3. The system holds those seats exclusively for the booking.
+4. Pay online immediately, return to Pay pending booking later or give the
+   Booking ID to Seller for offline payment before the same deadline.
+5. Successful payment confirms the order. Online checkout issues tickets.
+6. View booking/ticket history and present the ticket at the Gate.
+
+### Seller
+
+1. Search/select an ACTIVE Fan or choose the walk-in branch when creating booking.
+2. Select Match and seats, then create PENDING with its deadline.
+3. At Accept offline payment, enter Booking ID and confirm cash received.
+4. Successful offline payment records CONFIRMED.
+5. At Issue ticket, enter the paid Booking ID to issue its tickets.
+
+### Expiry and Cancellation
+
+The deadline is the earlier of creation plus 30 minutes and kick-off. At that
+instant, payment is rejected, PENDING becomes EXPIRED and owned holds are released.
+Cancellation or failed payment also releases the owning booking's holds.
+Stored timestamps prevent a restart from granting another window.
+
+### History, Gate and Refunds
+
+Booking history represents orders and status. Ticket history represents issued
+seats and check-in. Gate validates Match and ticket identity before one-time entry.
+Eligible paid Fan bookings may request refund and Administrator reviews them.
+Approval cancels the sale/tickets and releases BOOKED inventory.
+
+## Full Feature Coverage
+
+[Use Case traceability](06_USE_CASE_TRACEABILITY.md) maps every visible feature
+node to code and a captured feature guide. The [feature index](Demo_Tung_Feature/README.md)
+groups all delivered operations by actor/domain. Hold expiry is a business rule of
+booking, payment and seat availability, and is explained in the diagram note.

@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 029 — Create Seat A1
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 028](09_Update_Section.md#flow-028).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 028](../03_Admin_Venues/09_Update_Section.md#flow-028).
 
 ### Console ban đầu
 
@@ -248,7 +248,7 @@ Choose option:
 
 ## Flow 030 — Create Seat A2
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 029](11_Create_Seat.md#flow-029).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 029](../03_Admin_Venues/11_Create_Seat.md#flow-029).
 
 ### Console ban đầu
 
@@ -480,7 +480,7 @@ Choose option:
 
 ## Flow 031 — Create Seat A3
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 030](11_Create_Seat.md#flow-030).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 030](../03_Admin_Venues/11_Create_Seat.md#flow-030).
 
 ### Console ban đầu
 
@@ -712,7 +712,7 @@ Choose option:
 
 ## Flow 032 — Create Seat A4
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 031](11_Create_Seat.md#flow-031).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 031](../03_Admin_Venues/11_Create_Seat.md#flow-031).
 
 ### Console ban đầu
 
@@ -944,7 +944,7 @@ Choose option:
 
 ## Flow 033 — Create Seat A5
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 032](11_Create_Seat.md#flow-032).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 032](../03_Admin_Venues/11_Create_Seat.md#flow-032).
 
 ### Console ban đầu
 
@@ -1176,7 +1176,7 @@ Choose option:
 
 ## Flow 034 — Create Seat A6
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 033](11_Create_Seat.md#flow-033).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 033](../03_Admin_Venues/11_Create_Seat.md#flow-033).
 
 ### Console ban đầu
 
@@ -1408,7 +1408,7 @@ Choose option:
 
 ## Flow 035 — Create Seat A7
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 034](11_Create_Seat.md#flow-034).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 034](../03_Admin_Venues/11_Create_Seat.md#flow-034).
 
 ### Console ban đầu
 
@@ -1640,7 +1640,7 @@ Choose option:
 
 ## Flow 036 — Create Seat A8
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 035](11_Create_Seat.md#flow-035).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 035](../03_Admin_Venues/11_Create_Seat.md#flow-035).
 
 ### Console ban đầu
 
@@ -1872,7 +1872,7 @@ Choose option:
 
 ## Flow 043 — Delete Seat - tạo ghế phụ để xoá
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 042](15_Activate_Seat.md#flow-042).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 042](../03_Admin_Venues/15_Activate_Seat.md#flow-042).
 
 ### Console ban đầu
 

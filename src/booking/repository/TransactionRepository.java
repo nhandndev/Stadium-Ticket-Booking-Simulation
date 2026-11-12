@@ -35,7 +35,7 @@ public class TransactionRepository extends CsvRepository<BookingTransaction> {
         }
         long id = Long.parseLong(parts[0]);
         long bookingId = Long.parseLong(parts[1]);
-        long fanId = Long.parseLong(parts[2]);
+        Long fanId = parts[2].isEmpty() ? null : Long.parseLong(parts[2]);
         long matchId = Long.parseLong(parts[3]);
         if (id <= 0 || bookingId <= 0) {
             throw new AppException(ErrorCode.CSV_ERROR, "Transaction needs a valid booking");
@@ -94,7 +94,7 @@ public class TransactionRepository extends CsvRepository<BookingTransaction> {
         }
         return entity.getId() + ","
                 + entity.getBookingId() + ","
-                + entity.getFanId() + "," + entity.getMatchId() + ","
+                + (entity.getFanId() == null ? "" : entity.getFanId()) + "," + entity.getMatchId() + ","
                 + String.join(";", seatTexts) + "," + entity.getMechanism().name()
                 + "," + entity.getStatus().name() + "," + entity.getCreatedAt()
                 + "," + entity.getCompletedAt() + "," + entity.getDurationMillis()

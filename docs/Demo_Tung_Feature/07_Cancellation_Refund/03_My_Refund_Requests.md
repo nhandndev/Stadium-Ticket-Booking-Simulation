@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 094 — My Refund Requests trước review
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 093](02_Request_Refund.md#flow-093).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 093](../07_Cancellation_Refund/02_Request_Refund.md#flow-093).
 
 ### Console ban đầu
 
@@ -179,7 +179,7 @@ Choose option:
 
 ## Flow 097 — My Refund Requests sau review
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 096](05_Reject_Refund.md#flow-096).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 096](../07_Cancellation_Refund/05_Reject_Refund.md#flow-096).
 
 ### Console ban đầu
 

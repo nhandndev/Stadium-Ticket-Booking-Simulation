@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 003 — View Seat Availability từ kết quả tìm kiếm
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 002](02_View_Match_Details.md#flow-002).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 002](../01_Guest/02_View_Match_Details.md#flow-002).
 
 ### Console ban đầu
 
@@ -117,9 +117,10 @@ SEAT ID  | LABEL    | SECTION                  | PRICE (VND)  | STATUS
 19       | B9       | Stand B                  | 300000       | AVAILABLE
 20       | B10      | Stand B                  | 300000       | AVAILABLE
 
---- Choose action for matches ---
-1. View match details (enter Match ID)
-2. View seat availability / Seat map (enter Match ID)
+--- Match #1 ---
+1. View match details
+2. View seat availability / Seat map
+4. Choose another match
 0. Back to match browsing
 Choose action:
 ```
@@ -161,7 +162,7 @@ Choose option:
 
 ## Flow 007 — View Seat Map trực tiếp bằng ID
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 006](02_View_Match_Details.md#flow-006).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 006](../01_Guest/02_View_Match_Details.md#flow-006).
 
 ### Console ban đầu
 
@@ -182,6 +183,7 @@ Choose option:
 2. 4
 3. 1
 4. 0
+5. 0
 ```
 
 ### Bước 1 — Nhập `1` rồi Enter
@@ -239,6 +241,19 @@ SEAT ID  | LABEL    | SECTION                  | PRICE (VND)  | STATUS
 19       | B9       | Stand B                  | 300000       | AVAILABLE
 20       | B10      | Stand B                  | 300000       | AVAILABLE
 
+--- Match #1 ---
+1. View match details
+2. View seat availability / Seat map
+4. Choose another match
+0. Back to match browsing
+Choose action:
+```
+
+### Bước 4 — Nhập `0` rồi Enter
+
+Console trả về
+
+```text
 === MATCH BROWSING ===
 1. Search matches by team keyword
 2. Filter matches / List all schedule
@@ -248,7 +263,7 @@ SEAT ID  | LABEL    | SECTION                  | PRICE (VND)  | STATUS
 Choose option:
 ```
 
-### Bước 4 — Nhập `0` rồi Enter
+### Bước 5 — Nhập `0` rồi Enter
 
 Console trả về
 

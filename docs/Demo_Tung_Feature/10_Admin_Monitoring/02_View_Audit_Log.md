@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 137 — View Audit Log
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 136](01_View_System_Summary.md#flow-136).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 136](../10_Admin_Monitoring/01_View_System_Summary.md#flow-136).
 
 ### Console ban đầu
 
@@ -113,8 +113,8 @@ Console trả về
 
 ```text
 === AUDIT LOGS ===
-5 | Actor #1 | REVIEW_REFUND | Target: REFUND #3 | Result: REJECTED | 2026-11-12T19:45:28.712492
-4 | Actor #1 | REVIEW_REFUND | Target: REFUND #2 | Result: APPROVED | 2026-11-12T19:45:28.312667
+5 | Actor #1 | REVIEW_REFUND | Target: REFUND #3 | Result: REJECTED | 2026-11-12T23:47:39.953627
+4 | Actor #1 | REVIEW_REFUND | Target: REFUND #2 | Result: APPROVED | 2026-11-12T23:47:39.545422
 3 | Actor #1 | ASSIGN_ROLE | Target: STAFF #3 | Result: SUCCESS | 2026-10-26T00:10
 2 | Actor #1 | OPEN_TICKET_SALES | Target: MATCH #1 | Result: SUCCESS | 2026-10-26T00:05
 1 | Actor #1 | INITIALIZE_DATASET | Target: SYSTEM #0 | Result: SUCCESS | 2026-10-26T00:00

@@ -11,7 +11,7 @@ The canonical [ClassDiagram.drawio](../ClassDiagram.drawio) contains six pages.
 | 04 | CSV repositories, BaseEntity and common errors | [CSV Repository and BaseEntity](04_CSV_Repository_BaseEntity.mmd) |
 | 05 | Domain models, inheritance and multiplicities | [Model relationships](05_Model_Relationships.mmd) |
 
-The last inspection matched 97 production class/enum contracts to 190 expanded
+The last inspection matched 97 production class/enum contracts to 192 expanded
 class boxes and these five Mermaid files. Repeated classes contain the same
 declared fields, explicit constructors and public methods as source.
 
@@ -31,3 +31,11 @@ seat commits in one JVM.
 
 See [verification](../05_VERIFICATION_AND_DELIVERY.md) for recorded structural
 checks. Full rendered wire routing requires visual review before export.
+
+## Timed booking holds
+
+Booking includes createdAt/expiresAt and the EXPIRED state. MatchSeat includes
+holdBookingId and a structural hold-owner relationship. Default checkout commits
+only its owned LOCKED seats. Expiry releases those holds. BookingService is fully
+expanded on pages 01 and 02 where browsing/seat administration use its expiry
+operation. The Seller menu exposes the seven features shown on page 00.

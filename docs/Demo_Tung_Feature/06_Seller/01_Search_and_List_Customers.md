@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -38,11 +38,9 @@ Choose option:
 3. seller123
 4. 2
 5. 1
-6. 1
-7. flow.fan
+6. flow.fan
+7. 0
 8. 0
-9. 0
-10. 0
 ```
 
 ### Bước 1 — Nhập `3` rồi Enter
@@ -77,7 +75,6 @@ Role:   SELLER | Status: ACTIVE
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
@@ -87,10 +84,14 @@ Choose option:
 Console trả về
 
 ```text
-=== SELLER > SALES COUNTER ===
-1. Customers
-2. Customer bookings
-3. Payments and ticket issue
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Create booking for Fan / walk-in customer
+4. Accept offline payment
+5. Issue ticket
+6. View seat map and prices
+7. View customer booking history
 0. Back to dashboard
 Choose:
 ```
@@ -100,49 +101,29 @@ Choose:
 Console trả về
 
 ```text
-=== SELLER > CUSTOMERS ===
-1. Search / List customers
-2. Create Fan account
-0. Back to sales counter
-Choose:
-```
-
-### Bước 6 — Nhập `1` rồi Enter
-
-Console trả về
-
-```text
 Customer name/email (Enter = List all; 0 = Back):
 ```
 
-### Bước 7 — Nhập `flow.fan` rồi Enter
+### Bước 6 — Nhập `flow.fan` rồi Enter
 
 Console trả về
 
 ```text
 Fan #6 | Flow Fan Updated | flow.fan@example.com | ACTIVE
 
-=== SELLER > CUSTOMERS ===
-1. Search / List customers
-2. Create Fan account
-0. Back to sales counter
-Choose:
-```
-
-### Bước 8 — Nhập `0` rồi Enter
-
-Console trả về
-
-```text
-=== SELLER > SALES COUNTER ===
-1. Customers
-2. Customer bookings
-3. Payments and ticket issue
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Create booking for Fan / walk-in customer
+4. Accept offline payment
+5. Issue ticket
+6. View seat map and prices
+7. View customer booking history
 0. Back to dashboard
 Choose:
 ```
 
-### Bước 9 — Nhập `0` rồi Enter
+### Bước 7 — Nhập `0` rồi Enter
 
 Console trả về
 
@@ -151,12 +132,11 @@ Console trả về
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
 
-### Bước 10 — Nhập `0` rồi Enter
+### Bước 8 — Nhập `0` rồi Enter
 
 Console trả về
 
@@ -181,7 +161,7 @@ Choose option:
 
 ## Flow 082 — List Customers - Enter tại keyword
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 081](01_Search_and_List_Customers.md#flow-081).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 081](../06_Seller/01_Search_and_List_Customers.md#flow-081).
 
 ### Console ban đầu
 
@@ -203,11 +183,9 @@ Choose option:
 3. seller123
 4. 2
 5. 1
-6. 1
-7. Enter
+6. Enter
+7. 0
 8. 0
-9. 0
-10. 0
 ```
 
 ### Bước 1 — Nhập `3` rồi Enter
@@ -242,7 +220,6 @@ Role:   SELLER | Status: ACTIVE
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
@@ -252,10 +229,14 @@ Choose option:
 Console trả về
 
 ```text
-=== SELLER > SALES COUNTER ===
-1. Customers
-2. Customer bookings
-3. Payments and ticket issue
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Create booking for Fan / walk-in customer
+4. Accept offline payment
+5. Issue ticket
+6. View seat map and prices
+7. View customer booking history
 0. Back to dashboard
 Choose:
 ```
@@ -265,22 +246,10 @@ Choose:
 Console trả về
 
 ```text
-=== SELLER > CUSTOMERS ===
-1. Search / List customers
-2. Create Fan account
-0. Back to sales counter
-Choose:
-```
-
-### Bước 6 — Nhập `1` rồi Enter
-
-Console trả về
-
-```text
 Customer name/email (Enter = List all; 0 = Back):
 ```
 
-### Bước 7 — Nhấn Enter để trống
+### Bước 6 — Nhấn Enter để trống
 
 Console trả về
 
@@ -292,27 +261,19 @@ Fan #4 | Pham Minh Dung | dung.pham@gmail.com | ACTIVE
 Fan #5 | Do Thi Em | em.do@gmail.com | INACTIVE
 Fan #6 | Flow Fan Updated | flow.fan@example.com | ACTIVE
 
-=== SELLER > CUSTOMERS ===
-1. Search / List customers
-2. Create Fan account
-0. Back to sales counter
-Choose:
-```
-
-### Bước 8 — Nhập `0` rồi Enter
-
-Console trả về
-
-```text
-=== SELLER > SALES COUNTER ===
-1. Customers
-2. Customer bookings
-3. Payments and ticket issue
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Create booking for Fan / walk-in customer
+4. Accept offline payment
+5. Issue ticket
+6. View seat map and prices
+7. View customer booking history
 0. Back to dashboard
 Choose:
 ```
 
-### Bước 9 — Nhập `0` rồi Enter
+### Bước 7 — Nhập `0` rồi Enter
 
 Console trả về
 
@@ -321,12 +282,11 @@ Console trả về
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
 
-### Bước 10 — Nhập `0` rồi Enter
+### Bước 8 — Nhập `0` rồi Enter
 
 Console trả về
 

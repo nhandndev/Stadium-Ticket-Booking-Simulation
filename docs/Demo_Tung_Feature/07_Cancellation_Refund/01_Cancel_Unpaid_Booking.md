@@ -1,6 +1,6 @@
 # Cancel Unpaid Booking
 
-- Dùng để huỷ booking pending chưa có payment; booking đã trả tiền đi qua yêu cầu hoàn tiền.
+- Dùng để huỷ booking pending chưa có payment và trả ghế đang giữ; booking đã trả tiền đi qua yêu cầu hoàn tiền.
 - Luồng xử lý trong code `MainController → BookingController.cancelBooking → BookingService.cancelBooking → BookingRepository`.
 - Mỗi lần nhập bên dưới phải nhấn Enter. Dòng Enter trống là không gõ ký tự.
 
@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -116,6 +116,7 @@ Console trả về
 
 ```text
 Booking #3 | Flow Red vs Flow Blue | [Flow Stand Updated A1] | 250000 VND | PENDING
+  Payment deadline: 2026-11-13T00:17:29.188470
 Booking ID: (0 = Back):
 ```
 
@@ -129,6 +130,8 @@ Customer: Flow Fan Updated (Fan #6)
 Match: Flow Red vs Flow Blue (#4)
 Seats: [Flow Stand Updated A1] | IDs: [21]
 Total: 250000 VND | Status: PENDING
+Seats held until: 2026-11-13T00:17:29.188470
+Pay online now or give this Booking ID to a Seller for offline payment before the deadline.
 Cancel this unpaid booking? (y/n, Enter = No):
 ```
 
@@ -197,5 +200,5 @@ Choose option:
 
 ### Điểm cần chỉ khi demo
 
-- Huỷ booking pending chưa có payment; booking đã trả tiền đi qua yêu cầu hoàn tiền.
+- Huỷ booking pending chưa có payment và trả ghế đang giữ; booking đã trả tiền đi qua yêu cầu hoàn tiền.
 - Cuối flow đã trở lại Main. Giữ nguyên CORE_DIR để tiếp tục theo thứ tự.

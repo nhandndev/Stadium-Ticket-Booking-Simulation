@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 101 — Check-in Ticket - huỷ xác nhận
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 100](01_Validate_Ticket.md#flow-100).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 100](../08_Gate/01_Validate_Ticket.md#flow-100).
 
 ### Console ban đầu
 
@@ -170,7 +170,7 @@ Choose option:
 
 ## Flow 102 — Check-in Ticket
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 101](02_Check_In_Ticket.md#flow-101).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 101](../08_Gate/02_Check_In_Ticket.md#flow-101).
 
 ### Console ban đầu
 
@@ -277,7 +277,7 @@ Confirm check-in (y/n, Enter = No):
 Console trả về
 
 ```text
-Ticket #2 | Code T-4-21 | Flow Red vs Flow Blue (Match #4) | Flow Stand Updated A1 | Status CHECKED_IN | Checked in at 2026-11-12T19:45:31.044271
+Ticket #2 | Code T-4-21 | Flow Red vs Flow Blue (Match #4) | Flow Stand Updated A1 | Status CHECKED_IN | Checked in at 2026-11-12T23:47:42.306200
 
 === GATE STAFF ===
 1. Validate ticket
@@ -324,7 +324,7 @@ Choose option:
 
 ## Flow 103 — Check-in Ticket - chặn dùng vé lại
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 102](02_Check_In_Ticket.md#flow-102).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 102](../08_Gate/02_Check_In_Ticket.md#flow-102).
 
 ### Console ban đầu
 
@@ -468,7 +468,7 @@ Choose option:
 
 ## Flow 105 — Check-in Ticket - code không tồn tại
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 104](01_Validate_Ticket.md#flow-104).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 104](../08_Gate/01_Validate_Ticket.md#flow-104).
 
 ### Console ban đầu
 

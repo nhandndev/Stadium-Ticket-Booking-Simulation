@@ -113,7 +113,7 @@ public class BookingController {
                         List<BookingResponseDto> pending = getMyBookings(fan.getId());
                         pending.removeIf(booking -> booking.getStatus() != BookingStatus.PENDING);
                         if (pending.isEmpty()) {
-                            bookingView.displayMessage("No bookings are waiting for payment.");
+                            bookingView.displayMessage("No active bookings are waiting for payment. Unpaid bookings expire after at most 30 minutes; check booking history.");
                             break;
                         }
                         bookingView.displayBookings(pending);
@@ -188,14 +188,13 @@ public class BookingController {
         }
         BookingResponseDto booking = createBooking(request);
         bookingView.displayBookingResponse(booking);
-        bookingView.displayMessage("Seats are not held until payment succeeds.");
         payBooking(booking);
     }
 
     private void payBooking(BookingResponseDto booking) {
         PaymentRequestDto payment = bookingView.readPaymentRequest(booking);
         if (payment == null) {
-            bookingView.displayMessage("Not paid. This booking remains pending; open My bookings and payments > Pay pending booking later.");
+            bookingView.displayMessage("Not paid. Pay before " + booking.getExpiresAt() + " online or give the Booking ID to a Seller for offline payment.");
             return;
         }
         PaymentResponseDto result = makeOnlinePayment(payment);
@@ -257,34 +256,9 @@ public class BookingController {
 
     public void runSellerMenu() {
         while (true) {
-            requireRole(UserRole.SELLER);
-            try {
-                int group = sellerView.showSellerMenu();
-                if (group == 0) return;
-                if (group >= 1 && group <= 3) runSellerActions(group);
-                else sellerView.displayMessage("Invalid choice.");
-            } catch (NumberFormatException e) {
-                sellerView.displayMessage("Please enter a valid number.");
-            } catch (AppException | IllegalArgumentException e) {
-                sellerView.displayMessage(e.getMessage());
-            }
-        }
-    }
-
-    private void runSellerActions(int group) {
-        while (true) {
             UserResponseDto seller = requireRole(UserRole.SELLER);
             try {
-                int action = sellerView.showSellerActionsMenu(group);
-                if (action == 0) return;
-                if (action < 1 || action > (group == 2 ? 3 : 2)) {
-                    sellerView.displayMessage("Invalid choice.");
-                    continue;
-                }
-                int choice = action;
-                if (group == 2) choice = action == 3 ? 7 : action + 2;
-                if (group == 3) choice = action + 4;
-                switch (choice) {
+                switch (sellerView.showSellerMenu()) {
                     case 1:
                         String keyword = sellerView.readFanKeyword();
                         if (keyword != null) sellerView.displayFans(fanController.searchFans(keyword));
@@ -295,76 +269,28 @@ public class BookingController {
                         else sellerView.displayMessage("Account creation cancelled.");
                         break;
                     case 3:
+                        sellTicketsAtCounter(seller.getId());
+                        break;
                     case 4:
-                        UserResponseDto customer = choice == 4 ? selectFan() : null;
-                        if (choice == 4 && customer == null) break;
+                        BookingResponseDto unpaid = selectSellerBooking();
+                        if (unpaid != null) collectOfflinePayment(seller.getId(), unpaid);
+                        break;
+                    case 5:
+                        BookingResponseDto paid = selectSellerBooking();
+                        if (paid != null) sellerView.displayTickets(issueTickets(paid.getBookingId()));
+                        break;
+                    case 6:
                         List<MatchResponseDto> matches = browseController.filterMatches(null, null);
                         bookingView.displayMatches(matches);
                         if (matches.isEmpty()) break;
                         Long matchId = sellerView.readMatchId();
                         if (matchId == null) break;
-                        MatchResponseDto match = browseController.viewMatchDetails(matchId);
-                        bookingView.displayMatchDetails(match);
-                        List<MatchSeatResponseDto> seats = browseController.getSeatMap(matchId);
-                        seatMapView.displaySeatMap(seats);
-                        if (choice == 3) break;
-                        if (match.getSaleStatus() != SaleStatus.OPEN
-                                || !match.getStartTime().isAfter(LocalDateTime.now())) {
-                            sellerView.displayMessage("Ticket sales are closed for this match.");
-                            break;
-                        }
-                        boolean available = false;
-                        for (MatchSeatResponseDto seat : seats) {
-                            if (seat.isAvailable()) available = true;
-                        }
-                        if (!available) {
-                            sellerView.displayMessage("No seats are available for booking.");
-                            break;
-                        }
-                        BookingRequestDto request = sellerView.readBookingRequest(customer.getId(), matchId);
-                        if (request != null) sellerView.displayBookingResponse(createBookingForFan(seller.getId(), request));
-                        else sellerView.displayMessage("Booking cancelled.");
+                        bookingView.displayMatchDetails(browseController.viewMatchDetails(matchId));
+                        seatMapView.displaySeatMap(browseController.getSeatMap(matchId));
                         break;
-                    case 5:
-                    case 6:
                     case 7:
                         UserResponseDto fan = selectFan();
-                        if (fan == null) break;
-                        List<BookingResponseDto> bookings = getBookingsForFan(fan.getId());
-                        if (choice == 5) bookings.removeIf(b -> b.getStatus() != BookingStatus.PENDING);
-                        if (choice == 6) bookings.removeIf(b -> b.getStatus() != BookingStatus.CONFIRMED);
-                        if (bookings.isEmpty()) {
-                            sellerView.displayMessage("No bookings match this action for this customer.");
-                            break;
-                        }
-                        bookingView.displayBookings(bookings);
-                        if (choice == 7) break;
-                        Long bookingId = sellerView.readBookingId();
-                        if (bookingId == null) break;
-                        BookingResponseDto booking = getBookingDetails(bookingId);
-                        if (!booking.getFanId().equals(fan.getId())) {
-                            sellerView.displayMessage("This booking belongs to another customer.");
-                            break;
-                        }
-                        bookingView.displayBookingResponse(booking);
-                        if (choice == 6) {
-                            sellerView.displayTickets(issueTickets(bookingId));
-                            break;
-                        }
-                        if (booking.getStatus() != BookingStatus.PENDING) {
-                            sellerView.displayMessage("Choose a booking waiting for payment.");
-                            break;
-                        }
-                        PaymentRequestDto payment = sellerView.readPaymentRequest(booking);
-                        if (payment == null) {
-                            sellerView.displayMessage("No payment recorded.");
-                            break;
-                        }
-                        PaymentResponseDto result = acceptOfflinePayment(seller.getId(), payment);
-                        sellerView.displayPaymentResponse(result);
-                        if (result.getStatus() == PaymentStatus.SUCCESS && sellerView.confirmIssueTickets()) {
-                            sellerView.displayTickets(issueTickets(bookingId));
-                        }
+                        if (fan != null) bookingView.displayBookings(getBookingsForFan(fan.getId()));
                         break;
                     case 0:
                         return;
@@ -379,19 +305,103 @@ public class BookingController {
         }
     }
 
+    private void sellTicketsAtCounter(Long sellerId) {
+        int customerType = sellerView.showCustomerTypeMenu();
+        if (customerType == 0) return;
+        UserResponseDto customer = null;
+        switch (customerType) {
+            case 1:
+                customer = selectFan();
+                if (customer == null) return;
+                break;
+            case 2:
+                break;
+            default:
+                sellerView.displayMessage("Choose an existing account or walk-in customer. Use Create Fan to register an account.");
+                return;
+        }
+        List<MatchResponseDto> matches = browseController.filterMatches(null, null);
+        bookingView.displayMatches(matches);
+        if (matches.isEmpty()) return;
+        Long matchId = sellerView.readMatchId();
+        if (matchId == null) return;
+        MatchResponseDto match = browseController.viewMatchDetails(matchId);
+        bookingView.displayMatchDetails(match);
+        if (match.getSaleStatus() != SaleStatus.OPEN
+                || !match.getStartTime().isAfter(LocalDateTime.now())) {
+            sellerView.displayMessage("Ticket sales are closed for this match.");
+            return;
+        }
+        List<MatchSeatResponseDto> seats = browseController.getSeatMap(matchId);
+        seatMapView.displaySeatMap(seats);
+        boolean available = false;
+        for (MatchSeatResponseDto seat : seats) {
+            if (seat.isAvailable()) available = true;
+        }
+        if (!available) {
+            sellerView.displayMessage("No seats are AVAILABLE for this match.");
+            return;
+        }
+        Long fanId = customer == null ? null : customer.getId();
+        BookingRequestDto request = sellerView.readBookingRequest(fanId, matchId);
+        if (request == null) {
+            sellerView.displayMessage("Booking cancelled.");
+            return;
+        }
+        BookingResponseDto booking = createBookingForCustomer(sellerId, request);
+        sellerView.displayBookingResponse(booking);
+        sellerView.displayMessage("Use 4. Accept offline payment before the deadline, then 5. Issue ticket.");
+    }
+
+    private BookingResponseDto selectSellerBooking() {
+        Long bookingId = sellerView.readBookingId();
+        if (bookingId == null) return null;
+        BookingResponseDto booking = getBookingDetails(bookingId);
+        if (booking.getFanId() != null) bookingService.validateFanAccount(booking.getFanId());
+        sellerView.displayBookingResponse(booking);
+        return booking;
+    }
+
+    private void collectOfflinePayment(Long sellerId, BookingResponseDto booking) {
+        if (booking.getFanId() != null) bookingService.validateFanAccount(booking.getFanId());
+        if (booking.getStatus() == BookingStatus.EXPIRED) {
+            sellerView.displayMessage("Booking has expired. Offline payment is no longer allowed. Create a new booking.");
+            return;
+        }
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            sellerView.displayMessage("Offline payment requires a PENDING booking within its payment deadline.");
+            return;
+        }
+        PaymentRequestDto payment = sellerView.readPaymentRequest(booking);
+        if (payment == null) {
+            sellerView.displayMessage("No payment recorded. Keep Booking ID " + booking.getBookingId()
+                    + " to pay before " + booking.getExpiresAt() + ".");
+            return;
+        }
+        PaymentResponseDto result = acceptOfflinePayment(sellerId, payment);
+        sellerView.displayPaymentResponse(result);
+        if (result.getStatus() == PaymentStatus.SUCCESS) {
+            sellerView.displayMessage("Offline payment recorded. Use 5. Issue ticket to issue the paid tickets.");
+        } else {
+            sellerView.displayMessage("Cash sale failed because the selected seats could not be committed. "
+                    + "No tickets were issued. Return any cash collected and check current seat availability.");
+        }
+    }
+
     private UserResponseDto selectFan() {
         String keyword = sellerView.readFanKeyword();
         if (keyword == null) return null;
         List<UserResponseDto> fans = fanController.searchFans(keyword);
         sellerView.displayFans(fans);
         if (fans.isEmpty()) {
-            sellerView.displayMessage("Use Create Fan to add a new customer.");
+            sellerView.displayMessage("No matching Fan account. Choose Walk-in customer or register a Fan account.");
             return null;
         }
         Long fanId = sellerView.readFanId();
         if (fanId == null) return null;
         for (UserResponseDto fan : fans) {
             if (fan.getId().equals(fanId)) {
+                bookingService.validateFanAccount(fan.getId());
                 sellerView.displayMessage("Customer: " + fan.getFullName() + " | " + fan.getEmail());
                 return fan;
             }
@@ -421,6 +431,15 @@ public class BookingController {
             throw new AppException(ErrorCode.INVALID_INPUT, "Wrong seller ID");
         }
         return bookingService.createBookingForFan(sellerId, request);
+    }
+
+    public BookingResponseDto createBookingForCustomer(Long sellerId,
+                                                        BookingRequestDto request) {
+        UserResponseDto seller = requireRole(UserRole.SELLER);
+        if (!seller.getId().equals(sellerId)) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Wrong seller ID");
+        }
+        return bookingService.createBookingForCustomer(sellerId, request);
     }
 
     public PaymentResponseDto makeOnlinePayment(PaymentRequestDto request) {

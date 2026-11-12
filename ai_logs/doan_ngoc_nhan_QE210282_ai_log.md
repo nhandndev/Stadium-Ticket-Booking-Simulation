@@ -1952,3 +1952,162 @@ Limits
 
 - The retained detailed feature set accounts for most remaining documentation files.
 - Full rendered diagram routing still requires visual review before submission.
+
+## Entry 54 - Add Diverse Match Fixtures
+
+Date — 2026-11-12. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Add around 1000 matches with varied sample data.
+
+AI contribution
+
+- Appended exactly 1000 fictional matches with IDs 5–1004 to data/matches.csv, retaining the four existing records.
+- Used 76 distinct team names across Vietnamese clubs, international clubs and national teams. Added ordered home/away pairings are unique and each Match has different teams.
+- Distributed the additions across the two existing Stadiums and ten afternoon/evening kick-off slots, from 2026-01-01 to 2029-01-20. Relative to 2026-11-12, 200 additions are past and 800 future.
+- Set new matches to CLOSED, matching MatchService.createMatch. This agent-selected fixture choice lets Administrator pricing and inventory preparation precede opening sales for eligible future matches.
+- Updated root README, demo preparation and verification notes. The source match fixture now has 1004 rows. Other business counts evolve with application use.
+- Kept generation and validation helpers outside the project.
+
+Agent verification
+
+- Compiled current Java source and an isolated fixture check.
+- Loaded all 1004 matches through MatchRepository and checked CSV roundtrips, unique IDs, home/away identities and valid Stadium references.
+- Exercised BrowseService listing, Stadium/date filters, Vietnamese Unicode and international-club searches, and details for Match 1004.
+- Executed a Guest Console search for Arsenal on a copy of the updated source fixture and exited successfully. The check preserved its copied CSV bytes.
+- Confirmed matches.csv retains the original four records. The initial attempt to assert unchanged source business files detected concurrent changes in match_seats, bookings, payments, tickets and transactions. The agent preserved those records and moved Console acceptance to a separate copy. Total source rows observed at that point were 12195, including ongoing business activity.
+
+Limits
+
+- These are fictional demonstration fixtures. Real event schedules are separate from this generated dataset.
+- Administrator must prepare pricing and inventory before opening eligible added matches for sale.
+
+## Entry 55 - Reduce Added Match Fixtures to Fifty
+
+Date — 2026-11-12. Member — Doan Ngoc Nhan, QE210282.
+
+User correction — Reduce the requested match additions from 1000 to about 50.
+
+- Reduced the additions to exactly 50 matches with IDs 5–54, alongside the four original matches, for 54 total.
+- Selected varied samples covering 59 team names and both Stadiums. Relative to 2026-11-12, ten added matches are past and forty future. Added matches retain CLOSED status.
+- Checked booking, ticket, transaction, pricing and inventory references before removing unused generated matches and renumbering the retained additions.
+- Updated README, demo preparation and the fixture verification section.
+- Compiled current source and ran isolated repository/browsing assertions for 54 matches, unique IDs/pairings, CSV roundtrips, Stadium references, search, filtering and Match 54 details. Checks passed, including diff whitespace.
+
+## Entry 56 - Reuse the Selected Match for Booking
+
+Date — 2026-11-12. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Book this match must use the already selected Match ID. General booking asks for the ID when a Match has yet to be selected.
+
+AI contribution
+
+- Kept selectedMatchId local to the browsing action loop and passed it directly to the existing BookingController.bookMatch method.
+- Details and seat-map actions establish and reuse that context, including their direct Browse entry routes.
+- Added Choose another match to clear the current context and display the existing results again. Returning from the screen ends the context.
+- Added a context-aware MainView.showMatchActionMenu overload, retaining the original public entry point. General booking displays Book match with an ID prompt, selected booking displays Book this match and proceeds to Seat IDs.
+- Updated the expanded MainView member list in the canonical draw.io and Mermaid. The private Controller navigation helper remains an implementation detail.
+- Updated SRS, README, menu map, demo setup/order and verification notes. Re-recorded Flow 077 as a standalone copied-data demo with 24 actual Console steps, including account registration, selected booking cancellation and general booking.
+- The 88 feature guides now contain 1481 documented input/output steps across the existing 139 flow identifiers. Older captured menu text is acknowledged in the preparation guide, which explains the changed ID/Back handling.
+
+Agent verification
+
+- Compiled current Java source and refreshed local out classes for the documented run command.
+- Exercised details to seat map to booking without another Match ID prompt, general booking with one prompt, changing Match, invalid/cancelled selection, direct details/map entry, context reset and Guest role restrictions.
+- Navigation/cancellation checks ran in isolated fixtures and preserved their CSV bytes. The standalone demo registration wrote only its copied dataset.
+- Matched all 97 source contracts to 190 expanded UML boxes and five Mermaid files, including row bounds and unique XML IDs.
+- Checked local Markdown links, fences, flow anchors and diff whitespace.
+
+Limits
+
+- Older feature snapshots retain their earlier captured menu text. The demo preparation and refreshed Flow 077 describe the current navigation.
+- Full rendered diagram routing remains a visual review step before submission.
+
+## Entry 57 - Seller Counter Sales for Account Holders and Anonymous Walk-ins
+
+Date — 2026-11-12. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Reject an INACTIVE customer immediately, explain invalid Seat IDs accurately, clarify Seller menus and support counter cash sales and ticket issue for both account holders and walk-in customers. Synchronize code, Use Cases, Class Diagram, README and feature walkthroughs.
+
+User follow-up — Questioned the purpose and necessity of requiring walk-in full name and phone.
+
+Design decision
+
+The first working draft required walk-in contact details. After the follow-up, the final implementation uses an anonymous counter sale identified by Booking ID and ticket codes. Walk-ins select the Match and seats directly. Explicit Fan registration remains available when the customer wants an account. The final source introduces no walk-in name/phone fields and retains the six-column booking schema.
+
+AI contribution
+
+- Added the account-holder, walk-in and explicit register-then-purchase choices within Seller ticket sales.
+- Rechecked account status as soon as an existing customer is selected and before cash collection, with Service validation again during checkout.
+- Kept the default synchronized booking mechanism for both buyer types. An empty booking fanId identifies a walk-in sale. Account self-service creation still requires an active Fan.
+- Added seller-only createBookingForCustomer entry points, preserving the existing account-specific public APIs.
+- Integrated cash receipt confirmation and immediate ticket issue into counter purchase. Deferred collection, receipt lookup and ticket print/reprint use Booking ID for either buyer type. Reprints preserve existing ticket records and codes.
+- Clarified menu descriptions and Seat ID prompts. Errors now distinguish malformed tokens, duplicate/nonpositive IDs, absent/inactive/occupied seats, wrong Stadium and unpublished Match inventory. Four IDs such as 1,2,3,4 are accepted as a four-seat list.
+- Added an explanation to return collected cash when seat commitment fails and no tickets were issued.
+- Made booking-account filtering and refund ownership comparison safe for a nullable walk-in fanId. Guest transaction rows retain bookingId and leave fanId empty.
+- Updated three expanded class boxes for public API additions, the optional Booking-to-Fan multiplicity, a counter purchase note and the Seller Use Case labels. Added booking-by-ID lookup as the 83rd visible Use Case.
+- Updated README, agent context, SRS, architecture, booking persistence, traceability, presentation and menu/preparation guides.
+- Re-recorded all eight Seller feature documents with 20 actual Console flows. Nine added cases use IDs 143–151. The full guide set now contains 88 feature files, 148 flow identifiers and 1606 input/output steps.
+- Removed obsolete verification commands referring to absent test source files and retained their earlier execution history as recorded evidence.
+
+Agent verification
+
+- Compiled final production source and refreshed local out classes.
+- Passed early INACTIVE rejection before Match selection, a walk-in cash sale of seats 1,2,3,4 with four tickets and unchanged Fan count, existing-account purchase and explicit registration followed by purchase.
+- Passed exact errors for sold/inactive/foreign/unpublished/missing seats, duplicates, malformed tokens and over-limit selection.
+- Passed deferred walk-in payment after restart, Booking ID lookup, repeat print idempotence, already-paid cash collection rejection and walk-in Gate check-in.
+- Passed mixed Guest/Fan concurrent checkout of one seat with exactly one successful sale, account history isolation, Guest online-payment rejection, refund ownership rejection and booking/transaction CSV roundtrips.
+- Re-ran the selected-Match navigation checks and the registration, Fan payment/refund, Gate, Administrator approval/seat release/audit and Seller routing Console checks on copied data.
+- Verified 97 source contracts against 190 expanded boxes, all five Mermaid counterparts, XML IDs/endpoints and member bounds. Mapped 83 visible Use Cases to feature guides.
+- Checked local Markdown links, fences, 148 unique flow anchors and diff whitespace. Temporary test/capture helpers stayed outside the project and used isolated/copied CSV.
+
+Limits
+
+- Full rendered diagram wire routing still requires visual review. Earlier non-Seller snapshots retain their captured menu text, with the selected-Match adjustment documented in the preparation guide.
+- Walk-ins use printed receipt/ticket identifiers for assistance. Account-owned refund self-service remains an authenticated Fan workflow.
+- Payment is mocked, passwords are demo plaintext and multi-file CSV changes retain their documented interruption limits.
+
+## Entry 58 - Match Seven Seller Use Cases and Add Thirty-Minute Owned Holds
+
+Date — 2026-11-13. Member — Doan Ngoc Nhan, QE210282.
+
+User requests
+
+- Limit Seller to Search Fan, Create Fan, Create booking for Fan, Accept offline payment, Issue ticket, View seat map and prices, and View customer booking history.
+- Keep offline payment as payment only, with Issue ticket separate.
+- Allow a Fan to pay immediately or later within a thirty-minute booking window, online or through Seller offline payment. Reject payment after expiry.
+- Analyze all existing features and synchronize Use Cases, Class Diagram, code, README problem statement and documentation. Preserve existing Use Cases where they already express the feature.
+
+AI contribution
+
+- Replaced Seller's grouped counter menus with the seven requested operations. Removed the additional booking-lookup feature, the authenticated Seller browsing shortcut, the standalone print/reprint presentation and inline register-and-sell option. The previously agreed anonymous walk-in branch remains inside booking creation.
+- Separated creation, offline payment and issue. Creating a counter booking now ends at PENDING. Accept offline payment records receipt only. Issue ticket handles the paid booking separately. Repeated issue retains the existing result as an idempotency property.
+- Implemented persisted createdAt/expiresAt, EXPIRED status and owned seat holds. MatchSeat stores holdBookingId while LOCKED. The seat map displays HELD.
+- Creating a booking validates and holds the full seat group under the existing shared synchronization monitor. The booking-aware strategy overload can commit only the owning booking's holds.
+- Online and offline payment enforce the same persisted deadline, including after restart. Expiry/cancellation/payment failure releases only the matching booking's holds. Repeated cleanup cannot release another booking's newer hold.
+- Chose the earlier of creation plus thirty minutes and kick-off, preserving the existing pre-kick-off sale rule. Expiry is checked on relevant application operations instead of adding a background scheduler.
+- Added expiry cleanup dependencies for seat-map reads and administrative seat deactivation, and wired them through Main.
+- Booking CSV writes eight columns with the two timestamps and reads legacy six-column rows. MatchSeat CSV writes six columns with holdBookingId and reads legacy five-column rows. Legacy unpaid PENDING without timestamps expires on access. Confirmed historical records retain their state. This is an explicit migration decision.
+- Preserved precise Seat ID errors, early INACTIVE rejection, Fan ownership checks, authenticated refund self-service and the anonymous walk-in representation.
+- Updated the canonical Use Case page to the seven Seller features, removed the extra lookup node and explained the timed-hold rule in its note. Mapped every one of the 82 visible Use Case nodes to implemented code paths and demo files.
+- Expanded new fields, constructors, methods, enum values and relationships in the canonical draw.io and all five Mermaid files. Complete BookingService definitions are repeated in the browsing and venue domains that use expiry cleanup. There are 97 source contracts and 192 expanded class boxes.
+- Regenerated all current feature walkthroughs from actual Console execution. The set contains 87 feature files, 148 flows and 1546 input/output pairs. Retired Seller Browse flow 091 and kept existing remaining identifiers. Added deterministic online/offline expiry cases 151–152.
+- Added a small checked-in CSV demo fixture under docs/Demo_Tung_Feature/fixtures/core so the core walkthrough remains reproducible while live source records evolve. The expiry demonstration derives a deliberately elapsed booking on a separate copy.
+- Rewrote the English README scope, SRS, Use Case specification, architecture, booking lifecycle, verification and agent context. Updated the Vietnamese presentation, menu/preparation guide and full traceability review. Root README now enumerates the full delivered role/domain scope.
+
+Agent verification
+
+- Compiled current production source and refreshed local out classes.
+- Executed 138 core Console flows and ten counter/expiry flows against isolated/copied data and regenerated their actual transcripts.
+- Verified exclusive concurrent Fan/walk-in holds, all-or-nothing selection, hold ownership, restart persistence, online/offline expiry rejection before charge, exact deadline behavior and earlier kick-off cutoff.
+- Verified cancellation/failed-payment/expiry release, owner-safe repeated cleanup, seat-map refresh and administrative expired-hold cleanup.
+- Verified separate offline payment/issue, payment and issue idempotency, legacy/new CSV roundtrips, invalid timestamp reporting and INACTIVE account rejection.
+- Executed the exact expiry-fixture preparation commands from Markdown and confirmed EXPIRED visibility, blocked Fan payment and released inventory.
+- Checked all 97 contracts against 192 expanded XML class boxes and five Mermaid counterparts. Checked IDs/endpoints, member bounds, two wrapped constructor rows and the 82-node feature mapping.
+- Validated current Markdown links, code fences, flow identifiers, source method names in feature explanations and whitespace. Temporary capture/validation helpers remained outside the project.
+
+Limits and student verification
+
+- Full rendered diagram wire routing remains a visual review step. Structural/member checks are separate from a complete rendered inspection.
+- Expiry is evaluated on application operations using stored wall-clock timestamps. Legacy PENDING without timestamps needs a new booking after expiry.
+- Synchronization coordinates one JVM. Payments/refunds are mocked and multi-file CSV changes retain their documented interruption/reconciliation limits.
+- The student should rehearse with the documented copied fixture and distinguish agent-generated contributions/checks from independent understanding and authorship.

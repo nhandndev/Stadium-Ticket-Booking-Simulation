@@ -65,9 +65,6 @@ public class Main {
         TransactionRepository transactionRepository = new TransactionRepository(dataFolder.resolve("transactions.csv"));
         RefundRepository refundRepository = new RefundRepository(dataFolder.resolve("refunds.csv"));
 
-        BrowseController browseController = new BrowseController(
-                new BrowseService(matchRepository, matchSeatRepository, seatRepository,
-                        stadiumRepository, sectionRepository, ticketPriceRepository));
         AuthController authController = new AuthController(
                 new AuthService(fanRepository, staffRepository));
         FanController fanController = new FanController(
@@ -79,6 +76,10 @@ public class Main {
                 new StrategyFactory(matchSeatRepository, transactionRepository),
                 new MockPaymentService(paymentSuccess), fanRepository, matchRepository,
                 matchSeatRepository, sectionRepository);
+        bookingService.expirePendingBookings();
+        BrowseController browseController = new BrowseController(
+                new BrowseService(matchRepository, matchSeatRepository, seatRepository,
+                        stadiumRepository, sectionRepository, ticketPriceRepository, bookingService));
         TicketService ticketService = new TicketService(ticketRepository, bookingRepository,
                 matchRepository, seatRepository, sectionRepository);
         RefundController refundController = new RefundController(new RefundService(
@@ -87,7 +88,7 @@ public class Main {
 
         StadiumController stadiumController = new StadiumController(
                 new StadiumService(stadiumRepository, sectionRepository, seatRepository,
-                        matchRepository, matchSeatRepository, ticketPriceRepository));
+                        matchRepository, matchSeatRepository, ticketPriceRepository, bookingService));
         MatchController matchController = new MatchController(
                 new MatchService(matchRepository, ticketPriceRepository, matchSeatRepository,
                         bookingRepository, stadiumRepository, sectionRepository, seatRepository));

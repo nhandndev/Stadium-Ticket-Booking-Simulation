@@ -32,7 +32,7 @@ public class BookingTransaction extends BaseEntity {
                               List<Long> seatIds, SyncMechanism mechanism,
                               LocalDateTime createdAt) {
         super(id);
-        if (fanId == null || fanId <= 0 || matchId == null || matchId <= 0
+        if ((fanId != null && fanId <= 0) || matchId == null || matchId <= 0
                 || seatIds == null || seatIds.isEmpty() || mechanism == null
                 || createdAt == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid booking transaction");

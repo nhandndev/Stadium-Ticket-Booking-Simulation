@@ -45,10 +45,21 @@ public class MainView {
     }
 
     public int showMatchActionMenu(boolean canBook) {
-        System.out.println("\n--- Choose action for matches ---");
-        System.out.println("1. View match details (enter Match ID)");
-        System.out.println("2. View seat availability / Seat map (enter Match ID)");
-        if (canBook) System.out.println("3. Book this match");
+        return showMatchActionMenu(canBook, null);
+    }
+
+    public int showMatchActionMenu(boolean canBook, Long selectedMatchId) {
+        String prompt = selectedMatchId == null ? " (enter Match ID)" : "";
+        String heading = selectedMatchId == null
+                ? "Choose action for matches" : "Match #" + selectedMatchId;
+        System.out.println("\n--- " + heading + " ---");
+        System.out.println("1. View match details" + prompt);
+        System.out.println("2. View seat availability / Seat map" + prompt);
+        if (canBook) {
+            System.out.println(selectedMatchId == null
+                    ? "3. Book match (enter Match ID)" : "3. Book this match");
+        }
+        if (selectedMatchId != null) System.out.println("4. Choose another match");
         System.out.println("0. Back to match browsing");
         System.out.print("Choose action: ");
         String line = scanner.nextLine().trim();
@@ -71,7 +82,6 @@ public class MainView {
         System.out.println("1. View profile");
         System.out.println("2. Sales counter");
         System.out.println("3. Update profile");
-        System.out.println("4. Browse matches");
         System.out.println("0. Logout");
         System.out.print("Choose option: ");
         return Integer.parseInt(scanner.nextLine().trim());

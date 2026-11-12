@@ -15,6 +15,7 @@ import common.exception.ErrorCode;
 import match.model.Match;
 import match.model.MatchSeat;
 import match.enums.SaleStatus;
+import match.enums.SeatStatus;
 import match.model.TicketPrice;
 import match.repository.MatchRepository;
 import match.repository.MatchSeatRepository;
@@ -107,21 +108,35 @@ public class BookingService {
     }
 
     public BigDecimal calculateTotal(Long matchId, List<Long> seatIds) {
+        expirePendingBookings();
         validateTicketLimit(seatIds);
         Match match = requireOpenMatch(matchId);
         BigDecimal total = BigDecimal.ZERO;
         for (Long seatId : seatIds) {
             Seat seat = requireUsableSeat(match, seatId);
             MatchSeat matchSeat = matchSeatRepository.find(matchId, seatId);
-            if (matchSeat == null || !matchSeat.isAvailable()) {
-                throw new AppException(ErrorCode.INVALID_INPUT, "Seat is not available");
+            if (matchSeat == null) {
+                throw new AppException(ErrorCode.INVALID_INPUT,
+                        "Seat ID " + seatId + " has no inventory for Match #" + matchId
+                                + ". Choose a SEAT ID from this match's displayed map.");
+            }
+            if (!matchSeat.isAvailable()) {
+                if (matchSeat.getStatus() == SeatStatus.LOCKED) {
+                    throw new AppException(ErrorCode.INVALID_INPUT,
+                            "Seat ID " + seatId + " is HELD by another unpaid booking for Match #"
+                                    + matchId + ". Choose an AVAILABLE seat or pay the existing booking.");
+                }
+                throw new AppException(ErrorCode.INVALID_INPUT,
+                        "Seat ID " + seatId + " is " + matchSeat.getStatus()
+                                + " for Match #" + matchId + ". Choose an AVAILABLE seat.");
             }
             TicketPrice price = ticketPriceRepository.findPrice(matchId,
                     seat.getSectionId());
             if (price == null || price.getAmount() == null
                     || price.getAmount().signum() <= 0) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
-                        "Ticket price is missing or invalid");
+                        "Price is missing or invalid for Seat ID " + seatId
+                                + " in Match #" + matchId);
             }
             total = total.add(price.getAmount());
         }
@@ -134,10 +149,7 @@ public class BookingService {
         }
         synchronized (MatchSeatRepository.class) {
             requireActiveFan(request.getFanId());
-            BigDecimal total = calculateTotal(request.getMatchId(), request.getSeatIds());
-            Booking booking = bookingRepository.save(new Booking(null, request.getFanId(),
-                    request.getMatchId(), request.getSeatIds(), total, BookingStatus.PENDING));
-            return toBookingResponse(booking);
+            return savePendingBooking(request);
         }
     }
 
@@ -145,6 +157,66 @@ public class BookingService {
                                                   BookingRequestDto request) {
         requirePositive(sellerId, "Seller ID");
         return createBooking(request);
+    }
+
+    public BookingResponseDto createBookingForCustomer(Long sellerId,
+                                                       BookingRequestDto request) {
+        requirePositive(sellerId, "Seller ID");
+        if (request == null) {
+            throw new AppException(ErrorCode.INVALID_INPUT, "Booking request is required");
+        }
+        synchronized (MatchSeatRepository.class) {
+            if (request.getFanId() != null) requireActiveFan(request.getFanId());
+            return savePendingBooking(request);
+        }
+    }
+
+    public void validateFanAccount(Long fanId) {
+        requireActiveFan(fanId);
+    }
+
+    private BookingResponseDto savePendingBooking(BookingRequestDto request) {
+        BigDecimal total = calculateTotal(request.getMatchId(), request.getSeatIds());
+        LocalDateTime createdAt = LocalDateTime.now();
+        LocalDateTime expiresAt = createdAt.plusMinutes(30);
+        Match match = requireOpenMatch(request.getMatchId());
+        if (match.getStartTime().isBefore(expiresAt)) expiresAt = match.getStartTime();
+        Booking booking = bookingRepository.save(new Booking(null, request.getFanId(),
+                request.getMatchId(), request.getSeatIds(), total, BookingStatus.PENDING,
+                createdAt, expiresAt));
+        try {
+            if (!matchSeatRepository.holdSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                    booking.getSeatIds())) {
+                throw new AppException(ErrorCode.INVALID_INPUT,
+                        "The selected seats are no longer available. Choose available seats again.");
+            }
+        } catch (AppException e) {
+            booking.cancel();
+            bookingRepository.update(booking);
+            matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                    booking.getSeatIds());
+            throw e;
+        }
+        return toBookingResponse(booking);
+    }
+
+    public void expirePendingBookings() {
+        synchronized (MatchSeatRepository.class) {
+            LocalDateTime now = LocalDateTime.now();
+            for (Booking booking : bookingRepository.findAll()) {
+                if (booking.isExpired(now)) {
+                    Payment payment = paymentRepository.findByBookingId(booking.getId());
+                    if (payment != null && payment.getStatus() == PaymentStatus.SUCCESS) continue;
+                    booking.expire();
+                    bookingRepository.update(booking);
+                }
+                if (booking.getStatus() == BookingStatus.EXPIRED
+                        || booking.getStatus() == BookingStatus.CANCELLED) {
+                    matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(),
+                            booking.getMatchId(), booking.getSeatIds());
+                }
+            }
+        }
     }
 
     public PaymentResponseDto makeOnlinePayment(PaymentRequestDto request) {
@@ -163,7 +235,16 @@ public class BookingService {
             throw new AppException(ErrorCode.INVALID_INPUT, "Payment request is required");
         }
         synchronized (MatchSeatRepository.class) {
+            expirePendingBookings();
             Booking booking = requireBooking(request.getBookingId());
+            if (booking.getStatus() == BookingStatus.EXPIRED) {
+                throw new AppException(ErrorCode.INVALID_INPUT,
+                        "Booking #" + booking.getId() + " has expired. The payment window is at most 30 minutes. Create a new booking.");
+            }
+            if (booking.getFanId() == null && method != PaymentMethod.OFFLINE_CASH) {
+                throw new AppException(ErrorCode.INVALID_INPUT,
+                        "Walk-in bookings must be paid in cash at the Seller counter");
+            }
             if (booking.getTotalAmount().compareTo(request.getAmount()) != 0) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Payment amount mismatch");
             }
@@ -188,7 +269,14 @@ public class BookingService {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "Only pending booking can be paid");
             }
-            requireActiveFan(booking.getFanId());
+            if (booking.isExpired(LocalDateTime.now())) {
+                booking.expire();
+                bookingRepository.update(booking);
+                matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                        booking.getSeatIds());
+                throw new AppException(ErrorCode.INVALID_INPUT, "Booking has expired; payment was not recorded.");
+            }
+            if (booking.getFanId() != null) requireActiveFan(booking.getFanId());
             Match match = requireOpenMatch(booking.getMatchId());
             for (Long seatId : booking.getSeatIds()) {
                 requireUsableSeat(match, seatId);
@@ -203,18 +291,22 @@ public class BookingService {
                 paymentRepository.update(payment);
                 booking.cancel();
                 bookingRepository.update(booking);
+                matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                        booking.getSeatIds());
                 recordFailedPayment(booking, "Mock payment failed");
                 return toPaymentResponse(payment);
             }
             BookingTransaction transaction = strategyFactory
                     .create(SyncMechanism.SYNCHRONIZED)
-                    .execute(booking.getFanId(), booking.getMatchId(),
+                    .execute(booking.getId(), booking.getFanId(), booking.getMatchId(),
                             booking.getSeatIds());
             if (transaction.getStatus() != TransactionStatus.SUCCESS) {
                 payment.markFailed();
                 paymentRepository.update(payment);
                 booking.cancel();
                 bookingRepository.update(booking);
+                matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                        booking.getSeatIds());
                 transaction.attachBooking(booking.getId());
                 transactionRepository.save(transaction);
                 return toPaymentResponse(payment);
@@ -279,6 +371,7 @@ public class BookingService {
     }
 
     public List<BookingResponseDto> getMyBookings(Long fanId) {
+        expirePendingBookings();
         requirePositive(fanId, "Fan ID");
         List<BookingResponseDto> result = new ArrayList<>();
         for (Booking booking : bookingRepository.findByFanId(fanId)) {
@@ -288,11 +381,13 @@ public class BookingService {
     }
 
     public BookingResponseDto getBookingDetails(Long bookingId) {
+        expirePendingBookings();
         return toBookingResponse(requireBooking(bookingId));
     }
 
     public BookingResponseDto cancelBooking(Long bookingId) {
         synchronized (MatchSeatRepository.class) {
+            expirePendingBookings();
             Booking booking = requireBooking(bookingId);
             if (booking.getStatus() != BookingStatus.PENDING
                     || paymentRepository.findByBookingId(bookingId) != null) {
@@ -300,7 +395,10 @@ public class BookingService {
                         "Only an unpaid pending booking can be cancelled directly. Paid bookings need a refund request.");
             }
             booking.cancel();
-            return toBookingResponse(bookingRepository.update(booking));
+            bookingRepository.update(booking);
+            matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                    booking.getSeatIds());
+            return toBookingResponse(booking);
         }
     }
 
@@ -319,14 +417,19 @@ public class BookingService {
     private Seat requireUsableSeat(Match match, Long seatId) {
         requirePositive(seatId, "Seat ID");
         Seat seat = seatRepository.findById(seatId);
-        if (seat == null || !seat.isActive()) {
+        if (seat == null) {
             throw new AppException(ErrorCode.INVALID_INPUT,
-                    "Seat does not exist or is inactive");
+                    "Seat ID " + seatId + " does not exist. Enter a numeric SEAT ID from the displayed map.");
+        }
+        if (!seat.isActive()) {
+            throw new AppException(ErrorCode.INVALID_INPUT,
+                    "Seat ID " + seatId + " is INACTIVE and cannot be sold");
         }
         Section section = sectionRepository.findById(seat.getSectionId());
         if (section == null || !section.getStadiumId().equals(match.getStadiumId())) {
             throw new AppException(ErrorCode.INVALID_INPUT,
-                    "Seat does not belong to match stadium");
+                    "Seat ID " + seatId + " belongs to another stadium. Choose a seat from Match #"
+                            + match.getId() + "'s displayed map.");
         }
         return seat;
     }
@@ -334,9 +437,14 @@ public class BookingService {
     private Fan requireActiveFan(Long fanId) {
         requirePositive(fanId, "Fan ID");
         Fan fan = fanRepository.findById(fanId);
-        if (fan == null || fan.getStatus() != UserStatus.ACTIVE) {
+        if (fan == null) {
             throw new AppException(ErrorCode.INVALID_INPUT,
-                    "Active fan account is required");
+                    "Fan account #" + fanId + " does not exist");
+        }
+        if (fan.getStatus() != UserStatus.ACTIVE) {
+            throw new AppException(ErrorCode.INVALID_INPUT,
+                    "Fan account #" + fanId + " is " + fan.getStatus()
+                            + ". Choose an ACTIVE customer account.");
         }
         return fan;
     }
@@ -366,7 +474,7 @@ public class BookingService {
     }
 
     private BookingResponseDto toBookingResponse(Booking booking) {
-        Fan fan = fanRepository.findById(booking.getFanId());
+        Fan fan = booking.getFanId() == null ? null : fanRepository.findById(booking.getFanId());
         Match match = matchRepository.findById(booking.getMatchId());
         List<String> labels = new ArrayList<>();
         for (Long seatId : booking.getSeatIds()) {
@@ -378,8 +486,10 @@ public class BookingService {
         return new BookingResponseDto(booking.getId(), booking.getFanId(),
                 booking.getMatchId(), booking.getSeatIds(),
                 booking.getTotalAmount(), booking.getStatus(),
-                fan == null ? "Fan #" + booking.getFanId() : fan.getFullName(),
-                match == null ? "Match #" + booking.getMatchId() : match.getHomeTeam() + " vs " + match.getAwayTeam(), labels);
+                booking.getFanId() == null ? "Walk-in customer"
+                        : fan == null ? "Fan #" + booking.getFanId() : fan.getFullName(),
+                match == null ? "Match #" + booking.getMatchId() : match.getHomeTeam() + " vs " + match.getAwayTeam(),
+                labels, booking.getCreatedAt(), booking.getExpiresAt());
     }
 
     private PaymentResponseDto toPaymentResponse(Payment payment) {

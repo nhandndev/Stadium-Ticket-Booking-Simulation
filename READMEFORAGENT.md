@@ -35,24 +35,32 @@ Doan Ngoc Nhan — QE210282.
 The canonical draw.io has six pages. Page 00 contains Use Cases, 01 accounts and
 browsing, 02 administration, 03 booking/payment/tickets, 04 repositories and
 05 domain models. Five Mermaid files correspond to class pages 01–05.
-The last source inspection matched 97 contracts and 190 expanded class boxes.
+The last source inspection matched 97 contracts and 192 expanded class boxes.
 
 ## Business Rules to Preserve
 
-- Booking creation stores a PENDING quote for one to four distinct seats.
-- Seats are checked again and committed when online/cash checkout executes.
-- BookingService checkout and MatchSeatRepository seat commits share the
-  MatchSeatRepository.class monitor. Synchronization applies within one JVM.
-- Successful online checkout issues tickets through BookingService.issueTickets.
-  TicketService handles ticket querying/validation/check-in operations.
-- Completed-payment and ticket-issue retries preserve existing results.
-- Cancellation, refund review and account actions enforce their ownership,
-  status and history restrictions.
+- Creating PENDING holds one to four selected seats and persists createdAt/expiresAt.
+- expiresAt is creation plus 30 minutes, capped at kick-off when earlier.
+- LOCKED seats carry holdBookingId. Only that booking can commit its holds.
+- Fan can pay online now/later, or Seller can accept offline payment by Booking ID
+  within the same persisted deadline.
+- Expiry sets EXPIRED and releases owned holds. Cancellation/failure also releases
+  only that booking's holds. Cleanup is safe to repeat after release interruption.
+- Expiry is checked on startup and relevant operations, including seat maps and
+  administrative deactivation. BrowseService and StadiumService reference BookingService.
+- Seller's seven features match the Use Case. Creation, offline payment and issue
+  are separate. Account-holder/walk-in selection is inside counter creation.
+- Online checkout calls BookingService.issueTickets. Offline payment leaves issue
+  to Seller's explicit action. Repeated paid operations preserve their result.
+- Fan booking/ticket/refund access is owner-scoped. Gate validates booking/Match/seat.
 - Seat is physical layout. MatchSeat is inventory for one Match.
-- Transaction CSV uses 11 columns and requires bookingId. The parser accepts
-  legacy 12-column booking records when the extra second column is empty.
+- Booking CSV writes eight columns with createdAt/expiresAt and reads legacy six.
+  Legacy PENDING without timestamps expires on access, while paid history stays.
+- MatchSeat CSV writes six columns with holdBookingId and reads legacy five.
+- Transaction uses eleven columns and a required bookingId, with empty fanId for
+  walk-ins. Its old booking-only twelve-column layout remains readable.
 
-Read the SRS and booking-protection document before changing these rules.
+Read the SRS, traceability and booking-protection documents before changing rules.
 
 ## Coding and Alignment Conventions
 
@@ -80,7 +88,7 @@ java -cp out app.Main
 The first application argument selects the CSV directory. The optional second
 argument --payment-fails makes the online payment mock return failure.
 
-Retained checks and recorded verification are documented in
+Recorded checks and Console acceptance are documented in
 [verification and delivery](docs/05_VERIFICATION_AND_DELIVERY.md).
 The Java source inspector can be run with the following command.
 
@@ -89,7 +97,8 @@ java scripts/InspectDiagram.java
 ```
 
 Its output describes source contracts for comparison with the canonical UML.
-The feature guides document 139 captured flows across 88 feature files.
+The feature guides document 148 current captured flows across 87 feature files.
+The checked-in small fixture makes the core walkthrough reproducible.
 Their setup and order files define the fixture and dependent operation sequence.
 
 ## Operating Limits

@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 011 — Login As Fan
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 010](01_Register_Fan_Account.md#flow-010).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 010](../02_Authentication_User/01_Register_Fan_Account.md#flow-010).
 
 ### Console ban đầu
 
@@ -101,7 +101,7 @@ Choose option:
 
 ## Flow 015 — Login - sai mật khẩu
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 014](06_Logout.md#flow-014).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 014](../02_Authentication_User/06_Logout.md#flow-014).
 
 ### Console ban đầu
 
@@ -165,7 +165,7 @@ Choose option:
 
 ## Flow 016 — Login - tài khoản INACTIVE
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 015](02_Login_As_Fan.md#flow-015).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 015](../02_Authentication_User/02_Login_As_Fan.md#flow-015).
 
 ### Console ban đầu
 
@@ -229,7 +229,7 @@ Choose option:
 
 ## Flow 017 — Login Fan bằng tài khoản Staff
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 016](02_Login_As_Fan.md#flow-016).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 016](../02_Authentication_User/02_Login_As_Fan.md#flow-016).
 
 ### Console ban đầu
 
@@ -293,7 +293,7 @@ Choose option:
 
 ## Flow 019 — Huỷ form Login
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 018](03_Login_As_Staff.md#flow-018).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 018](../02_Authentication_User/03_Login_As_Staff.md#flow-018).
 
 ### Console ban đầu
 

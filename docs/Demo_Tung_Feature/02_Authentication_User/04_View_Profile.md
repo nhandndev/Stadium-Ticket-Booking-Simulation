@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 012 — View Profile của Fan
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 011](02_Login_As_Fan.md#flow-011).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 011](../02_Authentication_User/02_Login_As_Fan.md#flow-011).
 
 ### Console ban đầu
 
@@ -178,7 +178,6 @@ Role:   SELLER | Status: ACTIVE
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
@@ -198,7 +197,6 @@ Role:   SELLER | Status: ACTIVE
 1. View profile
 2. Sales counter
 3. Update profile
-4. Browse matches
 0. Logout
 Choose option:
 ```
@@ -228,7 +226,7 @@ Choose option:
 
 ## Flow 129 — View Profile của Gate Staff
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 128](05_Update_Profile.md#flow-128).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 128](../02_Authentication_User/05_Update_Profile.md#flow-128).
 
 ### Console ban đầu
 
@@ -332,7 +330,7 @@ Choose option:
 
 ## Flow 131 — View Profile của Admin
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 130](05_Update_Profile.md#flow-130).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 130](../02_Authentication_User/05_Update_Profile.md#flow-130).
 
 ### Console ban đầu
 

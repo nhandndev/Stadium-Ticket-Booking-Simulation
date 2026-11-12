@@ -1,6 +1,6 @@
 # Thứ tự demo đầy đủ
 
-Dùng [file chuẩn bị](00_CHUAN_BI.md) trước. Flow 001–142 dùng chung CORE_DIR và thực hiện theo thứ tự vì có dữ liệu phụ thuộc. Mỗi flow bắt đầu tại Main. Các mã Flow cũ 133–135 đã bỏ khi rút scope. Tiếp tục Flow 136 sau Flow 132.
+Dùng [file chuẩn bị](00_CHUAN_BI.md) trước. Flow 001–142 dùng chung CORE_DIR và thực hiện theo thứ tự vì có dữ liệu phụ thuộc. Mỗi flow bắt đầu tại Main. Các mã 091 và 133–135 đã rút khỏi scope. Tiếp tục 092 sau 090 và 136 sau 132. Flow 143–150 dùng COUNTER_DEMO_DIR, Flow 151–152 dùng EXPIRY_DEMO_DIR.
 
 - [Flow 001 — Search Matches - tìm trận theo tên đội](01_Guest/01_Search_Matches.md#flow-001).
 - [Flow 002 — View Match Details từ kết quả tìm kiếm](01_Guest/02_View_Match_Details.md#flow-002).
@@ -92,7 +92,6 @@ Dùng [file chuẩn bị](00_CHUAN_BI.md) trước. Flow 001–142 dùng chung C
 - [Flow 088 — Accept Cash Payment](06_Seller/06_Accept_Cash_Payment.md#flow-088).
 - [Flow 089 — Issue Tickets for Paid Booking](06_Seller/07_Issue_Tickets.md#flow-089).
 - [Flow 090 — Issue Tickets - gọi lại không tạo trùng](06_Seller/07_Issue_Tickets.md#flow-090).
-- [Flow 091 — Browse Matches từ dashboard Seller](06_Seller/08_Browse_Matches.md#flow-091).
 - [Flow 092 — Request Refund cho B4](07_Cancellation_Refund/02_Request_Refund.md#flow-092).
 - [Flow 093 — Request Refund cho B5](07_Cancellation_Refund/02_Request_Refund.md#flow-093).
 - [Flow 094 — My Refund Requests trước review](07_Cancellation_Refund/03_My_Refund_Requests.md#flow-094).
@@ -141,3 +140,13 @@ Dùng [file chuẩn bị](00_CHUAN_BI.md) trước. Flow 001–142 dùng chung C
 - [Flow 140 — Chọn quá bốn ghế](05_Fan_Booking_Tickets/02_Create_Booking.md#flow-140).
 - [Flow 141 — Thanh toán online thất bại](05_Fan_Booking_Tickets/05_Pay_Pending_Booking.md#flow-141).
 - [Flow 142 — Exit System](11_System/02_Exit_System.md#flow-142).
+- [Flow 143 — Create a walk-in booking with a 30-minute seat hold](06_Seller/04_Create_Booking_for_Customer.md#flow-143).
+- [Flow 144 — Accept offline payment for the walk-in booking](06_Seller/06_Accept_Cash_Payment.md#flow-144).
+- [Flow 145 — Create another walk-in booking and defer offline payment](06_Seller/04_Create_Booking_for_Customer.md#flow-145).
+- [Flow 146 — Accept offline payment within the persisted deadline after restart](06_Seller/06_Accept_Cash_Payment.md#flow-146).
+- [Flow 147 — Issue paid walk-in tickets as a separate Seller action](06_Seller/07_Issue_Tickets.md#flow-147).
+- [Flow 148 — Reject an inactive Fan before selecting the match](06_Seller/04_Create_Booking_for_Customer.md#flow-148).
+- [Flow 149 — Explain malformed Seat IDs](06_Seller/04_Create_Booking_for_Customer.md#flow-149).
+- [Flow 150 — Explain a seat already sold for the chosen match](06_Seller/04_Create_Booking_for_Customer.md#flow-150).
+- [Flow 151 — Expired booking is visible in Fan history and cannot be paid online](05_Fan_Booking_Tickets/05_Pay_Pending_Booking.md#flow-151).
+- [Flow 152 — Seller cannot accept offline payment for an expired booking](06_Seller/06_Accept_Cash_Payment.md#flow-152).

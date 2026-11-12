@@ -11,6 +11,7 @@ classDiagram
         +showMainMenu(): int
         +showGuestMenu(): int
         +showMatchActionMenu(canBook: boolean): int
+        +showMatchActionMenu(canBook: boolean, selectedMatchId: Long): int
         +showFanMenu(): int
         +showSellerMenu(): int
         +showGateStaffMenu(): int
@@ -124,7 +125,9 @@ classDiagram
         -stadiumRepository: StadiumRepository
         -sectionRepository: SectionRepository
         -ticketPriceRepository: TicketPriceRepository
+        -bookingService: BookingService
         +BrowseService(matchRepository: MatchRepository, matchSeatRepository: MatchSeatRepository, seatRepository: SeatRepository, stadiumRepository: StadiumRepository, sectionRepository: SectionRepository, ticketPriceRepository: TicketPriceRepository)
+        +BrowseService(matchRepository: MatchRepository, matchSeatRepository: MatchSeatRepository, seatRepository: SeatRepository, stadiumRepository: StadiumRepository, sectionRepository: SectionRepository, ticketPriceRepository: TicketPriceRepository, bookingService: BookingService)
         +searchMatches(keyword: String): List~MatchResponseDto~
         +filterMatches(stadiumId: Long, startDate: LocalDate): List~MatchResponseDto~
         +viewMatchDetails(matchId: Long): MatchResponseDto
@@ -164,6 +167,9 @@ classDiagram
         +save(seat: MatchSeat): MatchSeat
         +deleteByMatchId(matchId: Long): boolean
         +bookSeatsSynchronized(matchId: Long, seatIds: List~Long~): boolean
+        +holdSeatsSynchronized(bookingId: Long, matchId: Long, seatIds: List~Long~): boolean
+        +bookSeatsSynchronized(bookingId: Long, matchId: Long, seatIds: List~Long~): boolean
+        +releaseHeldSeatsSynchronized(bookingId: Long, matchId: Long, seatIds: List~Long~): void
         +releaseSeatsSynchronized(matchId: Long, seatIds: List~Long~): boolean
         +parseLine(line: String): MatchSeat
         +formatLine(entity: MatchSeat): String
@@ -333,15 +339,19 @@ classDiagram
         -seatId: Long
         -status: SeatStatus
         -version: int
+        -holdBookingId: Long
         +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int)
+        +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int, holdBookingId: Long)
         +isAvailable(): boolean
         +lock(): void
+        +hold(bookingId: Long): void
         +markBooked(): void
         +release(): void
         +getMatchId(): Long
         +getSeatId(): Long
         +getStatus(): SeatStatus
         +getVersion(): int
+        +getHoldBookingId(): Long
     }
     class UserRole {
         <<enumeration>>
@@ -389,3 +399,33 @@ classDiagram
     MainController --> AuthController
     MainController --> FanController
     MainController --> BrowseController
+
+    class BookingService {
+        -bookingRepository: BookingRepository
+        -ticketRepository: TicketRepository
+        -paymentRepository: PaymentRepository
+        -transactionRepository: TransactionRepository
+        -seatRepository: SeatRepository
+        -ticketPriceRepository: TicketPriceRepository
+        -strategyFactory: StrategyFactory
+        -mockPaymentService: MockPaymentService
+        -fanRepository: FanRepository
+        -matchRepository: MatchRepository
+        -matchSeatRepository: MatchSeatRepository
+        -sectionRepository: SectionRepository
+        +BookingService(bookingRepository: BookingRepository, ticketRepository: TicketRepository, paymentRepository: PaymentRepository, transactionRepository: TransactionRepository, seatRepository: SeatRepository, ticketPriceRepository: TicketPriceRepository, strategyFactory: StrategyFactory, mockPaymentService: MockPaymentService, fanRepository: FanRepository, matchRepository: MatchRepository, matchSeatRepository: MatchSeatRepository, sectionRepository: SectionRepository)
+        +validateTicketLimit(seatIds: List~Long~): void
+        +calculateTotal(matchId: Long, seatIds: List~Long~): BigDecimal
+        +createBooking(request: BookingRequestDto): BookingResponseDto
+        +createBookingForFan(sellerId: Long, request: BookingRequestDto): BookingResponseDto
+        +createBookingForCustomer(sellerId: Long, request: BookingRequestDto): BookingResponseDto
+        +validateFanAccount(fanId: Long): void
+        +expirePendingBookings(): void
+        +makeOnlinePayment(request: PaymentRequestDto): PaymentResponseDto
+        +acceptOfflinePayment(sellerId: Long, request: PaymentRequestDto): PaymentResponseDto
+        +issueTickets(bookingId: Long): List~TicketResponseDto~
+        +getMyBookings(fanId: Long): List~BookingResponseDto~
+        +getBookingDetails(bookingId: Long): BookingResponseDto
+        +cancelBooking(bookingId: Long): BookingResponseDto
+    }
+    BrowseService --> BookingService : expires unpaid bookings

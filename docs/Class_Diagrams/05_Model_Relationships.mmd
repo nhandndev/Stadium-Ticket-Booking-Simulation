@@ -78,15 +78,19 @@ classDiagram
         -seatId: Long
         -status: SeatStatus
         -version: int
+        -holdBookingId: Long
         +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int)
+        +MatchSeat(id: Long, matchId: Long, seatId: Long, status: SeatStatus, version: int, holdBookingId: Long)
         +isAvailable(): boolean
         +lock(): void
+        +hold(bookingId: Long): void
         +markBooked(): void
         +release(): void
         +getMatchId(): Long
         +getSeatId(): Long
         +getStatus(): SeatStatus
         +getVersion(): int
+        +getHoldBookingId(): Long
     }
     class TicketPrice {
         -matchId: Long
@@ -104,15 +108,22 @@ classDiagram
         -seatIds: List~Long~
         -totalAmount: BigDecimal
         -status: BookingStatus
+        -createdAt: LocalDateTime
+        -expiresAt: LocalDateTime
         +Booking(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, totalAmount: BigDecimal, status: BookingStatus)
+        +Booking(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, totalAmount: BigDecimal, status: BookingStatus, createdAt: LocalDateTime, expiresAt: LocalDateTime)
         +validateTicketLimit(): void
         +confirm(): void
         +cancel(): void
+        +isExpired(now: LocalDateTime): boolean
+        +expire(): void
         +getFanId(): Long
         +getMatchId(): Long
         +getSeatIds(): List~Long~
         +getTotalAmount(): BigDecimal
         +getStatus(): BookingStatus
+        +getCreatedAt(): LocalDateTime
+        +getExpiresAt(): LocalDateTime
     }
     class Payment {
         -bookingId: Long
@@ -241,7 +252,7 @@ classDiagram
     MatchSeat "0..*" --> "1" Seat
     TicketPrice "0..*" --> "1" Match
     TicketPrice "0..*" --> "1" Section
-    Booking "0..*" --> "1" Fan
+    Booking "0..*" --> "0..1" Fan
     Booking "0..*" --> "1" Match
     Booking "0..*" --> "1..4" MatchSeat
     Booking "1" *-- "0..4" Ticket
@@ -251,3 +262,9 @@ classDiagram
     RefundRequest "0..*" --> "0..1" Staff
     Ticket "0..*" --> "1" MatchSeat
     AuditLog "0..*" --> "1" User
+
+
+
+
+    MatchSeat "0..4" --> "0..1" Booking : holdBookingId
+    note for Booking "PENDING holds seats until expiresAt (at most 30 minutes, ending by kick-off). EXPIRED bookings cannot be paid."

@@ -7,6 +7,8 @@ import common.exception.AppException;
 import common.exception.ErrorCode;
 import java.math.BigDecimal;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,19 +21,19 @@ public class BookingRepository extends CsvRepository<Booking> {
         if (fanId == null || fanId <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Fan ID must be positive");
         }
-        return findByCondition(booking -> booking.getFanId().equals(fanId));
+        return findByCondition(booking -> fanId.equals(booking.getFanId()));
     }
 
     @Override
     public Booking parseLine(String line) {
         String[] parts = line.split(",", -1);
-        if (parts.length != 6) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Expected 6 booking columns");
+        if (parts.length != 6 && parts.length != 8) {
+            throw new AppException(ErrorCode.CSV_ERROR, "Expected 6 legacy or 8 booking columns");
         }
         long id = Long.parseLong(parts[0]);
-        long fanId = Long.parseLong(parts[1]);
+        Long fanId = parts[1].isEmpty() ? null : Long.parseLong(parts[1]);
         long matchId = Long.parseLong(parts[2]);
-        if (id <= 0 || fanId <= 0 || matchId <= 0) {
+        if (id <= 0 || (fanId != null && fanId <= 0) || matchId <= 0) {
             throw new AppException(ErrorCode.CSV_ERROR, "Invalid booking IDs");
         }
         String[] seatParts = parts[3].split(";", -1);
@@ -41,7 +43,15 @@ public class BookingRepository extends CsvRepository<Booking> {
         }
         BigDecimal amount = new BigDecimal(parts[4]);
         BookingStatus status = BookingStatus.valueOf(parts[5]);
-        return new Booking(id, fanId, matchId, seatIds, amount, status);
+        try {
+            LocalDateTime createdAt = parts.length == 8 && !parts[6].isEmpty()
+                    ? LocalDateTime.parse(parts[6]) : null;
+            LocalDateTime expiresAt = parts.length == 8 && !parts[7].isEmpty()
+                    ? LocalDateTime.parse(parts[7]) : null;
+            return new Booking(id, fanId, matchId, seatIds, amount, status, createdAt, expiresAt);
+        } catch (DateTimeParseException e) {
+            throw new AppException(ErrorCode.CSV_ERROR, "Booking timestamps must use ISO local date-time format");
+        }
     }
 
     @Override
@@ -54,8 +64,10 @@ public class BookingRepository extends CsvRepository<Booking> {
         for (Long seatId : entity.getSeatIds()) {
             seatTexts.add(seatId.toString());
         }
-        return entity.getId() + "," + entity.getFanId() + "," + entity.getMatchId()
+        return entity.getId() + "," + (entity.getFanId() == null ? "" : entity.getFanId()) + "," + entity.getMatchId()
                 + "," + String.join(";", seatTexts) + ","
-                + entity.getTotalAmount().toPlainString() + "," + entity.getStatus().name();
+                + entity.getTotalAmount().toPlainString() + "," + entity.getStatus().name()
+                + "," + (entity.getCreatedAt() == null ? "" : entity.getCreatedAt())
+                + "," + (entity.getExpiresAt() == null ? "" : entity.getExpiresAt());
     }
 }

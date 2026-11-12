@@ -6,60 +6,51 @@
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/READMEFORAGENT.md" beforeDir="false" afterPath="$PROJECT_DIR$/READMEFORAGENT.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ai_logs/doan_ngoc_nhan_QE210282_ai_log.md" beforeDir="false" afterPath="$PROJECT_DIR$/ai_logs/doan_ngoc_nhan_QE210282_ai_log.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auto_typer.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/audit_logs.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/audit_logs.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/bookings.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/bookings.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/fans.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/fans.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/seats.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/seats.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/00_REPO_SCAN_SUMMARY.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/00_REPO_SCAN_SUMMARY.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/02_SRS.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/02_SRS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/04_FEATURE_BACKLOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/04_FEATURE_BACKLOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/06_DOMAIN_DATA_MODEL.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/06_DOMAIN_DATA_MODEL.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/07_BOOKING_AND_SIMULATION_DESIGN.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/07_BOOKING_AND_SIMULATION_DESIGN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/09_TEST_PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/09_TEST_PLAN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/10_DELIVERY_CHECKLIST.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/10_DELIVERY_CHECKLIST.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/11_SERVICE_CONTRACTS.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/11_SERVICE_CONTRACTS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/12_IMPLEMENTATION_ROADMAP.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/12_IMPLEMENTATION_ROADMAP.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/14_MODEL_ENTITY_FIELD_GUIDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/14_MODEL_ENTITY_FIELD_GUIDE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/15_CONSOLE_VIEW_REVIEW.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/15_CONSOLE_VIEW_REVIEW.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/16_CONSOLE_MENU_STRUCTURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/16_CONSOLE_MENU_STRUCTURE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/match_seats.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/match_seats.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/matches.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/matches.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/payments.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/payments.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/refunds.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/refunds.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/tickets.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/tickets.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/transactions.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/transactions.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/01_SRS.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/01_SRS.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/02_USE_CASE_SPECIFICATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/02_USE_CASE_SPECIFICATION.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/03_ARCHITECTURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/03_ARCHITECTURE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/04_BOOKING_CONCURRENCY.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/04_BOOKING_CONCURRENCY.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/05_VERIFICATION_AND_DELIVERY.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/05_VERIFICATION_AND_DELIVERY.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/06_USE_CASE_TRACEABILITY.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/06_USE_CASE_TRACEABILITY.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/08_PRESENTATION_GUIDE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/08_PRESENTATION_GUIDE.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/ClassDiagram.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/docs/ClassDiagram.drawio" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/01_Main_View_Auth.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/01_Main_View_Auth.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/02_Stadium_Match_Admin.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/02_Stadium_Match_Admin.mmd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/03_User_Booking_Payment_Ticket.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/03_User_Booking_Payment_Ticket.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/04_Simulation.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/04_Simulation.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/05_CSV_Repository_BaseEntity.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/05_CSV_Repository_BaseEntity.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/06_Model_Relationships.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/06_Model_Relationships.mmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/CHANGES_PENDING_STAGE_03.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/CHANGES_PENDING_STAGE_03.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/CHANGES_STAGE_08_09.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/CHANGES_STAGE_08_09.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/ClassDiagram.drawio" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/ClassDiagram.drawio" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/DEPENDENCIES.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/DEPENDENCIES.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Class_Diagrams/05_Model_Relationships.mmd" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Class_Diagrams/05_Model_Relationships.mmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/00_CHUAN_BI.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/00_CHUAN_BI.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/01_THU_TU_DEMO.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/01_THU_TU_DEMO.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/02_BAN_DO_MENU.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/02_BAN_DO_MENU.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/05_Fan_Booking_Tickets/08_Book_This_Match_from_Browsing.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/05_Fan_Booking_Tickets/08_Book_This_Match_from_Browsing.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/01_Search_and_List_Customers.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/01_Search_and_List_Customers.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/02_Create_Customer_Fan_Account.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/02_Create_Customer_Fan_Account.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/03_View_Seat_Map_and_Prices.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/03_View_Seat_Map_and_Prices.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/04_Create_Booking_for_Customer.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/04_Create_Booking_for_Customer.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/05_Customer_Booking_History.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/05_Customer_Booking_History.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/06_Accept_Cash_Payment.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/06_Accept_Cash_Payment.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/07_Issue_Tickets.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/07_Issue_Tickets.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/08_Browse_Matches.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/06_Seller/08_Browse_Matches.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/Demo_Tung_Feature/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Demo_Tung_Feature/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/00_KICH_BAN_TONG_QUAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/00_KICH_BAN_TONG_QUAN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/01A_SCRIPT_USECASE_DEN_CLASS_DIAGRAM.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/01A_SCRIPT_USECASE_DEN_CLASS_DIAGRAM.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/01_USE_CASE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/01_USE_CASE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/02_CLASS_01_MAIN_VIEW_AUTH.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/02_CLASS_01_MAIN_VIEW_AUTH.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/03_CLASS_02_STADIUM_MATCH_ADMIN.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/03_CLASS_02_STADIUM_MATCH_ADMIN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/04_CLASS_03_BOOKING_PAYMENT_TICKET.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/04_CLASS_03_BOOKING_PAYMENT_TICKET.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/05_CLASS_04_SIMULATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/05_CLASS_04_SIMULATION.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/06_CLASS_05_REPOSITORY_BASE_ENTITY.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/06_CLASS_05_REPOSITORY_BASE_ENTITY.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/07_CLASS_06_MODEL_RELATIONSHIPS.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/07_CLASS_06_MODEL_RELATIONSHIPS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/08_CODE_DA_HOAN_THANH.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/08_CODE_DA_HOAN_THANH.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/09_DEMO_VA_PHAN_BIEN.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/09_DEMO_VA_PHAN_BIEN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/10_KICH_BAN_BAO_CAO_TIEN_DO.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/10_KICH_BAN_BAO_CAO_TIEN_DO.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/11_CHI_TIET_LUONG_CODE_FLOW.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/11_CHI_TIET_LUONG_CODE_FLOW.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/12_NGUYEN_LY_CSV_VA_REPOSITORY.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/12_NGUYEN_LY_CSV_VA_REPOSITORY.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/13_KICH_BAN_DEMO_FULL_FEATURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/13_KICH_BAN_DEMO_FULL_FEATURE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/14_KICH_BAN_DEMO_TUNG_FEATURE_HIEN_TAI.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/15_DEMO_TUNG_PHIM_VA_KET_QUA_CONSOLE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Thuyet_Trinh/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/Thuyet_Trinh/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scratch/generate_10k_data.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/smoke_console_menus.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/MainView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/booking/enums/SyncMechanism.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/enums/SyncMechanism.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/booking/strategy/StrategyFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/strategy/StrategyFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/match/repository/MatchSeatRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/match/repository/MatchSeatRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/booking/controller/BookingController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/controller/BookingController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/booking/model/Booking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/model/Booking.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/booking/model/BookingTransaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/model/BookingTransaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/booking/repository/BookingRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/repository/BookingRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/booking/repository/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/repository/TransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/booking/service/BookingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/service/BookingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/booking/view/BookingView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/booking/view/BookingView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/refund/service/RefundService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/refund/service/RefundService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/seller/view/SellerView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/seller/view/SellerView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

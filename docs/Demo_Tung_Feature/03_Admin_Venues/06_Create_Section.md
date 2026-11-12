@@ -8,7 +8,7 @@
 
 ## Điều kiện demo
 
-- Dùng CORE_DIR từ file chuẩn bị. Chạy các flow theo thứ tự toàn cục để có đúng ID và trạng thái.
+- Dùng đúng CORE_DIR, COUNTER_DEMO_DIR hoặc EXPIRY_DEMO_DIR theo từng flow. File chuẩn bị có lệnh tạo các bản sao. Chạy theo thứ tự để ID và trạng thái khớp.
 - Những flow tạo sân/ghế/trận, mua vé hoặc gửi refund là tiền đề cho các flow dùng lại bản ghi đó.
 - Có thể mở file theo từng tính năng để tra cứu; số Flow giữ thứ tự thực thi của buổi demo.
 
@@ -16,7 +16,7 @@
 
 ## Flow 025 — Create Section
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 024](04_Update_Stadium.md#flow-024).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 024](../03_Admin_Venues/04_Update_Stadium.md#flow-024).
 
 ### Console ban đầu
 
@@ -229,7 +229,7 @@ Choose option:
 
 ## Flow 046 — Delete Section - tạo khán đài phụ
 
-- Bắt đầu ở Main của CORE_DIR sau [Flow 045](17_Delete_Seat.md#flow-045).
+- Bắt đầu ở Main của CORE_DIR sau [Flow 045](../03_Admin_Venues/17_Delete_Seat.md#flow-045).
 
 ### Console ban đầu
 

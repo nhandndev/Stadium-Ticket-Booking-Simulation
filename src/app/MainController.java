@@ -106,14 +106,20 @@ public class MainController {
                         mainView.displayMatches(detailMatches);
                         if (detailMatches.isEmpty()) break;
                         Long detailId = mainView.readMatchId();
-                        if (detailId != null) mainView.displayMatchDetails(browseController.viewMatchDetails(detailId));
+                        if (detailId != null) {
+                            mainView.displayMatchDetails(browseController.viewMatchDetails(detailId));
+                            handleMatchActions(detailMatches, detailId);
+                        }
                         break;
                     case 4:
                         List<MatchResponseDto> seatMatches = browseController.filterMatches(null, null);
                         mainView.displayMatches(seatMatches);
                         if (seatMatches.isEmpty()) break;
                         Long seatId = mainView.readMatchId();
-                        if (seatId != null) seatMapView.displaySeatMap(browseController.getSeatMap(seatId));
+                        if (seatId != null) {
+                            seatMapView.displaySeatMap(browseController.getSeatMap(seatId));
+                            handleMatchActions(seatMatches, seatId);
+                        }
                         break;
                     case 0:
                         browsing = false;
@@ -134,6 +140,10 @@ public class MainController {
     }
 
     public void handleMatchListActions(List<MatchResponseDto> matches) {
+        handleMatchActions(matches, null);
+    }
+
+    private void handleMatchActions(List<MatchResponseDto> matches, Long selectedMatchId) {
         if (matches == null || matches.isEmpty()) {
             return;
         }
@@ -142,9 +152,15 @@ public class MainController {
             try {
                 UserResponseDto user = authController.getCurrentUser();
                 boolean canBook = user != null && user.getRole() == UserRole.FAN;
-                int action = mainView.showMatchActionMenu(canBook);
-                if (action == 1 || action == 2 || action == 3 && canBook) {
-                    Long matchId = mainView.readMatchId();
+                int action = mainView.showMatchActionMenu(canBook, selectedMatchId);
+                if (action == 4 && selectedMatchId != null) {
+                    selectedMatchId = null;
+                    mainView.displayMatches(matches);
+                    continue;
+                }
+                if (action == 1 || action == 2 || (action == 3 && canBook)) {
+                    Long matchId = selectedMatchId;
+                    if (matchId == null) matchId = mainView.readMatchId();
                     if (matchId == null) continue;
                     boolean listed = false;
                     for (MatchResponseDto match : matches) {
@@ -154,6 +170,7 @@ public class MainController {
                         mainView.displayMessage("Choose a Match ID from these results.");
                         continue;
                     }
+                    selectedMatchId = matchId;
                     if (action == 1) {
                         mainView.displayMatchDetails(browseController.viewMatchDetails(matchId));
                     } else if (action == 2) {
@@ -237,7 +254,7 @@ public class MainController {
                         if (profile != null) mainView.displayUser(authController.updateCurrentUserProfile(profile));
                         break;
                     case 4:
-                        if (user.getRole() == UserRole.FAN || user.getRole() == UserRole.SELLER) {
+                        if (user.getRole() == UserRole.FAN) {
                             runGuestMenu();
                         } else {
                             mainView.displayMessage("Invalid choice.");
