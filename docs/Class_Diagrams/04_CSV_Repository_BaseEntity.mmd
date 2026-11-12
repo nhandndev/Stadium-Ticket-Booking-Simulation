@@ -215,7 +215,6 @@ classDiagram
         -status: BookingStatus
         -createdAt: LocalDateTime
         -expiresAt: LocalDateTime
-        +Booking(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, totalAmount: BigDecimal, status: BookingStatus)
         +Booking(id: Long, fanId: Long, matchId: Long, seatIds: List~Long~, totalAmount: BigDecimal, status: BookingStatus, createdAt: LocalDateTime, expiresAt: LocalDateTime)
         +validateTicketLimit(): void
         +confirm(): void

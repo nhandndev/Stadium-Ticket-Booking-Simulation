@@ -21,13 +21,6 @@ public class Booking extends BaseEntity {
     private LocalDateTime expiresAt;
 
     public Booking(Long id, Long fanId, Long matchId, List<Long> seatIds,
-                   BigDecimal totalAmount, BookingStatus status) {
-        this(id, fanId, matchId, seatIds, totalAmount, status, null, null);
-        this.createdAt = LocalDateTime.now();
-        this.expiresAt = this.createdAt.plusMinutes(30);
-    }
-
-    public Booking(Long id, Long fanId, Long matchId, List<Long> seatIds,
                    BigDecimal totalAmount, BookingStatus status,
                    LocalDateTime createdAt, LocalDateTime expiresAt) {
         super(id);

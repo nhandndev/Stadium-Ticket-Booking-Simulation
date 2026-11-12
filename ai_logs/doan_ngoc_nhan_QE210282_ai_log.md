@@ -2137,3 +2137,21 @@ Agent verification
 Translation boundary
 
 Captured runtime data and historical personal audit entries retain their source wording and proper names. The authored project documentation now uses English.
+
+## Entry 60 - Remove the Unused Booking Constructor
+
+Date — 2026-11-13. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Questioned retaining the unused six-parameter Booking constructor after checking its callers.
+
+AI contribution
+
+- Removed the unused six-parameter constructor from Booking.
+- Removed its row from all three Booking boxes in the canonical project draw.io and the three matching Mermaid files.
+- Retained the eight-parameter constructor used by BookingService and BookingRepository.
+
+Agent verification
+
+- Searched production source for every new Booking call. Both call sites pass createdAt and expiresAt.
+- Parsed the source contracts and verified all three updated draw.io Booking boxes against them.
+- Checked XML validity and git diff whitespace. Verification used static inspection.
