@@ -38,4 +38,6 @@ Booking includes createdAt/expiresAt and the EXPIRED state. MatchSeat includes
 holdBookingId and a structural hold-owner relationship. Default checkout commits
 only its owned LOCKED seats. Expiry releases those holds. BookingService is fully
 expanded on pages 01 and 02 where browsing/seat administration use its expiry
-operation. The Seller menu exposes the seven features shown on page 00.
+operation. Seller Ticket sales has create-new and pay-existing branches. Successful
+cash checkout calls ticket issue in the same flow. SellerView includes the public
+showTicketSalesMenu(): int method on page 03 and its Mermaid counterpart.

@@ -1,6 +1,6 @@
 # Software Requirements Specification
 
-Baseline date — 2026-11-13. Java 17 Console stadium ticket booking.
+Baseline review date — 2026-11-14. Java 17 Console stadium ticket booking.
 
 ## 1. Product and Architecture
 
@@ -15,11 +15,17 @@ state and Request/Response DTOs carry boundary data. Enums use enums packages.
 - Guest browses, registers and opens login.
 - User represents shared authenticated profile/update/logout behavior.
 - Fan books and manages its own orders, tickets and refund requests.
-- Seller provides the seven counter features below.
+- Seller provides the counter workflows below.
 - Gate Staff validates tickets and records check-in.
 - Administrator manages venues, Matches, pricing, sales, accounts/roles,
   refund reviews, summary and audit records.
-- Payment Service supplies mock online payment results.
+
+MockPaymentService supplies the internal mock online payment result within Make online payment.
+
+Page 00 contains 75 unique Use Case goals. A goal shared by multiple actors has
+one node. User supplies inherited profile/update/logout behavior to all four
+authenticated roles. Supporting selection/detail steps remain part of the
+corresponding workflows.
 
 ## 3. Functional Requirements
 
@@ -30,6 +36,11 @@ state and Request/Response DTOs carry boundary data. Enums use enums packages.
 - Selecting a Match preserves its ID for subsequent details/map and Fan booking.
 - Book this match reuses the selected ID. General booking asks for an ID once.
 - Choose another match clears selection and leaving the screen ends that context.
+- Guest and Fan access keyword search and Stadium/date filtering through browsing.
+- Seller lists/selects Matches and views details/availability/prices in the counter flows.
+- Administrator accesses Match list/details through Match Management. The current
+  Admin menu provides no keyword-search or Stadium/date-filter entry.
+- Gate Staff enters Ticket Code only. Match and seat are resolved from that ticket.
 
 ### FR-02 — Accounts and Authentication
 
@@ -81,22 +92,30 @@ state and Request/Response DTOs carry boundary data. Enums use enums packages.
 
 ### FR-06 — Seller Features
 
-The Seller counter menu contains exactly these seven features.
+The Seller counter menu has five groups.
 
-1. Search Fan by name/email or list accounts and status.
-2. Create Fan through explicit account registration.
-3. Create booking for Fan, including the previously agreed walk-in branch.
-4. Accept offline payment.
-5. Issue ticket.
-6. View seat map and prices.
-7. View customer booking history for the selected Fan account.
+1. Search Fan.
+2. Create Fan.
+3. Ticket sales.
+   1. Create booking for Fan / walk-in customer.
+   2. Pay for an existing booking.
+   0. Back to Seller menu.
+4. View seat map and prices.
+5. View customer booking history.
+0. Back to dashboard.
 
-The existing-account branch rejects INACTIVE immediately before Match input.
-Walk-ins buy through the Seller and keep Booking ID/ticket codes.
-Create booking ends with PENDING and its deadline. Accept offline payment reads
-Booking ID and records receipt only after RECEIVED confirmation. The booking
-must remain PENDING and within its deadline. Issue ticket is a separate action
-requiring a CONFIRMED booking and successful payment.
+Creating a booking continues to the cash-receipt prompt. Confirming RECEIVED
+records offline payment and immediately issues/displays tickets. Cancelling the
+cash prompt keeps PENDING and displays the Booking ID and persisted deadline.
+Ticket sales > Pay for an existing booking accepts that ID, including an order
+created by a Fan online, and issues tickets after successful cash payment.
+An already-CONFIRMED cash booking can resume ticket issuance through the same
+entry without collecting cash again. The existing payment and issue methods remain separate code operations.
+
+The existing-account branch rejects INACTIVE before Match selection. Walk-ins
+use an empty fanId and keep Booking ID/ticket codes. Existing-booking cash checkout
+rejects expired or cancelled orders. A previous successful online payment is
+rejected as a different payment method when accessed through the cash route.
 
 ### FR-07 — Payment and Ticket Issue
 
@@ -106,10 +125,12 @@ requiring a CONFIRMED booking and successful payment.
 - Recheck the active account when present, OPEN future Match and usable physical seats.
 - Commit only seats held by that booking using SYNCHRONIZED.
 - Successful payment confirms the booking. Online checkout issues tickets.
-- Offline payment is followed by Seller Issue ticket.
+- Successful Seller cash checkout automatically issues/displays tickets in the same flow.
 - Idempotent completed-payment and issue retries preserve stored results.
 - Failed payment/conflict records the outcome and releases owned holds.
 - Fan can list ticket history and view ticket details.
+- Seller views Booking details before collecting cash or issuing tickets.
+- Booking Details lists all tickets for that booking with code and status, including used/cancelled tickets.
 - Ticket codes identify individual seats in the booking.
 - Booking history covers orders/totals and ticket history covers issued seats/use.
 
@@ -117,15 +138,18 @@ requiring a CONFIRMED booking and successful payment.
 
 - Gate Staff validates code, Match and confirmed booking membership.
 - Confirmation records CHECKED_IN and timestamp once.
-- Reject wrong-Match, missing, cancelled and already-used tickets.
+- Resolve Match and seat by Ticket Code. Reject missing, cancelled and already-used tickets.
+- Preview customer name/phone and Match/seat before confirmation. Walk-in values are `None`.
 - Issued walk-in tickets follow the same Gate rules.
+- The current implementation checks ticket/Match/booking validity without an entry-time window.
 
 ### FR-09 — Cancellation and Refund
 
 - Unpaid pending cancellation releases holds.
 - Eligible paid CONFIRMED bookings use the authenticated Fan refund request.
 - Require a reason and prevent duplicate active requests.
-- Require pre-kick-off eligibility and unused valid tickets.
+- Require pre-kick-off eligibility and reject existing CHECKED_IN/CANCELLED tickets.
+- A paid booking can request refund before Seller has issued tickets.
 - Fan lists its own requests. Administrator reviews REQUESTED with a note.
 - Approval rechecks eligibility, cancels booking/tickets, releases BOOKED seats
   and records APPROVED. Rejection records REJECTED and preserves the sale.
@@ -140,8 +164,22 @@ requiring a CONFIRMED booking and successful payment.
 - Protect the last ACTIVE Administrator from unsafe role/status removal.
 - Account administration may change name/email/phone and optionally password.
 - View system summary and stored audit logs. Current audit coverage includes refund review.
+- Display the Staff account name and role for each audit row. If the Staff account is missing, display its ID as Unknown staff and role UNKNOWN.
 
 ## 4. State and Persistence
+
+### Supplied Runtime Fixture
+
+- Two Stadiums contain 100 physical Seats each across five Sections.
+- Rows A–J each contain ten seats. A/B are VIP, C/D Premium, and E–J Standard.
+- The 100 Matches are divided equally between the Stadiums.
+- Every fixture Match has 100 MatchSeat rows and five Section prices.
+- As of 2026-11-14, 23 Matches are past/CLOSED, 52 future Matches are OPEN and
+  25 future Matches are CLOSED.
+- The fixture retains existing business history and its referenced physical Seat IDs.
+- These are initial sample counts. Existing CRUD operations can add further data.
+
+### Stored States and Formats
 
 - BookingStatus uses PENDING, CONFIRMED, CANCELLED, EXPIRED.
 - SeatStatus uses AVAILABLE, LOCKED, BOOKED. Seat map displays LOCKED as HELD.

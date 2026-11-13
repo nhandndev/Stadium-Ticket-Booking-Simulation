@@ -17,14 +17,14 @@ public class AuditLogRepository extends CsvRepository<AuditLog> {
     }
 
     public void append(AuditLog log) {
-        save(log);
+        this.save(log);
     }
 
     public List<AuditLog> findRecent(int limit) {
         if (limit <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Limit must be positive");
         }
-        List<AuditLog> logs = new ArrayList<>(findAll());
+        List<AuditLog> logs = new ArrayList<>(this.findAll());
         logs.sort(Comparator.comparing(AuditLog::getCreatedAt).reversed()
                 .thenComparing(AuditLog::getId, Comparator.reverseOrder()));
         return new ArrayList<>(logs.subList(0, Math.min(limit, logs.size())));

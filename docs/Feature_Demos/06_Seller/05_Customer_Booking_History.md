@@ -1,5 +1,48 @@
 # Customer Booking History
 
+## Current Seller Menu — 2026-11-14
+
+Seller > 3. Ticket sales contains 1. Create booking for Fan / walk-in customer,
+2. Pay for an existing booking and 0. Back. Successful cash checkout automatically
+issues/displays tickets. Payment and issue retain separate methods in the code.
+The walkthroughs here use an isolated copy of the core fixture with future Match
+dates. Inputs are listed in order. A blank line means Enter.
+
+### Customer booking history
+
+Start at the Seller menu.
+
+Inputs
+
+```text
+5
+binh
+2
+```
+
+Result captured from the current code
+
+```text
+Customer: Tran Thi Binh | binh.tran@gmail.com
+No bookings yet.
+
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Ticket sales
+4. View seat map and prices
+5. View customer booking history
+0. Back to dashboard
+Choose:
+```
+
+## Historical Numbered Flows
+
+The numbered flows below were captured on 2026-11-13 before the menu merge.
+Their Console blocks retain that historical menu. Use the current walkthroughs
+above and the [current menu map](../02_MENU_MAP.md) for the new navigation.
+
+
 - View the selected Fan account booking history, including status and payment deadlines.
 - Code path `MainController → BookingController.getBookingsForFan → BookingService.getMyBookings → BookingRepository`.
 - Press Enter after each input. A blank Enter submits an empty line.

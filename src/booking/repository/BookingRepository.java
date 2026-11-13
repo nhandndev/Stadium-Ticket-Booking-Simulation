@@ -21,7 +21,7 @@ public class BookingRepository extends CsvRepository<Booking> {
         if (fanId == null || fanId <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Fan ID must be positive");
         }
-        return findByCondition(booking -> fanId.equals(booking.getFanId()));
+        return this.findByCondition(booking -> fanId.equals(booking.getFanId()));
     }
 
     @Override

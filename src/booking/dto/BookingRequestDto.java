@@ -14,9 +14,9 @@ public class BookingRequestDto {
         this.seatIds = seatIds == null ? null : new ArrayList<>(seatIds);
     }
 
-    public Long getFanId() { return fanId; }
-    public Long getMatchId() { return matchId; }
+    public Long getFanId() { return this.fanId; }
+    public Long getMatchId() { return this.matchId; }
     public List<Long> getSeatIds() {
-        return seatIds == null ? null : new ArrayList<>(seatIds);
+        return this.seatIds == null ? null : new ArrayList<>(this.seatIds);
     }
 }

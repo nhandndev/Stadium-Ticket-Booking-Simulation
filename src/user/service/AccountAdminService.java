@@ -30,7 +30,7 @@ public class AccountAdminService {
         if (request == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Account request is required");
         }
-        validateAccountRequest(request, null, null);
+        this.validateAccountRequest(request, null, null);
         if (request.getPassword() == null || request.getPassword().trim().isEmpty()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Password is required");
         }
@@ -80,7 +80,7 @@ public class AccountAdminService {
     }
 
     public AccountResponseDto updateFan(Long fanId, AccountRequestDto request) {
-        validateAccountRequest(request, fanId, null);
+        this.validateAccountRequest(request, fanId, null);
         Fan fan = this.fanRepository.findById(fanId);
         if (fan == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Fan not found");
@@ -117,7 +117,7 @@ public class AccountAdminService {
     }
 
     public boolean deleteFan(Long fanId) {
-        if (!bookingRepository.findByFanId(fanId).isEmpty()) {
+        if (!this.bookingRepository.findByFanId(fanId).isEmpty()) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Fan has booking history. Deactivate the account instead.");
         }
@@ -128,7 +128,7 @@ public class AccountAdminService {
         if (request == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Account request is required");
         }
-        validateAccountRequest(request, null, null);
+        this.validateAccountRequest(request, null, null);
         if (request.getRole() == null || request.getRole() == UserRole.FAN
                 || request.getPassword() == null || request.getPassword().trim().isEmpty()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "A staff role and password are required");
@@ -180,7 +180,7 @@ public class AccountAdminService {
     }
 
     public AccountResponseDto updateStaff(Long staffId, AccountRequestDto request) {
-        validateAccountRequest(request, null, staffId);
+        this.validateAccountRequest(request, null, staffId);
         Staff staff = this.staffRepository.findById(staffId);
         if (staff == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Staff not found");
@@ -206,7 +206,7 @@ public class AccountAdminService {
     }
 
     public AccountResponseDto deactivateStaff(Long staffId) {
-        requireAnotherAdmin(staffId);
+        this.requireAnotherAdmin(staffId);
         Staff staff = this.staffRepository.findById(staffId);
         if (staff == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Staff not found");
@@ -238,7 +238,7 @@ public class AccountAdminService {
         if (role == null || role == UserRole.FAN || role == UserRole.UNASSIGNED) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Choose an assigned staff role");
         }
-        if (role != UserRole.ADMIN) requireAnotherAdmin(staffId);
+        if (role != UserRole.ADMIN) this.requireAnotherAdmin(staffId);
         Staff staff = this.staffRepository.findById(staffId);
         if (staff == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Staff not found");
@@ -250,7 +250,7 @@ public class AccountAdminService {
     }
 
     public AccountResponseDto revokeRole(Long staffId) {
-        requireAnotherAdmin(staffId);
+        this.requireAnotherAdmin(staffId);
         Staff staff = this.staffRepository.findById(staffId);
         if (staff == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Staff not found");
@@ -262,9 +262,9 @@ public class AccountAdminService {
     }
 
     private void requireAnotherAdmin(Long staffId) {
-        Staff staff = staffRepository.findById(staffId);
+        Staff staff = this.staffRepository.findById(staffId);
         if (staff == null || staff.getRole() != UserRole.ADMIN || staff.getStatus() != UserStatus.ACTIVE) return;
-        for (Staff other : staffRepository.findAll()) {
+        for (Staff other : this.staffRepository.findAll()) {
             if (!other.getId().equals(staffId) && other.getRole() == UserRole.ADMIN
                     && other.getStatus() == UserStatus.ACTIVE) return;
         }
@@ -288,8 +288,8 @@ public class AccountAdminService {
         if (!email.contains("@") || email.startsWith("@") || email.endsWith("@")) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid email");
         }
-        Fan fan = fanRepository.findByEmail(email);
-        Staff staff = staffRepository.findByEmail(email);
+        Fan fan = this.fanRepository.findByEmail(email);
+        Staff staff = this.staffRepository.findByEmail(email);
         if ((fan != null && !fan.getId().equals(fanId)) || (staff != null && !staff.getId().equals(staffId))) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Email already exists");
         }

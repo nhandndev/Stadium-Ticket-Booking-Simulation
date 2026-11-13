@@ -45,17 +45,17 @@ public class BookingResponseDto {
         this.expiresAt = expiresAt;
     }
 
-    public Long getBookingId() { return bookingId; }
-    public Long getFanId() { return fanId; }
-    public Long getMatchId() { return matchId; }
+    public Long getBookingId() { return this.bookingId; }
+    public Long getFanId() { return this.fanId; }
+    public Long getMatchId() { return this.matchId; }
     public List<Long> getSeatIds() {
-        return seatIds == null ? null : new ArrayList<>(seatIds);
+        return this.seatIds == null ? null : new ArrayList<>(this.seatIds);
     }
-    public BigDecimal getTotalAmount() { return totalAmount; }
-    public BookingStatus getStatus() { return status; }
-    public String getFanName() { return fanName; }
-    public String getMatchName() { return matchName; }
-    public List<String> getSeatLabels() { return new ArrayList<>(seatLabels); }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getExpiresAt() { return expiresAt; }
+    public BigDecimal getTotalAmount() { return this.totalAmount; }
+    public BookingStatus getStatus() { return this.status; }
+    public String getFanName() { return this.fanName; }
+    public String getMatchName() { return this.matchName; }
+    public List<String> getSeatLabels() { return new ArrayList<>(this.seatLabels); }
+    public LocalDateTime getCreatedAt() { return this.createdAt; }
+    public LocalDateTime getExpiresAt() { return this.expiresAt; }
 }

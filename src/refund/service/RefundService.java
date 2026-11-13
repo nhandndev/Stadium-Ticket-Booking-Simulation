@@ -62,13 +62,13 @@ public class RefundService {
                     "Valid refund request and Fan ID are required");
         }
         synchronized (MatchSeatRepository.class) {
-            Booking booking = requireBooking(request.getBookingId());
+            Booking booking = this.requireBooking(request.getBookingId());
             if (!request.getFanId().equals(booking.getFanId())) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "Fan does not own booking");
             }
-            requireEligible(booking);
-            for (RefundRequest old : refundRepository.findByFanId(request.getFanId())) {
+            this.requireEligible(booking);
+            for (RefundRequest old : this.refundRepository.findByFanId(request.getFanId())) {
                 if (old.getBookingId().equals(booking.getId())
                         && old.getStatus() != RefundStatus.REJECTED) {
                     throw new AppException(ErrorCode.INVALID_INPUT,
@@ -77,18 +77,18 @@ public class RefundService {
             }
             RefundRequest refund = new RefundRequest(null, booking.getId(),
                     booking.getFanId(), request.getReason(), LocalDateTime.now());
-            return toResponse(refundRepository.save(refund));
+            return this.toResponse(this.refundRepository.save(refund));
         }
     }
 
     public List<RefundRequest> getPendingRefunds() {
-        return refundRepository.findPending();
+        return this.refundRepository.findPending();
     }
 
     public List<RefundResponseDto> getMyRefunds(Long fanId) {
         List<RefundResponseDto> results = new ArrayList<>();
-        for (RefundRequest request : refundRepository.findByFanId(fanId)) {
-            results.add(toResponse(request));
+        for (RefundRequest request : this.refundRepository.findByFanId(fanId)) {
+            results.add(this.toResponse(request));
         }
         return results;
     }
@@ -102,7 +102,7 @@ public class RefundService {
         }
         synchronized (MatchSeatRepository.class) {
             synchronized (TicketRepository.class) {
-                RefundRequest refund = refundRepository.findById(request.getRequestId());
+                RefundRequest refund = this.refundRepository.findById(request.getRequestId());
                 if (refund == null) {
                     throw new AppException(ErrorCode.NOT_FOUND,
                             "Refund request not found");
@@ -114,15 +114,15 @@ public class RefundService {
                 if (!request.isApprove()) {
                     refund.reject(request.getAdminId(), request.getNote(),
                             LocalDateTime.now());
-                    return toResponse(refundRepository.update(refund));
+                    return this.toResponse(this.refundRepository.update(refund));
                 }
-                Booking booking = requireBooking(refund.getBookingId());
+                Booking booking = this.requireBooking(refund.getBookingId());
                 if (!refund.getFanId().equals(booking.getFanId())) {
                     throw new AppException(ErrorCode.CSV_ERROR,
                             "Refund owner does not match booking");
                 }
-                requireEligible(booking);
-                List<Ticket> tickets = ticketRepository.findByBookingId(booking.getId());
+                this.requireEligible(booking);
+                List<Ticket> tickets = this.ticketRepository.findByBookingId(booking.getId());
                 for (Ticket ticket : tickets) {
                     if (!ticket.getMatchId().equals(booking.getMatchId())
                             || !booking.getSeatIds().contains(ticket.getSeatId())
@@ -133,7 +133,7 @@ public class RefundService {
                     }
                 }
                 for (Long seatId : booking.getSeatIds()) {
-                    MatchSeat seat = matchSeatRepository.find(booking.getMatchId(), seatId);
+                    MatchSeat seat = this.matchSeatRepository.find(booking.getMatchId(), seatId);
                     if (seat == null || seat.getStatus() != SeatStatus.BOOKED) {
                         throw new AppException(ErrorCode.CSV_ERROR,
                                 "Booked seat state is inconsistent");
@@ -142,16 +142,16 @@ public class RefundService {
                 refund.approve(request.getAdminId(), request.getNote(), LocalDateTime.now());
                 for (Ticket ticket : tickets) {
                     ticket.cancel();
-                    ticketRepository.update(ticket);
+                    this.ticketRepository.update(ticket);
                 }
                 booking.cancel();
-                bookingRepository.update(booking);
-                if (!matchSeatRepository.releaseSeatsSynchronized(
+                this.bookingRepository.update(booking);
+                if (!this.matchSeatRepository.releaseSeatsSynchronized(
                         booking.getMatchId(), booking.getSeatIds())) {
                     throw new AppException(ErrorCode.CSV_ERROR,
                             "Booked seats could not be released");
                 }
-                return toResponse(refundRepository.update(refund));
+                return this.toResponse(this.refundRepository.update(refund));
             }
         }
     }
@@ -161,18 +161,18 @@ public class RefundService {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Only confirmed booking can request refund");
         }
-        Payment payment = paymentRepository.findByBookingId(booking.getId());
+        Payment payment = this.paymentRepository.findByBookingId(booking.getId());
         if (payment == null || payment.getStatus() != PaymentStatus.SUCCESS) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Successful payment is required");
         }
-        Match match = matchRepository.findById(booking.getMatchId());
+        Match match = this.matchRepository.findById(booking.getMatchId());
         if (match == null || match.getStartTime() == null
                 || !match.getStartTime().isAfter(LocalDateTime.now())) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Match already started or is missing");
         }
-        for (Ticket ticket : ticketRepository.findByBookingId(booking.getId())) {
+        for (Ticket ticket : this.ticketRepository.findByBookingId(booking.getId())) {
             if (ticket.getStatus() == TicketStatus.CHECKED_IN
                     || ticket.getStatus() == TicketStatus.CANCELLED) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
@@ -186,7 +186,7 @@ public class RefundService {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Booking ID must be positive");
         }
-        Booking booking = bookingRepository.findById(bookingId);
+        Booking booking = this.bookingRepository.findById(bookingId);
         if (booking == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Booking not found");
         }

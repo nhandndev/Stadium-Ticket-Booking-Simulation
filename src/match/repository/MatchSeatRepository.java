@@ -28,9 +28,9 @@ public class MatchSeatRepository {
     }
 
     public List<MatchSeat> findByMatchId(Long matchId) {
-        requirePositive(matchId);
+        this.requirePositive(matchId);
         List<MatchSeat> result = new ArrayList<>();
-        for (MatchSeat seat : readAll()) {
+        for (MatchSeat seat : this.readAll()) {
             if (seat.getMatchId().equals(matchId)) {
                 result.add(seat);
             }
@@ -39,9 +39,9 @@ public class MatchSeatRepository {
     }
 
     public MatchSeat find(Long matchId, Long seatId) {
-        requirePositive(matchId);
-        requirePositive(seatId);
-        for (MatchSeat seat : readAll()) {
+        this.requirePositive(matchId);
+        this.requirePositive(seatId);
+        for (MatchSeat seat : this.readAll()) {
             if (seat.getMatchId().equals(matchId) && seat.getSeatId().equals(seatId)) {
                 return seat;
             }
@@ -55,7 +55,7 @@ public class MatchSeatRepository {
                 || seat.getStatus() == null || seat.getVersion() < 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid match seat");
         }
-        List<MatchSeat> seats = readAll();
+        List<MatchSeat> seats = this.readAll();
         long maxId = 0;
         for (MatchSeat current : seats) {
             maxId = Math.max(maxId, current.getId());
@@ -74,11 +74,11 @@ public class MatchSeatRepository {
             }
             seat.setId(maxId + 1);
         } else {
-            requirePositive(originalId);
+            this.requirePositive(originalId);
         }
         seats.add(seat);
         try {
-            writeAll(seats);
+            this.writeAll(seats);
         } catch (AppException e) {
             seat.setId(originalId);
             throw e;
@@ -87,26 +87,26 @@ public class MatchSeatRepository {
     }
 
     public boolean deleteByMatchId(Long matchId) {
-        requirePositive(matchId);
-        List<MatchSeat> seats = readAll();
+        this.requirePositive(matchId);
+        List<MatchSeat> seats = this.readAll();
         boolean removed = seats.removeIf(seat -> seat.getMatchId().equals(matchId));
         if (removed) {
-            writeAll(seats);
+            this.writeAll(seats);
         }
         return removed;
     }
 
     public boolean bookSeatsSynchronized(Long matchId, List<Long> seatIds) {
-        requirePositive(matchId);
+        this.requirePositive(matchId);
         if (seatIds == null || seatIds.isEmpty() || seatIds.size() > 4
                 || new HashSet<>(seatIds).size() != seatIds.size()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Choose 1 to 4 unique seats");
         }
         synchronized (MatchSeatRepository.class) {
-            List<MatchSeat> seats = readAll();
+            List<MatchSeat> seats = this.readAll();
             List<MatchSeat> selected = new ArrayList<>();
             for (Long seatId : seatIds) {
-                requirePositive(seatId);
+                this.requirePositive(seatId);
                 MatchSeat found = null;
                 for (MatchSeat seat : seats) {
                     if (seat.getMatchId().equals(matchId) && seat.getSeatId().equals(seatId)) {
@@ -121,50 +121,50 @@ public class MatchSeatRepository {
                 seat.lock();
                 seat.markBooked();
             }
-            writeAll(seats);
+            this.writeAll(seats);
             return true;
         }
     }
 
     public boolean holdSeatsSynchronized(Long bookingId, Long matchId, List<Long> seatIds) {
-        requirePositive(bookingId);
+        this.requirePositive(bookingId);
         synchronized (MatchSeatRepository.class) {
-            List<MatchSeat> seats = readAll();
-            List<MatchSeat> selected = selectSeats(seats, matchId, seatIds);
+            List<MatchSeat> seats = this.readAll();
+            List<MatchSeat> selected = this.selectSeats(seats, matchId, seatIds);
             if (selected.size() != seatIds.size()) return false;
             for (MatchSeat seat : selected) {
                 if (!seat.isAvailable()) return false;
             }
             for (MatchSeat seat : selected) seat.hold(bookingId);
-            writeAll(seats);
+            this.writeAll(seats);
             return true;
         }
     }
 
     public boolean bookSeatsSynchronized(Long bookingId, Long matchId, List<Long> seatIds) {
-        requirePositive(bookingId);
+        this.requirePositive(bookingId);
         synchronized (MatchSeatRepository.class) {
-            List<MatchSeat> seats = readAll();
-            List<MatchSeat> selected = selectSeats(seats, matchId, seatIds);
+            List<MatchSeat> seats = this.readAll();
+            List<MatchSeat> selected = this.selectSeats(seats, matchId, seatIds);
             if (selected.size() != seatIds.size()) return false;
             for (MatchSeat seat : selected) {
                 if (seat.getStatus() != SeatStatus.LOCKED
                         || !bookingId.equals(seat.getHoldBookingId())) return false;
             }
             for (MatchSeat seat : selected) seat.markBooked();
-            writeAll(seats);
+            this.writeAll(seats);
             return true;
         }
     }
 
     public void releaseHeldSeatsSynchronized(Long bookingId, Long matchId, List<Long> seatIds) {
-        requirePositive(bookingId);
-        requirePositive(matchId);
+        this.requirePositive(bookingId);
+        this.requirePositive(matchId);
         if (seatIds == null || seatIds.isEmpty()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Held Seat IDs are required");
         }
         synchronized (MatchSeatRepository.class) {
-            List<MatchSeat> seats = readAll();
+            List<MatchSeat> seats = this.readAll();
             boolean changed = false;
             for (MatchSeat seat : seats) {
                 if (matchId.equals(seat.getMatchId()) && seatIds.contains(seat.getSeatId())
@@ -174,19 +174,19 @@ public class MatchSeatRepository {
                     changed = true;
                 }
             }
-            if (changed) writeAll(seats);
+            if (changed) this.writeAll(seats);
         }
     }
 
     private List<MatchSeat> selectSeats(List<MatchSeat> seats, Long matchId, List<Long> seatIds) {
-        requirePositive(matchId);
+        this.requirePositive(matchId);
         if (seatIds == null || seatIds.isEmpty() || seatIds.size() > 4
                 || new HashSet<>(seatIds).size() != seatIds.size()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Choose 1 to 4 unique seats");
         }
         List<MatchSeat> selected = new ArrayList<>();
         for (Long seatId : seatIds) {
-            requirePositive(seatId);
+            this.requirePositive(seatId);
             for (MatchSeat seat : seats) {
                 if (matchId.equals(seat.getMatchId()) && seatId.equals(seat.getSeatId())) {
                     selected.add(seat);
@@ -198,16 +198,16 @@ public class MatchSeatRepository {
     }
 
     public boolean releaseSeatsSynchronized(Long matchId, List<Long> seatIds) {
-        requirePositive(matchId);
+        this.requirePositive(matchId);
         if (seatIds == null || seatIds.isEmpty()
                 || new HashSet<>(seatIds).size() != seatIds.size()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Unique seats are required");
         }
         synchronized (MatchSeatRepository.class) {
-            List<MatchSeat> seats = readAll();
+            List<MatchSeat> seats = this.readAll();
             List<MatchSeat> selected = new ArrayList<>();
             for (Long seatId : seatIds) {
-                requirePositive(seatId);
+                this.requirePositive(seatId);
                 MatchSeat found = null;
                 for (MatchSeat seat : seats) {
                     if (seat.getMatchId().equals(matchId) && seat.getSeatId().equals(seatId)) {
@@ -219,7 +219,7 @@ public class MatchSeatRepository {
                 selected.add(found);
             }
             for (MatchSeat seat : selected) seat.release();
-            writeAll(seats);
+            this.writeAll(seats);
             return true;
         }
     }
@@ -262,20 +262,20 @@ public class MatchSeatRepository {
 
     private List<MatchSeat> readAll() {
         try {
-            Files.createDirectories(filePath.getParent());
-            if (!Files.exists(filePath)) {
-                Files.createFile(filePath);
+            Files.createDirectories(this.filePath.getParent());
+            if (!Files.exists(this.filePath)) {
+                Files.createFile(this.filePath);
             }
             List<MatchSeat> result = new ArrayList<>();
             Set<Long> ids = new HashSet<>();
             Set<String> pairs = new HashSet<>();
-            List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(this.filePath, StandardCharsets.UTF_8);
             for (int i = 0; i < lines.size(); i++) {
                 if (lines.get(i).trim().isEmpty()) {
                     continue;
                 }
                 try {
-                    MatchSeat seat = parseLine(lines.get(i));
+                    MatchSeat seat = this.parseLine(lines.get(i));
                     String pair = seat.getMatchId() + ":" + seat.getSeatId();
                     if (!ids.add(seat.getId()) || !pairs.add(pair)) {
                         throw new AppException(ErrorCode.CSV_ERROR, "Duplicate ID or match/seat");
@@ -283,32 +283,32 @@ public class MatchSeatRepository {
                     result.add(seat);
                 } catch (AppException | IllegalArgumentException e) {
                     throw new AppException(ErrorCode.CSV_ERROR,
-                            filePath.getFileName() + " line " + (i + 1) + ": " + e.getMessage());
+                            this.filePath.getFileName() + " line " + (i + 1) + ": " + e.getMessage());
                 }
             }
             return result;
         } catch (IOException e) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Cannot read " + filePath);
+            throw new AppException(ErrorCode.CSV_ERROR, "Cannot read " + this.filePath);
         }
     }
 
     private void writeAll(List<MatchSeat> seats) {
         List<String> lines = new ArrayList<>();
         for (MatchSeat seat : seats) {
-            lines.add(formatLine(seat));
+            lines.add(this.formatLine(seat));
         }
         Path temporaryFile = null;
         try {
-            temporaryFile = Files.createTempFile(filePath.getParent(), "match-seats-", ".tmp");
+            temporaryFile = Files.createTempFile(this.filePath.getParent(), "match-seats-", ".tmp");
             Files.write(temporaryFile, lines, StandardCharsets.UTF_8);
             try {
-                Files.move(temporaryFile, filePath,
+                Files.move(temporaryFile, this.filePath,
                         StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
             } catch (AtomicMoveNotSupportedException e) {
-                Files.move(temporaryFile, filePath, StandardCopyOption.REPLACE_EXISTING);
+                Files.move(temporaryFile, this.filePath, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Cannot write " + filePath);
+            throw new AppException(ErrorCode.CSV_ERROR, "Cannot write " + this.filePath);
         } finally {
             if (temporaryFile != null) {
                 try {

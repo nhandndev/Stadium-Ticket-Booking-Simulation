@@ -1,5 +1,69 @@
 # View Seat Map and Prices
 
+## Current Seller Menu — 2026-11-14
+
+Seller > 3. Ticket sales contains 1. Create booking for Fan / walk-in customer,
+2. Pay for an existing booking and 0. Back. Successful cash checkout automatically
+issues/displays tickets. Payment and issue retain separate methods in the code.
+The walkthroughs here use an isolated copy of the core fixture with future Match
+dates. Inputs are listed in order. A blank line means Enter.
+
+### View seat map and prices
+
+Start at the Seller menu.
+
+Inputs
+
+```text
+4
+1
+```
+
+Result captured from the current code
+
+```text
+Match #1 | Vietnam vs Thailand | My Dinh National Stadium | 2026-12-14T01:40:09 | Sales: OPEN
+
+=== SEAT AVAILABILITY ===
+SEAT ID  | LABEL    | SECTION                  | PRICE (VND)  | STATUS
+1        | A1       | Stand A VIP              | 500000       | BOOKED
+2        | A2       | Stand A VIP              | 500000       | BOOKED
+3        | A3       | Stand A VIP              | 500000       | AVAILABLE
+4        | A4       | Stand A VIP              | 500000       | AVAILABLE
+5        | A5       | Stand A VIP              | 500000       | AVAILABLE
+6        | A6       | Stand A VIP              | 500000       | AVAILABLE
+7        | A7       | Stand A VIP              | 500000       | AVAILABLE
+8        | A8       | Stand A VIP              | 500000       | AVAILABLE
+9        | A9       | Stand A VIP              | 500000       | AVAILABLE
+10       | A10      | Stand A VIP              | 500000       | AVAILABLE
+11       | B1       | Stand B                  | 300000       | AVAILABLE
+12       | B2       | Stand B                  | 300000       | AVAILABLE
+13       | B3       | Stand B                  | 300000       | AVAILABLE
+14       | B4       | Stand B                  | 300000       | AVAILABLE
+15       | B5       | Stand B                  | 300000       | AVAILABLE
+16       | B6       | Stand B                  | 300000       | AVAILABLE
+17       | B7       | Stand B                  | 300000       | AVAILABLE
+18       | B8       | Stand B                  | 300000       | AVAILABLE
+19       | B9       | Stand B                  | 300000       | AVAILABLE
+20       | B10      | Stand B                  | 300000       | AVAILABLE
+
+=== SELLER ===
+1. Search Fan
+2. Create Fan
+3. Ticket sales
+4. View seat map and prices
+5. View customer booking history
+0. Back to dashboard
+Choose:
+```
+
+## Historical Numbered Flows
+
+The numbered flows below were captured on 2026-11-13 before the menu merge.
+Their Console blocks retain that historical menu. Use the current walkthroughs
+above and the [current menu map](../02_MENU_MAP.md) for the new navigation.
+
+
 - Inspect the Seat IDs, prices and availability before choosing seats.
 - Code path `MainController → BookingController → BrowseController.getSeatMap → BrowseService → SeatMapView`.
 - Press Enter after each input. A blank Enter submits an empty line.

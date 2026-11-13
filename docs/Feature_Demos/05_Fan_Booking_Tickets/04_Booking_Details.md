@@ -6,6 +6,35 @@
 
 [Data setup](../00_SETUP.md) · [Complete demo order](../01_DEMO_ORDER.md) · [Feature index](../README.md)
 
+## Current Flow — 2026-11-14
+
+- From the Fan dashboard choose `2. Tickets and bookings`, then `2. My bookings
+  and payments`, then `2. Booking details`. Select one of your Booking IDs.
+- The details include every ticket for that booking with its code and status.
+  A booking without issued tickets displays `No tickets yet.`
+- Each ticket belongs to one seat. Keep the code to present at the Gate.
+- The output below was captured on an isolated copied fixture after Seller
+  created and paid Booking #3 for Fan #2, with seat IDs 3 and 4.
+
+```text
+=== BOOKING #3 ===
+Customer: Tran Thi Binh (Fan #2)
+Match: Vietnam vs Thailand (#1)
+Seats: [Stand A VIP A3, Stand A VIP A4] | IDs: [3, 4]
+Total: 1000000 VND | Status: CONFIRMED
+Ticket #2 | Booking #3 | Vietnam vs Thailand | Stand A VIP A3 | Code T-3-3 | Status ISSUED
+Ticket #3 | Booking #3 | Vietnam vs Thailand | Stand A VIP A4 | Code T-3-4 | Status ISSUED
+
+=== FAN > MY BOOKINGS AND PAYMENTS ===
+1. Booking history
+2. Booking details
+3. Pay pending booking
+0. Back to tickets and bookings
+Choose:
+```
+
+The original numbered recordings below retain their earlier output.
+
 ## Demo prerequisites
 
 - Use CORE_DIR, COUNTER_DEMO_DIR or EXPIRY_DEMO_DIR as specified for each flow. The setup guide creates these copies. Follow the order so IDs and state match.

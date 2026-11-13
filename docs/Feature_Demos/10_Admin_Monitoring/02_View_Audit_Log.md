@@ -6,6 +6,29 @@
 
 [Data setup](../00_SETUP.md) · [Complete demo order](../01_DEMO_ORDER.md) · [Feature index](../README.md)
 
+## Current Flow — 2026-11-14
+
+- Administrator dashboard > `2. Manage system operations` > `5. Reports and audit
+  logs` > `2. Audit logs`.
+- Each row shows the Staff account's current name and role. A missing account is
+  shown as `Unknown staff #<id>` with role `UNKNOWN`.
+- Current audit creation covers refund review. The following isolated check
+  deliberately seeded one known Staff ID and one missing Staff ID.
+
+```text
+=== AUDIT LOGS ===
+2 | Name: Unknown staff #99999 | Role: UNKNOWN | REVIEW_REFUND | Target: REFUND #2 | Result: REJECTED | 2026-11-14T03:56:39.925082
+1 | Name: Administrator | Role: ADMIN | REVIEW_REFUND | Target: REFUND #1 | Result: APPROVED | 2026-11-14T03:56:39.924959
+
+=== ADMIN > REPORTS AND AUDIT LOGS ===
+1. System summary
+2. Audit logs
+0. Back to system operations
+Choose:
+```
+
+The original numbered recordings below retain their earlier output.
+
 ## Demo prerequisites
 
 - Use CORE_DIR, COUNTER_DEMO_DIR or EXPIRY_DEMO_DIR as specified for each flow. The setup guide creates these copies. Follow the order so IDs and state match.

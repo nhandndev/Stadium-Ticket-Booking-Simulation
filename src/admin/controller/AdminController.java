@@ -48,383 +48,395 @@ public class AdminController {
 
 
     public SystemSummaryDto getSystemSummary() {
-        requireAdmin();
+        this.requireAdmin();
         return this.adminService.getSystemSummary();
     }
 
     public List<AuditLog> getAuditLogs() {
-        requireAdmin();
+        this.requireAdmin();
         return this.adminService.getAuditLogs();
     }
 
     public void runAdminMenu() {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                switch (adminManagementView.showAdminMenu()) {
+                switch (this.adminManagementView.showAdminMenu()) {
                     case 0: return;
-                    case 1: runStadiumMenu(); break;
-                    case 2: runMatchMenu(); break;
-                    case 3: runAccountsMenu(); break;
-                    case 4: runRefundReviewMenu(); break;
-                    case 5: runReportsMenu(); break;
-                    default: adminManagementView.displayResult("Invalid choice.");
+                    case 1: this.runStadiumMenu(); break;
+                    case 2: this.runMatchMenu(); break;
+                    case 3: this.runAccountsMenu(); break;
+                    case 4: this.runRefundReviewMenu(); break;
+                    case 5: this.runReportsMenu(); break;
+                    default: this.adminManagementView.displayResult("Invalid choice.");
                 }
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
     private void runStadiumMenu() {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                int group = adminManagementView.showStadiumMenu();
+                int group = this.adminManagementView.showStadiumMenu();
                 if (group == 0) return;
-                if (group >= 1 && group <= 3) runVenueActions(group);
-                else adminManagementView.displayResult("Invalid choice.");
+                if (group >= 1 && group <= 3) this.runVenueActions(group);
+                else this.adminManagementView.displayResult("Invalid choice.");
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
+    // Groups: 1 = stadiums, 2 = sections, 3 = seats.
     private void runVenueActions(int group) {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                int action = adminManagementView.showVenueActionsMenu(group);
+                int action = this.adminManagementView.showVenueActionsMenu(group);
                 if (action == 0) return;
                 if (action < 1 || action > (group == 3 ? 7 : 5)) {
-                    adminManagementView.displayResult("Invalid choice.");
+                    this.adminManagementView.displayResult("Invalid choice.");
                     continue;
                 }
+                // Cases: 1-5 = stadiums, 6-10 = sections, 11-17 = seats.
                 int choice = action + (group - 1) * 5;
                 if (choice == 1) {
-                    stadium.dto.StadiumRequestDto request = adminManagementView.readStadiumRequest();
-                    if (request != null) adminManagementView.displayResult(stadiumController.createStadium(request));
+                    stadium.dto.StadiumRequestDto request = this.adminManagementView.readStadiumRequest();
+                    if (request != null) this.adminManagementView.displayResult(this.stadiumController.createStadium(request));
                     continue;
                 }
                 if (choice == 2) {
-                    adminManagementView.displayResult(stadiumController.getStadiums());
+                    this.adminManagementView.displayResult(this.stadiumController.getStadiums());
                     continue;
                 }
-                if (choice <= 7) adminManagementView.displayResult(stadiumController.getStadiums());
-                else displaySections(choice >= 13);
-                Long id = adminManagementView.readLong(
+                if (choice <= 7) this.adminManagementView.displayResult(this.stadiumController.getStadiums());
+                else this.displaySections(choice >= 13);
+                // ID types: cases 1-7 = Stadium, 8-12 = Section, 13-17 = Seat.
+                Long id = this.adminManagementView.readLong(
                         choice <= 7 ? "Stadium ID (0 = Back): " :
                         choice <= 12 ? "Section ID (0 = Back): " : "Seat ID (0 = Back): ");
                 if (id == null) continue;
                 switch (choice) {
-                    case 3: adminManagementView.displayResult(stadiumController.getStadiumDetails(id)); break;
+                    case 3: this.adminManagementView.displayResult(this.stadiumController.getStadiumDetails(id)); break;
                     case 4:
-                        stadium.dto.StadiumRequestDto request = adminManagementView.readStadiumRequest();
-                        if (request != null) adminManagementView.displayResult(stadiumController.updateStadium(id, request));
+                        stadium.dto.StadiumRequestDto request = this.adminManagementView.readStadiumRequest();
+                        if (request != null) this.adminManagementView.displayResult(this.stadiumController.updateStadium(id, request));
                         break;
                     case 5:
-                        if (adminManagementView.confirm("Delete stadium #" + id))
-                            adminManagementView.displayResult(stadiumController.deleteStadium(id));
+                        if (this.adminManagementView.confirm("Delete stadium #" + id))
+                            this.adminManagementView.displayResult(this.stadiumController.deleteStadium(id));
                         break;
                     case 6:
                     case 9:
-                        String name = adminManagementView.readText("Section name (Enter = Cancel): ");
-                        if (!name.isEmpty()) adminManagementView.displayResult(choice == 6
-                                ? stadiumController.createSection(id, name) : stadiumController.updateSection(id, name));
+                        String name = this.adminManagementView.readText("Section name (Enter = Cancel): ");
+                        // 6 = create section, 9 = update section.
+                        if (!name.isEmpty()) this.adminManagementView.displayResult(choice == 6
+                                ? this.stadiumController.createSection(id, name) : this.stadiumController.updateSection(id, name));
                         break;
-                    case 7: adminManagementView.displayResult(stadiumController.getSections(id)); break;
-                    case 8: adminManagementView.displayResult(stadiumController.getSectionDetails(id)); break;
+                    case 7: this.adminManagementView.displayResult(this.stadiumController.getSections(id)); break;
+                    case 8: this.adminManagementView.displayResult(this.stadiumController.getSectionDetails(id)); break;
                     case 10:
-                        if (adminManagementView.confirm("Delete section #" + id))
-                            adminManagementView.displayResult(stadiumController.deleteSection(id));
+                        if (this.adminManagementView.confirm("Delete section #" + id))
+                            this.adminManagementView.displayResult(this.stadiumController.deleteSection(id));
                         break;
                     case 11:
                     case 14:
-                        String row = adminManagementView.readText("Row label (Enter = Cancel): ");
+                        String row = this.adminManagementView.readText("Row label (Enter = Cancel): ");
                         if (row.isEmpty()) break;
-                        int number = adminManagementView.readInt("Seat number: ");
-                        adminManagementView.displayResult(choice == 11 ? stadiumController.createSeat(id, row, number)
-                                : stadiumController.updateSeat(id, row, number));
+                        int number = this.adminManagementView.readInt("Seat number: ");
+                        // 11 = create seat, 14 = update seat.
+                        this.adminManagementView.displayResult(choice == 11 ? this.stadiumController.createSeat(id, row, number)
+                                : this.stadiumController.updateSeat(id, row, number));
                         break;
-                    case 12: adminManagementView.displayResult(stadiumController.buildSeatMap(id)); break;
-                    case 13: adminManagementView.displayResult(stadiumController.getSeatDetails(id)); break;
+                    case 12: this.adminManagementView.displayResult(this.stadiumController.buildSeatMap(id)); break;
+                    case 13: this.adminManagementView.displayResult(this.stadiumController.getSeatDetails(id)); break;
                     case 15:
-                        if (adminManagementView.confirm("Delete seat #" + id))
-                            adminManagementView.displayResult(stadiumController.deleteSeat(id));
+                        if (this.adminManagementView.confirm("Delete seat #" + id))
+                            this.adminManagementView.displayResult(this.stadiumController.deleteSeat(id));
                         break;
-                    case 16: adminManagementView.displayResult(stadiumController.activateSeat(id)); break;
+                    case 16: this.adminManagementView.displayResult(this.stadiumController.activateSeat(id)); break;
                     case 17:
-                        if (adminManagementView.confirm("Deactivate seat #" + id))
-                            adminManagementView.displayResult(stadiumController.deactivateSeat(id));
+                        if (this.adminManagementView.confirm("Deactivate seat #" + id))
+                            this.adminManagementView.displayResult(this.stadiumController.deactivateSeat(id));
                         break;
                     default: break;
                 }
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
     private void displaySections(boolean includeSeats) {
-        for (stadium.dto.StadiumResponseDto stadium : stadiumController.getStadiums()) {
-            adminManagementView.displayResult(stadium);
-            for (stadium.model.Section section : stadiumController.getSections(stadium.getId())) {
-                adminManagementView.displayResult(section);
-                if (includeSeats) adminManagementView.displayResult(stadiumController.buildSeatMap(section.getId()));
+        for (stadium.dto.StadiumResponseDto stadium : this.stadiumController.getStadiums()) {
+            this.adminManagementView.displayResult(stadium);
+            for (stadium.model.Section section : this.stadiumController.getSections(stadium.getId())) {
+                this.adminManagementView.displayResult(section);
+                if (includeSeats) this.adminManagementView.displayResult(this.stadiumController.buildSeatMap(section.getId()));
             }
         }
     }
 
     private void runMatchMenu() {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                int group = adminManagementView.showMatchMenu();
+                int group = this.adminManagementView.showMatchMenu();
                 if (group == 0) return;
-                if (group >= 1 && group <= 3) runMatchActions(group);
-                else adminManagementView.displayResult("Invalid choice.");
+                if (group >= 1 && group <= 3) this.runMatchActions(group);
+                else this.adminManagementView.displayResult("Invalid choice.");
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
+    // Groups: 1 = matches, 2 = prices, 3 = sales.
     private void runMatchActions(int group) {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                int action = adminManagementView.showMatchActionsMenu(group);
+                int action = this.adminManagementView.showMatchActionsMenu(group);
                 if (action == 0) return;
                 if (action < 1 || action > (group == 3 ? 3 : 5)) {
-                    adminManagementView.displayResult("Invalid choice.");
+                    this.adminManagementView.displayResult("Invalid choice.");
                     continue;
                 }
+                // Cases: 1-5 = matches, 6-10 = prices, 11-13 = sales.
                 int choice = action + (group - 1) * 5;
                 if (choice == 1 || choice == 4) {
-                    adminManagementView.displayResult(stadiumController.getStadiums());
+                    this.adminManagementView.displayResult(this.stadiumController.getStadiums());
                 }
                 if (choice == 1) {
-                    match.dto.MatchRequestDto request = adminManagementView.readMatchRequest();
-                    if (request != null) adminManagementView.displayResult(matchController.createMatch(request));
+                    match.dto.MatchRequestDto request = this.adminManagementView.readMatchRequest();
+                    if (request != null) this.adminManagementView.displayResult(this.matchController.createMatch(request));
                     continue;
                 }
-                adminManagementView.displayResult(matchController.getMatches());
+                this.adminManagementView.displayResult(this.matchController.getMatches());
                 if (choice == 2) continue;
-                Long id = adminManagementView.readLong("Match ID (0 = Back): ");
+                Long id = this.adminManagementView.readLong("Match ID (0 = Back): ");
                 if (id == null) continue;
                 Long sectionId = null;
+                // Price actions needing a Section: 6 = create, 8 = details, 9 = update, 10 = delete.
                 if (choice == 6 || choice == 8 || choice == 9 || choice == 10) {
-                    adminManagementView.displayResult(stadiumController.getSections(matchController.getMatchDetails(id).getStadiumId()));
-                    sectionId = adminManagementView.readLong("Section ID (0 = Back): ");
+                    this.adminManagementView.displayResult(this.stadiumController.getSections(this.matchController.getMatchDetails(id).getStadiumId()));
+                    sectionId = this.adminManagementView.readLong("Section ID (0 = Back): ");
                     if (sectionId == null) continue;
                 }
                 switch (choice) {
-                    case 3: adminManagementView.displayResult(matchController.getMatchDetails(id)); break;
+                    case 3: this.adminManagementView.displayResult(this.matchController.getMatchDetails(id)); break;
                     case 4:
-                        match.dto.MatchRequestDto request = adminManagementView.readMatchRequest();
-                        if (request != null) adminManagementView.displayResult(matchController.updateMatch(id, request));
+                        match.dto.MatchRequestDto request = this.adminManagementView.readMatchRequest();
+                        if (request != null) this.adminManagementView.displayResult(this.matchController.updateMatch(id, request));
                         break;
                     case 5:
-                        if (adminManagementView.confirm("Delete match #" + id))
-                            adminManagementView.displayResult(matchController.deleteMatch(id));
+                        if (this.adminManagementView.confirm("Delete match #" + id))
+                            this.adminManagementView.displayResult(this.matchController.deleteMatch(id));
                         break;
                     case 6:
                     case 9:
-                        java.math.BigDecimal amount = adminManagementView.readAmount("Price in VND (0 = Cancel): ");
-                        if (amount != null) adminManagementView.displayResult(choice == 6
-                                ? matchController.createTicketPrice(new TicketPriceRequestDto(id, sectionId, amount))
-                                : matchController.updateTicketPrice(id, sectionId, amount));
+                        java.math.BigDecimal amount = this.adminManagementView.readAmount("Price in VND (0 = Cancel): ");
+                        // 6 = create price, 9 = update price.
+                        if (amount != null) this.adminManagementView.displayResult(choice == 6
+                                ? this.matchController.createTicketPrice(new TicketPriceRequestDto(id, sectionId, amount))
+                                : this.matchController.updateTicketPrice(id, sectionId, amount));
                         break;
-                    case 7: adminManagementView.displayResult(matchController.getTicketPrices(id)); break;
-                    case 8: adminManagementView.displayResult(matchController.getTicketPriceDetails(id, sectionId)); break;
+                    case 7: this.adminManagementView.displayResult(this.matchController.getTicketPrices(id)); break;
+                    case 8: this.adminManagementView.displayResult(this.matchController.getTicketPriceDetails(id, sectionId)); break;
                     case 10:
-                        if (adminManagementView.confirm("Delete price for match #" + id + ", section #" + sectionId))
-                            adminManagementView.displayResult(matchController.deleteTicketPrice(id, sectionId));
+                        if (this.adminManagementView.confirm("Delete price for match #" + id + ", section #" + sectionId))
+                            this.adminManagementView.displayResult(this.matchController.deleteTicketPrice(id, sectionId));
                         break;
-                    case 11: adminManagementView.displayResult(matchController.openTicketSales(id)); break;
+                    case 11: this.adminManagementView.displayResult(this.matchController.openTicketSales(id)); break;
                     case 12:
-                        if (adminManagementView.confirm("Close sales for match #" + id))
-                            adminManagementView.displayResult(matchController.closeTicketSales(id));
+                        if (this.adminManagementView.confirm("Close sales for match #" + id))
+                            this.adminManagementView.displayResult(this.matchController.closeTicketSales(id));
                         break;
-                    case 13: adminManagementView.displayResult(matchController.getTicketSalesStatus(id)); break;
+                    case 13: this.adminManagementView.displayResult(this.matchController.getTicketSalesStatus(id)); break;
                     default: break;
                 }
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (java.time.format.DateTimeParseException e) {
-                adminManagementView.displayResult("Use yyyy-MM-ddTHH:mm, for example 2030-11-15T19:00.");
+                this.adminManagementView.displayResult("Use yyyy-MM-ddTHH:mm, for example 2030-11-15T19:00.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
     private void runAccountsMenu() {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                int choice = adminManagementView.showAccountsMenu();
+                int choice = this.adminManagementView.showAccountsMenu();
                 if (choice == 0) return;
-                if (choice == 1 || choice == 2) runAccountMenu(choice == 2);
-                else adminManagementView.displayResult("Invalid choice.");
+                // 1 = Fan accounts, 2 = Staff accounts.
+                if (choice == 1 || choice == 2) this.runAccountMenu(choice == 2);
+                else this.adminManagementView.displayResult("Invalid choice.");
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
     private void runReportsMenu() {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                switch (adminManagementView.showReportsMenu()) {
+                switch (this.adminManagementView.showReportsMenu()) {
                     case 0: return;
-                    case 1: adminManagementView.showSystemSummary(getSystemSummary()); break;
-                    case 2: adminManagementView.showAuditLogs(getAuditLogs()); break;
-                    default: adminManagementView.displayResult("Invalid choice.");
+                    case 1: this.adminManagementView.showSystemSummary(this.getSystemSummary()); break;
+                    case 2: this.adminManagementView.showAuditLogs(this.getAuditLogs(), this.accountAdminController.getStaffs()); break;
+                    default: this.adminManagementView.displayResult("Invalid choice.");
                 }
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
     private void runStaffRoles() {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                int choice = adminManagementView.showStaffRoleMenu();
+                // 1 = assign role, 2 = change role, 3 = revoke role.
+                int choice = this.adminManagementView.showStaffRoleMenu();
                 if (choice == 0) return;
                 if (choice < 1 || choice > 3) {
-                    adminManagementView.displayResult("Invalid choice.");
+                    this.adminManagementView.displayResult("Invalid choice.");
                     continue;
                 }
-                adminManagementView.displayResult(accountAdminController.getStaffs());
-                Long id = adminManagementView.readLong("Staff ID (0 = Back): ");
+                this.adminManagementView.displayResult(this.accountAdminController.getStaffs());
+                Long id = this.adminManagementView.readLong("Staff ID (0 = Back): ");
                 if (id == null) continue;
                 if (choice == 3) {
-                    if (adminManagementView.confirm("Revoke role from staff #" + id))
-                        adminManagementView.displayResult(accountAdminController.revokeRole(id));
+                    if (this.adminManagementView.confirm("Revoke role from staff #" + id))
+                        this.adminManagementView.displayResult(this.accountAdminController.revokeRole(id));
                 } else {
-                    UserRole role = adminManagementView.readRole(false);
-                    if (role != null) adminManagementView.displayResult(choice == 1
-                            ? accountAdminController.assignRole(id, role) : accountAdminController.changeRole(id, role));
+                    UserRole role = this.adminManagementView.readRole(false);
+                    if (role != null) this.adminManagementView.displayResult(choice == 1
+                            ? this.accountAdminController.assignRole(id, role) : this.accountAdminController.changeRole(id, role));
                 }
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
     private void runAccountMenu(boolean staff) {
         while (true) {
-            requireAdmin();
+            this.requireAdmin();
             try {
-                int choice = staff ? adminManagementView.showStaffManagementMenu() : adminManagementView.showFanManagementMenu();
+                int choice = staff ? this.adminManagementView.showStaffManagementMenu() : this.adminManagementView.showFanManagementMenu();
                 if (choice == 0) return;
                 if (choice < 1 || choice > 9) {
-                    adminManagementView.displayResult("Invalid choice.");
+                    this.adminManagementView.displayResult("Invalid choice.");
                     continue;
                 }
+                // 9 = role management for Staff, account deletion for Fan.
                 if (staff && choice == 9) {
-                    runStaffRoles();
+                    this.runStaffRoles();
                     continue;
                 }
                 if (choice == 1) {
-                    admin.dto.AccountRequestDto request = adminManagementView.readAccountRequest(staff ? null : UserRole.FAN, true);
-                    if (request != null) adminManagementView.displayResult(staff
-                            ? accountAdminController.createStaffAccount(request) : accountAdminController.createFanAccount(request));
+                    admin.dto.AccountRequestDto request = this.adminManagementView.readAccountRequest(staff ? null : UserRole.FAN, true);
+                    if (request != null) this.adminManagementView.displayResult(staff
+                            ? this.accountAdminController.createStaffAccount(request) : this.accountAdminController.createFanAccount(request));
                     continue;
                 }
                 if (choice == 4) {
-                    String keyword = adminManagementView.readText("Keyword (Enter = All): ");
-                    adminManagementView.displayResult(staff ? accountAdminController.searchStaff(keyword)
-                            : accountAdminController.searchFans(keyword));
+                    String keyword = this.adminManagementView.readText("Keyword (Enter = All): ");
+                    this.adminManagementView.displayResult(staff ? this.accountAdminController.searchStaff(keyword)
+                            : this.accountAdminController.searchFans(keyword));
                     continue;
                 }
                 if (choice == 5) {
-                    UserRole role = staff ? adminManagementView.readRole(true) : null;
-                    UserStatus status = adminManagementView.readStatus();
-                    adminManagementView.displayResult(staff ? accountAdminController.filterStaff(role, status)
-                            : accountAdminController.filterFans(status));
+                    UserRole role = staff ? this.adminManagementView.readRole(true) : null;
+                    UserStatus status = this.adminManagementView.readStatus();
+                    this.adminManagementView.displayResult(staff ? this.accountAdminController.filterStaff(role, status)
+                            : this.accountAdminController.filterFans(status));
                     continue;
                 }
-                adminManagementView.displayResult(staff ? accountAdminController.getStaffs() : accountAdminController.getFans());
+                this.adminManagementView.displayResult(staff ? this.accountAdminController.getStaffs() : this.accountAdminController.getFans());
                 if (choice == 2) continue;
-                Long id = adminManagementView.readLong(staff ? "Staff ID (0 = Back): " : "Fan ID (0 = Back): ");
+                Long id = this.adminManagementView.readLong(staff ? "Staff ID (0 = Back): " : "Fan ID (0 = Back): ");
                 if (id == null) continue;
                 switch (choice) {
-                    case 3: adminManagementView.displayResult(staff ? accountAdminController.getStaffDetails(id)
-                            : accountAdminController.getFanDetails(id)); break;
+                    case 3: this.adminManagementView.displayResult(staff ? this.accountAdminController.getStaffDetails(id)
+                            : this.accountAdminController.getFanDetails(id)); break;
                     case 6:
-                        admin.dto.AccountRequestDto request = adminManagementView.readAccountRequest(staff ? null : UserRole.FAN, false);
-                        if (request != null) adminManagementView.displayResult(staff
-                                ? accountAdminController.updateStaff(id, request) : accountAdminController.updateFan(id, request));
+                        admin.dto.AccountRequestDto request = this.adminManagementView.readAccountRequest(staff ? null : UserRole.FAN, false);
+                        if (request != null) this.adminManagementView.displayResult(staff
+                                ? this.accountAdminController.updateStaff(id, request) : this.accountAdminController.updateFan(id, request));
                         break;
-                    case 7: adminManagementView.displayResult(staff ? accountAdminController.activateStaff(id)
-                            : accountAdminController.activateFan(id)); break;
+                    case 7: this.adminManagementView.displayResult(staff ? this.accountAdminController.activateStaff(id)
+                            : this.accountAdminController.activateFan(id)); break;
                     case 8:
-                        if (adminManagementView.confirm("Deactivate account #" + id))
-                            adminManagementView.displayResult(staff ? accountAdminController.deactivateStaff(id)
-                                    : accountAdminController.deactivateFan(id));
+                        if (this.adminManagementView.confirm("Deactivate account #" + id))
+                            this.adminManagementView.displayResult(staff ? this.accountAdminController.deactivateStaff(id)
+                                    : this.accountAdminController.deactivateFan(id));
                         break;
                     case 9:
-                        if (adminManagementView.confirm("Delete fan #" + id))
-                            adminManagementView.displayResult(accountAdminController.deleteFan(id));
+                        if (this.adminManagementView.confirm("Delete fan #" + id))
+                            this.adminManagementView.displayResult(this.accountAdminController.deleteFan(id));
                         break;
                     default: break;
                 }
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
     private void runRefundReviewMenu() {
         while (true) {
-            UserResponseDto admin = requireAdmin();
+            UserResponseDto admin = this.requireAdmin();
             try {
-                List<refund.model.RefundRequest> pending = refundController.getPendingRefunds();
-                adminManagementView.displayResult(pending);
+                List<refund.model.RefundRequest> pending = this.refundController.getPendingRefunds();
+                this.adminManagementView.displayResult(pending);
                 if (pending.isEmpty()) return;
-                int choice = adminManagementView.showRefundReviewMenu();
+                int choice = this.adminManagementView.showRefundReviewMenu();
                 if (choice == 0) return;
                 if (choice != 1) {
-                    adminManagementView.displayResult("Invalid choice.");
+                    this.adminManagementView.displayResult("Invalid choice.");
                     continue;
                 }
-                refund.dto.RefundReviewRequestDto request = adminManagementView.readRefundReviewRequest(admin.getId());
+                refund.dto.RefundReviewRequestDto request = this.adminManagementView.readRefundReviewRequest(admin.getId());
                 if (request == null) continue;
-                RefundResponseDto result = refundController.reviewRefund(request);
-                auditLogRepository.append(new AuditLog(null, admin.getId(), "REVIEW_REFUND", "REFUND",
+                RefundResponseDto result = this.refundController.reviewRefund(request);
+                this.auditLogRepository.append(new AuditLog(null, admin.getId(), "REVIEW_REFUND", "REFUND",
                         result.getRequestId(), result.getStatus().name(), LocalDateTime.now()));
-                adminManagementView.displayResult(result);
+                this.adminManagementView.displayResult(result);
             } catch (NumberFormatException e) {
-                adminManagementView.displayResult("Please enter a valid number.");
+                this.adminManagementView.displayResult("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                adminManagementView.displayResult(e.getMessage());
+                this.adminManagementView.displayResult(e.getMessage());
             }
         }
     }
 
     private UserResponseDto requireAdmin() {
-        UserResponseDto user = authController.getCurrentUser();
+        UserResponseDto user = this.authController.getCurrentUser();
         if (user == null || user.getRole() != UserRole.ADMIN) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Admin login required");
         }

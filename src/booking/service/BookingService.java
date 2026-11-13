@@ -108,13 +108,13 @@ public class BookingService {
     }
 
     public BigDecimal calculateTotal(Long matchId, List<Long> seatIds) {
-        expirePendingBookings();
-        validateTicketLimit(seatIds);
-        Match match = requireOpenMatch(matchId);
+        this.expirePendingBookings();
+        this.validateTicketLimit(seatIds);
+        Match match = this.requireOpenMatch(matchId);
         BigDecimal total = BigDecimal.ZERO;
         for (Long seatId : seatIds) {
-            Seat seat = requireUsableSeat(match, seatId);
-            MatchSeat matchSeat = matchSeatRepository.find(matchId, seatId);
+            Seat seat = this.requireUsableSeat(match, seatId);
+            MatchSeat matchSeat = this.matchSeatRepository.find(matchId, seatId);
             if (matchSeat == null) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "Seat ID " + seatId + " has no inventory for Match #" + matchId
@@ -130,7 +130,7 @@ public class BookingService {
                         "Seat ID " + seatId + " is " + matchSeat.getStatus()
                                 + " for Match #" + matchId + ". Choose an AVAILABLE seat.");
             }
-            TicketPrice price = ticketPriceRepository.findPrice(matchId,
+            TicketPrice price = this.ticketPriceRepository.findPrice(matchId,
                     seat.getSectionId());
             if (price == null || price.getAmount() == null
                     || price.getAmount().signum() <= 0) {
@@ -148,71 +148,71 @@ public class BookingService {
             throw new AppException(ErrorCode.INVALID_INPUT, "Booking request is required");
         }
         synchronized (MatchSeatRepository.class) {
-            requireActiveFan(request.getFanId());
-            return savePendingBooking(request);
+            this.requireActiveFan(request.getFanId());
+            return this.savePendingBooking(request);
         }
     }
 
     public BookingResponseDto createBookingForFan(Long sellerId,
                                                   BookingRequestDto request) {
-        requirePositive(sellerId, "Seller ID");
-        return createBooking(request);
+        this.requirePositive(sellerId, "Seller ID");
+        return this.createBooking(request);
     }
 
     public BookingResponseDto createBookingForCustomer(Long sellerId,
                                                        BookingRequestDto request) {
-        requirePositive(sellerId, "Seller ID");
+        this.requirePositive(sellerId, "Seller ID");
         if (request == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Booking request is required");
         }
         synchronized (MatchSeatRepository.class) {
-            if (request.getFanId() != null) requireActiveFan(request.getFanId());
-            return savePendingBooking(request);
+            if (request.getFanId() != null) this.requireActiveFan(request.getFanId());
+            return this.savePendingBooking(request);
         }
     }
 
     public void validateFanAccount(Long fanId) {
-        requireActiveFan(fanId);
+        this.requireActiveFan(fanId);
     }
 
     private BookingResponseDto savePendingBooking(BookingRequestDto request) {
-        BigDecimal total = calculateTotal(request.getMatchId(), request.getSeatIds());
+        BigDecimal total = this.calculateTotal(request.getMatchId(), request.getSeatIds());
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime expiresAt = createdAt.plusMinutes(30);
-        Match match = requireOpenMatch(request.getMatchId());
+        Match match = this.requireOpenMatch(request.getMatchId());
         if (match.getStartTime().isBefore(expiresAt)) expiresAt = match.getStartTime();
-        Booking booking = bookingRepository.save(new Booking(null, request.getFanId(),
+        Booking booking = this.bookingRepository.save(new Booking(null, request.getFanId(),
                 request.getMatchId(), request.getSeatIds(), total, BookingStatus.PENDING,
                 createdAt, expiresAt));
         try {
-            if (!matchSeatRepository.holdSeatsSynchronized(booking.getId(), booking.getMatchId(),
+            if (!this.matchSeatRepository.holdSeatsSynchronized(booking.getId(), booking.getMatchId(),
                     booking.getSeatIds())) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "The selected seats are no longer available. Choose available seats again.");
             }
         } catch (AppException e) {
             booking.cancel();
-            bookingRepository.update(booking);
-            matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+            this.bookingRepository.update(booking);
+            this.matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
                     booking.getSeatIds());
             throw e;
         }
-        return toBookingResponse(booking);
+        return this.toBookingResponse(booking);
     }
 
     public void expirePendingBookings() {
         synchronized (MatchSeatRepository.class) {
             LocalDateTime now = LocalDateTime.now();
-            for (Booking booking : bookingRepository.findAll()) {
+            for (Booking booking : this.bookingRepository.findAll()) {
                 if (booking.isExpired(now)) {
-                    Payment payment = paymentRepository.findByBookingId(booking.getId());
+                    Payment payment = this.paymentRepository.findByBookingId(booking.getId());
                     if (payment != null && payment.getStatus() == PaymentStatus.SUCCESS) continue;
                     booking.expire();
-                    bookingRepository.update(booking);
+                    this.bookingRepository.update(booking);
                 }
                 if (booking.getStatus() == BookingStatus.EXPIRED
                         || booking.getStatus() == BookingStatus.CANCELLED) {
-                    matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(),
+                    this.matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(),
                             booking.getMatchId(), booking.getSeatIds());
                 }
             }
@@ -220,13 +220,13 @@ public class BookingService {
     }
 
     public PaymentResponseDto makeOnlinePayment(PaymentRequestDto request) {
-        return completePayment(request, PaymentMethod.ONLINE);
+        return this.completePayment(request, PaymentMethod.ONLINE);
     }
 
     public PaymentResponseDto acceptOfflinePayment(Long sellerId,
                                                    PaymentRequestDto request) {
-        requirePositive(sellerId, "Seller ID");
-        return completePayment(request, PaymentMethod.OFFLINE_CASH);
+        this.requirePositive(sellerId, "Seller ID");
+        return this.completePayment(request, PaymentMethod.OFFLINE_CASH);
     }
 
     private PaymentResponseDto completePayment(PaymentRequestDto request,
@@ -235,8 +235,8 @@ public class BookingService {
             throw new AppException(ErrorCode.INVALID_INPUT, "Payment request is required");
         }
         synchronized (MatchSeatRepository.class) {
-            expirePendingBookings();
-            Booking booking = requireBooking(request.getBookingId());
+            this.expirePendingBookings();
+            Booking booking = this.requireBooking(request.getBookingId());
             if (booking.getStatus() == BookingStatus.EXPIRED) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "Booking #" + booking.getId() + " has expired. The payment window is at most 30 minutes. Create a new booking.");
@@ -248,7 +248,7 @@ public class BookingService {
             if (booking.getTotalAmount().compareTo(request.getAmount()) != 0) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Payment amount mismatch");
             }
-            Payment existing = paymentRepository.findByBookingId(booking.getId());
+            Payment existing = this.paymentRepository.findByBookingId(booking.getId());
             if (existing != null) {
                 if (existing.getMethod() != method) {
                     throw new AppException(ErrorCode.INVALID_INPUT,
@@ -256,11 +256,11 @@ public class BookingService {
                 }
                 if (existing.getStatus() == PaymentStatus.SUCCESS
                         && booking.getStatus() == BookingStatus.CONFIRMED) {
-                    if (method == PaymentMethod.ONLINE) issueTickets(booking.getId());
-                    return toPaymentResponse(existing);
+                    if (method == PaymentMethod.ONLINE) this.issueTickets(booking.getId());
+                    return this.toPaymentResponse(existing);
                 }
                 if (existing.getStatus() == PaymentStatus.FAILED) {
-                    return toPaymentResponse(existing);
+                    return this.toPaymentResponse(existing);
                 }
                 throw new AppException(ErrorCode.CSV_ERROR,
                         "Incomplete checkout requires reconciliation");
@@ -271,67 +271,67 @@ public class BookingService {
             }
             if (booking.isExpired(LocalDateTime.now())) {
                 booking.expire();
-                bookingRepository.update(booking);
-                matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                this.bookingRepository.update(booking);
+                this.matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
                         booking.getSeatIds());
                 throw new AppException(ErrorCode.INVALID_INPUT, "Booking has expired; payment was not recorded.");
             }
-            if (booking.getFanId() != null) requireActiveFan(booking.getFanId());
-            Match match = requireOpenMatch(booking.getMatchId());
+            if (booking.getFanId() != null) this.requireActiveFan(booking.getFanId());
+            Match match = this.requireOpenMatch(booking.getMatchId());
             for (Long seatId : booking.getSeatIds()) {
-                requireUsableSeat(match, seatId);
+                this.requireUsableSeat(match, seatId);
             }
-            Payment payment = paymentRepository.save(new Payment(null,
+            Payment payment = this.paymentRepository.save(new Payment(null,
                     booking.getId(), booking.getTotalAmount(), method,
                     PaymentStatus.PENDING));
             if (method == PaymentMethod.ONLINE
-                    && !mockPaymentService.processPayment(booking.getId(),
+                    && !this.mockPaymentService.processPayment(booking.getId(),
                     booking.getTotalAmount())) {
                 payment.markFailed();
-                paymentRepository.update(payment);
+                this.paymentRepository.update(payment);
                 booking.cancel();
-                bookingRepository.update(booking);
-                matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                this.bookingRepository.update(booking);
+                this.matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
                         booking.getSeatIds());
-                recordFailedPayment(booking, "Mock payment failed");
-                return toPaymentResponse(payment);
+                this.recordFailedPayment(booking, "Mock payment failed");
+                return this.toPaymentResponse(payment);
             }
-            BookingTransaction transaction = strategyFactory
+            BookingTransaction transaction = this.strategyFactory
                     .create(SyncMechanism.SYNCHRONIZED)
                     .execute(booking.getId(), booking.getFanId(), booking.getMatchId(),
                             booking.getSeatIds());
             if (transaction.getStatus() != TransactionStatus.SUCCESS) {
                 payment.markFailed();
-                paymentRepository.update(payment);
+                this.paymentRepository.update(payment);
                 booking.cancel();
-                bookingRepository.update(booking);
-                matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+                this.bookingRepository.update(booking);
+                this.matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
                         booking.getSeatIds());
                 transaction.attachBooking(booking.getId());
-                transactionRepository.save(transaction);
-                return toPaymentResponse(payment);
+                this.transactionRepository.save(transaction);
+                return this.toPaymentResponse(payment);
             }
             transaction.attachBooking(booking.getId());
             payment.markSuccess();
-            paymentRepository.update(payment);
+            this.paymentRepository.update(payment);
             booking.confirm();
-            bookingRepository.update(booking);
-            if (method == PaymentMethod.ONLINE) issueTickets(booking.getId());
-            transactionRepository.save(transaction);
-            return toPaymentResponse(payment);
+            this.bookingRepository.update(booking);
+            if (method == PaymentMethod.ONLINE) this.issueTickets(booking.getId());
+            this.transactionRepository.save(transaction);
+            return this.toPaymentResponse(payment);
         }
     }
 
     public List<TicketResponseDto> issueTickets(Long bookingId) {
         synchronized (TicketRepository.class) {
-            Booking booking = requireBooking(bookingId);
-            Payment payment = paymentRepository.findByBookingId(bookingId);
+            Booking booking = this.requireBooking(bookingId);
+            Payment payment = this.paymentRepository.findByBookingId(bookingId);
             if (booking.getStatus() != BookingStatus.CONFIRMED || payment == null
                     || payment.getStatus() != PaymentStatus.SUCCESS) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "Confirmed paid booking is required before issuing tickets");
             }
-            List<Ticket> existing = ticketRepository.findByBookingId(bookingId);
+            List<Ticket> existing = this.ticketRepository.findByBookingId(bookingId);
             Set<Long> seenSeats = new HashSet<>();
             for (Ticket ticket : existing) {
                 if (!ticket.getMatchId().equals(booking.getMatchId())
@@ -349,62 +349,71 @@ public class BookingService {
                 }
                 if (ticket == null) {
                     String code = "T-" + bookingId + "-" + seatId;
-                    if (ticketRepository.findByCode(code) != null) {
+                    if (this.ticketRepository.findByCode(code) != null) {
                         throw new AppException(ErrorCode.CSV_ERROR,
                                 "Ticket code already belongs to another ticket");
                     }
                     ticket = new Ticket(null, bookingId, booking.getMatchId(),
                             seatId, code, TicketStatus.PENDING);
                     ticket.issue();
-                    ticketRepository.save(ticket);
+                    this.ticketRepository.save(ticket);
                 } else if (ticket.getStatus() == TicketStatus.PENDING) {
                     ticket.issue();
-                    ticketRepository.update(ticket);
+                    this.ticketRepository.update(ticket);
                 } else if (ticket.getStatus() == TicketStatus.CANCELLED) {
                     throw new AppException(ErrorCode.INVALID_INPUT,
                             "Cancelled ticket cannot be reissued");
                 }
-                result.add(toTicketResponse(ticket));
+                result.add(this.toTicketResponse(ticket));
             }
             return result;
         }
     }
 
     public List<BookingResponseDto> getMyBookings(Long fanId) {
-        expirePendingBookings();
-        requirePositive(fanId, "Fan ID");
+        this.expirePendingBookings();
+        this.requirePositive(fanId, "Fan ID");
         List<BookingResponseDto> result = new ArrayList<>();
-        for (Booking booking : bookingRepository.findByFanId(fanId)) {
-            result.add(toBookingResponse(booking));
+        for (Booking booking : this.bookingRepository.findByFanId(fanId)) {
+            result.add(this.toBookingResponse(booking));
         }
         return result;
     }
 
+    public List<TicketResponseDto> getTicketsForBooking(Long bookingId) {
+        this.requireBooking(bookingId);
+        List<TicketResponseDto> tickets = new ArrayList<>();
+        for (Ticket ticket : this.ticketRepository.findByBookingId(bookingId)) {
+            tickets.add(this.toTicketResponse(ticket));
+        }
+        return tickets;
+    }
+
     public BookingResponseDto getBookingDetails(Long bookingId) {
-        expirePendingBookings();
-        return toBookingResponse(requireBooking(bookingId));
+        this.expirePendingBookings();
+        return this.toBookingResponse(this.requireBooking(bookingId));
     }
 
     public BookingResponseDto cancelBooking(Long bookingId) {
         synchronized (MatchSeatRepository.class) {
-            expirePendingBookings();
-            Booking booking = requireBooking(bookingId);
+            this.expirePendingBookings();
+            Booking booking = this.requireBooking(bookingId);
             if (booking.getStatus() != BookingStatus.PENDING
-                    || paymentRepository.findByBookingId(bookingId) != null) {
+                    || this.paymentRepository.findByBookingId(bookingId) != null) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "Only an unpaid pending booking can be cancelled directly. Paid bookings need a refund request.");
             }
             booking.cancel();
-            bookingRepository.update(booking);
-            matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
+            this.bookingRepository.update(booking);
+            this.matchSeatRepository.releaseHeldSeatsSynchronized(booking.getId(), booking.getMatchId(),
                     booking.getSeatIds());
-            return toBookingResponse(booking);
+            return this.toBookingResponse(booking);
         }
     }
 
     private Match requireOpenMatch(Long matchId) {
-        requirePositive(matchId, "Match ID");
-        Match match = matchRepository.findById(matchId);
+        this.requirePositive(matchId, "Match ID");
+        Match match = this.matchRepository.findById(matchId);
         if (match == null || match.getSaleStatus() != SaleStatus.OPEN
                 || match.getStartTime() == null
                 || !match.getStartTime().isAfter(LocalDateTime.now())) {
@@ -415,8 +424,8 @@ public class BookingService {
     }
 
     private Seat requireUsableSeat(Match match, Long seatId) {
-        requirePositive(seatId, "Seat ID");
-        Seat seat = seatRepository.findById(seatId);
+        this.requirePositive(seatId, "Seat ID");
+        Seat seat = this.seatRepository.findById(seatId);
         if (seat == null) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Seat ID " + seatId + " does not exist. Enter a numeric SEAT ID from the displayed map.");
@@ -425,7 +434,7 @@ public class BookingService {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Seat ID " + seatId + " is INACTIVE and cannot be sold");
         }
-        Section section = sectionRepository.findById(seat.getSectionId());
+        Section section = this.sectionRepository.findById(seat.getSectionId());
         if (section == null || !section.getStadiumId().equals(match.getStadiumId())) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Seat ID " + seatId + " belongs to another stadium. Choose a seat from Match #"
@@ -435,8 +444,8 @@ public class BookingService {
     }
 
     private Fan requireActiveFan(Long fanId) {
-        requirePositive(fanId, "Fan ID");
-        Fan fan = fanRepository.findById(fanId);
+        this.requirePositive(fanId, "Fan ID");
+        Fan fan = this.fanRepository.findById(fanId);
         if (fan == null) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Fan account #" + fanId + " does not exist");
@@ -450,8 +459,8 @@ public class BookingService {
     }
 
     private Booking requireBooking(Long bookingId) {
-        requirePositive(bookingId, "Booking ID");
-        Booking booking = bookingRepository.findById(bookingId);
+        this.requirePositive(bookingId, "Booking ID");
+        Booking booking = this.bookingRepository.findById(bookingId);
         if (booking == null) throw new AppException(ErrorCode.NOT_FOUND,
                 "Booking not found");
         return booking;
@@ -470,16 +479,16 @@ public class BookingService {
                 SyncMechanism.SYNCHRONIZED);
         transaction.markFailed(reason, LocalDateTime.now());
         transaction.attachBooking(booking.getId());
-        transactionRepository.save(transaction);
+        this.transactionRepository.save(transaction);
     }
 
     private BookingResponseDto toBookingResponse(Booking booking) {
-        Fan fan = booking.getFanId() == null ? null : fanRepository.findById(booking.getFanId());
-        Match match = matchRepository.findById(booking.getMatchId());
+        Fan fan = booking.getFanId() == null ? null : this.fanRepository.findById(booking.getFanId());
+        Match match = this.matchRepository.findById(booking.getMatchId());
         List<String> labels = new ArrayList<>();
         for (Long seatId : booking.getSeatIds()) {
-            Seat seat = seatRepository.findById(seatId);
-            Section section = seat == null ? null : sectionRepository.findById(seat.getSectionId());
+            Seat seat = this.seatRepository.findById(seatId);
+            Section section = seat == null ? null : this.sectionRepository.findById(seat.getSectionId());
             labels.add(seat == null ? "Seat #" + seatId :
                     (section == null ? "" : section.getName() + " ") + seat.getRowLabel() + seat.getSeatNumber());
         }
@@ -498,14 +507,18 @@ public class BookingService {
     }
 
     private TicketResponseDto toTicketResponse(Ticket ticket) {
-        Match match = matchRepository.findById(ticket.getMatchId());
-        Seat seat = seatRepository.findById(ticket.getSeatId());
-        Section section = seat == null ? null : sectionRepository.findById(seat.getSectionId());
+        Booking booking = this.requireBooking(ticket.getBookingId());
+        Fan fan = booking.getFanId() == null ? null : this.fanRepository.findById(booking.getFanId());
+        Match match = this.matchRepository.findById(ticket.getMatchId());
+        Seat seat = this.seatRepository.findById(ticket.getSeatId());
+        Section section = seat == null ? null : this.sectionRepository.findById(seat.getSectionId());
         return new TicketResponseDto(ticket.getId(), ticket.getBookingId(),
                 ticket.getMatchId(), ticket.getSeatId(), ticket.getTicketCode(),
                 ticket.getStatus(), ticket.getCheckedInAt(),
                 match == null ? "Match #" + ticket.getMatchId() : match.getHomeTeam() + " vs " + match.getAwayTeam(),
                 seat == null ? "Seat #" + ticket.getSeatId() :
-                        (section == null ? "" : section.getName() + " ") + seat.getRowLabel() + seat.getSeatNumber());
+                        (section == null ? "" : section.getName() + " ") + seat.getRowLabel() + seat.getSeatNumber(),
+                fan == null ? "None" : fan.getFullName(),
+                fan == null ? "None" : fan.getPhone());
     }
 }

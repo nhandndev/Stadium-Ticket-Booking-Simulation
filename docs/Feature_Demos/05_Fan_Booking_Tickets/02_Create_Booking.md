@@ -1,5 +1,9 @@
 # Create Booking
 
+UI update on 2026-11-14 — Declining online payment also prints `Booking ID: <id>`
+before the payment-deadline message. Use that ID for later payment or the Seller
+counter. The dated Console captures below retain their original recorded output.
+
 - Select one to four seats and create PENDING. The quote and owned seat holds last until expiresAt, up to 30 minutes or kick-off.
 - Code path `MainController → BookingController.createBooking → BookingService.createBooking → BookingRepository`. Pay Now continues through `makeOnlinePayment`.
 - Press Enter after each input. A blank Enter submits an empty line.

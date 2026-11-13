@@ -16,7 +16,7 @@ public class MatchRepository extends CsvRepository<Match> {
 
     public List<Match> findUpcoming() {
         LocalDateTime now = LocalDateTime.now();
-        return findByCondition(match -> !match.getStartTime().isBefore(now));
+        return this.findByCondition(match -> !match.getStartTime().isBefore(now));
     }
 
     @Override

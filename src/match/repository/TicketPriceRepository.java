@@ -22,7 +22,7 @@ public class TicketPriceRepository {
     }
 
     public TicketPrice findPrice(Long matchId, Long sectionId) {
-        for (TicketPrice price : findByMatchId(matchId)) {
+        for (TicketPrice price : this.findByMatchId(matchId)) {
             if (price.getSectionId().equals(sectionId)) {
                 return price;
             }
@@ -32,20 +32,20 @@ public class TicketPriceRepository {
 
     public List<TicketPrice> findByMatchId(Long matchId) {
         List<TicketPrice> result = new ArrayList<>();
-        if (!Files.exists(filePath)) {
+        if (!Files.exists(this.filePath)) {
             return result;
         }
         try {
-            for (String line : Files.readAllLines(filePath, StandardCharsets.UTF_8)) {
+            for (String line : Files.readAllLines(this.filePath, StandardCharsets.UTF_8)) {
                 if (!line.trim().isEmpty()) {
-                    TicketPrice p = parseLine(line);
+                    TicketPrice p = this.parseLine(line);
                     if (matchId == null || p.getMatchId().equals(matchId)) {
                         result.add(p);
                     }
                 }
             }
         } catch (IOException e) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Cannot read " + filePath);
+            throw new AppException(ErrorCode.CSV_ERROR, "Cannot read " + this.filePath);
         }
         return result;
     }
@@ -54,7 +54,7 @@ public class TicketPriceRepository {
         if (price == null || price.getMatchId() == null || price.getSectionId() == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid price");
         }
-        List<TicketPrice> all = findByMatchId(null);
+        List<TicketPrice> all = this.findByMatchId(null);
         for (TicketPrice p : all) {
             if (p.getMatchId().equals(price.getMatchId()) && p.getSectionId().equals(price.getSectionId())) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Price already exists");
@@ -63,11 +63,11 @@ public class TicketPriceRepository {
         all.add(price);
         try {
             List<String> lines = new ArrayList<>();
-            for (TicketPrice p : all) lines.add(formatLine(p));
-            if (filePath.getParent() != null) Files.createDirectories(filePath.getParent());
-            Files.write(filePath, lines, StandardCharsets.UTF_8);
+            for (TicketPrice p : all) lines.add(this.formatLine(p));
+            if (this.filePath.getParent() != null) Files.createDirectories(this.filePath.getParent());
+            Files.write(this.filePath, lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Cannot write " + filePath);
+            throw new AppException(ErrorCode.CSV_ERROR, "Cannot write " + this.filePath);
         }
         return price;
     }
@@ -76,7 +76,7 @@ public class TicketPriceRepository {
         if (price == null || price.getMatchId() == null || price.getSectionId() == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid price");
         }
-        List<TicketPrice> all = findByMatchId(null);
+        List<TicketPrice> all = this.findByMatchId(null);
         boolean found = false;
         for (int i = 0; i < all.size(); i++) {
             TicketPrice p = all.get(i);
@@ -91,11 +91,11 @@ public class TicketPriceRepository {
         }
         try {
             List<String> lines = new ArrayList<>();
-            for (TicketPrice p : all) lines.add(formatLine(p));
-            if (filePath.getParent() != null) Files.createDirectories(filePath.getParent());
-            Files.write(filePath, lines, StandardCharsets.UTF_8);
+            for (TicketPrice p : all) lines.add(this.formatLine(p));
+            if (this.filePath.getParent() != null) Files.createDirectories(this.filePath.getParent());
+            Files.write(this.filePath, lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            throw new AppException(ErrorCode.CSV_ERROR, "Cannot write " + filePath);
+            throw new AppException(ErrorCode.CSV_ERROR, "Cannot write " + this.filePath);
         }
         return price;
     }
@@ -104,16 +104,16 @@ public class TicketPriceRepository {
         if (matchId == null || sectionId == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid ID");
         }
-        List<TicketPrice> all = findByMatchId(null);
+        List<TicketPrice> all = this.findByMatchId(null);
         boolean removed = all.removeIf(p -> p.getMatchId().equals(matchId) && p.getSectionId().equals(sectionId));
         if (removed) {
             try {
                 List<String> lines = new ArrayList<>();
-                for (TicketPrice p : all) lines.add(formatLine(p));
-                if (filePath.getParent() != null) Files.createDirectories(filePath.getParent());
-                Files.write(filePath, lines, StandardCharsets.UTF_8);
+                for (TicketPrice p : all) lines.add(this.formatLine(p));
+                if (this.filePath.getParent() != null) Files.createDirectories(this.filePath.getParent());
+                Files.write(this.filePath, lines, StandardCharsets.UTF_8);
             } catch (IOException e) {
-                throw new AppException(ErrorCode.CSV_ERROR, "Cannot write " + filePath);
+                throw new AppException(ErrorCode.CSV_ERROR, "Cannot write " + this.filePath);
             }
         }
         return removed;

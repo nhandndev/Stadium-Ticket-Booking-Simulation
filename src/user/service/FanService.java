@@ -78,16 +78,19 @@ public class FanService {
 
     public List<TicketResponseDto> getMyTickets(Long fanId) {
         List<TicketResponseDto> results = new ArrayList<>();
-        for (Ticket ticket : ticketRepository.findByFanId(fanId)) {
-            Match match = matchRepository.findById(ticket.getMatchId());
-            Seat seat = seatRepository.findById(ticket.getSeatId());
-            Section section = seat == null ? null : sectionRepository.findById(seat.getSectionId());
+        Fan fan = this.fanRepository.findById(fanId);
+        for (Ticket ticket : this.ticketRepository.findByFanId(fanId)) {
+            Match match = this.matchRepository.findById(ticket.getMatchId());
+            Seat seat = this.seatRepository.findById(ticket.getSeatId());
+            Section section = seat == null ? null : this.sectionRepository.findById(seat.getSectionId());
             results.add(new TicketResponseDto(ticket.getId(), ticket.getBookingId(),
                     ticket.getMatchId(), ticket.getSeatId(), ticket.getTicketCode(),
                     ticket.getStatus(), ticket.getCheckedInAt(),
                     match == null ? "Match #" + ticket.getMatchId() : match.getHomeTeam() + " vs " + match.getAwayTeam(),
                     seat == null ? "Seat #" + ticket.getSeatId() :
-                            (section == null ? "" : section.getName() + " ") + seat.getRowLabel() + seat.getSeatNumber()));
+                            (section == null ? "" : section.getName() + " ") + seat.getRowLabel() + seat.getSeatNumber(),
+                    fan == null ? "None" : fan.getFullName(),
+                    fan == null ? "None" : fan.getPhone()));
         }
         return results;
     }

@@ -33,47 +33,43 @@ public class TicketController {
 
     public void runGateMenu() {
         while (true) {
-            requireGate();
+            this.requireGate();
             try {
-                int choice = gateView.showGateMenu();
+                int choice = this.gateView.showGateMenu();
                 switch (choice) {
                     case 1:
-                    case 2:
-                        String code = gateView.readTicketCode();
+                        String code = this.gateView.readTicketCode();
                         if (code == null) break;
-                        Long matchId = gateView.readMatchId();
-                        if (matchId == null) break;
-                        gateView.displayTicket(validateTicket(code, matchId));
-                        if (choice == 1) break;
-                        if (gateView.confirmCheckIn()) {
-                            gateView.displayTicket(checkInTicket(code, matchId));
+                        this.gateView.displayTicket(this.validateTicket(code));
+                        if (this.gateView.confirmCheckIn()) {
+                            this.gateView.displayTicket(this.checkInTicket(code));
                         } else {
-                            gateView.displayMessage("Check-in cancelled.");
+                            this.gateView.displayMessage("Check-in cancelled.");
                         }
                         break;
                     case 0:
                         return;
                     default:
-                        gateView.displayMessage("Invalid choice.");
+                        this.gateView.displayMessage("Invalid choice.");
                 }
             } catch (NumberFormatException e) {
-                gateView.displayMessage("Please enter a valid number.");
+                this.gateView.displayMessage("Please enter a valid number.");
             } catch (AppException | IllegalArgumentException e) {
-                gateView.displayMessage(e.getMessage());
+                this.gateView.displayMessage(e.getMessage());
             }
         }
     }
 
-    public TicketResponseDto validateTicket(String ticketCode, Long matchId) {
-        requireGate();
-        return ticketService.validateTicket(ticketCode, matchId);
+    public TicketResponseDto validateTicket(String ticketCode) {
+        this.requireGate();
+        return this.ticketService.validateTicket(ticketCode);
     }
 
     public TicketResponseDto getTicketDetails(Long ticketId) {
-        UserResponseDto user = requireSignedIn();
-        TicketResponseDto ticket = ticketService.getTicketDetails(ticketId);
+        UserResponseDto user = this.requireSignedIn();
+        TicketResponseDto ticket = this.ticketService.getTicketDetails(ticketId);
         if (user.getRole() == UserRole.FAN) {
-            Booking booking = bookingRepository.findById(ticket.getBookingId());
+            Booking booking = this.bookingRepository.findById(ticket.getBookingId());
             if (booking == null || !user.getId().equals(booking.getFanId())) {
                 throw new AppException(ErrorCode.INVALID_INPUT,
                         "Fan cannot see another fan's ticket");
@@ -86,20 +82,20 @@ public class TicketController {
         return ticket;
     }
 
-    public TicketResponseDto checkInTicket(String ticketCode, Long matchId) {
-        requireGate();
-        return ticketService.checkInTicket(ticketCode, matchId);
+    public TicketResponseDto checkInTicket(String ticketCode) {
+        this.requireGate();
+        return this.ticketService.checkInTicket(ticketCode);
     }
 
     private void requireGate() {
-        if (requireSignedIn().getRole() != UserRole.GATE_STAFF) {
+        if (this.requireSignedIn().getRole() != UserRole.GATE_STAFF) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Gate Staff role is required");
         }
     }
 
     private UserResponseDto requireSignedIn() {
-        UserResponseDto user = authController.getCurrentUser();
+        UserResponseDto user = this.authController.getCurrentUser();
         if (user == null || user.getId() == null || user.getStatus() != UserStatus.ACTIVE) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Active login required");
         }

@@ -14,9 +14,13 @@ public class TicketResponseDto {
     private String matchName;
     private String seatLabel;
 
+    private String customerName;
+    private String customerPhone;
+
     public TicketResponseDto(Long ticketId, Long bookingId, Long matchId,
                              Long seatId, String ticketCode, TicketStatus status,
-                             LocalDateTime checkedInAt, String matchName, String seatLabel) {
+                             LocalDateTime checkedInAt, String matchName, String seatLabel,
+                             String customerName, String customerPhone) {
         this.ticketId = ticketId;
         this.bookingId = bookingId;
         this.matchId = matchId;
@@ -26,15 +30,19 @@ public class TicketResponseDto {
         this.checkedInAt = checkedInAt;
         this.matchName = matchName;
         this.seatLabel = seatLabel;
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
     }
 
-    public Long getTicketId() { return ticketId; }
-    public Long getBookingId() { return bookingId; }
-    public Long getMatchId() { return matchId; }
-    public Long getSeatId() { return seatId; }
-    public String getTicketCode() { return ticketCode; }
-    public TicketStatus getStatus() { return status; }
-    public LocalDateTime getCheckedInAt() { return checkedInAt; }
-    public String getMatchName() { return matchName; }
-    public String getSeatLabel() { return seatLabel; }
+    public Long getTicketId() { return this.ticketId; }
+    public Long getBookingId() { return this.bookingId; }
+    public Long getMatchId() { return this.matchId; }
+    public Long getSeatId() { return this.seatId; }
+    public String getTicketCode() { return this.ticketCode; }
+    public TicketStatus getStatus() { return this.status; }
+    public LocalDateTime getCheckedInAt() { return this.checkedInAt; }
+    public String getMatchName() { return this.matchName; }
+    public String getSeatLabel() { return this.seatLabel; }
+    public String getCustomerName() { return this.customerName; }
+    public String getCustomerPhone() { return this.customerPhone; }
 }

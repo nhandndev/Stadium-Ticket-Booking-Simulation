@@ -1,10 +1,35 @@
 # Validate Ticket
 
-- Validate the ticket code and Match, rejecting a mismatched Match.
+- Validation is included in Check in ticket. The current entry takes Ticket Code only.
 - Code path `MainController → TicketController.validateTicket → TicketService.validateTicket → TicketRepository / BookingRepository`.
 - Press Enter after each input. A blank Enter submits an empty line.
 
 [Data setup](../00_SETUP.md) · [Complete demo order](../01_DEMO_ORDER.md) · [Feature index](../README.md)
+
+## Current Flow — 2026-11-14
+
+1. Main menu — enter `3`, then the Gate Staff email and password.
+2. Gate Staff dashboard — enter `2`.
+3. Gate menu — enter `1. Check in ticket`.
+4. Enter an ISSUED Ticket Code from Booking Details or Ticket History.
+5. Review customer name/phone, ticket code, Match name/ID, seat and status.
+   Walk-in name and phone are `None`.
+6. Enter `n` or a blank line to cancel without consuming the ticket, or `y` to check in.
+7. Successful confirmation shows `CHECKED_IN` and its timestamp. Reusing that code
+   is rejected. An unknown or cancelled ticket is rejected before confirmation.
+
+Example preview for an issued walk-in ticket
+
+```text
+Customer: None | Phone: None
+Ticket #13 | Code T-12-4 | Hoàng Anh Gia Lai vs Bình Định (Match #8) | Stand A VIP A4 | Status ISSUED
+Confirm check-in (y/n, Enter = No):
+```
+
+The IDs above illustrate the output shape. Choose a real issued code from the
+active dataset. The captured flows below are historical recordings of the earlier
+separate validation menu with Match ID entry.
+
 
 ## Demo prerequisites
 
@@ -153,7 +178,7 @@ Choose option:
 
 ### Points to explain
 
-- Validate the ticket code and Match, rejecting a mismatched Match.
+- Validation is included in Check in ticket. The current entry takes Ticket Code only.
 - The flow ends at Main. Keep CORE_DIR for the next flow.
 
 <a id="flow-104"></a>
@@ -297,5 +322,5 @@ Choose option:
 
 ### Points to explain
 
-- Validate the ticket code and Match, rejecting a mismatched Match.
+- Validation is included in Check in ticket. The current entry takes Ticket Code only.
 - The flow ends at Main. Keep CORE_DIR for the next flow.

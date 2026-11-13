@@ -2155,3 +2155,345 @@ Agent verification
 - Searched production source for every new Booking call. Both call sites pass createdAt and expiresAt.
 - Parsed the source contracts and verified all three updated draw.io Booking boxes against them.
 - Checked XML validity and git diff whitespace. Verification used static inspection.
+
+## Entry 61 - Prepare the Dependency Injection Defense Script
+
+Date — 2026-11-13. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Create a script phan bien folder and collect the DI explanations into a Markdown rehearsal script.
+
+AI contribution
+
+- Created script phan bien/01_Dependency_Injection.md in Vietnamese for oral rehearsal.
+- Included constructor injection, object creation with new, shared authentication state, CSV configuration, final fields, trade-offs and a one-minute speaking script.
+- Identified simplified examples and clarified that production Controllers share AuthController, which holds AuthService.
+
+Agent verification
+
+- Checked Markdown section coverage and balanced code fences.
+
+## Entry 62 - Align Actor Use Cases with Console Menus
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Check every actor's actual Console menus and correct the Use Case drawing without changing application code.
+
+AI contribution
+
+- Reviewed MainController/MainView, Administrator management menus, Seller counter entry points, and Gate menus and controller routing.
+- Added a public View Match List node associated with Guest, Fan and Seller. Preserved Administrator's existing Match Management list/details nodes.
+- Removed Seller keyword-search and Stadium/date-filter associations because the Seller menu loads a Match selection list without those input forms.
+- Documented reachable Match operations and inherited User behavior for every actor in the requirements, Use Case specification, traceability, presentation guide and README.
+- Clarified that MockPaymentService supplies an internal online-payment result in the current drawing.
+
+Agent verification
+
+- Parsed the draw.io XML and checked all edge endpoints, distinct actor associations and all 82 connected Use Case nodes.
+- Rechecked all 97 production contracts against 192 expanded class boxes.
+- Checked local documentation links, code fences and diff whitespace.
+- Verification was static. This task edited the Use Case page and documentation.
+
+## Entry 63 - Consolidate Duplicate Use Case Goals
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Review the entire Use Case diagram, keep one node per goal and explain any similar goals retained separately.
+
+AI contribution
+
+- Consolidated the duplicate Match list, Match details and Fan search nodes and redirected their actor associations to the retained shared nodes.
+- Consolidated Fan View tickets with View Ticket History and combined availability/map/pricing display under View seat map and prices.
+- Removed two actor associations that became duplicates after consolidation.
+- Documented the distinct scope of self-registration/staff-assisted creation, owner/customer booking history, list/details, online/offline payment and validation/check-in.
+- Updated traceability to 77 unique nodes and 77 entries, retaining surviving IDs, plus the README and presentation explanation.
+
+Agent verification
+
+- Checked normalized node-name uniqueness, actor coverage, connected endpoints and absence of duplicate links.
+- Compared all five class pages against the pre-edit snapshot and production source hashes against their pre-edit values.
+- Checked traceability coverage, documentation links, Markdown fences and diff whitespace.
+- Verification was structural and static. The consolidated actor wires have not been visually rendered in this task.
+
+## Entry 64 - Review All Use Cases and Refresh Documentation
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Review the full Use Case overview and rewrite project documents where needed, then report completion.
+
+AI contribution
+
+- Reviewed all 77 goals against Main, Guest/Fan browsing, all Staff dashboards, nested administration menus, Controller permissions and Service rules.
+- Added Seller associations to the existing Select seats and View Booking Details nodes because the corresponding counter forms are displayed in the implemented workflow.
+- Expanded every traceability entry with its actors and reachable Console entry, retaining implementation and captured-demo links.
+- Expanded the Use Case specification with normal flows, cancellation/rejection paths, role/ownership scope, holds, payment/issue, Gate, refunds, venue/Match/pricing/account management and operating boundaries.
+- Corrected the Staff roles menu level, obsolete Use Case counts, the description of shared Admin Match nodes and the distinction between current static review and historical Console execution.
+- Synchronized the SRS, architecture responsibilities, menu map, presentation guide, documentation index, root README and agent context in English.
+- Preserved existing Use Case identifiers and explained the retired/consolidated IDs. The current goal count is 77 and the highest retained identifier is UC-82.
+
+Agent verification
+
+- Checked all 77 unique goal labels, all direct actor sets, four User generalizations, unique links and connected edge endpoints.
+- Verified 77 traceability entries contain actor/menu/code/demo information and that referenced class methods exist in source.
+- Linked all 87 per-feature guides, preserving 148 flow identifiers and 1546 recorded steps.
+- Matched 97 source contracts against 192 expanded class boxes and five Mermaid files.
+- Compared production source hashes and all five class pages with their pre-review snapshots.
+- Checked documentation links, explicit flow anchors, balanced code fences and diff whitespace.
+
+Review boundary
+
+This was a static source, XML and documentation review. Historical Console execution retains its recorded date. Full visual wire routing was not rendered in this task.
+
+## Entry 65 - Simplify Fan Booking Menu Routing
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Make runFanBookingActions easier to understand and present, particularly its ternary expressions and numeric choice conversion.
+
+AI contribution
+
+- Replaced group/action-to-choice conversion with direct dispatch to three private handlers for Book tickets, My bookings and payments, and My tickets.
+- Used the displayed menu numbers directly in each handler.
+- Replaced the pending-booking removeIf expression in the affected handler with a basic loop collecting PENDING bookings.
+- Kept session checks, owner-scoped lookups, expiry-aware payment validation, input cancellation and existing error messages.
+
+Agent verification
+
+- Parsed production Java source and compared declared field/public API contracts before and after the change. They are identical.
+- Confirmed the remaining Controller source beginning at bookMatch is byte-identical to the pre-edit snapshot.
+- Checked private-handler dispatch, absence of ternary/remapping expressions in the refactored section and diff whitespace.
+- Verification was static source inspection.
+
+## Entry 66 - Restore Original Fan Menu Logic and Explain It Inline
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Keep the original runFanBookingActions implementation and add explanatory comments to make its flow understandable.
+
+AI contribution
+
+- Restored the original group/action/choice mapping, ternary expressions, switch and pending-list filtering.
+- Removed the three private handlers and the ArrayList import introduced in Entry 65.
+- Added Vietnamese learning comments explaining menu groups, choice conversion, each switch branch, list filtering, cancellation, payment and loop/error flow.
+
+Agent verification
+
+- Compared the complete Controller with its pre-refactor snapshot after stripping line comments and whitespace. The executable source matches.
+- Confirmed the three new handlers are absent and diff whitespace checks pass.
+
+## Entry 67 - Keep Numeric Menu Comments Brief
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Comment only confusing numeric menu mappings and ternary values, briefly in English, without explaining simple expressions.
+
+AI contribution
+
+- Shortened Fan routing comments to the meanings of group and case numbers.
+- Added brief numeric mapping comments for Administrator venue/Match groups and shared create/update branches, plus refund/cancellation selection.
+- Removed long ternary walkthroughs and redundant comments on simple checks.
+
+Agent verification
+
+Compared both edited Controllers before and after removing comments and whitespace. Executable source matches. Diff whitespace checks passed.
+
+## Entry 68 - Review Numeric Comments Across Controllers
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Apply brief English comments to confusing numeric routing and ternary choices across the other Controllers, stating only what values mean.
+
+AI contribution
+
+- Reviewed all 11 Controllers.
+- Added seven short comments in MainController, TicketController and AdminController for Match actions, Gate modes, administrative ID ranges, price actions, account selection and Staff roles.
+- Kept existing concise BookingController mappings and omitted commentary on straightforward expressions.
+
+Agent verification
+
+Compared all Controller files before and after stripping comments and whitespace. Executable code matches. Diff whitespace checks passed.
+
+## Entry 69 - Accept the Student's Final Diagram Design
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Install the newly redesigned draw.io into the project, check compatibility and finalize the result.
+
+AI contribution
+
+- Compared the supplied Downloads/ClassDiagram.drawio against the reviewed canonical diagram and current Java source before installation.
+- Installed the student's exact file at docs/ClassDiagram.drawio.
+- Updated the verification document with the accepted design and compatibility evidence.
+
+Agent verification
+
+- Confirmed six pages, 77 unique goals, 97 source class/enum contracts and 192 expanded class boxes.
+- Compared semantic edges, relationship notation, multiplicities and Use Case goals against the pre-install baseline. There are no semantic differences.
+- Checked source member contracts, parent/edge references, uniqueness and all 77 documented actor mappings.
+- Confirmed the installed file matches the supplied file byte-for-byte and diff whitespace checks pass.
+
+Review boundary
+
+Compatibility was checked by static Java source and XML inspection. This task accepted the student's layout without a rendered visual inspection.
+
+## Entry 70 - Show Booking ID When Online Payment Is Deferred
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Display the actual Booking ID alongside the unpaid-booking deadline message so the Fan can provide it to Seller.
+
+AI contribution
+
+- Added Booking ID output in BookingController.payBooking when the payment prompt is declined or cancelled.
+- Added a dated UI note to the Create Booking demo guide while preserving historical Console captures.
+
+Agent verification
+
+Confirmed BookingResponseDto.getBookingId exists and the ID is displayed before the existing deadline message. Diff whitespace checks passed. Verification was static.
+
+## Entry 71 - Integrate Seller Cash Checkout and Ticket Issue
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Adopt the Ticket sales submenu with Create booking for Fan / walk-in customer and Pay for an existing booking, keeping Class Diagram alignment and reporting necessary contract changes.
+
+AI contribution
+
+- Reorganized Seller navigation into Search Fan, Create Fan, Ticket sales, View seat map and prices, and View customer booking history.
+- Added SellerView.showTicketSalesMenu(): int and private Controller navigation for the two approved sales paths.
+- Continued new counter booking into the existing cash-receipt prompt and automatic ticket issue on successful payment.
+- Retained payment deferral with Booking ID and deadline. Existing-booking checkout also handles Fan-created orders.
+- Enabled confirmed cash checkout to reuse its stored payment and resume missing ticket issue without collecting again.
+- Preserved all existing public booking/payment/issue method names and signatures and left Service implementations intact.
+- Added exactly one public View method to Class Diagram page 03 and its Mermaid counterpart, using the existing row style and increasing the SellerView box height by one row.
+- Consolidated ticket issue into the sales flows on page 00 and renamed the cash goal to Pay for an existing booking. The overview now contains 76 distinct goals.
+- Updated scope, requirements, Use Case specification, traceability, architecture, presentation, menu map and agent context.
+- Added current captured walkthroughs to existing Seller guides and the Fan payment guide while identifying historical numbered captures as the earlier menu.
+
+Agent verification
+
+- Compiled production source with Java 17.
+- Checked 12 focused Console scenarios using isolated copied core fixtures with future Match dates.
+- Verified new account-holder cash sale, deferred walk-in booking, existing cash checkout with automatic issue, already-paid retry with unchanged payment/transaction/ticket counts, unknown/expired booking rejection, inactive customer rejection and Fan-created booking paid by Seller.
+- Verified missing-ticket recovery by removing a ticket only in the copied fixture and repeating the paid cash workflow without another payment.
+- Compared source contracts before/after. The only declared-field/public-API delta is SellerView.showTicketSalesMenu(): int.
+- Matched all 97 source contracts to 192 expanded class boxes and five Mermaid files.
+- Checked all 76 unique Use Case goals and their documented actor mappings, XML references, SellerView row bounds, Markdown links/fences/anchors and diff whitespace.
+
+Documentation boundary
+
+The 148 numbered Console flows retain their original historical recordings. Current counter walkthroughs are separately labeled at the top of the affected guides. The existing student-designed layout is preserved around the changed Use Case node and the added SellerView member row.
+
+## Entry 72 - Balance Stadium Seats and Match Fixtures
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Prepare about 100 Matches split equally between two Stadiums, with 100 physical Seats per Stadium, matching per-Match inventory, mixed past/future and OPEN/CLOSED Matches, and clear row/VIP layout in the existing headerless CSV format.
+
+AI contribution
+
+- Rebuilt sections.csv, seats.csv, matches.csv, ticket_prices.csv and match_seats.csv.
+- Set 10 Sections and 200 physical Seats, with rows A–J and ten seats per row in each Stadium. Rows A/B are VIP, C/D Premium, and E–J Standard.
+- Preserved all original physical Seat records referenced by existing business history.
+- Extended 54 existing Matches to 100, keeping their IDs, teams, Stadiums and kick-off times. The new totals are 50 Matches per Stadium, 52 OPEN and 48 CLOSED, with 23 past/CLOSED and 77 future Matches as of the review date.
+- Prepared five prices and exactly 100 MatchSeat records for every Match, totaling 500 prices and 10000 inventory rows.
+- Preserved valid existing prices, supplied missing Section prices and corrected the anomalous 50 VND fixture value while validating every stored Booking total.
+- Reindexed MatchSeat IDs and preserved status/version/hold ownership by the existing Match/physical-Seat pair.
+- Updated the README dataset description, SRS, verification, demo setup and agent context. Builders and pre-edit backups remain in a temporary task directory outside the project.
+
+Agent verification
+
+- Checked exact counts, unique IDs and positions, Stadium/Section/Seat/Match references, complete prices, and 100 inventory seats per Match.
+- Confirmed physical Seats referenced by Booking/Ticket/transaction history retain their original locations.
+- Confirmed all existing business record IDs remain, stored payment/booking amounts match, current CONFIRMED bookings own BOOKED seats, and current holds have valid owners.
+- Retained new user runtime transactions and the normal expiry of Booking 9 observed during review, without overwriting them with the pre-edit snapshot.
+- Read all fixtures through production Java Repository classes.
+- On a copied dataset, verified Console listing of 100 Matches and both Stadiums' 100-seat maps with prices and VIP/Premium/Standard labels.
+
+Dataset scope
+
+The main data directory is the runtime fixture. Historical feature-demo core fixtures retain their smaller prepared dataset and recorded IDs. Source code and UML member contracts require no change for these fixture counts.
+
+## Entry 73 - Expand the README Problem Statement, Highlights and Scope
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Add the group's problem statement, notable delivered features and project scope to README.
+
+AI contribution
+
+- Expanded the problem statement with deferred payment, online/counter inventory sharing, walk-in sales, abandoned/invalid actions, refunds and ticket validation.
+- Added eight concrete feature highlights grounded in the current implementation.
+- Added business coverage and technical/data scope ahead of the existing actor feature inventory.
+- Retained English throughout the README and formatted the Seller menu as a code block so option numbers remain explicit.
+
+Agent verification
+
+Checked the descriptions against the existing implementation and reviewed documentation. Verified required sections appear once, relative links resolve, code fences are balanced and diff whitespace checks pass.
+
+## Entry 74 - Demonstrate the Seat-Map Expiry Trigger
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Show concrete evidence that the expiry check is triggered.
+
+AI contribution and verification
+
+- Inspected BrowseService.getSeatMap, BookingService.expirePendingBookings and Booking.isExpired.
+- Compiled current production source into a temporary classes directory and launched it on a copied runtime dataset.
+- After startup had completed and the program was waiting for input, inserted a test PENDING booking with a past 30-minute payment window and a matching LOCKED seat into the copied CSV files.
+- Confirmed the test booking stayed PENDING through Match listing, then opened its seat map through Main > Browse As Guest > View seat availability > Match ID 1.
+- Observed Booking 12 transition PENDING to EXPIRED, MatchSeat 2 transition LOCKED to AVAILABLE, holdBookingId clear, version increment from 4 to 5 and Console display A2 as AVAILABLE.
+- The test used intentionally elapsed timestamps in copied data. No production source or live dataset edits were required.
+
+## Entry 75 - Make Instance Access Explicit with this
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Add this where it can appropriately qualify members in the project.
+
+AI contribution
+
+- Used Java compiler symbol resolution to distinguish instance members from parameters, local variables, static members and types.
+- Added 1139 explicit this qualifiers across 63 production Java files.
+- Qualified current-object instance fields and method calls, including inherited instance methods.
+- Recorded the explicit-instance-access convention in the agent README.
+
+Agent verification
+
+- Compiled production source with Java 17 compatibility.
+- Compared every edited file to a pre-edit snapshot after removing this qualifiers. The remaining text is identical.
+- Compared all declared field/public method contracts before and after. They match.
+- Re-ran the symbol-based scan and found zero remaining eligible unqualified instance references across 97 source files.
+- Diff whitespace checks passed. Temporary tooling and backups are outside the project.
+
+
+## Entry 76 - Ticket Codes in Booking Details and Code-Only Gate Check-in
+
+Date — 2026-11-14. Member — Doan Ngoc Nhan, QE210282.
+
+User request — Show ticket codes in Booking Details, combine ticket validation
+with check-in using Ticket Code, preview customer/Match/seat information with
+None values for walk-in customers, and display audit actor names and roles.
+
+AI contribution
+
+- Added ownership-checked getTicketsForBooking methods to BookingController and BookingService.
+- Displayed booking ticket codes/statuses in Fan Booking Details and Seller existing-booking preview.
+- Added customerName/customerPhone to TicketResponseDto and populated all its callers.
+- Injected FanRepository into TicketService to resolve customer details.
+- Changed validateTicket/checkInTicket to Ticket Code-only signatures. Removed GateView.readMatchId.
+- Combined Gate validation, preview and confirmation into one Check in ticket menu action.
+- Retained locked revalidation before recording check-in and rejection of reused tickets.
+- Displayed Audit Log Staff names/roles using existing account DTOs and collaborators.
+- Defined a missing-account fallback with Unknown staff ID and UNKNOWN role. Identity display uses the current Staff record.
+- Updated canonical draw.io, five Mermaid source files where affected, requirements, traceability, README, menu map and current demo instructions.
+- Retired UC-16 standalone validation into UC-17 Check-in ticket. The overview now contains 75 unique goals.
+
+Agent verification
+
+- Compiled production sources with Java 17 compatibility.
+- Captured 60 Console interactions on copied fixtures, including multi-ticket details, Seller ticket preview, Gate cancellation/success/reuse rejection, unknown code, Fan information, walk-in None fields and known/missing audit identities.
+- Compared 97 source class/enum contracts with all 192 expanded draw.io boxes and 191 source-aligned Mermaid class blocks.
+- Checked 75 unique Use Case nodes against 75 traceability sections and checked XML IDs/relationship endpoints.
+- Live CSV files were used only as read sources. Test data mutations were confined to temporary copied fixtures.
+- Rendered diagram routing and text fit remain a visual review step.

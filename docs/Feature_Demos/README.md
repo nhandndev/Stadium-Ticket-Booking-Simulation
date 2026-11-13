@@ -1,7 +1,16 @@
 # Feature Demo Index
 
+## Current Counter Menu — Updated 2026-11-14
+
+The current menu is in [Menu map](02_MENU_MAP.md). Seller > Ticket sales contains
+1. Create booking for Fan / walk-in customer and 2. Pay for an existing booking.
+Cash confirmation automatically issues tickets. The 001–152 flow captures below
+or in linked guides record the earlier menu. Use the current Seller walkthroughs
+at the top of each Seller guide for the updated input sequence.
+
+
 Recorded on 2026-11-13 using the current code. This set contains 87 feature guides
-and 148 flows captured from the actual Console.
+and 148 historical numbered flows captured from the actual Console. Current counter walkthroughs are included separately.
 
 - [Setup and dataset information](00_SETUP.md).
 - [Complete execution order](01_DEMO_ORDER.md).
@@ -13,7 +22,7 @@ included in the corresponding feature guide.
 
 Use the small CORE_DIR fixture for stable IDs and follow the setup guide and
 global order. Bookings hold seats for up to 30 minutes and use SYNCHRONIZED to
-prevent double booking. Seller exposes the seven approved Use Case features.
+prevent double booking. Seller uses the integrated cash-checkout workflow in the current menu map.
 
 ## 01 Guest
 
@@ -87,7 +96,7 @@ prevent double booking. Seller exposes the seven approved Use Case features.
 - [Create Booking for Customer](06_Seller/04_Create_Booking_for_Customer.md) — Flow 085, 143, 145, 148, 149, 150.
 - [Customer Booking History](06_Seller/05_Customer_Booking_History.md) — Flow 086.
 - [Accept Cash Payment](06_Seller/06_Accept_Cash_Payment.md) — Flow 087, 088, 144, 146, 152.
-- [Issue Tickets](06_Seller/07_Issue_Tickets.md) — Flow 089, 090, 147.
+- [Automatic Ticket Issue and Historical Captures](06_Seller/07_Issue_Tickets.md) — Flow 089, 090, 147.
 
 ## 07 Cancellation Refund
 
@@ -134,3 +143,11 @@ prevent double booking. Seller exposes the seven approved Use Case features.
 
 - [Invalid Menu Input](11_System/01_Invalid_Menu_Input.md) — Flow 139.
 - [Exit System](11_System/02_Exit_System.md) — Flow 142.
+
+## Current Ticket and Audit Behavior — 2026-11-14
+
+Booking Details now lists all ticket codes for that booking. Gate check-in takes
+Ticket Code only and includes validation, customer/Match/seat preview and
+confirmation. The Gate guide's current-flow section supersedes its historical
+recorded inputs. Audit Log displays Staff name and role, with an explicit unknown
+identity fallback when the Staff account is missing.

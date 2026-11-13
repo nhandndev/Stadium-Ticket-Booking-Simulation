@@ -10,7 +10,7 @@ Read the documents below in order.
 | 03 | [Architecture](03_ARCHITECTURE.md) | Controller, View, Service, Model, DTO and Repository responsibilities. |
 | 04 | [Booking protection](04_BOOKING_CONCURRENCY.md) | Default synchronized checkout and transaction CSV. |
 | 05 | [Verification and delivery](05_VERIFICATION_AND_DELIVERY.md) | Recorded checks, rerun commands, limits and submission checklist. |
-| 06 | [Use Case traceability](06_USE_CASE_TRACEABILITY.md) | Mapping from 82 visible Use Case nodes to feature walkthroughs. |
+| 06 | [Use Case traceability](06_USE_CASE_TRACEABILITY.md) | Mapping from 75 unique Use Cases to actors, menu entries, code and feature walkthroughs. |
 | 07 | [AI reflection guide](07_AI_REFLECTION_GUIDE.md) | T10 reflection and personal AI records. |
 | 08 | [Presentation guide](08_PRESENTATION_GUIDE.md) | Project introduction, explanation and diagram reading order. |
 
@@ -21,10 +21,14 @@ Pages 00–05 cover Use Cases, accounts/browsing, administration, booking/paymen
 tickets, repositories and domain models. The [diagram guide](Class_Diagrams/README.md)
 links the five expanded Mermaid files.
 
+Shared goals have one Use Case node connected to all participating actors.
+The specification explains the different ownership and workflow scopes of similar
+goals retained separately. The traceability document preserves established IDs.
+
 ## Feature Demos
 
 The [feature-demo index](Feature_Demos/README.md) contains 87 feature files,
-148 captured Console flows and 1546 input/output steps. Follow its preparation,
+148 historical numbered Console flows and 1546 recorded steps, plus current integrated-counter walkthroughs. Follow its preparation,
 menu map and operation order for reproducible IDs and state.
 
 ## Agent and Audit

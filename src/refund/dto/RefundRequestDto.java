@@ -11,7 +11,7 @@ public class RefundRequestDto {
         this.reason = reason;
     }
 
-    public Long getFanId() { return fanId; }
-    public Long getBookingId() { return bookingId; }
-    public String getReason() { return reason; }
+    public Long getFanId() { return this.fanId; }
+    public Long getBookingId() { return this.bookingId; }
+    public String getReason() { return this.reason; }
 }

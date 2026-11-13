@@ -57,11 +57,11 @@ public class BrowseService {
         }
         String text = keyword.trim().toLowerCase();
         List<MatchResponseDto> result = new ArrayList<>();
-        for (Match match : matchRepository.findAll()) {
+        for (Match match : this.matchRepository.findAll()) {
             boolean homeMatches = match.getHomeTeam().toLowerCase().contains(text);
             boolean awayMatches = match.getAwayTeam().toLowerCase().contains(text);
             if (homeMatches || awayMatches) {
-                result.add(toMatchResponse(match));
+                result.add(this.toMatchResponse(match));
             }
         }
         return result;
@@ -73,7 +73,7 @@ public class BrowseService {
         }
         List<MatchResponseDto> result = new ArrayList<>();
 
-        for (Match match : matchRepository.findAll()) {
+        for (Match match : this.matchRepository.findAll()) {
             boolean stadiumMatches = true;
             boolean dateMatches = true;
             if (stadiumId != null) {
@@ -83,23 +83,23 @@ public class BrowseService {
                 dateMatches = startDate.equals(match.getStartTime().toLocalDate());
             }
             if (stadiumMatches && dateMatches) {
-                result.add(toMatchResponse(match));
+                result.add(this.toMatchResponse(match));
             }
         }
         return result;
     }
 
     public MatchResponseDto viewMatchDetails(Long matchId) {
-        Match match = matchRepository.findById(matchId);
+        Match match = this.matchRepository.findById(matchId);
         if (match == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Match does not exist");
         }
-        return toMatchResponse(match);
+        return this.toMatchResponse(match);
     }
 
     public List<MatchSeatResponseDto> getSeatMap(Long matchId) {
-        if (bookingService != null) bookingService.expirePendingBookings();
-        Match match = matchRepository.findById(matchId);
+        if (this.bookingService != null) this.bookingService.expirePendingBookings();
+        Match match = this.matchRepository.findById(matchId);
         if (match == null) {
             throw new AppException(
                     ErrorCode.NOT_FOUND,
@@ -107,14 +107,14 @@ public class BrowseService {
             );
         }
         List<MatchSeatResponseDto> result = new ArrayList<>();
-        for (MatchSeat seat : matchSeatRepository.findByMatchId(matchId)) {
-            Seat physicalSeat = seatRepository.findById(seat.getSeatId());
+        for (MatchSeat seat : this.matchSeatRepository.findByMatchId(matchId)) {
+            Seat physicalSeat = this.seatRepository.findById(seat.getSeatId());
             if (physicalSeat == null) {
                 throw new AppException(ErrorCode.CSV_ERROR, "Match inventory references a missing seat");
             }
             Long sectionId = physicalSeat.getSectionId();
-            Section section = sectionRepository.findById(sectionId);
-            TicketPrice price = ticketPriceRepository.findPrice(matchId, sectionId);
+            Section section = this.sectionRepository.findById(sectionId);
+            TicketPrice price = this.ticketPriceRepository.findPrice(matchId, sectionId);
             result.add(new MatchSeatResponseDto(seat.getId(), seat.getMatchId(),
                     seat.getSeatId(), sectionId, seat.getStatus(), seat.getVersion(),
                     section == null ? "Section #" + sectionId : section.getName(),
@@ -125,7 +125,7 @@ public class BrowseService {
     }
 
     private MatchResponseDto toMatchResponse(Match match) {
-        Stadium stadium = stadiumRepository.findById(match.getStadiumId());
+        Stadium stadium = this.stadiumRepository.findById(match.getStadiumId());
         return new MatchResponseDto(match.getId(), match.getStadiumId(), match.getHomeTeam(),
                 match.getAwayTeam(), match.getStartTime(), match.getSaleStatus(),
                 stadium == null ? "Stadium #" + match.getStadiumId() : stadium.getName());

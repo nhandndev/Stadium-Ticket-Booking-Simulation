@@ -1,5 +1,27 @@
 # Pay Pending Booking
 
+## Current Seller Payment Route — 2026-11-14
+
+After deferring online payment, keep the Booking ID shown by the application.
+Seller opens Sales counter > 3. Ticket sales > 2. Pay for an existing booking,
+enters that ID and confirms RECEIVED. The program records offline payment and
+automatically issues tickets. This cross-role flow was checked on a copied fixture.
+
+Captured cash-checkout result
+
+```text
+Logged out.
+
+STADIUM TICKET BOOKING
+1. Browse As Guest (Search matches & View seat availability)
+2. Login As Fan
+3. Login As Staff (Admin, Seller, Gate)
+4. Register Fan Account
+0. Exit System
+Choose option:
+```
+
+
 - Pay online before expiresAt. SYNCHRONIZED commits only the booking-owned holds, confirms payment and issues tickets. The failure flow uses --payment-fails.
 - Code path `MainController → BookingController.makeOnlinePayment → BookingService → MockPaymentService / StrategyFactory / SynchronizedStrategy → CSV repositories`.
 - Press Enter after each input. A blank Enter submits an empty line.

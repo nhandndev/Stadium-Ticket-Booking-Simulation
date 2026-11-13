@@ -1,5 +1,20 @@
 # Complete Demo Order
 
+Current Gate flow — 2026-11-14. Use the current-flow section in
+[Check In Ticket](08_Gate/02_Check_In_Ticket.md). It combines validation and
+check-in using Ticket Code. The numbered flows below retain the original
+recording order, including the earlier separate validation and Match ID prompts.
+
+
+## Current Counter Menu — Updated 2026-11-14
+
+The current menu is in [Menu map](02_MENU_MAP.md). Seller > Ticket sales contains
+1. Create booking for Fan / walk-in customer and 2. Pay for an existing booking.
+Cash confirmation automatically issues tickets. The 001–152 flow captures below
+or in linked guides record the earlier menu. Use the current Seller walkthroughs
+at the top of each Seller guide for the updated input sequence.
+
+
 Start with the [setup guide](00_SETUP.md). Flows 001–142 share CORE_DIR and
 run in order because they reuse records. Each flow starts at Main. Retired IDs
 are 091 and 133–135. Continue with 092 after 090 and 136 after 132.

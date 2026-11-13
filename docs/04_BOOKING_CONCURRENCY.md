@@ -12,7 +12,7 @@ Pay before expiresAt
   -> Fan online OR Seller offline
   -> default SYNCHRONIZED strategy commits only the booking's own holds
   -> seats BOOKED, payment SUCCESS, booking CONFIRMED
-  -> online issues tickets; Seller offline uses separate Issue ticket
+  -> online and Seller cash checkout issue/display tickets
 
 Expiry / cancellation / failed payment
   -> EXPIRED or CANCELLED booking
@@ -81,7 +81,7 @@ failure reasons are URL-encoded. Demo files have no header.
 
 Checks cover exclusive concurrent holds, all-or-nothing groups, owner-safe release,
 exact deadline rejection, restart persistence, failure/cancellation release,
-offline payment separate from issue and online retry idempotence.
+automatic issue after cash payment, deferred cash checkout and payment/issue retry idempotence.
 
 Synchronization coordinates one JVM. CSV replacement is per file, so interrupted
 multi-file changes can need reconciliation. Payment/refund are mocked.

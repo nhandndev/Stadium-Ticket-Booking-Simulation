@@ -1,5 +1,101 @@
 # Create Booking for Customer
 
+## Current Seller Menu — 2026-11-14
+
+Seller > 3. Ticket sales contains 1. Create booking for Fan / walk-in customer,
+2. Pay for an existing booking and 0. Back. Successful cash checkout automatically
+issues/displays tickets. Payment and issue retain separate methods in the code.
+The walkthroughs here use an isolated copy of the core fixture with future Match
+dates. Inputs are listed in order. A blank line means Enter.
+
+### Create Fan booking, take cash and issue tickets
+
+Start at the Seller menu.
+
+Inputs
+
+```text
+3
+1
+1
+binh.tran@gmail.com
+2
+1
+3
+RECEIVED
+```
+
+Result captured from the current code
+
+```text
+Payment #3 | Booking #3 | 500000 VND | Method OFFLINE_CASH | Status SUCCESS
+Ticket #2 | Code T-3-3 | Vietnam vs Thailand | Stand A VIP A3 | Status ISSUED
+
+=== SELLER > TICKET SALES ===
+1. Create booking for Fan / walk-in customer
+2. Pay for an existing booking
+0. Back to Seller menu
+Choose:
+```
+
+### Create walk-in booking and defer cash payment
+
+Start at the Ticket sales menu.
+
+Inputs
+
+```text
+1
+2
+1
+4
+
+```
+
+Result captured from the current code
+
+```text
+No payment recorded. Keep Booking ID 4 to pay before 2026-11-14T02:10:10.013803.
+
+=== SELLER > TICKET SALES ===
+1. Create booking for Fan / walk-in customer
+2. Pay for an existing booking
+0. Back to Seller menu
+Choose:
+```
+
+### Reject an inactive customer before selecting Match
+
+Start at the Ticket sales menu.
+
+Inputs
+
+```text
+1
+1
+
+1
+```
+
+Result captured from the current code
+
+```text
+Fan account #1 is INACTIVE. Choose an ACTIVE customer account.
+
+=== SELLER > TICKET SALES ===
+1. Create booking for Fan / walk-in customer
+2. Pay for an existing booking
+0. Back to Seller menu
+Choose:
+```
+
+## Historical Numbered Flows
+
+The numbered flows below were captured on 2026-11-13 before the menu merge.
+Their Console blocks retain that historical menu. Use the current walkthroughs
+above and the [current menu map](../02_MENU_MAP.md) for the new navigation.
+
+
 - Choose an ACTIVE Fan or the walk-in branch, then select the Match and seats and create the time-limited booking.
 - Code path `MainController → BookingController.createBookingForCustomer → BookingService.createBookingForCustomer → BookingRepository`.
 - Press Enter after each input. A blank Enter submits an empty line.

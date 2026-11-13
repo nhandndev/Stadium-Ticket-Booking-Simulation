@@ -28,14 +28,14 @@ public class TicketRepository extends CsvRepository<Ticket> {
         if (bookingId == null || bookingId <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Booking ID must be positive");
         }
-        return findByCondition(ticket -> ticket.getBookingId().equals(bookingId));
+        return this.findByCondition(ticket -> ticket.getBookingId().equals(bookingId));
     }
 
     public Ticket findByCode(String ticketCode) {
-        if (!isValidCode(ticketCode)) {
+        if (!this.isValidCode(ticketCode)) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid ticket code");
         }
-        List<Ticket> matches = findByCondition(
+        List<Ticket> matches = this.findByCondition(
                 ticket -> ticket.getTicketCode().equals(ticketCode));
         if (matches.size() > 1) {
             throw new AppException(ErrorCode.CSV_ERROR, "Duplicate ticket code");
@@ -48,10 +48,10 @@ public class TicketRepository extends CsvRepository<Ticket> {
             throw new AppException(ErrorCode.INVALID_INPUT, "Fan ID must be positive");
         }
         Set<Long> bookingIds = new HashSet<>();
-        for (Booking booking : bookingRepository.findByFanId(fanId)) {
+        for (Booking booking : this.bookingRepository.findByFanId(fanId)) {
             bookingIds.add(booking.getId());
         }
-        return findByCondition(ticket -> bookingIds.contains(ticket.getBookingId()));
+        return this.findByCondition(ticket -> bookingIds.contains(ticket.getBookingId()));
     }
 
     @Override
@@ -65,7 +65,7 @@ public class TicketRepository extends CsvRepository<Ticket> {
         long matchId = Long.parseLong(parts[2]);
         long seatId = Long.parseLong(parts[3]);
         if (id <= 0 || bookingId <= 0 || matchId <= 0 || seatId <= 0
-                || !isValidCode(parts[4])) {
+                || !this.isValidCode(parts[4])) {
             throw new AppException(ErrorCode.CSV_ERROR, "Invalid ticket data");
         }
         TicketStatus status = TicketStatus.valueOf(parts[5]);
@@ -90,7 +90,7 @@ public class TicketRepository extends CsvRepository<Ticket> {
     @Override
     public String formatLine(Ticket entity) {
         if (entity == null || entity.getId() == null || entity.getId() <= 0
-                || !isValidCode(entity.getTicketCode())) {
+                || !this.isValidCode(entity.getTicketCode())) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid ticket CSV data");
         }
         LocalDateTime checkedInAt = entity.getCheckedInAt();

@@ -12,7 +12,7 @@ public class TicketPrice {
     public TicketPrice(Long matchId, Long sectionId, BigDecimal amount) {
         this.matchId = matchId;
         this.sectionId = sectionId;
-        updatePrice(amount);
+        this.updatePrice(amount);
     }
 
     public void updatePrice(BigDecimal amount) {
@@ -23,14 +23,14 @@ public class TicketPrice {
     }
 
     public Long getMatchId() {
-        return matchId;
+        return this.matchId;
     }
 
     public Long getSectionId() {
-        return sectionId;
+        return this.sectionId;
     }
 
     public BigDecimal getAmount() {
-        return amount;
+        return this.amount;
     }
 }

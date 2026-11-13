@@ -16,10 +16,10 @@ public class Section extends BaseEntity {
     }
 
     public Long getStadiumId() {
-        return stadiumId;
+        return this.stadiumId;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 }

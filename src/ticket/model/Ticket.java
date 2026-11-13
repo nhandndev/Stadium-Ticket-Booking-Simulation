@@ -30,36 +30,36 @@ public class Ticket extends BaseEntity {
     }
 
     public void issue() {
-        if (status != TicketStatus.PENDING) {
+        if (this.status != TicketStatus.PENDING) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Only pending ticket can be issued");
         }
-        status = TicketStatus.ISSUED;
+        this.status = TicketStatus.ISSUED;
     }
 
     public boolean isValidForMatch(Long matchId) {
         return matchId != null && this.matchId.equals(matchId)
-                && status == TicketStatus.ISSUED;
+                && this.status == TicketStatus.ISSUED;
     }
 
     public void checkIn(LocalDateTime time) {
-        if (time == null || status != TicketStatus.ISSUED) {
+        if (time == null || this.status != TicketStatus.ISSUED) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Ticket cannot be checked in");
         }
-        status = TicketStatus.CHECKED_IN;
-        checkedInAt = time;
+        this.status = TicketStatus.CHECKED_IN;
+        this.checkedInAt = time;
     }
 
     public void cancel() {
-        if (status != TicketStatus.PENDING && status != TicketStatus.ISSUED) {
+        if (this.status != TicketStatus.PENDING && this.status != TicketStatus.ISSUED) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Ticket cannot be cancelled");
         }
-        status = TicketStatus.CANCELLED;
+        this.status = TicketStatus.CANCELLED;
     }
 
-    public Long getBookingId() { return bookingId; }
-    public Long getMatchId() { return matchId; }
-    public Long getSeatId() { return seatId; }
-    public String getTicketCode() { return ticketCode; }
-    public TicketStatus getStatus() { return status; }
-    public LocalDateTime getCheckedInAt() { return checkedInAt; }
+    public Long getBookingId() { return this.bookingId; }
+    public Long getMatchId() { return this.matchId; }
+    public Long getSeatId() { return this.seatId; }
+    public String getTicketCode() { return this.ticketCode; }
+    public TicketStatus getStatus() { return this.status; }
+    public LocalDateTime getCheckedInAt() { return this.checkedInAt; }
 }

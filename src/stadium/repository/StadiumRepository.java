@@ -18,7 +18,7 @@ public class StadiumRepository extends CsvRepository<Stadium> {
             throw  new AppException(ErrorCode.INVALID_INPUT,"Name is required");
         }
         String keyword = name.trim().toLowerCase(Locale.ROOT);
-        return findByCondition(stadium ->  stadium.getName().toLowerCase(Locale.ROOT).contains(keyword));
+        return this.findByCondition(stadium ->  stadium.getName().toLowerCase(Locale.ROOT).contains(keyword));
     }
     @Override
     public Stadium parseLine(String line) {

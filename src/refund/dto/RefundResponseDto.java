@@ -16,8 +16,8 @@ public class RefundResponseDto {
         this.status = status;
     }
 
-    public Long getRequestId() { return requestId; }
-    public Long getBookingId() { return bookingId; }
-    public Long getFanId() { return fanId; }
-    public RefundStatus getStatus() { return status; }
+    public Long getRequestId() { return this.requestId; }
+    public Long getBookingId() { return this.bookingId; }
+    public Long getFanId() { return this.fanId; }
+    public RefundStatus getStatus() { return this.status; }
 }

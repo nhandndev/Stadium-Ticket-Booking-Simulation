@@ -29,30 +29,30 @@ public class MatchResponseDto {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public Long getStadiumId() {
-        return stadiumId;
+        return this.stadiumId;
     }
 
     public String getStadiumName() {
-        return stadiumName;
+        return this.stadiumName;
     }
 
     public String getHomeTeam() {
-        return homeTeam;
+        return this.homeTeam;
     }
 
     public String getAwayTeam() {
-        return awayTeam;
+        return this.awayTeam;
     }
 
     public LocalDateTime getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public SaleStatus getSaleStatus() {
-        return saleStatus;
+        return this.saleStatus;
     }
 }

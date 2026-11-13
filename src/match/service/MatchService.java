@@ -52,7 +52,7 @@ public class MatchService {
         if (request == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Match request is required");
         }
-        validateMatchRequest(request);
+        this.validateMatchRequest(request);
         Match match = new Match(null, request.getStadiumId(), request.getHomeTeam(),
                 request.getAwayTeam(), request.getStartTime(), SaleStatus.CLOSED);
         Match saved = this.matchRepository.save(match);
@@ -79,15 +79,15 @@ public class MatchService {
     }
 
     public MatchResponseDto updateMatch(Long matchId, MatchRequestDto request) {
-        validateMatchRequest(request);
+        this.validateMatchRequest(request);
         Match match = this.matchRepository.findById(matchId);
         if (match == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Match not found");
         }
-        requireNoBookingHistory(matchId);
+        this.requireNoBookingHistory(matchId);
         if (match.getSaleStatus() == SaleStatus.OPEN
-                || !matchSeatRepository.findByMatchId(matchId).isEmpty()
-                || !ticketPriceRepository.findByMatchId(matchId).isEmpty()) {
+                || !this.matchSeatRepository.findByMatchId(matchId).isEmpty()
+                || !this.ticketPriceRepository.findByMatchId(matchId).isEmpty()) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Only a closed match without inventory or prices can be changed");
         }
@@ -99,14 +99,14 @@ public class MatchService {
     }
 
     public boolean deleteMatch(Long matchId) {
-        getMatchDetails(matchId);
-        requireNoBookingHistory(matchId);
-        if (getTicketSalesStatus(matchId) == SaleStatus.OPEN) {
+        this.getMatchDetails(matchId);
+        this.requireNoBookingHistory(matchId);
+        if (this.getTicketSalesStatus(matchId) == SaleStatus.OPEN) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Close sales before deleting the match");
         }
-        matchSeatRepository.deleteByMatchId(matchId);
-        for (TicketPrice price : ticketPriceRepository.findByMatchId(matchId)) {
-            ticketPriceRepository.delete(matchId, price.getSectionId());
+        this.matchSeatRepository.deleteByMatchId(matchId);
+        for (TicketPrice price : this.ticketPriceRepository.findByMatchId(matchId)) {
+            this.ticketPriceRepository.delete(matchId, price.getSectionId());
         }
         return this.matchRepository.delete(matchId);
     }
@@ -115,8 +115,8 @@ public class MatchService {
         if (request == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Price request is required");
         }
-        MatchResponseDto match = getMatchDetails(request.getMatchId());
-        Section section = sectionRepository.findById(request.getSectionId());
+        MatchResponseDto match = this.getMatchDetails(request.getMatchId());
+        Section section = this.sectionRepository.findById(request.getSectionId());
         if (section == null || !section.getStadiumId().equals(match.getStadiumId())) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Section must belong to the match stadium");
         }
@@ -140,7 +140,7 @@ public class MatchService {
     }
 
     public TicketPrice updateTicketPrice(Long matchId, Long sectionId, BigDecimal amount) {
-        if (getTicketSalesStatus(matchId) == SaleStatus.OPEN) {
+        if (this.getTicketSalesStatus(matchId) == SaleStatus.OPEN) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Close sales before changing prices");
         }
         TicketPrice price = this.ticketPriceRepository.findPrice(matchId, sectionId);
@@ -152,7 +152,7 @@ public class MatchService {
     }
 
     public boolean deleteTicketPrice(Long matchId, Long sectionId) {
-        if (getTicketSalesStatus(matchId) == SaleStatus.OPEN) {
+        if (this.getTicketSalesStatus(matchId) == SaleStatus.OPEN) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Close sales before deleting prices");
         }
         return this.ticketPriceRepository.delete(matchId, sectionId);
@@ -167,10 +167,10 @@ public class MatchService {
             throw new AppException(ErrorCode.INVALID_INPUT, "Match has already started");
         }
         List<Seat> activeSeats = new ArrayList<>();
-        for (Section section : sectionRepository.findByStadiumId(match.getStadiumId())) {
-            for (Seat seat : seatRepository.findBySectionId(section.getId())) {
+        for (Section section : this.sectionRepository.findByStadiumId(match.getStadiumId())) {
+            for (Seat seat : this.seatRepository.findBySectionId(section.getId())) {
                 if (seat.isActive()) {
-                    if (ticketPriceRepository.findPrice(matchId, section.getId()) == null) {
+                    if (this.ticketPriceRepository.findPrice(matchId, section.getId()) == null) {
                         throw new AppException(ErrorCode.INVALID_INPUT,
                                 "Set a price for every section with active seats before opening sales");
                     }
@@ -182,8 +182,8 @@ public class MatchService {
             throw new AppException(ErrorCode.INVALID_INPUT, "No active seats for this stadium");
         }
         for (Seat seat : activeSeats) {
-            if (matchSeatRepository.find(matchId, seat.getId()) == null) {
-                matchSeatRepository.save(new MatchSeat(null, matchId, seat.getId(), SeatStatus.AVAILABLE, 0));
+            if (this.matchSeatRepository.find(matchId, seat.getId()) == null) {
+                this.matchSeatRepository.save(new MatchSeat(null, matchId, seat.getId(), SeatStatus.AVAILABLE, 0));
             }
         }
         match.changeSaleStatus(SaleStatus.OPEN);
@@ -212,7 +212,7 @@ public class MatchService {
     }
 
     private void requireNoBookingHistory(Long matchId) {
-        for (Booking booking : bookingRepository.findAll()) {
+        for (Booking booking : this.bookingRepository.findAll()) {
             if (booking.getMatchId().equals(matchId)) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Match has booking history and cannot be changed or deleted");
             }
@@ -220,7 +220,7 @@ public class MatchService {
     }
 
     private void validateMatchRequest(MatchRequestDto request) {
-        if (request == null || stadiumRepository.findById(request.getStadiumId()) == null
+        if (request == null || this.stadiumRepository.findById(request.getStadiumId()) == null
                 || request.getStartTime() == null || !request.getStartTime().isAfter(LocalDateTime.now())
                 || request.getHomeTeam() == null || request.getHomeTeam().trim().isEmpty()
                 || request.getAwayTeam() == null || request.getAwayTeam().trim().isEmpty()

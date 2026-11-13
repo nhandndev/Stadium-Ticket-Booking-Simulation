@@ -26,7 +26,7 @@ public class SynchronizedStrategy implements BookingStrategy {
 
     @Override
     public BookingTransaction execute(Long fanId, Long matchId, List<Long> seatIds) {
-        return execute(null, fanId, matchId, seatIds);
+        return this.execute(null, fanId, matchId, seatIds);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class SynchronizedStrategy implements BookingStrategy {
         BookingTransaction transaction = new BookingTransaction(null, fanId, matchId,
                 seatIds, SyncMechanism.SYNCHRONIZED);
         boolean booked = bookingId == null
-                ? matchSeatRepository.bookSeatsSynchronized(matchId, seatIds)
-                : matchSeatRepository.bookSeatsSynchronized(bookingId, matchId, seatIds);
+                ? this.matchSeatRepository.bookSeatsSynchronized(matchId, seatIds)
+                : this.matchSeatRepository.bookSeatsSynchronized(bookingId, matchId, seatIds);
         LocalDateTime completedAt = LocalDateTime.now();
         if (completedAt.isBefore(transaction.getCreatedAt())) {
             completedAt = transaction.getCreatedAt();

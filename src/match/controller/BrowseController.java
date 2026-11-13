@@ -15,19 +15,19 @@ public class BrowseController {
     }
 
     public List<MatchResponseDto> searchMatches(String keyword) {
-        return browseService.searchMatches(keyword);
+        return this.browseService.searchMatches(keyword);
     }
 
     public List<MatchResponseDto> filterMatches(Long stadiumId, LocalDate startDate) {
-        return browseService.filterMatches(stadiumId, startDate);
+        return this.browseService.filterMatches(stadiumId, startDate);
     }
 
     public MatchResponseDto viewMatchDetails(Long matchId) {
-        return browseService.viewMatchDetails(matchId);
+        return this.browseService.viewMatchDetails(matchId);
     }
 
     public List<MatchSeatResponseDto> getSeatMap(Long matchId) {
-        return browseService.getSeatMap(matchId);
+        return this.browseService.getSeatMap(matchId);
     }
 
 }

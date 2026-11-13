@@ -29,7 +29,7 @@ classDiagram
         +displayResult(result: Object): void
         +formatItem(item: Object): String
         +showSystemSummary(summary: SystemSummaryDto): void
-        +showAuditLogs(logs: List~AuditLog~): void
+        +showAuditLogs(logs: List~AuditLog~, staffAccounts: List~AccountResponseDto~): void
     }
     class StadiumController {
         -stadiumService: StadiumService
@@ -641,6 +641,7 @@ classDiagram
         +acceptOfflinePayment(sellerId: Long, request: PaymentRequestDto): PaymentResponseDto
         +issueTickets(bookingId: Long): List~TicketResponseDto~
         +getMyBookings(fanId: Long): List~BookingResponseDto~
+        +getTicketsForBooking(bookingId: Long): List~TicketResponseDto~
         +getBookingDetails(bookingId: Long): BookingResponseDto
         +cancelBooking(bookingId: Long): BookingResponseDto
     }

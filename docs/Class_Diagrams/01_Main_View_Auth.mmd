@@ -275,7 +275,9 @@ classDiagram
         -checkedInAt: LocalDateTime
         -matchName: String
         -seatLabel: String
-        +TicketResponseDto(ticketId: Long, bookingId: Long, matchId: Long, seatId: Long, ticketCode: String, status: TicketStatus, checkedInAt: LocalDateTime, matchName: String, seatLabel: String)
+        -customerName: String
+        -customerPhone: String
+        +TicketResponseDto(ticketId: Long, bookingId: Long, matchId: Long, seatId: Long, ticketCode: String, status: TicketStatus, checkedInAt: LocalDateTime, matchName: String, seatLabel: String, customerName: String, customerPhone: String)
         +getTicketId(): Long
         +getBookingId(): Long
         +getMatchId(): Long
@@ -285,6 +287,8 @@ classDiagram
         +getCheckedInAt(): LocalDateTime
         +getMatchName(): String
         +getSeatLabel(): String
+        +getCustomerName(): String
+        +getCustomerPhone(): String
     }
     class BaseEntity {
         -id: Long
@@ -425,6 +429,7 @@ classDiagram
         +acceptOfflinePayment(sellerId: Long, request: PaymentRequestDto): PaymentResponseDto
         +issueTickets(bookingId: Long): List~TicketResponseDto~
         +getMyBookings(fanId: Long): List~BookingResponseDto~
+        +getTicketsForBooking(bookingId: Long): List~TicketResponseDto~
         +getBookingDetails(bookingId: Long): BookingResponseDto
         +cancelBooking(bookingId: Long): BookingResponseDto
     }

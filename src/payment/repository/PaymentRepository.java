@@ -19,7 +19,7 @@ public class PaymentRepository extends CsvRepository<Payment> {
         if (bookingId == null || bookingId <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Booking ID must be positive");
         }
-        List<Payment> payments = findByCondition(
+        List<Payment> payments = this.findByCondition(
                 payment -> payment.getBookingId().equals(bookingId));
         if (payments.size() > 1) {
             throw new AppException(ErrorCode.CSV_ERROR, "Multiple payments for one booking");

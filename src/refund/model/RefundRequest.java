@@ -31,34 +31,34 @@ public class RefundRequest extends BaseEntity {
     }
 
     public void approve(Long adminId, String note, LocalDateTime time) {
-        review(adminId, note, time, RefundStatus.APPROVED);
+        this.review(adminId, note, time, RefundStatus.APPROVED);
     }
 
     public void reject(Long adminId, String note, LocalDateTime time) {
-        review(adminId, note, time, RefundStatus.REJECTED);
+        this.review(adminId, note, time, RefundStatus.REJECTED);
     }
 
     private void review(Long adminId, String note, LocalDateTime time,
                         RefundStatus decision) {
-        if (status != RefundStatus.REQUESTED) {
+        if (this.status != RefundStatus.REQUESTED) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Refund request already reviewed");
         }
         if (adminId == null || adminId <= 0 || note == null || note.trim().isEmpty()
-                || time == null || time.isBefore(requestedAt)) {
+                || time == null || time.isBefore(this.requestedAt)) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid refund review");
         }
-        reviewedBy = adminId;
-        reviewedAt = time;
-        reviewNote = note;
-        status = decision;
+        this.reviewedBy = adminId;
+        this.reviewedAt = time;
+        this.reviewNote = note;
+        this.status = decision;
     }
 
-    public Long getBookingId() { return bookingId; }
-    public Long getFanId() { return fanId; }
-    public String getReason() { return reason; }
-    public RefundStatus getStatus() { return status; }
-    public LocalDateTime getRequestedAt() { return requestedAt; }
-    public Long getReviewedBy() { return reviewedBy; }
-    public LocalDateTime getReviewedAt() { return reviewedAt; }
-    public String getReviewNote() { return reviewNote; }
+    public Long getBookingId() { return this.bookingId; }
+    public Long getFanId() { return this.fanId; }
+    public String getReason() { return this.reason; }
+    public RefundStatus getStatus() { return this.status; }
+    public LocalDateTime getRequestedAt() { return this.requestedAt; }
+    public Long getReviewedBy() { return this.reviewedBy; }
+    public LocalDateTime getReviewedAt() { return this.reviewedAt; }
+    public String getReviewNote() { return this.reviewNote; }
 }

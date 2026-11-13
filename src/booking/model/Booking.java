@@ -45,55 +45,55 @@ public class Booking extends BaseEntity {
         }
         this.createdAt = createdAt;
         this.expiresAt = expiresAt;
-        validateTicketLimit();
+        this.validateTicketLimit();
     }
 
     public void validateTicketLimit() {
-        if (seatIds.isEmpty() || seatIds.size() > 4) {
+        if (this.seatIds.isEmpty() || this.seatIds.size() > 4) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Choose 1 to 4 seats");
         }
-        for (Long seatId : seatIds) {
+        for (Long seatId : this.seatIds) {
             if (seatId == null || seatId <= 0) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Seat ID must be positive");
             }
         }
-        if (new HashSet<>(seatIds).size() != seatIds.size()) {
+        if (new HashSet<>(this.seatIds).size() != this.seatIds.size()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Duplicate seat ID");
         }
     }
 
     public void confirm() {
-        if (status != BookingStatus.PENDING) {
+        if (this.status != BookingStatus.PENDING) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Only pending booking can be confirmed");
         }
-        status = BookingStatus.CONFIRMED;
+        this.status = BookingStatus.CONFIRMED;
     }
 
     public void cancel() {
-        if (status == BookingStatus.CANCELLED || status == BookingStatus.EXPIRED) {
+        if (this.status == BookingStatus.CANCELLED || this.status == BookingStatus.EXPIRED) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Booking is already cancelled or expired");
         }
-        status = BookingStatus.CANCELLED;
+        this.status = BookingStatus.CANCELLED;
     }
 
     public boolean isExpired(LocalDateTime now) {
         if (now == null) throw new AppException(ErrorCode.INVALID_INPUT, "Current time is required");
-        return status == BookingStatus.PENDING
-                && (expiresAt == null || !now.isBefore(expiresAt));
+        return this.status == BookingStatus.PENDING
+                && (this.expiresAt == null || !now.isBefore(this.expiresAt));
     }
 
     public void expire() {
-        if (status != BookingStatus.PENDING) {
+        if (this.status != BookingStatus.PENDING) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Only a pending booking can expire");
         }
-        status = BookingStatus.EXPIRED;
+        this.status = BookingStatus.EXPIRED;
     }
 
-    public Long getFanId() { return fanId; }
-    public Long getMatchId() { return matchId; }
-    public List<Long> getSeatIds() { return new ArrayList<>(seatIds); }
-    public BigDecimal getTotalAmount() { return totalAmount; }
-    public BookingStatus getStatus() { return status; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getExpiresAt() { return expiresAt; }
+    public Long getFanId() { return this.fanId; }
+    public Long getMatchId() { return this.matchId; }
+    public List<Long> getSeatIds() { return new ArrayList<>(this.seatIds); }
+    public BigDecimal getTotalAmount() { return this.totalAmount; }
+    public BookingStatus getStatus() { return this.status; }
+    public LocalDateTime getCreatedAt() { return this.createdAt; }
+    public LocalDateTime getExpiresAt() { return this.expiresAt; }
 }

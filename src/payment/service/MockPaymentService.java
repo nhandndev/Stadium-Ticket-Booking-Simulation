@@ -17,6 +17,6 @@ public class MockPaymentService {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Valid booking ID and positive amount are required");
         }
-        return successMode;
+        return this.successMode;
     }
 }

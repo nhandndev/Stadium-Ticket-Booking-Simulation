@@ -18,9 +18,9 @@ public class AccountRequestDto {
         this.role = role;
     }
 
-    public UserRole getRole() { return role; }
-    public String getFullName() { return fullName; }
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public String getPhone() { return phone; }
+    public UserRole getRole() { return this.role; }
+    public String getFullName() { return this.fullName; }
+    public String getEmail() { return this.email; }
+    public String getPassword() { return this.password; }
+    public String getPhone() { return this.phone; }
 }

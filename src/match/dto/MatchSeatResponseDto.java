@@ -31,35 +31,35 @@ public class MatchSeatResponseDto {
     }
 
     public boolean isAvailable() {
-        return active && status == SeatStatus.AVAILABLE;
+        return this.active && this.status == SeatStatus.AVAILABLE;
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public Long getMatchId() {
-        return matchId;
+        return this.matchId;
     }
 
     public Long getSeatId() {
-        return seatId;
+        return this.seatId;
     }
 
     public Long getSectionId() {
-        return sectionId;
+        return this.sectionId;
     }
 
     public SeatStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     public int getVersion() {
-        return version;
+        return this.version;
     }
 
-    public String getSectionName() { return sectionName; }
-    public String getSeatLabel() { return seatLabel; }
-    public BigDecimal getPrice() { return price; }
-    public boolean isActive() { return active; }
+    public String getSectionName() { return this.sectionName; }
+    public String getSeatLabel() { return this.seatLabel; }
+    public BigDecimal getPrice() { return this.price; }
+    public boolean isActive() { return this.active; }
 }

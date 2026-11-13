@@ -17,7 +17,7 @@ public class SeatRepository extends CsvRepository<Seat> {
         if (sectionId == null || sectionId <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Section ID must be positive");
         }
-        return findByCondition(seat -> seat.getSectionId().equals(sectionId));
+        return this.findByCondition(seat -> seat.getSectionId().equals(sectionId));
     }
 
     @Override

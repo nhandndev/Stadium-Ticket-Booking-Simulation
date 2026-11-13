@@ -15,10 +15,10 @@ public enum ErrorCode {
     }
 
     public String getCode() {
-        return code;
+        return this.code;
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 }

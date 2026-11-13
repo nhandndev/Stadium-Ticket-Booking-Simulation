@@ -81,7 +81,7 @@ public class Main {
                 new BrowseService(matchRepository, matchSeatRepository, seatRepository,
                         stadiumRepository, sectionRepository, ticketPriceRepository, bookingService));
         TicketService ticketService = new TicketService(ticketRepository, bookingRepository,
-                matchRepository, seatRepository, sectionRepository);
+                matchRepository, seatRepository, sectionRepository, fanRepository);
         RefundController refundController = new RefundController(new RefundService(
                 refundRepository, bookingRepository, paymentRepository, ticketRepository,
                 matchRepository, matchSeatRepository), authController);

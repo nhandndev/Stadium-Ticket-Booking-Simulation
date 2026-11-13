@@ -25,22 +25,22 @@ public abstract class CsvRepository<T extends BaseEntity> {
         this.filePath = filePath.toAbsolutePath().normalize();
     }
     public List<T> findAll() {
-        ensureFile();
+        this.ensureFile();
         try {
-            List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+            List<String> lines = Files.readAllLines(this.filePath, StandardCharsets.UTF_8);
             List<T> entities = new ArrayList<>();
             Set<Long> ids = new HashSet<>();
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
                 if (line.trim().isEmpty()) continue;
                 try {
-                    T entity = parseLine(line);
+                    T entity = this.parseLine(line);
                     if(entity.getId() == null || entity.getId() <= 0 || !ids.add(entity.getId())) {
                         throw new AppException(ErrorCode.CSV_ERROR, "Invalid or duplicate ID");
                     }
                     entities.add(entity);
                 } catch (AppException | IllegalArgumentException e){
-                    throw new AppException(ErrorCode.CSV_ERROR, filePath.getFileName()+" line "+(i+1)+": "+e.getMessage());
+                    throw new AppException(ErrorCode.CSV_ERROR, this.filePath.getFileName()+" line "+(i+1)+": "+e.getMessage());
                 }
             }
             return entities;
@@ -50,7 +50,7 @@ public abstract class CsvRepository<T extends BaseEntity> {
     }
     public T findById(Long id) {
         if(id == null || id <= 0) throw new AppException(ErrorCode.INVALID_INPUT,"Invalid ID , ID Must be greater than 0");
-        for(T entity : findAll()) {
+        for(T entity : this.findAll()) {
             if(entity.getId().equals(id)) {
                 return entity;
             }
@@ -62,7 +62,7 @@ public abstract class CsvRepository<T extends BaseEntity> {
             throw new AppException(ErrorCode.INVALID_INPUT,"Condition is required");
         }
         List<T> result = new ArrayList<>();
-        for(T entity : findAll()) {
+        for(T entity : this.findAll()) {
             if(condition.test(entity)) {
                 result.add(entity);
             }
@@ -72,7 +72,7 @@ public abstract class CsvRepository<T extends BaseEntity> {
     public T save(T entity) {
         if (entity == null) throw new AppException(ErrorCode.INVALID_INPUT, "Entity is required");
 
-        List<T> entities = findAll();
+        List<T> entities = this.findAll();
         Long originalId = entity.getId();
         if (originalId == null) {
             long maxId = 0;
@@ -95,7 +95,7 @@ public abstract class CsvRepository<T extends BaseEntity> {
         }
         entities.add(entity);
         try {
-            writeAll(entities);
+            this.writeAll(entities);
         } catch (AppException e) {
             entity.setId(originalId);
             throw e;
@@ -107,11 +107,11 @@ public abstract class CsvRepository<T extends BaseEntity> {
         if(entity.getId() == null || entity.getId() <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid ID");
         }
-        List<T> entities = findAll();
+        List<T> entities = this.findAll();
         for(int i = 0 ; i< entities.size() ; i++) {
             if(entities.get(i).getId().equals(entity.getId())) {
                 entities.set(i, entity);
-                writeAll(entities);
+                this.writeAll(entities);
                 return entity;
             }
         }
@@ -121,11 +121,11 @@ public abstract class CsvRepository<T extends BaseEntity> {
         if(id == null || id <= 0){
             throw new AppException(ErrorCode.INVALID_INPUT,"Invalid ID");
         }
-        List<T> entities = findAll();
+        List<T> entities = this.findAll();
         for(int i = 0 ; i< entities.size() ; i++) {
             if(entities.get(i).getId().equals(id)) {
                 entities.remove(i);
-                writeAll(entities);
+                this.writeAll(entities);
                 return true;
             }
         }
@@ -133,9 +133,9 @@ public abstract class CsvRepository<T extends BaseEntity> {
     }
     private void ensureFile(){
         try{
-            Files.createDirectories(filePath.getParent());
-            if(!Files.exists(filePath)){
-                Files.createFile(filePath);
+            Files.createDirectories(this.filePath.getParent());
+            if(!Files.exists(this.filePath)){
+                Files.createFile(this.filePath);
             }
         }catch (IOException e){
             throw new AppException(ErrorCode.CSV_ERROR,"Cannot create file");
@@ -144,23 +144,23 @@ public abstract class CsvRepository<T extends BaseEntity> {
     private void writeAll(List<T> entities) {
         List<String> lines = new ArrayList<>();
         for (T entity : entities) {
-            lines.add(formatLine(entity));
+            lines.add(this.formatLine(entity));
         }
-        ensureFile();
+        this.ensureFile();
         Path temporaryFile = null;
         try {
-            temporaryFile = Files.createTempFile(filePath.getParent(), "csv-", ".tmp");
+            temporaryFile = Files.createTempFile(this.filePath.getParent(), "csv-", ".tmp");
             Files.write(temporaryFile, lines, StandardCharsets.UTF_8);
             try {
-                Files.move(temporaryFile, filePath,
+                Files.move(temporaryFile, this.filePath,
                         StandardCopyOption.REPLACE_EXISTING,
                         StandardCopyOption.ATOMIC_MOVE);
             } catch (AtomicMoveNotSupportedException e) {
-                Files.move(temporaryFile, filePath, StandardCopyOption.REPLACE_EXISTING);
+                Files.move(temporaryFile, this.filePath, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
             throw new AppException(ErrorCode.CSV_ERROR,
-                    "Cannot write " + filePath + ": " + e.getMessage());
+                    "Cannot write " + this.filePath + ": " + e.getMessage());
         } finally {
             if (temporaryFile != null) {
                 try {

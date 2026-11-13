@@ -11,6 +11,6 @@ public class PaymentRequestDto {
         this.amount = amount;
     }
 
-    public Long getBookingId() { return bookingId; }
-    public BigDecimal getAmount() { return amount; }
+    public Long getBookingId() { return this.bookingId; }
+    public BigDecimal getAmount() { return this.amount; }
 }

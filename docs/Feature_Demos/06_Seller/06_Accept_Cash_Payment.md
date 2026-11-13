@@ -1,6 +1,94 @@
 # Accept Cash Payment
 
-- Record offline cash receipt with RECEIVED before the deadline. Issue ticket remains a separate operation.
+## Current Seller Menu — 2026-11-14
+
+Seller > 3. Ticket sales contains 1. Create booking for Fan / walk-in customer,
+2. Pay for an existing booking and 0. Back. Successful cash checkout automatically
+issues/displays tickets. Payment and issue retain separate methods in the code.
+The walkthroughs here use an isolated copy of the core fixture with future Match
+dates. Inputs are listed in order. A blank line means Enter.
+
+### Pay for an existing walk-in booking and issue tickets
+
+Start at the Ticket sales menu.
+
+Inputs
+
+```text
+2
+4
+RECEIVED
+```
+
+Result captured from the current code
+
+```text
+Payment #4 | Booking #4 | 500000 VND | Method OFFLINE_CASH | Status SUCCESS
+Ticket #3 | Code T-4-4 | Vietnam vs Thailand | Stand A VIP A4 | Status ISSUED
+
+=== SELLER > TICKET SALES ===
+1. Create booking for Fan / walk-in customer
+2. Pay for an existing booking
+0. Back to Seller menu
+Choose:
+```
+
+### Reject an unknown booking
+
+Start at the Ticket sales menu.
+
+Inputs
+
+```text
+2
+999999
+```
+
+Result captured from the current code
+
+```text
+Booking not found
+
+=== SELLER > TICKET SALES ===
+1. Create booking for Fan / walk-in customer
+2. Pay for an existing booking
+0. Back to Seller menu
+Choose:
+```
+
+### Reject an expired booking before cash collection
+
+Start at the Ticket sales menu.
+
+Inputs
+
+```text
+2
+5
+```
+
+Result captured from the current code
+
+```text
+Booking #5 | Walk-in customer Walk-in customer | Vietnam vs Thailand | Seats [Stand A VIP A5] | Total 500000 VND | Status EXPIRED
+Keep Booking ID 5 for payment or ticket issuance.
+Booking has expired. Offline payment is no longer allowed. Create a new booking.
+
+=== SELLER > TICKET SALES ===
+1. Create booking for Fan / walk-in customer
+2. Pay for an existing booking
+0. Back to Seller menu
+Choose:
+```
+
+## Historical Numbered Flows
+
+The numbered flows below were captured on 2026-11-13 before the menu merge.
+Their Console blocks retain that historical menu. Use the current walkthroughs
+above and the [current menu map](../02_MENU_MAP.md) for the new navigation.
+
+
+- Confirm cash receipt with RECEIVED before the deadline. Successful cash checkout automatically issues tickets.
 - Code path `MainController → BookingController.acceptOfflinePayment → BookingService.acceptOfflinePayment → PaymentRepository / MatchSeatRepository / BookingRepository`.
 - Press Enter after each input. A blank Enter submits an empty line.
 
@@ -169,7 +257,7 @@ Choose option:
 
 ### Points to explain
 
-- Record offline cash receipt with RECEIVED before the deadline. Issue ticket remains a separate operation.
+- Confirm cash receipt with RECEIVED before the deadline. Successful cash checkout automatically issues tickets.
 - The flow ends at Main. Keep CORE_DIR for the next flow.
 
 <a id="flow-088"></a>
@@ -330,7 +418,7 @@ Choose option:
 
 ### Points to explain
 
-- Record offline cash receipt with RECEIVED before the deadline. Issue ticket remains a separate operation.
+- Confirm cash receipt with RECEIVED before the deadline. Successful cash checkout automatically issues tickets.
 - The flow ends at Main. Keep CORE_DIR for the next flow.
 
 <a id="flow-144"></a>
@@ -500,7 +588,7 @@ Goodbye!
 
 ### Points to explain
 
-- Record offline cash receipt with RECEIVED before the deadline. Issue ticket remains a separate operation.
+- Confirm cash receipt with RECEIVED before the deadline. Successful cash checkout automatically issues tickets.
 - Writes occur in the demo copy. Keep the designated directory for subsequent flows.
 
 <a id="flow-146"></a>
@@ -670,7 +758,7 @@ Goodbye!
 
 ### Points to explain
 
-- Record offline cash receipt with RECEIVED before the deadline. Issue ticket remains a separate operation.
+- Confirm cash receipt with RECEIVED before the deadline. Successful cash checkout automatically issues tickets.
 - Writes occur in the demo copy. Keep the designated directory for subsequent flows.
 
 <a id="flow-152"></a>
@@ -827,5 +915,5 @@ Goodbye!
 
 ### Points to explain
 
-- Record offline cash receipt with RECEIVED before the deadline. Issue ticket remains a separate operation.
+- Confirm cash receipt with RECEIVED before the deadline. Successful cash checkout automatically issues tickets.
 - Writes occur in the demo copy. Keep the designated directory for subsequent flows.

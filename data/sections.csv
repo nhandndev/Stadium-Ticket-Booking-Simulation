@@ -1,5 +1,10 @@
 1,1,Stand A VIP
-2,1,Stand B
-3,1,Stand C
-4,1,Stand D
-5,2,Main Stand
+2,1,Stand B Premium
+3,1,Stand C Standard
+4,1,Stand D Standard
+5,2,Main Stand VIP
+6,1,Stand E Standard
+7,2,East Stand Premium
+8,2,West Stand Standard
+9,2,North Stand Standard
+10,2,South Stand Standard

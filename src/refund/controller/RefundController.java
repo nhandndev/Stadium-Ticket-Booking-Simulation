@@ -28,38 +28,38 @@ public class RefundController {
     }
 
     public RefundResponseDto requestRefund(RefundRequestDto request) {
-        UserResponseDto fan = requireRole(UserRole.FAN);
+        UserResponseDto fan = this.requireRole(UserRole.FAN);
         if (request == null || !fan.getId().equals(request.getFanId())) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Fan can only request own refund");
         }
-        return refundService.requestRefund(request);
+        return this.refundService.requestRefund(request);
     }
 
     public List<RefundRequest> getPendingRefunds() {
-        requireRole(UserRole.ADMIN);
-        return refundService.getPendingRefunds();
+        this.requireRole(UserRole.ADMIN);
+        return this.refundService.getPendingRefunds();
     }
 
     public List<RefundResponseDto> getMyRefunds(Long fanId) {
-        UserResponseDto fan = requireRole(UserRole.FAN);
+        UserResponseDto fan = this.requireRole(UserRole.FAN);
         if (!fan.getId().equals(fanId)) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Fan can only see own refund requests");
         }
-        return refundService.getMyRefunds(fanId);
+        return this.refundService.getMyRefunds(fanId);
     }
 
     public RefundResponseDto reviewRefund(RefundReviewRequestDto request) {
-        UserResponseDto admin = requireRole(UserRole.ADMIN);
+        UserResponseDto admin = this.requireRole(UserRole.ADMIN);
         if (request == null || !admin.getId().equals(request.getAdminId())) {
             throw new AppException(ErrorCode.INVALID_INPUT,
                     "Admin ID does not match current session");
         }
-        return refundService.reviewRefund(request);
+        return this.refundService.reviewRefund(request);
     }
 
     private UserResponseDto requireRole(UserRole role) {
-        UserResponseDto user = authController.getCurrentUser();
+        UserResponseDto user = this.authController.getCurrentUser();
         if (user == null || user.getId() == null
                 || user.getStatus() != UserStatus.ACTIVE || user.getRole() != role) {
             throw new AppException(ErrorCode.INVALID_INPUT,

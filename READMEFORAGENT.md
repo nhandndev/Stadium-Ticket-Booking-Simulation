@@ -37,6 +37,23 @@ browsing, 02 administration, 03 booking/payment/tickets, 04 repositories and
 05 domain models. Five Mermaid files correspond to class pages 01–05.
 The last source inspection matched 97 contracts and 192 expanded class boxes.
 
+The current Use Case overview contains 75 unique goals. Use one node per shared
+goal and connect every participating actor. The traceability document preserves
+established IDs, direct actors and Console entry paths. Check reachable menus
+before adding an actor association. Seller has five counter menu groups. Ticket sales contains Create booking for Fan /
+walk-in customer and Pay for an existing booking. Match listing/details, seat
+selection and Booking details remain supporting steps.
+
+## Runtime Dataset Baseline
+
+The main data directory starts with 2 Stadiums, 10 Sections, 200 physical Seats,
+100 Matches, 500 prices and 10000 MatchSeat rows. Each Stadium has 100 Seats
+(rows A–J, ten seats per row) and 50 Matches. Every Match references exactly the
+100 physical Seats of its Stadium. Rows A/B are VIP, C/D Premium and E–J Standard.
+All fixture Matches have inventory and prices, with mixed sales status and past/
+future dates. Runtime activity can change counts and states. The historical demo
+core fixture stays a smaller dataset with its own recorded IDs.
+
 ## Business Rules to Preserve
 
 - Creating PENDING holds one to four selected seats and persists createdAt/expiresAt.
@@ -48,10 +65,12 @@ The last source inspection matched 97 contracts and 192 expanded class boxes.
   only that booking's holds. Cleanup is safe to repeat after release interruption.
 - Expiry is checked on startup and relevant operations, including seat maps and
   administrative deactivation. BrowseService and StadiumService reference BookingService.
-- Seller's seven features match the Use Case. Creation, offline payment and issue
-  are separate. Account-holder/walk-in selection is inside counter creation.
-- Online checkout calls BookingService.issueTickets. Offline payment leaves issue
-  to Seller's explicit action. Repeated paid operations preserve their result.
+- Seller Ticket sales has create-new and pay-existing paths. Creation can defer
+  payment or continue through cash collection and automatic ticket issue.
+  Account-holder/walk-in selection is inside counter creation.
+- Online checkout and successful Seller cash checkout call issueTickets. A confirmed
+  cash booking can resume issue through Pay for an existing booking without a new charge.
+  Existing payment/issue methods retain their public names and signatures.
 - Fan booking/ticket/refund access is owner-scoped. Gate validates booking/Match/seat.
 - Seat is physical layout. MatchSeat is inventory for one Match.
 - Booking CSV writes eight columns with createdAt/expiresAt and reads legacy six.
@@ -65,6 +84,8 @@ Read the SRS, traceability and booking-protection documents before changing rule
 ## Coding and Alignment Conventions
 
 - Keep implementation straightforward for a plain-Java Console project.
+- Use `this.` for instance field access and calls to the current object's instance methods.
+  Keep parameters, local variables and static member access appropriately qualified.
 - Follow the existing package-by-domain structure and enums subpackages.
 - Attributes are private. UML expands explicit constructors and public methods.
   Private implementation helpers remain internal to the class.
@@ -97,7 +118,7 @@ java scripts/InspectDiagram.java
 ```
 
 Its output describes source contracts for comparison with the canonical UML.
-The feature guides document 148 current captured flows across 87 feature files.
+The 87 feature files retain 148 historical numbered flows and add current integrated-counter walkthroughs.
 The checked-in small fixture makes the core walkthrough reproducible.
 Their setup and order files define the fixture and dependent operation sequence.
 

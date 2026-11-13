@@ -60,51 +60,51 @@ public class BookingTransaction extends BaseEntity {
     }
 
     public void markSuccessful(LocalDateTime completedAt) {
-        validateCompletion(completedAt);
+        this.validateCompletion(completedAt);
         this.completedAt = completedAt;
         this.status = TransactionStatus.SUCCESS;
-        this.durationMillis = calculateDuration();
+        this.durationMillis = this.calculateDuration();
     }
 
     public void markFailed(String reason, LocalDateTime completedAt) {
-        markUnsuccessful(TransactionStatus.FAILED, reason, completedAt);
+        this.markUnsuccessful(TransactionStatus.FAILED, reason, completedAt);
     }
 
     public void markConflict(String reason, LocalDateTime completedAt) {
-        markUnsuccessful(TransactionStatus.CONFLICT, reason, completedAt);
+        this.markUnsuccessful(TransactionStatus.CONFLICT, reason, completedAt);
     }
 
     private void markUnsuccessful(TransactionStatus result, String reason,
                                   LocalDateTime completedAt) {
-        validateCompletion(completedAt);
+        this.validateCompletion(completedAt);
         if (reason == null || reason.trim().isEmpty()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Failure reason is required");
         }
         this.completedAt = completedAt;
         this.failureReason = reason;
         this.status = result;
-        this.durationMillis = calculateDuration();
+        this.durationMillis = this.calculateDuration();
     }
 
     private void validateCompletion(LocalDateTime time) {
-        if (status != null || time == null || time.isBefore(createdAt)) {
+        if (this.status != null || time == null || time.isBefore(this.createdAt)) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Invalid transaction completion");
         }
     }
 
     public long calculateDuration() {
-        if (completedAt == null) return 0L;
-        return Duration.between(createdAt, completedAt).toMillis();
+        if (this.completedAt == null) return 0L;
+        return Duration.between(this.createdAt, this.completedAt).toMillis();
     }
 
-    public Long getBookingId() { return bookingId; }
-    public Long getFanId() { return fanId; }
-    public Long getMatchId() { return matchId; }
-    public List<Long> getSeatIds() { return new ArrayList<>(seatIds); }
-    public SyncMechanism getMechanism() { return mechanism; }
-    public TransactionStatus getStatus() { return status; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getCompletedAt() { return completedAt; }
-    public long getDurationMillis() { return durationMillis; }
-    public String getFailureReason() { return failureReason; }
+    public Long getBookingId() { return this.bookingId; }
+    public Long getFanId() { return this.fanId; }
+    public Long getMatchId() { return this.matchId; }
+    public List<Long> getSeatIds() { return new ArrayList<>(this.seatIds); }
+    public SyncMechanism getMechanism() { return this.mechanism; }
+    public TransactionStatus getStatus() { return this.status; }
+    public LocalDateTime getCreatedAt() { return this.createdAt; }
+    public LocalDateTime getCompletedAt() { return this.completedAt; }
+    public long getDurationMillis() { return this.durationMillis; }
+    public String getFailureReason() { return this.failureReason; }
 }

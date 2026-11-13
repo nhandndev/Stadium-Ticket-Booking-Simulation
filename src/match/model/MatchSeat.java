@@ -30,57 +30,57 @@ public class MatchSeat extends BaseEntity {
     }
 
     public boolean isAvailable() {
-        return status == SeatStatus.AVAILABLE;
+        return this.status == SeatStatus.AVAILABLE;
     }
 
     public void lock() {
-        if (!isAvailable()) {
+        if (!this.isAvailable()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Seat is not available");
         }
-        status = SeatStatus.LOCKED;
-        version++;
+        this.status = SeatStatus.LOCKED;
+        this.version++;
     }
 
     public void hold(Long bookingId) {
         if (bookingId == null || bookingId <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Booking ID is required for a seat hold");
         }
-        lock();
-        holdBookingId = bookingId;
+        this.lock();
+        this.holdBookingId = bookingId;
     }
 
     public void markBooked() {
-        if (status != SeatStatus.LOCKED) {
+        if (this.status != SeatStatus.LOCKED) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Seat must be locked first");
         }
-        status = SeatStatus.BOOKED;
-        holdBookingId = null;
-        version++;
+        this.status = SeatStatus.BOOKED;
+        this.holdBookingId = null;
+        this.version++;
     }
 
     public void release() {
-        if (status == SeatStatus.AVAILABLE) {
+        if (this.status == SeatStatus.AVAILABLE) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Seat is already available");
         }
-        status = SeatStatus.AVAILABLE;
-        holdBookingId = null;
-        version++;
+        this.status = SeatStatus.AVAILABLE;
+        this.holdBookingId = null;
+        this.version++;
     }
 
     public Long getMatchId() {
-        return matchId;
+        return this.matchId;
     }
 
     public Long getSeatId() {
-        return seatId;
+        return this.seatId;
     }
 
     public SeatStatus getStatus() {
-        return status;
+        return this.status;
     }
 
     public int getVersion() {
-        return version;
+        return this.version;
     }
-    public Long getHoldBookingId() { return holdBookingId; }
+    public Long getHoldBookingId() { return this.holdBookingId; }
 }

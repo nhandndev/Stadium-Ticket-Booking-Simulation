@@ -14,14 +14,14 @@ public class TicketPriceRequestDto {
     }
 
     public BigDecimal getAmount() {
-        return amount;
+        return this.amount;
     }
 
     public Long getMatchId() {
-        return matchId;
+        return this.matchId;
     }
 
     public Long getSectionId() {
-        return sectionId;
+        return this.sectionId;
     }
 }

@@ -10,9 +10,9 @@ Main -> MainController
 ```
 
 - Main wires shared repository/service instances.
-- Controllers own navigation, authentication/role routing and operation orchestration.
+- Controllers own navigation, authentication/role routing, boundary ownership checks and operation orchestration.
 - Views read/print Console values.
-- Services validate ownership, account state, pricing, holds, payment and ticket rules.
+- Services apply account-state, pricing, hold, payment, refund and ticket rules, including ownership where the operation requires it.
 - Repositories parse/format CSV and perform data access.
 - Models hold state and enforce transitions. Enums use separate enums packages.
 
@@ -33,13 +33,37 @@ expanded in the corresponding diagram domains.
 
 ## Seller Scope
 
-SellerView presents the seven Use Case features. BookingController separately
-orchestrates creation, Accept offline payment and Issue ticket. Internal Booking ID
-lookup supports those operations. The account-holder and agreed walk-in branches
-share booking/payment logic. Walk-in fanId is empty and the receipt identifies the order.
+SellerView presents Search Fan, Create Fan, Ticket sales, View seat map and prices,
+and View customer booking history. The new public showTicketSalesMenu method
+presents the create-new and pay-existing branches.
+
+BookingController.runTicketSalesMenu is private navigation logic. Creation calls
+createBookingForCustomer, then collectOfflinePayment. Successful cash checkout
+calls the existing acceptOfflinePayment and issueTickets methods. Cancelling
+cash entry retains PENDING and its deadline. Existing bookings use the same flow
+by Booking ID. Confirmed cash checkout can safely resume ticket issue.
+
+The existing domain classes, public booking/payment/issue methods and relationships
+remain. SellerView adds showTicketSalesMenu(): int on Class Diagram page 03 and
+its Mermaid counterpart. Walk-in fanId stays empty.
 
 ## Contracts
 
 The canonical draw.io and five Mermaid files expand declared fields, explicit
 public constructors and public methods. Private helpers remain implementation
 details. Relationships express structure. Runtime flow is described above.
+
+## Ticket Preview and Audit Presentation
+
+- `BookingController.getTicketsForBooking` checks the same ownership/role rules as
+  Booking Details, then calls `BookingService.getTicketsForBooking`. Existing
+  BookingView and SellerView ticket-list methods render the result.
+- `TicketController.validateTicket(ticketCode)` obtains a preview. Confirmation calls
+  `checkInTicket(ticketCode)`, which revalidates while holding the ticket lock.
+- TicketService receives FanRepository through its constructor to resolve customer
+  name and phone into TicketResponseDto. BookingService and FanService populate
+  the same DTO fields. Walk-in values are `None`.
+- AdminController obtains audit rows and Staff account DTOs through its existing
+  collaborators. AdminManagementView matches the stored Staff ID to a name/role
+  for display. CSV schemas remain compatible. The displayed identity reflects the
+  current account record.

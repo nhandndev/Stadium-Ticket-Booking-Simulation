@@ -1,5 +1,10 @@
 # Update Profile
 
+Gate menu update — 2026-11-14. Gate dashboard option 2 is now `Check in ticket`.
+Its submenu has `1. Check in ticket` and `0. Back`. Ticket Code is the only ticket
+identifier requested. Captures below retain their original menu context.
+
+
 - Update the signed-in account full name and phone, then save the corresponding CSV record.
 - Code path `MainController → MainView.readProfileUpdateRequest → AuthController.updateCurrentUserProfile → AuthService → FanRepository / StaffRepository`.
 - Press Enter after each input. A blank Enter submits an empty line.

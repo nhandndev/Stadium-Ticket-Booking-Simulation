@@ -21,26 +21,26 @@ public class Seat extends BaseEntity {
     }
 
     public void activate() {
-        active = true;
+        this.active = true;
     }
 
     public void deactivate() {
-        active = false;
+        this.active = false;
     }
 
     public Long getSectionId() {
-        return sectionId;
+        return this.sectionId;
     }
 
     public String getRowLabel() {
-        return rowLabel;
+        return this.rowLabel;
     }
 
     public int getSeatNumber() {
-        return seatNumber;
+        return this.seatNumber;
     }
 
     public boolean isActive() {
-        return active;
+        return this.active;
     }
 }

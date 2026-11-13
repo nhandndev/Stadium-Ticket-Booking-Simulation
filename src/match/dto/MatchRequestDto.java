@@ -17,18 +17,18 @@ public class MatchRequestDto {
     }
 
     public Long getStadiumId() {
-        return stadiumId;
+        return this.stadiumId;
     }
 
     public String getHomeTeam() {
-        return homeTeam;
+        return this.homeTeam;
     }
 
     public String getAwayTeam() {
-        return awayTeam;
+        return this.awayTeam;
     }
 
     public LocalDateTime getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 }

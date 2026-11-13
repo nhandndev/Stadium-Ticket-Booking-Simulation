@@ -20,9 +20,9 @@ public class PaymentResponseDto {
         this.status = status;
     }
 
-    public Long getPaymentId() { return paymentId; }
-    public Long getBookingId() { return bookingId; }
-    public BigDecimal getAmount() { return amount; }
-    public PaymentMethod getMethod() { return method; }
-    public PaymentStatus getStatus() { return status; }
+    public Long getPaymentId() { return this.paymentId; }
+    public Long getBookingId() { return this.bookingId; }
+    public BigDecimal getAmount() { return this.amount; }
+    public PaymentMethod getMethod() { return this.method; }
+    public PaymentStatus getStatus() { return this.status; }
 }

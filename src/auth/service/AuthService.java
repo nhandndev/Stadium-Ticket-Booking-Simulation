@@ -56,11 +56,11 @@ public class AuthService {
     public UserResponseDto getCurrentUser() {
         if (this.currentUser == null) return null;
         User saved = this.currentUser instanceof Fan
-                ? fanRepository.findById(currentUser.getId())
-                : staffRepository.findById(currentUser.getId());
+                ? this.fanRepository.findById(this.currentUser.getId())
+                : this.staffRepository.findById(this.currentUser.getId());
         if (saved == null || saved.getStatus() != UserStatus.ACTIVE
                 || saved.getRole() == UserRole.UNASSIGNED
-                || !saved.getEmail().equalsIgnoreCase(currentUser.getEmail())) {
+                || !saved.getEmail().equalsIgnoreCase(this.currentUser.getEmail())) {
             this.currentUser = null;
             return null;
         }

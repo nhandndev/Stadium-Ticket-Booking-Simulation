@@ -9,6 +9,31 @@
 - Seller serves counter customers, accepts offline payment and issues tickets.
 - Gate Staff validates tickets and checks them in. Administrator reviews eligible refunds.
 
+## Explaining Shared Match Access
+
+- Guest and Fan list/search/filter Matches and view details and seat availability.
+- Seller lists/selects Matches and views details, seat maps and prices inside its counter workflows.
+- Administrator reaches the shared View Match List and View Match Details through Match Management.
+- The current Admin menu has no team-keyword search or Stadium/date-filter entry.
+- Seller calls filterMatches(null, null) to load the selection list. Its menu has no search/filter criteria form.
+- Gate Staff enters Ticket Code, reviews customer/Match/seat details and confirms check-in.
+- All authenticated actors inherit profile, profile update and logout through User.
+
+## Explaining Shared Use Cases
+
+- A shared business goal has one ellipse with links from every participating actor.
+- Guest, Fan, Seller and Administrator share View Match List and View Match Details.
+- Seller and Administrator share Search Fan and Create Fan.
+- Guest, Fan and Seller share View seat map and prices.
+- Fan ticket listing is represented once as View Ticket History.
+- Seller shares Select seats and View Booking Details through the counter workflows.
+- Owner booking history and Seller customer booking history remain separate because their ownership and selection rules differ.
+- Self-registration and staff-assisted account creation remain separate because their initiating actors and account-management rules differ.
+
+There are 75 goals on the current overview. The traceability document records
+actors, Console entry paths, implementation calls and demo links for every goal.
+Separate successful/rejected demo scenarios can belong to the same goal.
+
 ## Explaining the Booking Workflow
 
 - Creating PENDING stores the total, createdAt and expiresAt.
@@ -20,21 +45,35 @@
 - Cancelling an unpaid booking or failing payment also releases that booking's holds.
 - SYNCHRONIZED protects validation and state changes within one JVM.
 
-## The Seven Seller Features
+## Seller Counter Workflow
 
-1. Search Fan finds accounts by name/email or lists them.
-2. Create Fan registers an account when the customer wants one.
-3. Create booking for Fan selects an ACTIVE customer, Match and seats. The walk-in
-   branch buys directly at the counter and keeps booking/ticket codes.
-4. Accept offline payment collects cash for an unexpired booking. For example,
-   Fan chooses later payment and brings the Booking ID to Seller.
-5. Issue ticket issues tickets after the booking is CONFIRMED and payment succeeds.
-6. View seat map and prices shows Seat IDs, prices and availability.
-7. View customer booking history lists the selected Fan account's orders.
+The Seller counter menu has five groups.
 
-Booking creation, offline payment and ticket issue are separate operations.
-INACTIVE accounts are rejected before Match selection. Seat IDs 1,2,3,4 select
-four numeric IDs from the SEAT ID column. Errors identify the failed Seat ID and reason.
+1. Search Fan.
+2. Create Fan.
+3. Ticket sales.
+   1. Create booking for Fan / walk-in customer.
+   2. Pay for an existing booking.
+   0. Back to Seller menu.
+4. View seat map and prices.
+5. View customer booking history.
+0. Back to dashboard.
+
+Creating a booking continues to the cash-receipt prompt. Confirming RECEIVED
+records offline payment and immediately issues/displays tickets. Cancelling the
+cash prompt keeps PENDING and displays the Booking ID and persisted deadline.
+Ticket sales > Pay for an existing booking accepts that ID, including an order
+created by a Fan online, and issues tickets after successful cash payment.
+An already-CONFIRMED cash booking can resume ticket issuance through the same
+entry without collecting cash again. The existing payment and issue methods remain separate code operations.
+
+Explain the distinction between menu navigation and class responsibilities.
+Cash payment and ticket issue are sequential steps in the user's sales workflow.
+The code still uses separate acceptOfflinePayment and issueTickets methods.
+SellerView adds showTicketSalesMenu(): int. The Controller's new menu helper is private.
+
+INACTIVE accounts are rejected before Match selection. Seat IDs use numbers from
+the SEAT ID column. Error messages identify the invalid ID and reason.
 
 ## Explaining Classes and Relationships
 

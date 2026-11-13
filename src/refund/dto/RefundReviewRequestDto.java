@@ -14,8 +14,8 @@ public class RefundReviewRequestDto {
         this.note = note;
     }
 
-    public Long getAdminId() { return adminId; }
-    public Long getRequestId() { return requestId; }
-    public boolean isApprove() { return approve; }
-    public String getNote() { return note; }
+    public Long getAdminId() { return this.adminId; }
+    public Long getRequestId() { return this.requestId; }
+    public boolean isApprove() { return this.approve; }
+    public String getNote() { return this.note; }
 }

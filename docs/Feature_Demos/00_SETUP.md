@@ -1,7 +1,28 @@
 # Demo Setup
 
+## Current Counter Menu — Updated 2026-11-14
+
+The current menu is in [Menu map](02_MENU_MAP.md). Seller > Ticket sales contains
+1. Create booking for Fan / walk-in customer and 2. Pay for an existing booking.
+Cash confirmation automatically issues tickets. The 001–152 flow captures below
+or in linked guides record the earlier menu. Use the current Seller walkthroughs
+at the top of each Seller guide for the updated input sequence.
+
+
 Recorded on 2026-11-13. The 87 feature guides contain 148 flows and 1546
-input/output pairs captured from the current code.
+input/output pairs captured from that code version. Current counter walkthroughs appear separately.
+
+## Runtime Dataset for the 100-Match Layout
+
+The main data directory now contains 100 Matches, split 50/50 between the two
+Stadiums, with 100 physical Seats per Stadium and 100 MatchSeat rows per Match.
+Rows A–J contain ten seats each, grouped into VIP/Premium/Standard Sections.
+All Matches have prices and prepared inventory, including CLOSED Matches.
+Copy data to a temporary directory to use this layout in a demo.
+
+The CORE_DIR instructions below use the smaller historical fixture so the
+numbered captures retain their documented IDs. Current runtime data and those
+recorded fixtures have their own preparation instructions.
 
 ## Compile
 
@@ -67,7 +88,7 @@ subsequent payment and issue flows. Walk-ins keep their booking and ticket codes
 - Flow 144 accepts offline payment for that booking.
 - Flow 145 creates another walk-in booking for later payment.
 - Flow 146 accepts offline payment for the second booking after a restart.
-- Flow 147 issues tickets through the separate Issue ticket operation.
+- Historical Flow 147 used the former separate Issue ticket operation. Current cash checkout issues tickets automatically.
 - Flows 148–150 check INACTIVE rejection and specific invalid Seat ID reasons.
 
 ## EXPIRY_DEMO_DIR for Flows 151–152
@@ -89,22 +110,24 @@ java -cp out app.Main "$EXPIRY_DEMO_DIR"
 - Flow 152 logs in as Seller and enters Booking ID 3 at Accept offline payment.
 - The elapsed booking is rejected before payment is recorded, and its held seats are released.
 
-## Seven Seller Features
+## Current Seller Workflow
+
+The Seller counter menu has five groups.
 
 1. Search Fan.
 2. Create Fan.
-3. Create booking for Fan, with ACTIVE-account and walk-in branches.
-4. Accept offline payment.
-5. Issue ticket.
-6. View seat map and prices.
-7. View customer booking history.
+3. Ticket sales.
+   1. Create booking for Fan / walk-in customer.
+   2. Pay for an existing booking.
+   0. Back to Seller menu.
+4. View seat map and prices.
+5. View customer booking history.
+0. Back to dashboard.
 
-Booking creation, offline payment and ticket issue are three separate operations.
-Profile, login and logout are shared account-dashboard capabilities.
-
-## Source Data and Demo Copies
-
-The source currently contains 54 Matches, two Stadiums, five Sections and 10100
-physical Seats, along with accounts and business history. Each demo writes to its
-designated copied directory. Legacy six-column PENDING bookings without timestamps
-expire on access. CONFIRMED bookings and payment/ticket history retain their stored state.
+Creating a booking continues to the cash-receipt prompt. Confirming RECEIVED
+records offline payment and immediately issues/displays tickets. Cancelling the
+cash prompt keeps PENDING and displays the Booking ID and persisted deadline.
+Ticket sales > Pay for an existing booking accepts that ID, including an order
+created by a Fan online, and issues tickets after successful cash payment.
+An already-CONFIRMED cash booking can resume ticket issuance through the same
+entry without collecting cash again. The existing payment and issue methods remain separate code operations.

@@ -33,6 +33,7 @@ classDiagram
         -scanner: Scanner
         +SellerView(scanner: Scanner)
         +showSellerMenu(): int
+        +showTicketSalesMenu(): int
         +showCustomerTypeMenu(): int
         +readFanKeyword(): String
         +readRegisterFanRequest(): RegisterFanRequestDto
@@ -53,7 +54,6 @@ classDiagram
         +GateView(scanner: Scanner)
         +showGateMenu(): int
         +readTicketCode(): String
-        +readMatchId(): Long
         +confirmCheckIn(): boolean
         +displayTicket(ticket: TicketResponseDto): void
         +displayMessage(message: String): void
@@ -96,6 +96,7 @@ classDiagram
         +acceptOfflinePayment(sellerId: Long, request: PaymentRequestDto): PaymentResponseDto
         +issueTickets(bookingId: Long): List~TicketResponseDto~
         +getMyBookings(fanId: Long): List~BookingResponseDto~
+        +getTicketsForBooking(bookingId: Long): List~TicketResponseDto~
         +getBookingDetails(bookingId: Long): BookingResponseDto
         +cancelBooking(bookingId: Long): BookingResponseDto
     }
@@ -106,9 +107,9 @@ classDiagram
         -gateView: GateView
         +TicketController(ticketService: TicketService, authController: AuthController, bookingRepository: BookingRepository, gateView: GateView)
         +runGateMenu(): void
-        +validateTicket(ticketCode: String, matchId: Long): TicketResponseDto
+        +validateTicket(ticketCode: String): TicketResponseDto
         +getTicketDetails(ticketId: Long): TicketResponseDto
-        +checkInTicket(ticketCode: String, matchId: Long): TicketResponseDto
+        +checkInTicket(ticketCode: String): TicketResponseDto
     }
     class RefundController {
         -refundService: RefundService
@@ -171,6 +172,7 @@ classDiagram
         +acceptOfflinePayment(sellerId: Long, request: PaymentRequestDto): PaymentResponseDto
         +issueTickets(bookingId: Long): List~TicketResponseDto~
         +getMyBookings(fanId: Long): List~BookingResponseDto~
+        +getTicketsForBooking(bookingId: Long): List~TicketResponseDto~
         +getBookingDetails(bookingId: Long): BookingResponseDto
         +cancelBooking(bookingId: Long): BookingResponseDto
     }
@@ -180,10 +182,11 @@ classDiagram
         -matchRepository: MatchRepository
         -seatRepository: SeatRepository
         -sectionRepository: SectionRepository
-        +TicketService(ticketRepository: TicketRepository, bookingRepository: BookingRepository, matchRepository: MatchRepository, seatRepository: SeatRepository, sectionRepository: SectionRepository)
-        +validateTicket(ticketCode: String, matchId: Long): TicketResponseDto
+        -fanRepository: FanRepository
+        +TicketService(ticketRepository: TicketRepository, bookingRepository: BookingRepository, matchRepository: MatchRepository, seatRepository: SeatRepository, sectionRepository: SectionRepository, fanRepository: FanRepository)
+        +validateTicket(ticketCode: String): TicketResponseDto
         +getTicketDetails(ticketId: Long): TicketResponseDto
-        +checkInTicket(ticketCode: String, matchId: Long): TicketResponseDto
+        +checkInTicket(ticketCode: String): TicketResponseDto
     }
     class RefundService {
         -refundRepository: RefundRepository
@@ -331,7 +334,9 @@ classDiagram
         -checkedInAt: LocalDateTime
         -matchName: String
         -seatLabel: String
-        +TicketResponseDto(ticketId: Long, bookingId: Long, matchId: Long, seatId: Long, ticketCode: String, status: TicketStatus, checkedInAt: LocalDateTime, matchName: String, seatLabel: String)
+        -customerName: String
+        -customerPhone: String
+        +TicketResponseDto(ticketId: Long, bookingId: Long, matchId: Long, seatId: Long, ticketCode: String, status: TicketStatus, checkedInAt: LocalDateTime, matchName: String, seatLabel: String, customerName: String, customerPhone: String)
         +getTicketId(): Long
         +getBookingId(): Long
         +getMatchId(): Long
@@ -341,6 +346,8 @@ classDiagram
         +getCheckedInAt(): LocalDateTime
         +getMatchName(): String
         +getSeatLabel(): String
+        +getCustomerName(): String
+        +getCustomerPhone(): String
     }
     class RefundRequestDto {
         -fanId: Long
@@ -661,6 +668,7 @@ classDiagram
     BookingService --> TicketRepository
     BookingService --> StrategyFactory
     BookingService --> MockPaymentService
+    TicketService --> FanRepository
     TicketService --> TicketRepository
     RefundService --> RefundRepository
     BookingController --> BookingView

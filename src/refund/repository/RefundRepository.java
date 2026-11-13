@@ -22,11 +22,11 @@ public class RefundRepository extends CsvRepository<RefundRequest> {
         if (fanId == null || fanId <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Fan ID must be positive");
         }
-        return findByCondition(request -> request.getFanId().equals(fanId));
+        return this.findByCondition(request -> request.getFanId().equals(fanId));
     }
 
     public List<RefundRequest> findPending() {
-        return findByCondition(request -> request.getStatus() == RefundStatus.REQUESTED);
+        return this.findByCondition(request -> request.getStatus() == RefundStatus.REQUESTED);
     }
 
     @Override

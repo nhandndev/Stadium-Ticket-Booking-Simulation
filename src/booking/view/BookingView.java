@@ -29,7 +29,7 @@ public class BookingView {
         System.out.println("4. Cancellations and refunds");
         System.out.println("0. Back to dashboard");
         System.out.print("Choose: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public int showRefundMenu() {
@@ -38,7 +38,7 @@ public class BookingView {
         System.out.println("2. Cancel unpaid pending booking");
         System.out.println("3. My refund requests\n0. Back to tickets and bookings");
         System.out.print("Choose: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public int showBookingActionsMenu(int group) {
@@ -59,12 +59,12 @@ public class BookingView {
         }
         System.out.println("0. Back to tickets and bookings");
         System.out.print("Choose: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public BookingRequestDto readBookingRequest(Long fanId, Long matchId) {
         System.out.print("Seat IDs (comma-separated, 1 to 4; 0 = Back): ");
-        String input = scanner.nextLine().trim();
+        String input = this.scanner.nextLine().trim();
         if (input.isEmpty() || input.equals("0")) return null;
         String[] parts = input.split(",", -1);
         if (parts.length < 1 || parts.length > 4) {
@@ -86,46 +86,46 @@ public class BookingView {
         System.out.println("Amount due: " + booking.getTotalAmount().toPlainString() + " VND");
         while (true) {
             System.out.print("Pay now? (y/n, Enter = No): ");
-            String answer = scanner.nextLine().trim();
+            String answer = this.scanner.nextLine().trim();
             if (answer.isEmpty() || answer.equalsIgnoreCase("n") || answer.equals("0")) return null;
             if (answer.equalsIgnoreCase("y")) {
                 return new PaymentRequestDto(booking.getBookingId(), booking.getTotalAmount());
             }
-            displayMessage("Please enter y or n.");
+            this.displayMessage("Please enter y or n.");
         }
     }
 
     public RefundRequestDto readRefundRequest(Long fanId, Long bookingId) {
         System.out.print("Reason (Enter = Cancel): ");
-        String reason = scanner.nextLine().trim();
+        String reason = this.scanner.nextLine().trim();
         return reason.isEmpty() ? null : new RefundRequestDto(fanId, bookingId, reason);
     }
 
     public boolean confirmCancellation() {
         while (true) {
             System.out.print("Cancel this unpaid booking? (y/n, Enter = No): ");
-            String answer = scanner.nextLine().trim();
+            String answer = this.scanner.nextLine().trim();
             if (answer.isEmpty() || answer.equalsIgnoreCase("n") || answer.equals("0")) return false;
             if (answer.equalsIgnoreCase("y")) return true;
-            displayMessage("Please enter y or n.");
+            this.displayMessage("Please enter y or n.");
         }
     }
 
     public Long readMatchId() {
-        return readPositiveId("Match ID: ");
+        return this.readPositiveId("Match ID: ");
     }
 
     public Long readBookingId() {
-        return readPositiveId("Booking ID: ");
+        return this.readPositiveId("Booking ID: ");
     }
 
     public Long readTicketId() {
-        return readPositiveId("Ticket ID: ");
+        return this.readPositiveId("Ticket ID: ");
     }
 
     private Long readPositiveId(String prompt) {
         System.out.print(prompt + "(0 = Back): ");
-        String input = scanner.nextLine().trim();
+        String input = this.scanner.nextLine().trim();
         if (input.isEmpty() || input.equals("0")) return null;
         long id = Long.parseLong(input);
         if (id <= 0) {
@@ -150,7 +150,7 @@ public class BookingView {
 
     public void displayMatches(List<MatchResponseDto> matches) {
         System.out.println("\n=== MATCHES ===");
-        if (matches.isEmpty()) displayMessage("No matches available.");
+        if (matches.isEmpty()) this.displayMessage("No matches available.");
         for (MatchResponseDto match : matches) {
             System.out.println(match.getId() + " | " + match.getHomeTeam() + " vs " + match.getAwayTeam()
                     + " | " + match.getStadiumName() + " | " + match.getStartTime()
@@ -166,7 +166,7 @@ public class BookingView {
 
     public void displayBookings(List<BookingResponseDto> bookings) {
         if (bookings.isEmpty()) {
-            displayMessage("No bookings yet.");
+            this.displayMessage("No bookings yet.");
         }
         for (BookingResponseDto booking : bookings) {
             System.out.println("Booking #" + booking.getBookingId() + " | " + booking.getMatchName()
@@ -185,13 +185,13 @@ public class BookingView {
                 + " | Method " + response.getMethod()
                 + " | Status " + response.getStatus());
         if (response.getStatus() == payment.enums.PaymentStatus.FAILED) {
-            displayMessage("Payment failed. This booking is cancelled; check availability and create a new booking.");
+            this.displayMessage("Payment failed. This booking is cancelled; check availability and create a new booking.");
         }
     }
 
     public void displayTickets(List<TicketResponseDto> tickets) {
         if (tickets.isEmpty()) {
-            displayMessage("No tickets yet.");
+            this.displayMessage("No tickets yet.");
         }
         for (TicketResponseDto ticket : tickets) {
             System.out.println("Ticket #" + ticket.getTicketId()
@@ -220,13 +220,13 @@ public class BookingView {
                 + " | Booking #" + response.getBookingId()
                 + " | Status " + response.getStatus());
         if (response.getStatus() == refund.enums.RefundStatus.REQUESTED) {
-            displayMessage("Admin review is required. Refunds are mocked; no real money is transferred.");
+            this.displayMessage("Admin review is required. Refunds are mocked; no real money is transferred.");
         }
     }
 
     public void displayRefunds(List<RefundResponseDto> refunds) {
-        if (refunds.isEmpty()) displayMessage("No refund requests yet.");
-        for (RefundResponseDto refund : refunds) displayRefundResponse(refund);
+        if (refunds.isEmpty()) this.displayMessage("No refund requests yet.");
+        for (RefundResponseDto refund : refunds) this.displayRefundResponse(refund);
     }
 
     public void displayMessage(String message) {

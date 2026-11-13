@@ -55,7 +55,7 @@ public class StadiumService {
         if (request == null) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Stadium request is required");
         }
-        Stadium stadium = new Stadium(null, requireText(request.getName()), requireText(request.getAddress()));
+        Stadium stadium = new Stadium(null, this.requireText(request.getName()), this.requireText(request.getAddress()));
         Stadium saved = this.stadiumRepository.save(stadium);
         return new StadiumResponseDto(saved.getId(), saved.getName(), saved.getAddress());
     }
@@ -82,17 +82,17 @@ public class StadiumService {
         if (stadium == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Stadium not found");
         }
-        stadium.updateDetails(requireText(request.getName()), requireText(request.getAddress()));
+        stadium.updateDetails(this.requireText(request.getName()), this.requireText(request.getAddress()));
         Stadium updated = this.stadiumRepository.update(stadium);
         return new StadiumResponseDto(updated.getId(), updated.getName(), updated.getAddress());
     }
 
     public boolean deleteStadium(Long stadiumId) {
-        getStadiumDetails(stadiumId);
-        if (!sectionRepository.findByStadiumId(stadiumId).isEmpty()) {
+        this.getStadiumDetails(stadiumId);
+        if (!this.sectionRepository.findByStadiumId(stadiumId).isEmpty()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Delete the stadium's sections first");
         }
-        for (Match match : matchRepository.findAll()) {
+        for (Match match : this.matchRepository.findAll()) {
             if (match.getStadiumId().equals(stadiumId)) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Stadium is used by a match");
             }
@@ -101,8 +101,8 @@ public class StadiumService {
     }
 
     public Section createSection(Long stadiumId, String name) {
-        getStadiumDetails(stadiumId);
-        Section section = new Section(null, stadiumId, requireText(name));
+        this.getStadiumDetails(stadiumId);
+        Section section = new Section(null, stadiumId, this.requireText(name));
         return this.sectionRepository.save(section);
     }
 
@@ -123,17 +123,17 @@ public class StadiumService {
         if (section == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Section not found");
         }
-        section.rename(requireText(name));
+        section.rename(this.requireText(name));
         return this.sectionRepository.update(section);
     }
 
     public boolean deleteSection(Long sectionId) {
-        getSectionDetails(sectionId);
-        if (!seatRepository.findBySectionId(sectionId).isEmpty()) {
+        this.getSectionDetails(sectionId);
+        if (!this.seatRepository.findBySectionId(sectionId).isEmpty()) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Delete the section's seats first");
         }
-        for (Match match : matchRepository.findAll()) {
-            if (ticketPriceRepository.findPrice(match.getId(), sectionId) != null) {
+        for (Match match : this.matchRepository.findAll()) {
+            if (this.ticketPriceRepository.findPrice(match.getId(), sectionId) != null) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Section is used by ticket pricing");
             }
         }
@@ -141,9 +141,9 @@ public class StadiumService {
     }
 
     public Seat createSeat(Long sectionId, String rowLabel, int seatNumber) {
-        getSectionDetails(sectionId);
-        String row = requireText(rowLabel);
-        validateSeatLocation(sectionId, row, seatNumber, null);
+        this.getSectionDetails(sectionId);
+        String row = this.requireText(rowLabel);
+        this.validateSeatLocation(sectionId, row, seatNumber, null);
         Seat seat = new Seat(null, sectionId, row, seatNumber, true);
         return this.seatRepository.save(seat);
     }
@@ -165,16 +165,16 @@ public class StadiumService {
         if (seat == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Seat not found");
         }
-        requireNoInventory(seatId);
-        String row = requireText(rowLabel);
-        validateSeatLocation(seat.getSectionId(), row, seatNumber, seatId);
+        this.requireNoInventory(seatId);
+        String row = this.requireText(rowLabel);
+        this.validateSeatLocation(seat.getSectionId(), row, seatNumber, seatId);
         seat.updateLocation(row, seatNumber);
         return this.seatRepository.update(seat);
     }
 
     public boolean deleteSeat(Long seatId) {
-        getSeatDetails(seatId);
-        requireNoInventory(seatId);
+        this.getSeatDetails(seatId);
+        this.requireNoInventory(seatId);
         return this.seatRepository.delete(seatId);
     }
 
@@ -188,13 +188,13 @@ public class StadiumService {
     }
 
     public Seat deactivateSeat(Long seatId) {
-        if (bookingService != null) bookingService.expirePendingBookings();
+        if (this.bookingService != null) this.bookingService.expirePendingBookings();
         Seat seat = this.seatRepository.findById(seatId);
         if (seat == null) {
             throw new AppException(ErrorCode.NOT_FOUND, "Seat not found");
         }
-        for (Match match : matchRepository.findAll()) {
-            MatchSeat inventory = matchSeatRepository.find(match.getId(), seatId);
+        for (Match match : this.matchRepository.findAll()) {
+            MatchSeat inventory = this.matchSeatRepository.find(match.getId(), seatId);
             if (inventory != null && inventory.getStatus() != SeatStatus.AVAILABLE) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Seat has a booking and cannot be deactivated");
             }
@@ -204,8 +204,8 @@ public class StadiumService {
     }
 
     private void requireNoInventory(Long seatId) {
-        for (Match match : matchRepository.findAll()) {
-            if (matchSeatRepository.find(match.getId(), seatId) != null) {
+        for (Match match : this.matchRepository.findAll()) {
+            if (this.matchSeatRepository.find(match.getId(), seatId) != null) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Seat is used by match inventory");
             }
         }
@@ -213,7 +213,7 @@ public class StadiumService {
 
     private void validateSeatLocation(Long sectionId, String row, int number, Long exceptId) {
         if (number <= 0) throw new AppException(ErrorCode.INVALID_INPUT, "Seat number must be positive");
-        for (Seat seat : seatRepository.findBySectionId(sectionId)) {
+        for (Seat seat : this.seatRepository.findBySectionId(sectionId)) {
             if (!seat.getId().equals(exceptId) && seat.getRowLabel().equalsIgnoreCase(row)
                     && seat.getSeatNumber() == number) {
                 throw new AppException(ErrorCode.INVALID_INPUT, "Seat location already exists");

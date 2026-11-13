@@ -22,10 +22,10 @@ public class AuditLog extends BaseEntity {
         this.createdAt = createdAt;
     }
 
-    public Long getActorId() { return actorId; }
-    public String getAction() { return action; }
-    public String getTargetType() { return targetType; }
-    public Long getTargetId() { return targetId; }
-    public String getResult() { return result; }
-    public LocalDateTime getCreatedAt() { return createdAt; }
+    public Long getActorId() { return this.actorId; }
+    public String getAction() { return this.action; }
+    public String getTargetType() { return this.targetType; }
+    public Long getTargetId() { return this.targetId; }
+    public String getResult() { return this.result; }
+    public LocalDateTime getCreatedAt() { return this.createdAt; }
 }

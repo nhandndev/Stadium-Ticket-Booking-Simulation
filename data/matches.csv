@@ -13,42 +13,89 @@
 13,2,England,South Korea,2026-06-10T19:00,CLOSED
 14,2,Singapore,Vietnam,2026-06-30T18:00,CLOSED
 15,1,Đà Nẵng,Hoàng Anh Gia Lai,2026-11-13T18:30,CLOSED
-16,1,Argentina,Spain,2026-12-03T20:00,CLOSED
-17,1,PVF-CAND,Sông Lam Nghệ An,2026-12-23T16:00,CLOSED
+16,1,Argentina,Spain,2026-12-03T20:00,OPEN
+17,1,PVF-CAND,Sông Lam Nghệ An,2026-12-23T16:00,OPEN
 18,1,Real Madrid,Inter Milan,2027-01-12T18:30,CLOSED
-19,2,Valencia,AC Milan,2027-02-01T15:00,CLOSED
-20,2,Manchester City,Manchester United,2027-02-21T17:30,CLOSED
+19,2,Valencia,AC Milan,2027-02-01T15:00,OPEN
+20,2,Manchester City,Manchester United,2027-02-21T17:30,OPEN
 21,1,Qatar,Vietnam,2027-03-13T18:00,CLOSED
-22,1,Barcelona,RB Leipzig,2027-04-02T19:00,CLOSED
-23,2,Juventus,Roma,2027-04-22T20:00,CLOSED
+22,1,Barcelona,RB Leipzig,2027-04-02T19:00,OPEN
+23,2,Juventus,Roma,2027-04-22T20:00,OPEN
 24,2,Benfica,Ajax,2027-05-12T20:00,CLOSED
-25,1,Real Madrid,Borussia Dortmund,2027-06-01T18:30,CLOSED
-26,1,Malaysia,Philippines,2027-06-21T19:30,CLOSED
+25,1,Real Madrid,Borussia Dortmund,2027-06-01T18:30,OPEN
+26,1,Malaysia,Philippines,2027-06-21T19:30,OPEN
 27,1,China,Philippines,2027-07-11T18:30,CLOSED
-28,2,PVF-CAND,Hoàng Anh Gia Lai,2027-07-31T19:00,CLOSED
-29,1,Qatar,Philippines,2027-08-20T17:30,CLOSED
+28,2,PVF-CAND,Hoàng Anh Gia Lai,2027-07-31T19:00,OPEN
+29,1,Qatar,Philippines,2027-08-20T17:30,OPEN
 30,2,Barcelona,Bayer Leverkusen,2027-09-09T18:00,CLOSED
-31,1,France,Vietnam,2027-09-29T19:30,CLOSED
-32,2,Napoli,Bayer Leverkusen,2027-10-19T16:00,CLOSED
+31,1,France,Vietnam,2027-09-29T19:30,OPEN
+32,2,Napoli,Bayer Leverkusen,2027-10-19T16:00,OPEN
 33,1,South Korea,Belgium,2027-11-08T20:30,CLOSED
-34,2,Quảng Nam,Becamex Bình Dương,2027-11-28T16:00,CLOSED
-35,1,Hoàng Anh Gia Lai,Thể Công Viettel,2027-12-18T20:30,CLOSED
+34,2,Quảng Nam,Becamex Bình Dương,2027-11-28T16:00,OPEN
+35,1,Hoàng Anh Gia Lai,Thể Công Viettel,2027-12-18T20:30,OPEN
 36,2,Thailand,Indonesia,2028-01-07T20:00,CLOSED
-37,2,TP. Hồ Chí Minh,Hoàng Anh Gia Lai,2028-01-27T18:00,CLOSED
-38,2,Philippines,Qatar,2028-02-16T20:30,CLOSED
+37,2,TP. Hồ Chí Minh,Hoàng Anh Gia Lai,2028-01-27T18:00,OPEN
+38,2,Philippines,Qatar,2028-02-16T20:30,OPEN
 39,2,Borussia Dortmund,Brighton,2028-03-07T20:30,CLOSED
-40,2,Đà Nẵng,PVF-CAND,2028-03-27T17:30,CLOSED
-41,2,Malaysia,Vietnam,2028-04-16T20:30,CLOSED
+40,2,Đà Nẵng,PVF-CAND,2028-03-27T17:30,OPEN
+41,2,Malaysia,Vietnam,2028-04-16T20:30,OPEN
 42,2,Newcastle United,Roma,2028-05-06T17:00,CLOSED
-43,2,Bayern Munich,PSV Eindhoven,2028-05-26T18:00,CLOSED
-44,2,Roma,Villarreal,2028-06-15T19:00,CLOSED
+43,2,Bayern Munich,PSV Eindhoven,2028-05-26T18:00,OPEN
+44,2,Roma,Villarreal,2028-06-15T19:00,OPEN
 45,1,Đà Nẵng,Bình Định,2028-07-05T20:00,CLOSED
-46,1,Philippines,Morocco,2028-07-25T18:30,CLOSED
-47,1,Hải Phòng FC,Sông Lam Nghệ An,2028-08-14T17:30,CLOSED
+46,1,Philippines,Morocco,2028-07-25T18:30,OPEN
+47,1,Hải Phòng FC,Sông Lam Nghệ An,2028-08-14T17:30,OPEN
 48,2,Portugal,Singapore,2028-09-03T16:00,CLOSED
-49,2,Valencia,West Ham United,2028-09-23T17:00,CLOSED
-50,1,Lazio,Villarreal,2028-10-13T18:00,CLOSED
+49,2,Valencia,West Ham United,2028-09-23T17:00,OPEN
+50,1,Lazio,Villarreal,2028-10-13T18:00,OPEN
 51,2,Becamex Bình Dương,Hồng Lĩnh Hà Tĩnh,2028-11-02T16:00,CLOSED
-52,1,England,Belgium,2028-11-22T20:00,CLOSED
-53,2,Villarreal,Real Madrid,2028-12-12T20:30,CLOSED
+52,1,England,Belgium,2028-11-22T20:00,OPEN
+53,2,Villarreal,Real Madrid,2028-12-12T20:30,OPEN
 54,2,Liverpool,Marseille,2029-01-01T20:30,CLOSED
+55,1,Hanoi FC,Khánh Hòa,2026-08-16T16:00,CLOSED
+56,1,Belgium,Inter Milan,2026-08-23T16:30,CLOSED
+57,1,Khánh Hòa,Philippines,2026-08-30T17:00,CLOSED
+58,1,Đà Nẵng,West Ham United,2026-09-06T17:30,CLOSED
+59,1,Valencia,Morocco,2026-09-13T18:00,CLOSED
+60,1,Juventus,England,2026-09-20T18:30,CLOSED
+61,1,Quảng Nam,Manchester United,2026-09-27T19:00,CLOSED
+62,1,Villarreal,TP. Hồ Chí Minh,2026-10-04T19:30,CLOSED
+63,2,Liverpool,Marseille,2026-10-11T20:00,CLOSED
+64,1,China,Huế FC,2026-10-18T20:30,CLOSED
+65,2,Huế FC,Argentina,2026-10-25T16:00,CLOSED
+66,1,Tottenham Hotspur,Juventus,2026-11-01T16:30,CLOSED
+67,2,Spain,PSV Eindhoven,2026-11-16T17:00,OPEN
+68,1,Manchester City,Hanoi FC,2026-11-20T17:30,OPEN
+69,2,Ajax,Atletico Madrid,2026-11-24T18:00,CLOSED
+70,1,TP. Hồ Chí Minh,Real Madrid,2026-11-28T18:30,OPEN
+71,2,Hải Phòng FC,Malaysia,2026-12-02T19:00,OPEN
+72,1,Vietnam,Portugal,2026-12-06T19:30,CLOSED
+73,2,Nam Định,Morocco,2026-12-10T20:00,OPEN
+74,1,Napoli,Chelsea,2026-12-14T20:30,OPEN
+75,2,England,Manchester City,2026-12-18T16:00,CLOSED
+76,1,Sông Lam Nghệ An,Becamex Bình Dương,2026-12-22T16:30,OPEN
+77,2,Qatar,Liverpool,2026-12-26T17:00,OPEN
+78,1,Malaysia,France,2026-12-30T17:30,OPEN
+79,2,Newcastle United,Đà Nẵng,2027-01-03T18:00,OPEN
+80,1,West Ham United,RB Leipzig,2027-01-07T18:30,OPEN
+81,2,Indonesia,Bayern Munich,2027-01-11T19:00,CLOSED
+82,1,Italy,Indonesia,2027-01-15T19:30,OPEN
+83,2,Atletico Madrid,Benfica,2027-01-19T20:00,OPEN
+84,1,Singapore,Sông Lam Nghệ An,2027-01-23T20:30,CLOSED
+85,2,Inter Milan,Borussia Dortmund,2027-01-27T16:00,OPEN
+86,1,RB Leipzig,Hải Phòng FC,2027-01-31T16:30,OPEN
+87,2,Bayer Leverkusen,Công An Hà Nội,2027-02-04T17:00,CLOSED
+88,1,PSV Eindhoven,Tottenham Hotspur,2027-02-08T17:30,OPEN
+89,2,Hồng Lĩnh Hà Tĩnh,AC Milan,2027-02-12T18:00,OPEN
+90,1,Hai Phong FC,Quảng Nam,2027-02-16T18:30,CLOSED
+91,2,France,Hồng Lĩnh Hà Tĩnh,2027-02-20T19:00,OPEN
+92,1,Thể Công Viettel,Belgium,2027-02-24T19:30,OPEN
+93,2,Argentina,Singapore,2027-02-28T20:00,CLOSED
+94,1,AC Milan,Barcelona,2027-03-04T20:30,OPEN
+95,2,Roma,Newcastle United,2027-03-08T16:00,OPEN
+96,1,Becamex Bình Dương,Thailand,2027-03-12T16:30,CLOSED
+97,2,Bình Định,Napoli,2027-03-16T17:00,OPEN
+98,1,Marseille,PVF-CAND,2027-03-20T17:30,OPEN
+99,2,Công An Hà Nội,Ajax,2027-03-24T18:00,CLOSED
+100,1,Hoàng Anh Gia Lai,Bình Định,2027-03-28T18:30,OPEN
+101,1,Nhan,Doan,2030-11-15T19:00,CLOSED

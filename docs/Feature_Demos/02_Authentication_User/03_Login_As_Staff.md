@@ -1,5 +1,10 @@
 # Login As Staff
 
+Gate menu update — 2026-11-14. Gate dashboard option 2 is now `Check in ticket`.
+Its submenu has `1. Check in ticket` and `0. Back`. Ticket Code is the only ticket
+identifier requested. Captures below retain their original menu context.
+
+
 - Log in through the Staff route and open the role-specific menu. Fan accounts use the Fan login route.
 - Code path `MainController.handleStaffLogin → AuthController.login → AuthService.login → MainController.routeAuthenticatedUser`.
 - Press Enter after each input. A blank Enter submits an empty line.

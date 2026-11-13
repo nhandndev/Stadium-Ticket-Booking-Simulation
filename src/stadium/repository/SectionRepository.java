@@ -16,7 +16,7 @@ public class SectionRepository extends CsvRepository<Section> {
         if(stadiumId == null || stadiumId <= 0) {
             throw new AppException(ErrorCode.INVALID_INPUT,"Stadium Id must be positive or not null");
         }
-        return findByCondition(section -> section.getStadiumId().equals(stadiumId));
+        return this.findByCondition(section -> section.getStadiumId().equals(stadiumId));
     }
     @Override
     public Section parseLine(String line) {

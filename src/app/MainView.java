@@ -30,7 +30,7 @@ public class MainView {
         System.out.println("4. Register Fan Account");
         System.out.println("0. Exit System");
         System.out.print("Choose option: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public int showGuestMenu() {
@@ -41,11 +41,11 @@ public class MainView {
         System.out.println("4. View seat availability / Seat map (by Match ID)");
         System.out.println("0. Back");
         System.out.print("Choose option: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public int showMatchActionMenu(boolean canBook) {
-        return showMatchActionMenu(canBook, null);
+        return this.showMatchActionMenu(canBook, null);
     }
 
     public int showMatchActionMenu(boolean canBook, Long selectedMatchId) {
@@ -62,7 +62,7 @@ public class MainView {
         if (selectedMatchId != null) System.out.println("4. Choose another match");
         System.out.println("0. Back to match browsing");
         System.out.print("Choose action: ");
-        String line = scanner.nextLine().trim();
+        String line = this.scanner.nextLine().trim();
         return line.isEmpty() ? 0 : Integer.parseInt(line);
     }
 
@@ -74,7 +74,7 @@ public class MainView {
         System.out.println("4. Browse matches");
         System.out.println("0. Logout");
         System.out.print("Choose option: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public int showSellerMenu() {
@@ -84,17 +84,17 @@ public class MainView {
         System.out.println("3. Update profile");
         System.out.println("0. Logout");
         System.out.print("Choose option: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public int showGateStaffMenu() {
         System.out.println("\n=== GATE STAFF OPERATIONS ===");
         System.out.println("1. View profile");
-        System.out.println("2. Validate / Check in ticket");
+        System.out.println("2. Check in ticket");
         System.out.println("3. Update profile");
         System.out.println("0. Logout");
         System.out.print("Choose option: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public int showAdminMenu() {
@@ -104,61 +104,61 @@ public class MainView {
         System.out.println("3. Update profile");
         System.out.println("0. Logout");
         System.out.print("Choose option: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public LoginRequestDto readLoginRequest() {
         System.out.println("\n=== LOGIN ===");
         System.out.print("Email (Enter = Cancel): ");
-        String email = scanner.nextLine().trim();
+        String email = this.scanner.nextLine().trim();
         if (email.isEmpty()) return null;
         System.out.print("Password: ");
-        String password = scanner.nextLine().trim();
+        String password = this.scanner.nextLine().trim();
         return new LoginRequestDto(email, password);
     }
 
     public RegisterFanRequestDto readRegisterFanRequest() {
         System.out.println("\n=== REGISTER FAN ACCOUNT ===");
         System.out.print("Full name (Enter = Cancel): ");
-        String fullName = scanner.nextLine().trim();
+        String fullName = this.scanner.nextLine().trim();
         if (fullName.isEmpty()) return null;
         System.out.print("Email: ");
-        String email = scanner.nextLine().trim();
+        String email = this.scanner.nextLine().trim();
         System.out.print("Password (at least 8 characters): ");
-        String password = scanner.nextLine().trim();
+        String password = this.scanner.nextLine().trim();
         System.out.print("Phone: ");
-        String phone = scanner.nextLine().trim();
+        String phone = this.scanner.nextLine().trim();
         return new RegisterFanRequestDto(fullName, email, password, phone);
     }
 
     public String readKeyword() {
         System.out.print("Enter Team keyword (e.g. Vietnam, Thailand): ");
-        return scanner.nextLine().trim();
+        return this.scanner.nextLine().trim();
     }
 
     public ProfileUpdateRequestDto readProfileUpdateRequest() {
         System.out.print("New full name (Enter = Cancel): ");
-        String name = scanner.nextLine().trim();
+        String name = this.scanner.nextLine().trim();
         if (name.isEmpty()) return null;
         System.out.print("New phone: ");
-        return new ProfileUpdateRequestDto(name, scanner.nextLine().trim());
+        return new ProfileUpdateRequestDto(name, this.scanner.nextLine().trim());
     }
 
     public Long readStadiumId() {
         System.out.print("Stadium ID (or press Enter for all): ");
-        String input = scanner.nextLine().trim();
+        String input = this.scanner.nextLine().trim();
         return input.isEmpty() ? null : Long.parseLong(input);
     }
 
     public LocalDate readStartDate() {
         System.out.print("Match Date yyyy-MM-dd (e.g. 2026-11-15, or press Enter for all): ");
-        String input = scanner.nextLine().trim();
+        String input = this.scanner.nextLine().trim();
         return input.isEmpty() ? null : LocalDate.parse(input);
     }
 
     public Long readMatchId() {
         System.out.print("Match ID (0 = Back): ");
-        String input = scanner.nextLine().trim();
+        String input = this.scanner.nextLine().trim();
         if (input.isEmpty() || input.equals("0")) return null;
         long id = Long.parseLong(input);
         if (id <= 0) throw new IllegalArgumentException("Match ID must be positive.");
@@ -177,14 +177,14 @@ public class MainView {
 
     public void displayMatches(List<MatchResponseDto> matches) {
         if (matches == null || matches.isEmpty()) {
-            displayMessage("\n[!] No matches found matching your criteria.");
+            this.displayMessage("\n[!] No matches found matching your criteria.");
             return;
         }
         System.out.println("\n=== MATCH SCHEDULE ===");
         System.out.printf("%-4s | %-28s | %-24s | %-16s | %-10s%n", "ID", "MATCH", "STADIUM (ID)", "KICK-OFF", "SALES");
         for (MatchResponseDto match : matches) {
             String matchTitle = match.getHomeTeam() + " vs " + match.getAwayTeam();
-            String timeStr = formatDateTime(match.getStartTime());
+            String timeStr = this.formatDateTime(match.getStartTime());
             System.out.printf("%-4d | %-28s | %-24s | %-16s | %-10s%n",
                     match.getId(), matchTitle, match.getStadiumName() + " (" + match.getStadiumId() + ")",
                     timeStr, match.getSaleStatus());
@@ -193,13 +193,13 @@ public class MainView {
 
     public void displayMatchDetails(MatchResponseDto match) {
         if (match == null) {
-            displayMessage("\n[!] Match details not found.");
+            this.displayMessage("\n[!] Match details not found.");
             return;
         }
         System.out.println("\n=== MATCH DETAILS #" + match.getId() + " ===");
         System.out.println("Match:      " + match.getHomeTeam() + " vs " + match.getAwayTeam());
         System.out.println("Stadium:    " + match.getStadiumName() + " [ID: " + match.getStadiumId() + "]");
-        System.out.println("Kick-off:   " + formatDateTime(match.getStartTime()));
+        System.out.println("Kick-off:   " + this.formatDateTime(match.getStartTime()));
         System.out.println("Sales Gate: [ " + match.getSaleStatus() + " ]");
     }
 
@@ -218,6 +218,6 @@ public class MainView {
 
     private String formatDateTime(LocalDateTime dt) {
         if (dt == null) return "N/A";
-        return dt.format(dateFormatter);
+        return dt.format(this.dateFormatter);
     }
 }

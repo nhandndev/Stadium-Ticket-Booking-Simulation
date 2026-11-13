@@ -24,7 +24,7 @@ public class FanController {
     }
 
     public List<UserResponseDto> searchFans(String keyword) {
-        UserResponseDto user = authController.getCurrentUser();
+        UserResponseDto user = this.authController.getCurrentUser();
         if (user == null || (user.getRole() != UserRole.SELLER && user.getRole() != UserRole.ADMIN)) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Seller or Admin login required");
         }
@@ -32,7 +32,7 @@ public class FanController {
     }
 
     public List<TicketResponseDto> getMyTickets(Long fanId) {
-        UserResponseDto user = authController.getCurrentUser();
+        UserResponseDto user = this.authController.getCurrentUser();
         if (user == null || user.getRole() != UserRole.FAN || !user.getId().equals(fanId)) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Fan can only see own tickets");
         }

@@ -1,5 +1,50 @@
 # Issue Tickets
 
+## Current Seller Menu — 2026-11-14
+
+Seller > 3. Ticket sales contains 1. Create booking for Fan / walk-in customer,
+2. Pay for an existing booking and 0. Back. Successful cash checkout automatically
+issues/displays tickets. Payment and issue retain separate methods in the code.
+The walkthroughs here use an isolated copy of the core fixture with future Match
+dates. Inputs are listed in order. A blank line means Enter.
+
+Ticket issue is now an automatic step. Use Pay for an existing booking to resume
+issue after a successful cash payment, including a repeated request.
+
+### Retry an already-paid cash booking without collecting again
+
+Start at the Ticket sales menu.
+
+Inputs
+
+```text
+2
+4
+```
+
+Result captured from the current code
+
+```text
+Booking #4 | Walk-in customer Walk-in customer | Vietnam vs Thailand | Seats [Stand A VIP A4] | Total 500000 VND | Status CONFIRMED
+Keep Booking ID 4 for payment or ticket issuance.
+Booking is already confirmed. Checking its existing cash payment.
+Payment #4 | Booking #4 | 500000 VND | Method OFFLINE_CASH | Status SUCCESS
+Ticket #3 | Code T-4-4 | Vietnam vs Thailand | Stand A VIP A4 | Status ISSUED
+
+=== SELLER > TICKET SALES ===
+1. Create booking for Fan / walk-in customer
+2. Pay for an existing booking
+0. Back to Seller menu
+Choose:
+```
+
+## Historical Numbered Flows
+
+The numbered flows below were captured on 2026-11-13 before the menu merge.
+Their Console blocks retain that historical menu. Use the current walkthroughs
+above and the [current menu map](../02_MENU_MAP.md) for the new navigation.
+
+
 - Issue tickets for a CONFIRMED paid booking. Repeated issue preserves the existing ticket codes and count.
 - Code path `MainController → BookingController.issueTickets → BookingService.issueTickets → TicketRepository`.
 - Press Enter after each input. A blank Enter submits an empty line.

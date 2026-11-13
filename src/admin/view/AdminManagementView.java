@@ -1,6 +1,7 @@
 package admin.view;
 
 import admin.dto.AccountRequestDto;
+import admin.dto.AccountResponseDto;
 import admin.dto.SystemSummaryDto;
 import admin.model.AuditLog;
 import java.math.BigDecimal;
@@ -53,7 +54,7 @@ public class AdminManagementView {
             default: throw new IllegalArgumentException("Invalid venue group.");
         }
         System.out.println("0. Back to venues and seating");
-        return readInt("Choose: ");
+        return this.readInt("Choose: ");
     }
 
     public int showMatchMenu() {
@@ -79,19 +80,19 @@ public class AdminManagementView {
             default: throw new IllegalArgumentException("Invalid match group.");
         }
         System.out.println("0. Back to matches, pricing and sales");
-        return readInt("Choose: ");
+        return this.readInt("Choose: ");
     }
 
     public int showAccountsMenu() {
         System.out.println("\n=== ADMIN > ACCOUNTS AND ROLES ===");
         System.out.println("1. Fan accounts\n2. Staff accounts\n0. Back to system operations");
-        return readInt("Choose: ");
+        return this.readInt("Choose: ");
     }
 
     public int showReportsMenu() {
         System.out.println("\n=== ADMIN > REPORTS AND AUDIT LOGS ===");
         System.out.println("1. System summary\n2. Audit logs\n0. Back to system operations");
-        return readInt("Choose: ");
+        return this.readInt("Choose: ");
     }
 
     public int showFanManagementMenu() {
@@ -111,11 +112,11 @@ public class AdminManagementView {
     public int showStaffRoleMenu() {
         System.out.println("\n=== ADMIN > ACCOUNTS > STAFF > ROLES ===");
         System.out.println("1. Assign role\n2. Change role\n3. Revoke role\n0. Back to staff accounts");
-        return readInt("Choose: ");
+        return this.readInt("Choose: ");
     }
 
     public StadiumRequestDto readStadiumRequest() {
-        String name = readText("Name (Enter = Cancel): ");
+        String name = this.readText("Name (Enter = Cancel): ");
         if (name.isEmpty()) return null;
         return new StadiumRequestDto(name, this.readText("Address: "));
     }
@@ -136,7 +137,7 @@ public class AdminManagementView {
         String password = this.readText(create ? "Password (at least 8 characters): " : "New password (Enter = Keep current): ");
         String phone = this.readText("Phone: ");
         if (role == null && create) {
-            role = readRole(false);
+            role = this.readRole(false);
             if (role == null) return null;
         }
         return new AccountRequestDto(name, email, password, phone, role);
@@ -144,7 +145,7 @@ public class AdminManagementView {
 
     public UserRole readRole(boolean allowAll) {
         System.out.println("1 Seller | 2 Gate Staff | 3 Administrator | 4 Unassigned");
-        int choice = readInt(allowAll ? "Role (0 = All): " : "Role (0 = Back): ");
+        int choice = this.readInt(allowAll ? "Role (0 = All): " : "Role (0 = Back): ");
         switch (choice) {
             case 0: return null;
             case 1: return UserRole.SELLER;
@@ -157,7 +158,7 @@ public class AdminManagementView {
 
     public UserStatus readStatus() {
         System.out.println("1 Active | 2 Inactive | 0 All");
-        switch (readInt("Status: ")) {
+        switch (this.readInt("Status: ")) {
             case 0: return null;
             case 1: return UserStatus.ACTIVE;
             case 2: return UserStatus.INACTIVE;
@@ -167,27 +168,27 @@ public class AdminManagementView {
 
     public boolean confirm(String action) {
         while (true) {
-            String answer = readText(action + "? (y/n, Enter = No): ");
+            String answer = this.readText(action + "? (y/n, Enter = No): ");
             if (answer.isEmpty() || answer.equalsIgnoreCase("n") || answer.equals("0")) return false;
             if (answer.equalsIgnoreCase("y")) return true;
-            displayResult("Please enter y or n.");
+            this.displayResult("Please enter y or n.");
         }
     }
 
     public int showRefundReviewMenu() {
         System.out.println("\n=== ADMIN > REFUND REVIEWS ===");
         System.out.println("1. Review a request\n0. Back to system operations");
-        return readInt("Choose: ");
+        return this.readInt("Choose: ");
     }
 
     public RefundReviewRequestDto readRefundReviewRequest(Long adminId) {
-        Long requestId = readLong("Refund request ID (0 = Back): ");
+        Long requestId = this.readLong("Refund request ID (0 = Back): ");
         if (requestId == null) return null;
-        String decision = readText("Approve refund? (y/n): ");
+        String decision = this.readText("Approve refund? (y/n): ");
         if (!decision.equalsIgnoreCase("y") && !decision.equalsIgnoreCase("n")) {
             throw new IllegalArgumentException("Enter y or n");
         }
-        String note = readText("Review note (required, 0 = Cancel): ");
+        String note = this.readText("Review note (required, 0 = Cancel): ");
         if (note.equals("0")) return null;
         if (note.isEmpty()) throw new IllegalArgumentException("Review note is required.");
         return new RefundReviewRequestDto(adminId, requestId, decision.equalsIgnoreCase("y"), note);
@@ -228,13 +229,13 @@ public class AdminManagementView {
                 System.out.println("List is empty.");
             } else {
                 for (Object item : list) {
-                    System.out.println(formatItem(item));
+                    System.out.println(this.formatItem(item));
                 }
             }
         } else if (result instanceof Boolean) {
             System.out.println((Boolean) result ? "Operation completed." : "No record was changed.");
         } else {
-            System.out.println(formatItem(result));
+            System.out.println(this.formatItem(result));
         }
     }
 
@@ -268,10 +269,6 @@ public class AdminManagementView {
             admin.dto.AccountResponseDto a = (admin.dto.AccountResponseDto) item;
             return a.getId() + " | " + a.getFullName() + " | " + a.getEmail() + " | Role: " + a.getRole() + " | Status: " + a.getStatus();
         }
-        if (item instanceof admin.model.AuditLog) {
-            admin.model.AuditLog log = (admin.model.AuditLog) item;
-            return log.getId() + " | Actor #" + log.getActorId() + " | " + log.getAction() + " | Target: " + log.getTargetType() + " #" + log.getTargetId() + " | Result: " + log.getResult() + " | " + log.getCreatedAt();
-        }
         if (item instanceof RefundRequest) {
             RefundRequest r = (RefundRequest) item;
             return "Request #" + r.getId() + " | Booking #" + r.getBookingId()
@@ -295,14 +292,26 @@ public class AdminManagementView {
         System.out.println("Total tickets: " + summary.getTicketCount());
     }
 
-    public void showAuditLogs(List<AuditLog> logs) {
+    public void showAuditLogs(List<AuditLog> logs, List<AccountResponseDto> staffAccounts) {
         System.out.println("\n=== AUDIT LOGS ===");
         if (logs.isEmpty()) {
             System.out.println("No audit logs available.");
             return;
         }
         for (AuditLog log : logs) {
-            System.out.println(formatItem(log));
+            String name = "Unknown staff #" + log.getActorId();
+            String role = "UNKNOWN";
+            for (AccountResponseDto staff : staffAccounts) {
+                if (staff.getId().equals(log.getActorId())) {
+                    name = staff.getFullName();
+                    role = staff.getRole().name();
+                    break;
+                }
+            }
+            System.out.println(log.getId() + " | Name: " + name + " | Role: " + role
+                    + " | " + log.getAction() + " | Target: " + log.getTargetType()
+                    + " #" + log.getTargetId() + " | Result: " + log.getResult()
+                    + " | " + log.getCreatedAt());
         }
     }
 

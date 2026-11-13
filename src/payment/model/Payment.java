@@ -27,21 +27,21 @@ public class Payment extends BaseEntity {
     }
 
     public void markSuccess() {
-        if (status != PaymentStatus.PENDING) {
+        if (this.status != PaymentStatus.PENDING) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Payment already completed");
         }
-        status = PaymentStatus.SUCCESS;
+        this.status = PaymentStatus.SUCCESS;
     }
 
     public void markFailed() {
-        if (status != PaymentStatus.PENDING) {
+        if (this.status != PaymentStatus.PENDING) {
             throw new AppException(ErrorCode.INVALID_INPUT, "Payment already completed");
         }
-        status = PaymentStatus.FAILED;
+        this.status = PaymentStatus.FAILED;
     }
 
-    public Long getBookingId() { return bookingId; }
-    public BigDecimal getAmount() { return amount; }
-    public PaymentMethod getMethod() { return method; }
-    public PaymentStatus getStatus() { return status; }
+    public Long getBookingId() { return this.bookingId; }
+    public BigDecimal getAmount() { return this.amount; }
+    public PaymentMethod getMethod() { return this.method; }
+    public PaymentStatus getStatus() { return this.status; }
 }

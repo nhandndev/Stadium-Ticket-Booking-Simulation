@@ -23,48 +23,55 @@ public class SellerView {
         System.out.println("\n=== SELLER ===");
         System.out.println("1. Search Fan");
         System.out.println("2. Create Fan");
-        System.out.println("3. Create booking for Fan / walk-in customer");
-        System.out.println("4. Accept offline payment");
-        System.out.println("5. Issue ticket");
-        System.out.println("6. View seat map and prices");
-        System.out.println("7. View customer booking history");
+        System.out.println("3. Ticket sales");
+        System.out.println("4. View seat map and prices");
+        System.out.println("5. View customer booking history");
         System.out.println("0. Back to dashboard");
         System.out.print("Choose: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public int showCustomerTypeMenu() {
         System.out.println("\n=== WHO IS BUYING AT THE COUNTER? ===");
         System.out.println("1. Existing Fan account - search and select an ACTIVE account");
         System.out.println("2. Walk-in customer - buy directly, without an account");
-        System.out.println("0. Back to Seller menu");
+        System.out.println("0. Back to Ticket sales");
         System.out.print("Choose customer type: ");
-        return Integer.parseInt(scanner.nextLine().trim());
+        return Integer.parseInt(this.scanner.nextLine().trim());
+    }
+
+    public int showTicketSalesMenu() {
+        System.out.println("\n=== SELLER > TICKET SALES ===");
+        System.out.println("1. Create booking for Fan / walk-in customer");
+        System.out.println("2. Pay for an existing booking");
+        System.out.println("0. Back to Seller menu");
+        System.out.print("Choose: ");
+        return Integer.parseInt(this.scanner.nextLine().trim());
     }
 
     public String readFanKeyword() {
         System.out.print("Customer name/email (Enter = List all; 0 = Back): ");
-        String keyword = scanner.nextLine().trim();
+        String keyword = this.scanner.nextLine().trim();
         return keyword.equals("0") ? null : keyword;
     }
 
     public RegisterFanRequestDto readRegisterFanRequest() {
         System.out.print("Full name (Enter = Cancel): ");
-        String name = scanner.nextLine().trim();
+        String name = this.scanner.nextLine().trim();
         if (name.isEmpty()) return null;
         System.out.print("Email: ");
-        String email = scanner.nextLine();
+        String email = this.scanner.nextLine();
         System.out.print("Password (at least 8 characters): ");
-        String password = scanner.nextLine();
+        String password = this.scanner.nextLine();
         System.out.print("Phone: ");
-        String phone = scanner.nextLine();
+        String phone = this.scanner.nextLine();
         return new RegisterFanRequestDto(name, email, password, phone);
     }
 
     public BookingRequestDto readBookingRequest(Long fanId, Long matchId) {
-        displayMessage("Use numbers from the SEAT ID column, not row labels such as A1.");
+        this.displayMessage("Use numbers from the SEAT ID column, not row labels such as A1.");
         System.out.print("Seat IDs (comma-separated, 1 to 4; 0 = Back): ");
-        String input = scanner.nextLine().trim();
+        String input = this.scanner.nextLine().trim();
         if (input.isEmpty() || input.equals("0")) return null;
         String[] parts = input.split(",", -1);
         if (parts.length < 1 || parts.length > 4) {
@@ -94,31 +101,31 @@ public class SellerView {
         System.out.println("Cash amount due: " + booking.getTotalAmount().toPlainString() + " VND");
         while (true) {
             System.out.print("Type RECEIVED after collecting cash (Enter = Cancel): ");
-            String answer = scanner.nextLine().trim();
+            String answer = this.scanner.nextLine().trim();
             if (answer.isEmpty() || answer.equals("0")) return null;
             if (answer.equalsIgnoreCase("RECEIVED")) {
                 return new PaymentRequestDto(booking.getBookingId(), booking.getTotalAmount());
             }
-            displayMessage("No payment recorded. Type RECEIVED or press Enter to cancel.");
+            this.displayMessage("No payment recorded. Type RECEIVED or press Enter to cancel.");
         }
     }
 
     public Long readFanId() {
-        return readPositiveId("Fan ID: ");
+        return this.readPositiveId("Fan ID: ");
     }
 
     public Long readMatchId() {
-        return readPositiveId("Match ID: ");
+        return this.readPositiveId("Match ID: ");
     }
 
     public Long readBookingId() {
-        displayMessage("Enter the single Booking ID from the counter receipt, for either customer type.");
-        return readPositiveId("Booking ID: ");
+        this.displayMessage("Enter the single Booking ID from the counter receipt, for either customer type.");
+        return this.readPositiveId("Booking ID: ");
     }
 
     private Long readPositiveId(String label) {
         System.out.print(label + "(0 = Back): ");
-        String input = scanner.nextLine().trim();
+        String input = this.scanner.nextLine().trim();
         if (input.isEmpty() || input.equals("0")) return null;
         long id;
         try {
@@ -135,7 +142,7 @@ public class SellerView {
 
     public void displayFans(List<UserResponseDto> fans) {
         if (fans.isEmpty()) {
-            displayMessage("No Fan found.");
+            this.displayMessage("No Fan found.");
         }
         for (UserResponseDto fan : fans) {
             System.out.println("Fan #" + fan.getId() + " | " + fan.getFullName()
@@ -154,10 +161,10 @@ public class SellerView {
                 + " | Seats " + booking.getSeatLabels()
                 + " | Total " + booking.getTotalAmount().toPlainString() + " VND"
                 + " | Status " + booking.getStatus());
-        displayMessage("Keep Booking ID " + booking.getBookingId() + " for payment or ticket issuance.");
+        this.displayMessage("Keep Booking ID " + booking.getBookingId() + " for payment or ticket issuance.");
         if (booking.getStatus() == BookingStatus.PENDING) {
-            displayMessage("Collect cash before recording offline payment.");
-            displayMessage("Seats held until: " + booking.getExpiresAt());
+            this.displayMessage("Collect cash before recording offline payment.");
+            this.displayMessage("Seats held until: " + booking.getExpiresAt());
         }
     }
 
@@ -169,7 +176,7 @@ public class SellerView {
     }
 
     public void displayTickets(List<TicketResponseDto> tickets) {
-        if (tickets.isEmpty()) displayMessage("No tickets found.");
+        if (tickets.isEmpty()) this.displayMessage("No tickets found.");
         for (TicketResponseDto ticket : tickets) {
             System.out.println("Ticket #" + ticket.getTicketId()
                     + " | Code " + ticket.getTicketCode()
