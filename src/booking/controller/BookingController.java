@@ -192,8 +192,11 @@ public class BookingController {
             this.bookingView.displayMessage("Booking cancelled.");
             return;
         }
+        //Make Booking and hold seat
         BookingResponseDto booking = this.createBooking(request);
+        //show booking have just made
         this.bookingView.displayBookingResponse(booking);
+        //ask method pay booking
         this.payBooking(booking);
     }
 
